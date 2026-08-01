@@ -6443,6 +6443,52 @@ function loadResourcesFromFirestore() {
         </div>
     </div>
 </div>
+<script>
+// === DIRECT MOBILE BACK BUTTON CATCHER ===
+
+// 1. Ek dummy history state push karo taaki phone ka back button browser close na kare
+window.history.pushState({ backButtonCatcher: true }, '');
+
+window.addEventListener('popstate', function(event) {
+    // 2. Jaise hi physical Back Button dabega, ye sab forcefully OFF ho jayega:
+
+    // A) Full-Screen Auto OFF
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+
+    // B) Screen Rotation Auto Unlock (Portrait mode)
+    if (screen.orientation && screen.orientation.unlock) {
+        try { screen.orientation.unlock(); } catch(e) {}
+    }
+
+    // C) Pomodoro Maximize Auto OFF
+    const pomodoroEl = document.getElementById('floating-pomodoro');
+    if (pomodoroEl && pomodoroEl.classList.contains('pomodoro-maximized')) {
+        pomodoroEl.classList.remove('pomodoro-maximized');
+        pomodoroEl.style.left = 'auto';
+        pomodoroEl.style.top = 'auto';
+        pomodoroEl.style.bottom = '70px';
+        pomodoroEl.style.right = '20px';
+    }
+
+    // 3. Wapas dummy state push karo taaki agli baar ke liye bhi back button ready rahe
+    window.history.pushState({ backButtonCatcher: true }, '');
+});
+
+// Fullscreen exit via button (agar koi on-screen 'Close' button dabata hai)
+document.addEventListener('fullscreenchange', function() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (screen.orientation && screen.orientation.unlock) {
+            try { screen.orientation.unlock(); } catch(e) {}
+        }
+    }
+});
+</script>
 
 </body>
 </html>
