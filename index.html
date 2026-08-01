@@ -1189,6 +1189,74 @@
     }
 }
 
+/* ==========================================
+   🚀 DESKTOP UI & ALIGNMENT FIXES
+   ========================================== */
+
+/* 1. Missing Top Header Flexbox (Fixes overlapping items) */
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 2.5rem auto;
+}
+
+/* 2. Prevent Ultra-Wide Stretching */
+.view-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 3. Center the Target Lock Box & limit width */
+.target-lock-box {
+    max-width: 800px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 4. Fix Greeting Text Alignment */
+.greeting-text {
+    width: auto !important;
+    flex-grow: 1;
+    text-align: left;
+}
+
+/* 5. Improve Desktop Header Search & Auth Spacing */
+@media (min-width: 901px) {
+    .search-container {
+        max-width: 500px !important;
+        margin-left: 30px !important;
+        margin-right: auto !important;
+    }
+    #auth-controls {
+        margin-left: auto !important;
+    }
+}
+/* ==========================================
+   🛠️ TABLET & SMALL DESKTOP FIX (901px - 1200px)
+   ========================================== */
+@media (min-width: 901px) and (max-width: 1200px) {
+    .top-header {
+        flex-wrap: wrap !important; /* Space kam hone par items next line me jayenge */
+    }
+    .search-container {
+        order: 3; /* Search bar ko poori tarah neeche shift karne ke liye */
+        flex: 1 1 100%; 
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 15px !important;
+    }
+    #auth-controls {
+        margin-left: auto !important; /* Buttons ko right me set karne ke liye */
+    }
+    .grid-cards {
+        grid-template-columns: 1fr !important; /* Choti screen par cards ek ke neeche ek aayenge */
+    }
+}
 
     </style>
 </head>
