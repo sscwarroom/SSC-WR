@@ -439,17 +439,84 @@
             100% { box-shadow: 0 0 18px rgba(249, 115, 22, 0.6); border-color: rgba(249, 115, 22, 0.8); }
         }
 
-       .main-content { 
+     /* ==========================================
+   🚀 CORE LAYOUT & CENTERING (1920px to 1280px)
+   ========================================== */
+
+/* 1. Main Outer Wrapper - Perfectly offsets the fixed sidebar */
+.main-content { 
     flex-grow: 1; 
-    margin-left: var(--nav-width); 
+    margin-left: var(--nav-width); /* Keeps sidebar fixed (260px) */
     padding: 2.5rem; 
     min-height: 100vh; 
     display: flex; 
     flex-direction: column; 
-    width: calc(100% - var(--nav-width)); /* ADDED: Width Calculation */
-    max-width: calc(100vw - var(--nav-width)); /* FIXED: Stop Overflow */
+    align-items: center; /* Horizontally centers all direct children */
+    width: calc(100% - var(--nav-width)); 
     box-sizing: border-box; 
+    overflow-x: hidden;
 }
+
+/* 2. Unified Centered Constraints - Removes right-side empty space */
+.top-header, .view-section, .app-footer {
+    width: 100%;
+    max-width: 1400px !important; /* Premium constraint limit */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   🚀 DESKTOP HEADER & COMPONENT ALIGNMENT
+   ========================================== */
+
+/* 3. Welcome Heading & Broadcast Button Alignment */
+.dashboard-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; /* Aligns items cleanly to the top */
+    margin-bottom: 2.5rem; 
+    width: 100%; 
+    flex-wrap: nowrap; /* Prevents wrapping on desktop */
+}
+
+.greeting-text {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.greeting-text h2 {
+    margin-bottom: 0.5rem;
+}
+
+/* 4. Top Header Layout (Search Bar & Auth Controls) */
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 2.5rem !important;
+}
+
+@media (min-width: 901px) {
+    .search-container {
+        flex-grow: 1;
+        max-width: 600px !important;
+        margin: 0 auto !important; /* Centers the search bar in the header */
+    }
+    
+    #auth-controls {
+        margin-left: 0 !important;
+        flex-shrink: 0;
+    }
+    
+    .target-lock-box {
+        max-width: 100% !important; /* Allows the target box to span the beautiful 1400px width */
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
 
         .search-container { flex-grow: 1; max-width: 650px; position: relative; }
         .search-input { width: 100%; padding: 14px 20px 14px 45px; border-radius: 30px; border: 2px solid transparent; background: var(--bg-secondary); color: var(--text-primary); font-weight: 500; box-shadow: var(--shadow); transition: all 0.3s ease; }
@@ -1258,35 +1325,6 @@
     }
 }
 /* ==========================================
-   🖥️ DESKTOP HEADER OVERLAP FIX
-   ========================================== */
-@media (min-width: 901px) {
-    .top-header {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 20px !important;
-        width: 100% !important;
-        margin-bottom: 2.5rem !important;
-    }
-    
-    /* Auth buttons ki width auto karke unhe right me fix karega */
-    #auth-controls {
-        width: auto !important; 
-        flex-wrap: nowrap !important;
-        justify-content: flex-end !important;
-        order: 2 !important;
-    }
-    
-    /* Search bar ko left me rakhega aur limit karega */
-    .search-container {
-        order: 1 !important;
-        max-width: 600px !important; /* PC par search bar itna hi bada rahega */
-        margin-right: auto !important;
-        flex-grow: 1 !important;
-    }
-}
-/* ==========================================
    🚀 DESKTOP LANDING PAGE REDESIGN
    ========================================== */
 @media (min-width: 901px) {
@@ -1349,6 +1387,66 @@
     .war-grid-overlay {
         background-size: 60px 60px;
         opacity: 0.6;
+    }
+}
+/* ==========================================
+   🚀 BULLETPROOF DESKTOP CENTERING FIX
+   ========================================== */
+
+/* 1. Main Wrapper - Lock to right of sidebar */
+.main-content {
+    margin-left: var(--nav-width) !important;
+    width: calc(100% - var(--nav-width)) !important;
+    padding: 2.5rem !important;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: block !important; /* Removed Flexbox to stop left-alignment glitch */
+    overflow-x: hidden;
+}
+
+/* 2. Magic Centering for all content inside */
+.top-header, .view-section, .app-footer {
+    width: 100% !important;
+    max-width: 1400px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 3. Top Header (Search & Auth) Alignment */
+.top-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 2.5rem !important;
+}
+
+/* 4. Dashboard Welcome Text & Broadcast Button */
+.dashboard-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 2.5rem !important;
+    flex-wrap: wrap;
+}
+
+.greeting-text {
+    flex-grow: 1;
+    text-align: left;
+}
+
+/* 5. Desktop Specific Centering */
+@media (min-width: 901px) {
+    .search-container {
+        margin: 0 auto !important; /* Perfectly centers search bar */
+        max-width: 600px !important;
+    }
+    #auth-controls {
+        margin-left: 0 !important;
+        flex-shrink: 0;
+    }
+    .target-lock-box {
+        max-width: 100% !important; /* Lets target box fill the centered 1400px area */
     }
 }
 
@@ -2021,35 +2119,43 @@
                     <div id="dashboard-subject-content-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 </div>
 
-                <div class="grid-cards" style="margin-top: 2rem;">
-                    <div class="glass-card">
-                        <h3 style="font-size: 1.2rem; color: var(--accent-primary); display: flex; align-items: center; gap: 8px;">
-                            🎯 Focus Session
-                        </h3>
-                        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Use the Pomodoro timer to maintain operational focus and discipline.</p>
-                        <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ea580c, #dc2626); color: white; padding: 12px; font-size: 0.9rem;" onclick="startPomodoroSession()">
-                            🔥 POMODORO TIMER
-                        </button>
-                    </div>
-                    <div class="glass-card">
-                        <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
-                            ⌨️ Typing Practice
-                        </h3>
-                        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Test and improve your WPM and accuracy for Tier-2 DEST.</p>
-                        <button class="btn btn-outline" style="width: 100%; padding: 12px; font-size: 0.9rem;" onclick="openTypingModal()">
-                            🚀 START TYPING TEST
-                        </button>
-                    </div>
-                </div>
-                <div class="glass-card" style="margin-top: 2rem; border: 2px dashed var(--accent-secondary);">
-    <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
-        🛡️ Distraction Blocker
-    </h3>
-    <p style="font-size: 0.85rem; margin-bottom: 1rem;">Lock distracting apps/websites and maintain absolute focus during study hours.</p>
-    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ea580c, #ca8a04); color: white; padding: 12px; font-size: 0.9rem;" onclick="openDistractionModal()">
-        🔒 CONFIGURE BLOCKER
-    </button>
+            <div class="grid-cards" style="margin-top: 2rem;">
+    
+    <!-- 1. Focus Session Card -->
+    <div class="glass-card">
+        <h3 style="font-size: 1.2rem; color: var(--accent-primary); display: flex; align-items: center; gap: 8px;">
+            🎯 Focus Session
+        </h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Use the Pomodoro timer to maintain operational focus and discipline.</p>
+        <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ea580c, #dc2626); color: white; padding: 12px; font-size: 0.9rem;" onclick="startPomodoroSession()">
+            🔥 POMODORO TIMER
+        </button>
+    </div>
+
+    <!-- 2. Typing Practice Card -->
+    <div class="glass-card">
+        <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
+            ⌨️ Typing Practice
+        </h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Test and improve your WPM and accuracy for Tier-2 DEST.</p>
+        <button class="btn btn-outline" style="width: 100%; padding: 12px; font-size: 0.9rem;" onclick="openTypingModal()">
+            🚀 START TYPING TEST
+        </button>
+    </div>
+
+    <!-- 3. Distraction Blocker Card (Ab ye grid ke ANDAR hai) -->
+    <div class="glass-card" style="border: 2px dashed var(--accent-secondary);">
+        <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
+            🛡️ Distraction Blocker
+        </h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Lock distracting apps/websites and maintain absolute focus during study hours.</p>
+        <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ea580c, #ca8a04); color: white; padding: 12px; font-size: 0.9rem;" onclick="openDistractionModal()">
+            🔒 CONFIGURE BLOCKER
+        </button>
+    </div>
+
 </div>
+
 
             </section>
 
