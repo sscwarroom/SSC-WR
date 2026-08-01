@@ -1286,6 +1286,71 @@
         flex-grow: 1 !important;
     }
 }
+/* ==========================================
+   🚀 DESKTOP LANDING PAGE REDESIGN
+   ========================================== */
+@media (min-width: 901px) {
+    /* 1. Background ko aur deep aur immersive banaya */
+    #landing-page {
+        background: radial-gradient(circle at center, #0f172a 0%, #020617 80%);
+        padding: 4rem;
+    }
+    
+    /* 2. Chote box ka border/background hata kar usko full width hero banaya */
+    .landing-content {
+        max-width: 1200px;
+        width: 100%;
+        padding: 6rem 2rem;
+        background: transparent; 
+        border: none;
+        box-shadow: none;
+        animation: none; /* Mobile ka pulse animation desktop pe band */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 3. Text size ko desktop ke hisaab se massive kiya */
+    .hero-title {
+        font-size: 6rem !important; 
+        letter-spacing: -2px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.6rem !important;
+        max-width: 700px;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+    }
+
+    /* 4. Quote aur badge ko clearly visible kiya */
+    .hero-quote {
+        font-size: 1.25rem !important;
+        margin-bottom: 3rem;
+    }
+    
+    .tactical-badge {
+        font-size: 0.95rem;
+        padding: 12px 24px;
+        margin-bottom: 2.5rem;
+        border-radius: 50px;
+    }
+
+    /* 5. Button ko sleek aur proper size ka banaya */
+    .btn-launch {
+        max-width: 450px; 
+        font-size: 1.25rem;
+        padding: 1.2rem 3rem;
+        border-radius: 50px; /* Sharp corners ki jagah premium pill shape */
+    }
+    
+    /* Optional: War grid overlay ko desktop pe aur wide aur visible karna */
+    .war-grid-overlay {
+        background-size: 60px 60px;
+        opacity: 0.6;
+    }
+}
 
     </style>
 </head>
