@@ -1390,44 +1390,15 @@
     }
 }
 /* ==========================================
-   🚀 BULLETPROOF DESKTOP CENTERING FIX
+   🚀 BULLETPROOF DESKTOP CENTERING (MOBILE SAFE)
    ========================================== */
 
-/* 1. Main Wrapper - Lock to right of sidebar */
+/* 1. Global Base (Applies to both Mobile & Desktop safely) */
 .main-content {
-    margin-left: var(--nav-width) !important;
-    width: calc(100% - var(--nav-width)) !important;
-    padding: 2.5rem !important;
+    padding: 2.5rem;
     min-height: 100vh;
     box-sizing: border-box;
-    display: block !important; /* Removed Flexbox to stop left-alignment glitch */
     overflow-x: hidden;
-}
-
-/* 2. Magic Centering for all content inside */
-.top-header, .view-section, .app-footer {
-    width: 100% !important;
-    max-width: 1400px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
-/* 3. Top Header (Search & Auth) Alignment */
-.top-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-bottom: 2.5rem !important;
-}
-
-/* 4. Dashboard Welcome Text & Broadcast Button */
-.dashboard-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-bottom: 2.5rem !important;
-    flex-wrap: wrap;
 }
 
 .greeting-text {
@@ -1435,18 +1406,49 @@
     text-align: left;
 }
 
-/* 5. Desktop Specific Centering */
+/* 2. STRICTLY DESKTOP ONLY (901px and above) - Stops Mobile Glitch */
 @media (min-width: 901px) {
+    .main-content {
+        margin-left: var(--nav-width) !important;
+        width: calc(100% - var(--nav-width)) !important;
+        display: block !important;
+    }
+
+    .top-header, .view-section, .app-footer {
+        width: 100% !important;
+        max-width: 1400px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .top-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 2.5rem !important;
+    }
+
+    .dashboard-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-bottom: 2.5rem !important;
+        flex-wrap: nowrap;
+    }
+
     .search-container {
-        margin: 0 auto !important; /* Perfectly centers search bar */
+        margin: 0 auto !important; 
         max-width: 600px !important;
     }
+    
     #auth-controls {
         margin-left: 0 !important;
         flex-shrink: 0;
     }
+    
     .target-lock-box {
-        max-width: 100% !important; /* Lets target box fill the centered 1400px area */
+        max-width: 100% !important; 
     }
 }
 
