@@ -5132,12 +5132,25 @@ function pageNextQuizQuestion() {
         });
 
         function loadIntelTicker() {
-            const savedIntel = localStorage.getItem('warRoomIntelNews');
-            if(savedIntel) {
-                document.getElementById('intel-display-text').innerText = savedIntel;
-            }
-            populateNotifications();
-        }
+    // Firebase se Live Intel fetch karna
+    if (typeof firebase !== 'undefined') {
+        firebase.firestore().collection("global_data").doc("intel_updates")
+            .onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('intel-display-text').innerText = data.latestIntel;
+                } else {
+                    document.getElementById('intel-display-text').innerText = "Welcome to SSCWarRoom. Prepare hard, Warrior!";
+                }
+            }, (error) => {
+                console.log("Error loading live intel: ", error);
+                const savedIntel = localStorage.getItem('warRoomIntelNews');
+                if(savedIntel) document.getElementById('intel-display-text').innerText = savedIntel;
+            });
+    }
+    populateNotifications(); 
+}
+
 
         function populateNotifications() {
             const history = JSON.parse(localStorage.getItem('warRoomIntelHistory') || '[]');
@@ -5155,26 +5168,32 @@ function pageNextQuizQuestion() {
         }
 
         function adminAddIntel() {
-            const currentIntel = document.getElementById('intel-display-text').innerText;
-            const newIntel = prompt("ADMIN BROADCAST\nType the new update for all aspirants:", currentIntel);
+    const currentIntel = document.getElementById('intel-display-text').innerText;
+    const newIntel = prompt("ADMIN BROADCAST\nType the new update for all aspirants:", currentIntel);
+    
+    if(newIntel && newIntel.trim() !== "") {
+        const textToSave = newIntel.trim();
+        const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
+        
+        // Firebase Cloud me save karna
+        firebase.firestore().collection("global_data").doc("intel_updates").set({
+            latestIntel: textToSave,
+            time: dateStr
+        }, { merge: true }).then(() => {
+            let history = JSON.parse(localStorage.getItem('warRoomIntelHistory') || '[]');
+            history.unshift({ text: textToSave, time: dateStr });
+            if(history.length > 5) history = history.slice(0, 5); 
+            localStorage.setItem('warRoomIntelHistory', JSON.stringify(history));
             
-            if(newIntel && newIntel.trim() !== "") {
-                const textToSave = newIntel.trim();
-                localStorage.setItem('warRoomIntelNews', textToSave);
-                
-                let history = JSON.parse(localStorage.getItem('warRoomIntelHistory') || '[]');
-                const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
-                history.unshift({ text: textToSave, time: dateStr });
-                if(history.length > 5) history = history.slice(0, 5); 
-                
-                localStorage.setItem('warRoomIntelHistory', JSON.stringify(history));
-                
-                loadIntelTicker();
-                document.getElementById('noti-badge').style.display = 'block'; 
-                
-                alert("Intel broadcasted to all units!");
-            }
-        }
+            document.getElementById('noti-badge').style.display = 'block'; 
+            alert("🚀 Intel broadcasted successfully to ALL users via Cloud!");
+        }).catch(err => {
+            console.error("Intel Broadcast Error: ", err);
+            alert("Error broadcasting intel. Please check your internet connection.");
+        });
+    }
+}
+
 
         function toggleNotifications() {
             const panel = document.getElementById('notification-panel');
