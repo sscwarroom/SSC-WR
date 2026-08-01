@@ -1257,6 +1257,35 @@
         grid-template-columns: 1fr !important; /* Choti screen par cards ek ke neeche ek aayenge */
     }
 }
+/* ==========================================
+   🖥️ DESKTOP HEADER OVERLAP FIX
+   ========================================== */
+@media (min-width: 901px) {
+    .top-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 20px !important;
+        width: 100% !important;
+        margin-bottom: 2.5rem !important;
+    }
+    
+    /* Auth buttons ki width auto karke unhe right me fix karega */
+    #auth-controls {
+        width: auto !important; 
+        flex-wrap: nowrap !important;
+        justify-content: flex-end !important;
+        order: 2 !important;
+    }
+    
+    /* Search bar ko left me rakhega aur limit karega */
+    .search-container {
+        order: 1 !important;
+        max-width: 600px !important; /* PC par search bar itna hi bada rahega */
+        margin-right: auto !important;
+        flex-grow: 1 !important;
+    }
+}
 
     </style>
 </head>
