@@ -686,7 +686,16 @@
         }
 
         .t-word-line { display: block; margin-bottom: 10px; word-spacing: 4px; white-space: pre-wrap; }
-                 .t-char { color: var(--text-secondary); display: inline; position: relative; }
+           .t-char { 
+    color: var(--text-secondary); 
+    display: inline; 
+    position: relative; 
+    font-family: 'Courier New', Courier, monospace !important; 
+    font-size: 1.7rem !important; /* Text ko bada karne ke liye */
+    font-weight: bold !important; /* Text ko bold (dark) karne ke liye */
+}
+
+
         .t-correct { color: #16a34a !important; font-weight: 600; }
         .t-incorrect { color: #ffffff !important; background-color: #dc2626 !important; font-weight: 700; border-radius: 3px; padding: 0 2px; }
         
@@ -763,7 +772,114 @@
             .greeting-text p { font-size: 0.95rem; }
             .target-lock-box { padding: 1.5rem; }
             .intel-ticker { padding: 10px; gap: 10px; }
-        }/* --- DESKTOP HEADER ALIGNMENT FIX --- */
+            
+        }
+        /* /* ==========================================
+   🚀 PRO TYPING TEST ENGINE (MOBILE + PC)
+   ========================================== */
+#typing-active-screen {
+    --type-primary: #2563eb;
+    --type-bg: #f8fafc;
+    --type-text: #0f172a;
+    --type-active: rgba(37, 99, 235, 0.15);
+}
+
+/* 🎨 THEMES */
+#typing-active-screen[data-typing-theme="zenkai"] {
+    --type-primary: #f97316;
+    --type-bg: #1e1e1e;
+    --type-text: #f8fafc;
+    --type-active: #432411;
+}
+#typing-active-screen[data-typing-theme="hacker"] {
+    --type-primary: #22c55e;
+    --type-bg: #000000;
+    --type-text: #22c55e;
+    --type-active: #062f13;
+}
+#typing-active-screen[data-typing-theme="midnight"] {
+    --type-primary: #38bdf8;
+    --type-bg: #0f172a;
+    --type-text: #f1f5f9;
+    --type-active: #164e63;
+}
+.typing-box {
+    background-color: var(--type-bg);
+    border: 2px solid var(--type-primary);
+    border-radius: 12px;
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace; /* Ekdum clean typewriter font */
+    font-size: 1.35rem;
+    color: var(--type-text);
+    line-height: 2.2;
+    letter-spacing: 0.5px; /* Words ke beech clean spacing */
+    height: 220px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    font-weight: 500; /* Bold (700) hata diya taaki clean dikhe */
+    position: relative;
+    cursor: text;
+    transition: all 0.4s ease;
+}
+
+
+@media (max-width: 600px) {
+    .typing-box {
+        font-size: 1.1rem; /* Smaller font for mobile */
+        padding: 15px;
+        height: 200px;
+    }
+}
+
+.t-word { display: inline-block; margin-right: 6px; margin-bottom: 6px; }
+
+.t-char {
+    display: inline-block;
+    position: relative;
+    border-radius: 4px;
+    transition: background-color 0.1s, color 0.1s;
+}
+
+.t-space { white-space: pre; }
+
+/* Cursor Glow */
+.t-char.active {
+    background-color: var(--type-active);
+    color: var(--type-text);
+    border-left: 3px solid var(--type-primary);
+    animation: cursorBlink 0.7s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cursorBlink {
+    0% { border-left-color: var(--type-primary); }
+    100% { border-left-color: transparent; }
+}
+
+/* Keystroke Feedback */
+.t-char.correct { color: #16a34a; animation: superPop 0.2s forwards; }
+.t-char.incorrect { color: #ef4444; background-color: rgba(239, 68, 68, 0.15); animation: hardShake 0.3s forwards; }
+
+@keyframes superPop { 0% { transform: scale(1); } 50% { transform: scale(1.15) translateY(-2px); } 100% { transform: scale(1); } }
+@keyframes hardShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-3px) rotate(-2deg); } 40%, 80% { transform: translateX(3px) rotate(2deg); } }
+
+/* Flash Overlay */
+.typing-flash-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10; border-radius: 10px; cursor: pointer;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+.typing-flash-overlay.hidden { opacity: 0; visibility: hidden; }
+.typing-flash-text {
+    background: var(--type-primary); color: white;
+    padding: 10px 20px; border-radius: 50px; font-weight: 800; font-size: 0.9rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: pulseFlash 1.5s infinite; text-align: center;
+}
+
+        /* --- DESKTOP HEADER ALIGNMENT FIX --- */
 @media (min-width: 901px) {
     .top-header {
         justify-content: flex-start !important;
@@ -1451,6 +1567,138 @@
         max-width: 100% !important; 
     }
 }
+/* ==========================================
+   📱 MOBILE VIEW UI REFINEMENTS (Perfect Alignment)
+   ========================================== */
+@media (max-width: 900px) {
+    /* 1. Fix Greeting Text & Button Alignment */
+    .dashboard-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    .greeting-text h2 {
+        font-size: 1.55rem !important; 
+        line-height: 1.25 !important;
+        margin-bottom: 5px !important;
+    }
+    #admin-broadcast-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* 2. Fix Timer Layout (Force 4 blocks in one row) */
+    .timer-display {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important; 
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .time-block {
+        min-width: auto !important;
+        padding: 10px 4px !important;
+    }
+    .time-value {
+        font-size: 1.25rem !important; 
+    }
+    .time-label {
+        font-size: 0.65rem !important;
+        letter-spacing: 0.5px !important;
+    }
+    /* 3. Fix Intel Ticker (Sleek Scrolling Bar for Mobile) */
+    .intel-ticker {
+        flex-direction: row !important; /* Wapas ek straight line mein */
+        align-items: center !important;
+        padding: 8px 12px !important; /* Box ki motai/chodai ekdum kam kar di */
+        border-radius: 8px !important; /* Sleek edges */
+        gap: 10px !important;
+    }
+    .intel-badge {
+        font-size: 0.65rem !important;
+        padding: 4px 8px !important;
+        flex-shrink: 0 !important; /* Badge chhota nahi hoga */
+    }
+    .ticker-text-wrapper {
+        flex-grow: 1 !important;
+        overflow: hidden !important; /* Bahar nikalta hua text hide karega */
+        position: relative !important;
+        white-space: nowrap !important;
+    }
+    .ticker-text {
+        display: inline-block !important;
+        white-space: nowrap !important;
+        font-size: 0.85rem !important;
+        line-height: 1 !important;
+        /* Animation wapas chalu kar di (Smooth scrolling) */
+        animation: scrollMobile 15s linear infinite !important;
+    }
+
+    @keyframes scrollMobile {
+        0% { transform: translateX(80vw); }
+        100% { transform: translateX(-100%); }
+    }
+
+
+/* --- PREMIUM APP DOWNLOAD SECTION --- */
+#app-promo-box {
+    margin-top: 1.5rem;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.promo-text {
+    color: #94a3b8; 
+    font-size: 0.85rem !important;
+    margin: 0 !important;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.btn-download-app {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.1); 
+    color: #22c55e; 
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-download-app:hover {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: #22c55e;
+    color: #4ade80;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3), inset 0 0 10px rgba(34, 197, 94, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-download-app svg {
+    transition: transform 0.3s ease;
+}
+
+.btn-download-app:hover svg {
+    transform: translateY(2px);
+}
 
     </style>
 </head>
@@ -1730,130 +1978,181 @@
 
     
     <div id="typing-test-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 20000; display: none; justify-content: center; align-items: center;">
-        <div class="glass-card fade-in" style="width: 100%; max-width: 680px; background: var(--bg-secondary); margin: 15px; position: relative;">
-            <button onclick="closeTypingModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; z-index: 10;">&times;</button>
-            
-            <div id="typing-setup-screen">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
-                    <h3 style="color: var(--accent-primary); margin: 0; font-size: 1.3rem;">⌨️ Tier-2 DEST Typing Test Setup</h3>
-                    <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="openTypingHistoryModal()">📜 View History</button>
-                </div>
-                <p style="font-size: 0.85rem; margin-bottom: 20px;">Configure your parameters before launching the test.</p>
-                
-                <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                    <div>
-                        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Duration:</label>
-                        <select id="typing-duration-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
-    <option value="1">1 Minute</option>
-    <option value="3">3 Minutes</option>
-    <option value="5" selected>5 Minutes (Standard SSC)</option>
-</select>
-
-                    </div>
-
-                    <div>
-                        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Difficulty Level:</label>
-                        <select id="typing-level-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
-                            <option value="basic">Basic (Simple Sentences & Common Words)</option>
-                            <option value="average" selected>Average (Standard Govt Notifications)</option>
-                            <option value="hard">Hard (Complex Technical & Legal Vocabulary)</option>
-                        </select>
-                    </div>
-                </div>
-<div id="distraction-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 40000; display: none; justify-content: center; align-items: center;">
-    <div class="glass-card" style="width: 100%; max-width: 450px; background: var(--bg-secondary); margin: 15px; position: relative;">
-        <button onclick="closeDistractionModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
-        <h3 style="color: var(--accent-secondary); margin-bottom: 10px;">🛡️ Tactical Distraction Blocker</h3>
-        <p style="font-size: 0.85rem; margin-bottom: 15px;">Add keywords or names of websites/apps that distract you during combat study.</p>
+    <div class="glass-card fade-in" id="typing-modal-card" style="width: 100%; max-width: 800px; max-height: 95vh; overflow-y: auto; background: var(--bg-secondary); margin: 10px; position: relative; padding: 20px;">
+        <button onclick="closeTypingModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; z-index: 20;">&times;</button>
         
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
-            <input type="text" id="distract-target-input" class="search-input" placeholder="e.g. instagram, shorts, gaming..." style="padding: 10px 14px; font-size: 0.9rem;">
-            <button class="btn" style="background: var(--accent-primary); color: white; padding: 10px;" onclick="addDistractionTarget()">Add to Blocklist ➕</button>
+        <!-- 1. SETUP SCREEN -->
+        <div id="typing-setup-screen">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
+                <h3 style="color: var(--accent-primary); margin: 0; font-size: 1.3rem;">⌨️ Tier-2 DEST Pro Setup</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="openTypingHistoryModal()">📜 History</button>
+                    <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem; border-color: #eab308; color: #eab308; font-weight: bold;" onclick="openTypingLeaderboard()">🏆 Ranks</button>
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; margin-bottom: 20px;">Configure your parameters before launching the test.</p>
             
-            <div id="blocklist-container" style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-top: 5px;"></div>
-            
-            <label style="font-size: 0.85rem; font-weight: 700; margin-top: 5px;">Select Lock Duration:</label>
-            <select id="distract-duration-sel" class="search-input" style="padding: 10px; font-size: 0.9rem;">
-                <option value="15">15 Minutes</option>
-                <option value="30" selected>30 Minutes</option>
-                <option value="60">1 Hour</option>
-                <option value="120">2 Hours</option>
-            </select>
-
-            <button class="btn" style="background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 12px; font-weight: 800; margin-top: 5px;" onclick="startDistractionLock()">Activate Lockdown 🛡️</button>
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Duration:</label>
+                    <select id="typing-duration-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
+                        <option value="1">1 Minute</option>
+                        <option value="3">3 Minutes</option>
+                        <option value="5" selected>5 Minutes (Standard SSC)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Difficulty Level:</label>
+                    <select id="typing-level-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
+                        <option value="basic">Basic (Simple Sentences)</option>
+                        <option value="average" selected>Average (Govt Notifications)</option>
+                        <option value="hard">Hard (Technical & Legal)</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" style="width: 100%; background: var(--accent-primary); color: white; padding: 14px;" onclick="initializeTypingTest()">🚀 Start Typing Assessment</button>
         </div>
+
+        <!-- 2. ACTIVE TYPING SCREEN -->
+        <div id="typing-active-screen" class="hidden" data-typing-theme="light">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; padding-right: 25px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <select id="typing-theme-selector" class="search-input" style="padding: 4px 8px; font-size: 0.75rem; width: auto; appearance: auto; background: var(--bg-primary);" onchange="changeTypingTheme(this.value)">
+                        <option value="light">Classic (Light)</option>
+                        <option value="zenkai">Zenkai (Orange)</option>
+                        <option value="hacker">Hacker (Green)</option>
+                        <option value="midnight">Midnight (Blue)</option>
+                    </select>
+                    <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="toggleTypingFullscreen()">⛶ Full Screen</button>
+                </div>
+                <div style="font-weight: 800; color: var(--accent-secondary); font-size: 1.1rem; background: var(--bg-primary); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--glass-border);" id="typing-timer-display">00:00</div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px;">🔊 Audio enabled. Tap the box to start. Timer begins on first keystroke.</p>
+            
+            <textarea id="hidden-focus-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; opacity: 0; left: -9999px; top: -9999px;"></textarea>
+
+            <div style="position: relative; margin-bottom: 15px; width: 100%;" onclick="focusTypingInput()">
+                <div id="typing-flash-overlay" class="typing-flash-overlay">
+                    <div class="typing-flash-text">🖱️ Tap here to start typing</div>
+                </div>
+                <div id="typing-passage-box" class="typing-box"></div>
+            </div>
+            
+            <button class="btn btn-outline" style="width: 100%; padding: 10px; font-size: 0.85rem;" onclick="finishTypingTestEarly()">Submit Test Early 🏁</button>
+        </div>
+
+        <!-- 3. RESULT SCREEN -->
+        <div id="typing-result-screen" class="hidden" style="text-align: center;">
+            <h3 style="color: var(--accent-tertiary); font-size: 1.8rem; margin-bottom: 5px;">🎉 Assessment Completed!</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Here is your detailed SSC Tier-2 DEST performance report:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-primary);" id="res-wpm">0</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Net WPM</div>
+                </div>
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-tertiary);" id="res-accuracy">0%</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Accuracy</div>
+                </div>
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-secondary);" id="res-kdph">0</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Key Dep / Hr</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-outline" style="flex: 1; padding: 12px;" onclick="openTypingHistoryModal()">📜 History</button>
+                <button class="btn btn-outline" style="flex: 1; padding: 12px; border-color: #eab308; color: #eab308;" onclick="openTypingLeaderboard()">🏆 Ranks</button>
+                <button class="btn" style="flex: 2; background: var(--accent-primary); color: white; padding: 12px; min-width: 100%;" onclick="resetTypingModalToSetup()">Take Another Test 🔄</button>
+            </div>
+        </div>
+
+        <!-- 4. HISTORY SCREEN -->
+        <div id="typing-history-screen" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
+                <h3 style="margin: 0; color: var(--accent-secondary); font-size: 1.3rem;">📜 History</h3>
+                <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="backToTypingSetup()">⬅️ Back</button>
+            </div>
+            <div id="typing-history-list-container" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 5px;"></div>
+            <button class="btn" style="width: 100%; background: #ef4444; color: white; padding: 10px;" onclick="clearTypingHistory()">🗑️ Clear History</button>
+        </div>
+
+        <!-- 5. LEADERBOARD SCREEN -->
+        <div id="typing-leaderboard-screen" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
+                <h3 style="margin: 0; color: #eab308; font-size: 1.3rem;">🏆 Global Typing Ranks</h3>
+                <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="backToTypingSetupFromLeaderboard()">⬅️ Back</button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="tab-daily-lb" class="btn" style="flex: 1; background: var(--accent-primary); color: white;" onclick="loadTypingLeaderboard('daily')">🔥 Daily Top 100</button>
+                <button id="tab-alltime-lb" class="btn btn-outline" style="flex: 1; border-color: #eab308; color: #eab308;" onclick="loadTypingLeaderboard('alltime')">🌟 All-Time Top</button>
+            </div>
+
+            <div id="user-typing-rank-banner" style="background: rgba(37,99,235,0.1); border: 1px solid var(--accent-primary); padding: 12px; border-radius: 12px; margin-bottom: 15px; text-align: center; font-weight: 800; color: var(--text-primary); font-size: 0.95rem;">
+                Fetching your rank... 📡
+            </div>
+
+            <div id="typing-leaderboard-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px;">
+                <!-- Leaderboard Data Injects Here -->
+            </div>
+        </div>
+
     </div>
 </div>
 
-<div id="lockdown-shield-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #020617; z-index: 999999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; color: white;">
-    <div style="font-size: 4rem; margin-bottom: 1rem;">🛡️</div>
-    <h2 style="color: #ef4444; font-size: 2.2rem; margin-bottom: 0.5rem;">STRICT LOCKDOWN ACTIVE</h2>
-    <p style="color: #94a3b8; max-width: 400px; margin-bottom: 2rem;">Distraction blocking is active. Return to your mission or wait out the timer to regain access.</p>
-    <div id="lockdown-countdown-timer" style="font-size: 3rem; font-weight: 800; color: var(--accent-secondary); font-variant-numeric: tabular-nums; margin-bottom: 2rem;">00:30</div>
-    <button class="btn btn-outline" style="border-color: #475569; color: #94a3b8;" onclick="forceUnlockEmergency()">Emergency Override (Not Recommended)</button>
-</div>
-
-                <button class="btn" style="width: 100%; background: var(--accent-primary); color: white; padding: 14px;" onclick="initializeTypingTest()">🚀 Start Typing Assessment</button>
-            </div>
-
-                       <div id="typing-active-screen" class="hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-right: 35px; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--accent-primary);">⌨️ Live Typing</h3>
-                        <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="toggleTypingFullscreen()">⛶ Full Screen</button>
-
-                    </div>
-                    <div style="font-weight: 800; color: var(--accent-secondary); font-size: 1.1rem;" id="typing-timer-display">Time: 00:00</div>
+        
+        <!-- 3. RESULT SCREEN (Update this section to add Leaderboard Button) -->
+        <div id="typing-result-screen" class="hidden" style="text-align: center;">
+            <h3 style="color: var(--accent-tertiary); font-size: 1.8rem; margin-bottom: 5px;">🎉 Assessment Completed!</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Here is your detailed SSC Tier-2 DEST performance report:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-primary);" id="res-wpm">0</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Net WPM</div>
                 </div>
-
-
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Click inside the box below and start typing on your keyboard (Timer starts on first key press):</p>
-                
-                <div id="typing-passage-box" tabindex="0" style="background: var(--bg-primary); padding: 18px; border-radius: 12px; font-size: 1.35rem; font-weight: 600; margin-bottom: 15px; line-height: 2.6; border: 2px solid var(--accent-primary); height: 230px; overflow-y: auto; outline: none; white-space: pre-wrap; font-family: monospace;"></div>
-
-                
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-outline" style="flex: 1; padding: 10px; font-size: 0.85rem;" onclick="finishTypingTestEarly()">Submit Test Early 🏁</button>
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-tertiary);" id="res-accuracy">0%</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Accuracy</div>
+                </div>
+                <div style="background: var(--bg-primary); padding: 15px 5px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-secondary);" id="res-kdph">0</div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Key Dep / Hr</div>
                 </div>
             </div>
 
-            <div id="typing-result-screen" class="hidden" style="text-align: center;">
-                <h3 style="color: var(--accent-tertiary); font-size: 1.8rem; margin-bottom: 5px;">🎉 Assessment Completed!</h3>
-                <p style="font-size: 0.9rem; margin-bottom: 20px;">Here is your detailed SSC Tier-2 DEST performance report:</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
-                    <div style="background: var(--bg-primary); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
-                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-primary);" id="res-wpm">0</div>
-                        <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Net WPM</div>
-                    </div>
-                    <div style="background: var(--bg-primary); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
-                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-tertiary);" id="res-accuracy">0%</div>
-                        <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Accuracy</div>
-                    </div>
-                    <div style="background: var(--bg-primary); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
-                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-secondary);" id="res-kdph">0</div>
-                        <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-top: 5px;">Key Dep / Hr</div>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-outline" style="flex: 1; padding: 12px;" onclick="openTypingHistoryModal()">📜 History</button>
-                    <button class="btn" style="flex: 2; background: var(--accent-primary); color: white; padding: 12px;" onclick="resetTypingModalToSetup()">Take Another Test 🔄</button>
-                </div>
-            </div>
-
-            <div id="typing-history-screen" class="hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
-                    <h3 style="margin: 0; color: var(--accent-secondary); font-size: 1.3rem;">📜 Typing Test Performance History</h3>
-                    <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="backToTypingSetup()">⬅️ Back</button>
-                </div>
-                
-                <div id="typing-history-list-container" style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 5px;"></div>
-                
-                <button class="btn" style="width: 100%; background: #ef4444; color: white; padding: 10px;" onclick="clearTypingHistory()">🗑️ Clear History</button>
+            <!-- Updated Buttons -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-outline" style="flex: 1; padding: 12px;" onclick="openTypingHistoryModal()">📜 History</button>
+                <button class="btn btn-outline" style="flex: 1; padding: 12px; border-color: #eab308; color: #eab308;" onclick="openTypingLeaderboard()">🏆 Ranks</button>
+                <button class="btn" style="flex: 2; background: var(--accent-primary); color: white; padding: 12px; min-width: 100%;" onclick="resetTypingModalToSetup()">Take Another Test 🔄</button>
             </div>
         </div>
-    </div>
+
+        <!-- 5. NEW: GLOBAL LEADERBOARD SCREEN -->
+        <div id="typing-leaderboard-screen" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; padding-right: 35px;">
+                <h3 style="margin: 0; color: #eab308; font-size: 1.3rem;">🏆 Global Typing Ranks</h3>
+                <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.75rem;" onclick="backToTypingSetupFromLeaderboard()">⬅️ Back</button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="tab-daily-lb" class="btn" style="flex: 1; background: var(--accent-primary); color: white;" onclick="loadTypingLeaderboard('daily')">🔥 Daily Top 100</button>
+                <button id="tab-alltime-lb" class="btn btn-outline" style="flex: 1; border-color: #eab308; color: #eab308;" onclick="loadTypingLeaderboard('alltime')">🌟 All-Time Top</button>
+            </div>
+
+            <div id="user-typing-rank-banner" style="background: rgba(37,99,235,0.1); border: 1px solid var(--accent-primary); padding: 12px; border-radius: 12px; margin-bottom: 15px; text-align: center; font-weight: 800; color: var(--text-primary); font-size: 0.95rem;">
+                Fetching your rank... 📡
+            </div>
+
+            <div id="typing-leaderboard-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px;">
+                <!-- Leaderboard Data Injects Here -->
+            </div>
+        </div>
+        
 
     <div id="test-runner-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 30000; display: none; flex-direction: column;">
         <div style="background: #1e293b; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -1938,11 +2237,9 @@
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
-            </button><div id="mobile-app-promo">
-    <p class="apk-notice">📱 Mobile users (Recommended for better experience):</p>
-    <!-- Yahan href me tumhari original file ka naam (SSC-WR.apk) daal diya hai -->
-<a href="https://raw.githubusercontent.com/sscwarroom/SSC-WR/main/SSC-WR.apk" class="btn-apk-download">
-
+            </button><div id="app-promo-box">
+    <p class="promo-text">📱 Get the Official SSCWarRoom App and Study Smarter </p>
+    <a href="https://raw.githubusercontent.com/sscwarroom/SSC-WR/main/SSC-WR.apk" class="btn-download-app">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
         </svg>
@@ -3486,19 +3783,56 @@ function pushToFirestoreCloud(title, subject, type, format, content) {
         5: '"Knowledge," said Dr. A. P. J. Abdul Kalam, "is the most powerful tool for transforming a Nation." Every serious SSC Aspirant should remember this statement because Success is never achieved by luck alone. It requires Discipline, Consistency, Smart Planning, and Continuous Practice. A student who studies for 6–8 hours with complete focus is usually more productive than someone who spends 10–12 hours without concentration. Therefore, prepare a realistic timetable, follow it honestly, and review your progress every week. Ask yourself, "What did I learn today?" If the answer is clear, you are moving in the right direction.\nIn Indian Polity, the Constitution came into force on 26 January, 1950, and India became a Republic. The Parliament consists of the Lok Sabha and the Rajya Sabha, while the President is the Constitutional Head of the State. The Prime Minister, however, is the Head of the Government and leads the Council of Ministers. The Supreme Court is the highest judicial authority, whereas the Election Commission conducts free and fair elections. Citizens enjoy Fundamental Rights but are also expected to perform their Fundamental Duties. Rights and responsibilities always go hand in hand.\nGeneral Science explains many natural phenomena through observation and experimentation. According to Newton\'s Second Law, force depends upon mass and acceleration. Water freezes at 0°C and boils at 100°C under standard atmospheric pressure. The Human Heart pumps oxygen-rich blood throughout the body, while the Brain controls thinking, memory, emotions, and coordination. Vitamins A, B12, C, D, E, and K perform different functions in the body. Renewable Energy sources such as Solar, Wind, and Hydroelectric Power reduce pollution and support sustainable development. Scientists continue to discover new technologies that improve Healthcare, Communication, Agriculture, and Space Research.\nIn Geography, the Earth is divided into 7 Continents and 5 Oceans. Asia is the largest continent, whereas Australia is the smallest. The Pacific Ocean is the largest ocean on Earth. The Himalayas influence India\'s climate by blocking cold winds from Central Asia. Rivers such as the Ganga, Brahmaputra, Godavari, Krishna, and Narmada play an important role in agriculture and water supply. Climate change, deforestation, and pollution have become major global concerns. Therefore, every responsible citizen should plant trees, conserve water, and reduce unnecessary waste.\nFinally, remember this simple formula: "Practice + Accuracy + Revision = Success." Solve Previous-Year Papers, analyse every mistake, maintain an Error Log, and never ignore weak topics. Do not compare your progress with anyone else\'s; compare today\'s performance with yesterday\'s. Even a 1% improvement every day creates extraordinary results over time. Stay calm during the examination, read every question carefully, avoid unnecessary risks, and manage your time wisely. Believe in yourself, trust your preparation, and always give 100% effort because Success belongs to those who refuse to quit!'
     }
 };
-
-        // === TYPING TEST ENGINE (STRICT MODE + ACCURATE METRICS) ===
+// === PRO TYPING TEST ENGINE (MOBILE + PC SYNC) ===
 let typingTimer = null;
 let typingSecondsLeft = 0;
-let selectedPassageText = "";
 let typingTestActive = false;
-let userTypedChars = "";
 let typingStarted = false;
-let inactivityTimer = null;
-let isTypingPaused = false;
+let exactStartTime = null;
 
-let typingErrors = 0; 
-let showErrorOnCurrent = false;
+let charactersInfo = [];
+let charIndex = 0;
+let typingMistakes = 0;
+let previousInputLength = 0;
+
+// Theme Changer
+function changeTypingTheme(theme) {
+    const screen = document.getElementById('typing-active-screen');
+    const card = document.getElementById('typing-modal-card');
+    screen.setAttribute('data-typing-theme', theme);
+    
+    // Match Modal background with theme for seamless look
+    if(theme === 'zenkai') card.style.background = '#111111';
+    else if(theme === 'hacker') card.style.background = '#050505';
+    else if(theme === 'midnight') card.style.background = '#020617';
+    else card.style.background = 'var(--bg-secondary)';
+    
+    document.getElementById('hidden-focus-input').focus();
+}
+
+// Audio Engine
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function playCorrectSound() {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); 
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+}
+function playErrorSound() {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+}
 
 function openTypingModal() {
     document.getElementById('typing-test-modal').style.display = 'flex';
@@ -3509,144 +3843,165 @@ function closeTypingModal() {
     clearInterval(typingTimer);
     typingTestActive = false;
     document.getElementById('typing-test-modal').style.display = 'none';
+    document.getElementById('typing-modal-card').style.background = 'var(--bg-secondary)';
+    
+    if (document.fullscreenElement) document.exitFullscreen();
 }
 
 function resetTypingModalToSetup() {
     clearInterval(typingTimer);
     typingTestActive = false;
     typingStarted = false;
+    exactStartTime = null;
+    document.getElementById('hidden-focus-input').value = "";
+    previousInputLength = 0;
+    
     document.getElementById('typing-setup-screen').classList.remove('hidden');
     document.getElementById('typing-active-screen').classList.add('hidden');
     document.getElementById('typing-result-screen').classList.add('hidden');
     document.getElementById('typing-history-screen').classList.add('hidden');
-    userTypedChars = "";
-    typingErrors = 0;
-    showErrorOnCurrent = false;
 }
 
-function formatPassageIntoLines(text, wordsPerLine = 7) {
-    const words = text.split(/\s+/);
-    let lines = [];
-    for (let i = 0; i < words.length; i += wordsPerLine) {
-        let chunk = words.slice(i, i + wordsPerLine).join(' ');
-        lines.push(chunk);
-    }
-    return lines.join('\n');
+function focusTypingInput() {
+    document.getElementById('typing-flash-overlay').classList.add('hidden');
+    const hiddenInput = document.getElementById('hidden-focus-input');
+    hiddenInput.focus();
+    initAudio(); 
 }
 
 function initializeTypingTest() {
     const durationMins = parseInt(document.getElementById('typing-duration-sel').value);
     const level = document.getElementById('typing-level-sel').value;
-
     const levelData = sscTypingTestsData[level] || sscTypingTestsData['average'];
     let rawText = levelData[durationMins] || levelData[5] || Object.values(levelData)[0];
 
-    selectedPassageText = formatPassageIntoLines(rawText, 7);
-
     typingSecondsLeft = durationMins * 60;
-    userTypedChars = "";
-    typingErrors = 0;           
-    showErrorOnCurrent = false; 
-    typingStarted = false;
-    isTypingPaused = false;
-
+    typingMistakes = 0; charIndex = 0; previousInputLength = 0;
+    typingStarted = false; exactStartTime = null; charactersInfo = [];
+    
     document.getElementById('typing-setup-screen').classList.add('hidden');
     document.getElementById('typing-active-screen').classList.remove('hidden');
+    document.getElementById('typing-flash-overlay').classList.remove('hidden');
 
-    renderRealDestPassage();
+    // Reset Theme to current selector
+    changeTypingTheme(document.getElementById('typing-theme-selector').value);
+
+    buildProTypingUI(rawText);
     updateTypingTimerDisplay();
-
-    const passageBox = document.getElementById('typing-passage-box');
-    passageBox.focus();
-
-    let pauseIndicator = document.getElementById('typing-pause-indicator');
-    if (!pauseIndicator) {
-        pauseIndicator = document.createElement('div');
-        pauseIndicator.id = 'typing-pause-indicator';
-        pauseIndicator.style.cssText = "color: #f59e0b; font-weight: bold; font-size: 0.85rem; margin-top: 5px;";
-        passageBox.parentNode.insertBefore(pauseIndicator, passageBox.nextSibling);
-    }
-    pauseIndicator.innerText = "";
-
-    passageBox.onkeydown = function(e) {
-        if (!typingTestActive) return;
-
-        if (e.key === ' ' || e.key === 'Backspace' || e.key === 'Enter') {
-            e.preventDefault();
-        }
-
-        if (isTypingPaused) {
-            isTypingPaused = false;
-            pauseIndicator.innerText = "";
-            startActiveTypingTimer();
-        }
-
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(() => {
-            if (typingTestActive && typingStarted && !isTypingPaused) {
-                isTypingPaused = true;
-                clearInterval(typingTimer);
-                pauseIndicator.innerText = "⏸️ Test Paused due to inactivity (Press any key to resume)";
-            }
-        }, 5000);
-
-        if (!typingStarted && (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter')) {
-            typingStarted = true;
-            startActiveTypingTimer();
-        }
-
-        if (isTypingPaused) return;
-
-        // === STRICT TYPING MODE LOGIC ===
-        if (e.key === 'Backspace') {
-            if (userTypedChars.length > 0) {
-                userTypedChars = userTypedChars.slice(0, -1);
-                showErrorOnCurrent = false; 
-                renderRealDestPassage();
-            }
-        } else if (e.key === 'Enter') {
-            const expectedChar = selectedPassageText[userTypedChars.length];
-            if (expectedChar === '\n') {
-                userTypedChars += '\n';
-                showErrorOnCurrent = false;
-                renderRealDestPassage();
-                if (userTypedChars.length >= selectedPassageText.length) finishTypingTest();
-            } else {
-                typingErrors++;
-                showErrorOnCurrent = true;
-                renderRealDestPassage();
-            }
-        } else if (e.key.length === 1) {
-            if (userTypedChars.length < selectedPassageText.length) {
-                const expectedChar = selectedPassageText[userTypedChars.length];
-                
-                if (e.key === expectedChar) {
-                    userTypedChars += e.key;
-                    showErrorOnCurrent = false;
-                    renderRealDestPassage();
-                    
-                    if (userTypedChars.length >= selectedPassageText.length) {
-                        finishTypingTest(); 
-                    }
-                } else {
-                    typingErrors++;
-                    showErrorOnCurrent = true;
-                    renderRealDestPassage();
-                }
-            }
-        }
-    };
-
     typingTestActive = true;
+    
+    const hiddenInput = document.getElementById('hidden-focus-input');
+    hiddenInput.value = '';
+    
+    // 👇👇 YAHAN PAR SCROLL FIX ADD KIYA GAYA HAI 👇👇
+    document.getElementById('typing-passage-box').scrollTop = 0;
+    // 👆👆 ===================================== 👆👆
+
+    // 📱 MOBILE BULLETPROOF INPUT LISTENER
+    hiddenInput.oninput = handleMobileFriendlyInput;
 }
+
+
+function buildProTypingUI(text) {
+    const typingBox = document.getElementById('typing-passage-box');
+    typingBox.innerHTML = '';
+    const words = text.split(' ');
+    
+    words.forEach((word, index) => {
+        const wordDiv = document.createElement('div');
+        wordDiv.classList.add('t-word');
+        
+        word.split('').forEach(char => {
+            const span = document.createElement('span');
+            span.innerText = char; span.classList.add('t-char');
+            wordDiv.appendChild(span);
+            charactersInfo.push({ el: span, char: char });
+        });
+        
+        if (index < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.innerText = ' '; spaceSpan.classList.add('t-char', 't-space');
+            wordDiv.appendChild(spaceSpan);
+            charactersInfo.push({ el: spaceSpan, char: ' ' });
+        }
+        typingBox.appendChild(wordDiv);
+    });
+
+    if (charactersInfo.length > 0) charactersInfo[0].el.classList.add('active');
+}
+
+function handleMobileFriendlyInput(e) {
+    if (!typingTestActive) return;
+    const hiddenInput = document.getElementById('hidden-focus-input');
+    let currentVal = hiddenInput.value;
+
+    if (!typingStarted && currentVal.length > 0) {
+        typingStarted = true;
+        exactStartTime = Date.now();
+        startActiveTypingTimer();
+    }
+
+    // Clear all states
+    charactersInfo.forEach(c => {
+        c.el.className = 't-char' + (c.char === ' ' ? ' t-space' : '');
+    });
+
+    typingMistakes = 0;
+    
+    // Validate each character typed so far
+    for (let i = 0; i < currentVal.length; i++) {
+        if (i >= charactersInfo.length) {
+            hiddenInput.value = currentVal.substring(0, charactersInfo.length);
+            break; 
+        }
+        if (currentVal[i] === charactersInfo[i].char) {
+            charactersInfo[i].el.classList.add('correct');
+        } else {
+            charactersInfo[i].el.classList.add('incorrect');
+            typingMistakes++;
+        }
+    }
+
+    charIndex = hiddenInput.value.length;
+
+    // Audio Feedback
+    if (charIndex > previousInputLength) {
+        let lastCharCorrect = currentVal[charIndex - 1] === charactersInfo[charIndex - 1]?.char;
+        if(lastCharCorrect) playCorrectSound();
+        else playErrorSound();
+    } else if (charIndex < previousInputLength) {
+        playCorrectSound(); // Backspace sound
+    }
+    previousInputLength = charIndex;
+
+      // Active Cursor & Auto-Scroll (100% PERFECT SCROLL FIX)
+    if (charIndex < charactersInfo.length) {
+        charactersInfo[charIndex].el.classList.add('active');
+        
+        const box = document.getElementById('typing-passage-box');
+        const activeSpan = charactersInfo[charIndex].el;
+        
+        // Exact screen position calculate karega
+        const boxRect = box.getBoundingClientRect();
+        const spanRect = activeSpan.getBoundingClientRect();
+
+        // Agar typing cursor box ke bottom border ke paas (20px) pahunch gaya hai
+        if (spanRect.bottom > boxRect.bottom - 20) {
+            box.scrollTop += 60; // Thoda sa smoothly neeche scroll karega
+        }
+    } else {
+        finishTypingTest();
+    }
+} // Yahan par handleMobileFriendlyInput function khatam hota hai
+
 
 function startActiveTypingTimer() {
     clearInterval(typingTimer);
     typingTimer = setInterval(() => {
-        if (typingSecondsLeft > 0 && !isTypingPaused) {
+        if (typingSecondsLeft > 0) {
             typingSecondsLeft--;
             updateTypingTimerDisplay();
-        } else if (typingSecondsLeft <= 0) {
+        } else {
             finishTypingTest();
         }
     }, 1000);
@@ -3655,111 +4010,179 @@ function startActiveTypingTimer() {
 function updateTypingTimerDisplay() {
     const m = Math.floor(typingSecondsLeft / 60);
     const s = typingSecondsLeft % 60;
-    const timerEl = document.getElementById('typing-timer-display');
-    if (timerEl) {
-        timerEl.innerText = `Time: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }
-}
-
-function renderRealDestPassage() {
-    const container = document.getElementById('typing-passage-box');
-    if (!container) return;
-
-    let html = '';
-    for (let i = 0; i < selectedPassageText.length; i++) {
-        let charClass = 't-char';
-        let charDisplay = selectedPassageText[i];
-        let inlineStyle = ''; 
-
-        if (i < userTypedChars.length) {
-            charClass = 't-char t-correct';
-        } else if (i === userTypedChars.length) {
-            charClass = 't-char t-current';
-            if (showErrorOnCurrent) {
-                inlineStyle = 'background-color: #dc2626 !important; color: #ffffff !important; border-radius: 3px; padding: 0 2px;';
-            }
-        }
-
-        if (charDisplay === ' ') {
-            charDisplay = '&nbsp;';
-        } else if (charDisplay === '\n') {
-            charDisplay = '↵\n';
-        }
-
-        html += `<span id="dest-char-${i}" class="${charClass}" style="${inlineStyle}" title="Expected: '${selectedPassageText[i]}'">${charDisplay}</span>`;
-    }
-    container.innerHTML = html;
-
-    const activeSpan = document.getElementById(`dest-char-${userTypedChars.length}`);
-    if (activeSpan) {
-        const containerRect = container.getBoundingClientRect();
-        const spanRect = activeSpan.getBoundingClientRect();
-        if (spanRect.top < containerRect.top || spanRect.bottom > containerRect.bottom) {
-            container.scrollTop = activeSpan.offsetTop - container.offsetTop - 30;
-        }
-    }
+    document.getElementById('typing-timer-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 
 function finishTypingTestEarly() {
-    if (confirm("Are you sure you want to submit and view your report?")) {
-        finishTypingTest();
-    }
+    if (confirm("Are you sure you want to submit and view your report?")) finishTypingTest();
 }
 
 function finishTypingTest() {
     if (!typingTestActive) return;
     clearInterval(typingTimer);
     typingTestActive = false;
+    document.getElementById('hidden-focus-input').oninput = null;
+    document.getElementById('typing-modal-card').style.background = 'var(--bg-secondary)'; 
 
-    const passageBox = document.getElementById('typing-passage-box');
-    if (passageBox) passageBox.onkeydown = null;
-
-    // Selected duration in seconds (e.g., 1, 3, or 5 mins)
-    const selectedMins = parseInt(document.getElementById('typing-duration-sel').value);
-    const totalDurationSecs = selectedMins * 60;
+    let timeElapsedInMins = 1 / 60; 
+    if (exactStartTime) timeElapsedInMins = (Date.now() - exactStartTime) / 60000;
     
-    // Actual time spent by user in seconds
-    const totalTimeSecs = totalDurationSecs - typingSecondsLeft;
-    const timeInMins = totalTimeSecs > 0 ? totalTimeSecs / 60 : 1 / 60; // Safe fallback for instant submit
+    let grossWPM = 0, netWPM = 0, accuracy = 0, kdph = 0;
 
-    // Correct vs Incorrect counts
-    let correctChars = 0;
-    let incorrectChars = typeof typingErrors !== 'undefined' ? typingErrors : 0; // Agar strict error counter hai
-
-    for (let i = 0; i < userTypedChars.length; i++) {
-        if (i < selectedPassageText.length) {
-            if (userTypedChars[i] === selectedPassageText[i]) {
-                correctChars++;
-            }
-        }
+    if (timeElapsedInMins > 0 && charIndex > 0) {
+        let totalStrokes = charIndex;
+        let correctStrokes = totalStrokes - typingMistakes;
+        
+        grossWPM = (totalStrokes / 5) / timeElapsedInMins;
+        netWPM = Math.round((correctStrokes / 5) / timeElapsedInMins);
+        accuracy = Math.round((correctStrokes / totalStrokes) * 100);
+        kdph = Math.round(correctStrokes * (60 / timeElapsedInMins));
     }
+    if (netWPM < 0) netWPM = 0;
 
-    const totalTyped = correctChars + incorrectChars;
-    const accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 0;
-    
-    // Standard WPM & KDPH Calculations
-    const grossWords = totalTyped / 5;
-    const errorWords = incorrectChars / 5;
-    
-    const netWpm = Math.max(0, Math.round((grossWords - errorWords) / timeInMins));
-    const kdph = totalTimeSecs > 0 ? Math.round(correctChars * (3600 / totalTimeSecs)) : 0;
-
-    // UI elements update
-    document.getElementById('res-wpm').innerText = netWpm;
+    document.getElementById('res-wpm').innerText = netWPM;
     document.getElementById('res-accuracy').innerText = accuracy + '%';
     document.getElementById('res-kdph').innerText = kdph;
 
+    const selectedMins = document.getElementById('typing-duration-sel').value;
     saveTypingHistory({
         date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
-        wpm: netWpm,
-        accuracy: accuracy + '%',
-        kdph: kdph,
-        duration: selectedMins + ' min',
+        wpm: netWPM, accuracy: accuracy + '%', kdph: kdph, duration: selectedMins + ' min',
         level: document.getElementById('typing-level-sel').value.toUpperCase()
     });
-
+    
     document.getElementById('typing-active-screen').classList.add('hidden');
-    document.getElementById('typing-result-screen').classList.remove('hidden');
+    if (document.fullscreenElement) document.exitFullscreen();
+
+    // Database check trigger
+    saveTypingScoreToCloud(netWPM, parseInt(accuracy));
+}
+
+function saveTypingScoreToCloud(wpm, accuracy) {
+    const currentUser = firebase.auth().currentUser;
+    if (!currentUser) {
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+        return; 
+    }
+
+    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+    const db = firebase.firestore();
+    const userRef = db.collection("users").doc(currentUser.uid);
+
+    db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(userRef);
+        let data = doc.exists ? doc.data() : {};
+
+        let newAllTimeWPM = data.allTimeWPM || 0;
+        let newAllTimeAcc = data.allTimeAcc !== undefined ? data.allTimeAcc : (data.lastTypingAccuracy || accuracy); 
+
+        let newDailyWPM = data.dailyWPM || 0;
+        let newDailyAcc = data.dailyAcc !== undefined ? data.dailyAcc : (data.lastTypingAccuracy || accuracy);
+        let lastDate = data.dailyWPMDate || "";
+
+        let isNewAllTime = false;
+        let isNewDaily = false;
+
+        if (wpm > newAllTimeWPM || (wpm === newAllTimeWPM && accuracy > newAllTimeAcc)) {
+            newAllTimeWPM = wpm;
+            newAllTimeAcc = accuracy; 
+            isNewAllTime = true;
+        }
+
+        if (lastDate !== todayStr) {
+            newDailyWPM = wpm;
+            newDailyAcc = accuracy;
+            isNewDaily = true;
+        } else {
+            if (wpm > newDailyWPM || (wpm === newDailyWPM && accuracy > newDailyAcc)) {
+                newDailyWPM = wpm;
+                newDailyAcc = accuracy;
+                isNewDaily = true;
+            }
+        }
+
+        const userName = localStorage.getItem('warRoomUserName') || "Aspirant";
+
+        transaction.set(userRef, {
+            allTimeWPM: newAllTimeWPM,
+            allTimeAcc: newAllTimeAcc,
+            dailyWPM: newDailyWPM,
+            dailyAcc: newDailyAcc,
+            dailyWPMDate: todayStr,
+            name: userName
+        }, { merge: true });
+
+        return { isNewAllTime, isNewDaily, userName, wpm, accuracy }; 
+
+    }).then((result) => {
+        if (result.isNewAllTime) {
+            triggerRankCelebration("All-Time", result.wpm, result.accuracy, result.userName);
+        } else if (result.isNewDaily) {
+            triggerRankCelebration("Daily 24-Hour", result.wpm, result.accuracy, result.userName);
+        } else {
+            document.getElementById('typing-result-screen').classList.remove('hidden');
+        }
+    }).catch(err => {
+        console.error("Cloud sync failed: ", err);
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+    });
+}
+
+function triggerRankCelebration(typeStr, wpm, acc, userName) {
+    const db = firebase.firestore();
+    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+    let query;
+
+    if (typeStr === "All-Time") {
+        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
+    } else {
+        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
+    }
+
+    query.get().then((snapshot) => {
+        let rank = ">100";
+        let currentEmail = localStorage.getItem('warRoomUserEmail');
+        let index = 1;
+        
+        snapshot.forEach(doc => {
+            if (doc.data().email === currentEmail) {
+                rank = index;
+            }
+            index++;
+        });
+
+        document.getElementById('rc-username').innerText = `Warrior ${userName}`;
+        document.getElementById('rc-wpm').innerText = wpm;
+        document.getElementById('rc-acc').innerText = acc + "%";
+        document.getElementById('rc-rank').innerText = rank !== ">100" ? `#${rank}` : "Top 100+";
+        
+        const catEl = document.getElementById('rc-category');
+        catEl.innerText = `${typeStr} Achievement`;
+        
+        if(typeStr === "All-Time") {
+            catEl.style.color = '#facc15';
+            catEl.style.borderColor = 'rgba(250, 204, 21, 0.4)';
+            catEl.style.background = 'rgba(250, 204, 21, 0.15)';
+        } else {
+            catEl.style.color = '#38bdf8';
+            catEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+            catEl.style.background = 'rgba(56, 189, 248, 0.15)';
+        }
+
+        if(typeof playChimeSound === 'function') playChimeSound();
+        const modal = document.getElementById('rank-celebration-modal');
+        modal.style.display = 'flex';
+        setTimeout(() => { modal.style.opacity = '1'; }, 10);
+    });
+}
+
+function closeRankCelebration() {
+    const modal = document.getElementById('rank-celebration-modal');
+    modal.style.opacity = '0';
+    setTimeout(() => { 
+        modal.style.display = 'none'; 
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+    }, 400);
 }
 
 function saveTypingHistory(record) {
@@ -3790,7 +4213,7 @@ function openTypingHistoryModal() {
     }
 
     container.innerHTML = history.map(h => `
-        <div style="background: var(--bg-primary); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="background: var(--bg-primary); padding: 12px; border-radius: 10px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
             <div>
                 <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">${h.level} (${h.duration})</div>
                 <div style="font-size: 0.75rem; color: var(--text-secondary);">${h.date}</div>
@@ -3816,6 +4239,7 @@ function clearTypingHistory() {
         openTypingHistoryModal();
     }
 }
+
 
 
         const armyRanksList = [
@@ -6162,6 +6586,41 @@ function downloadPracticePDF() {
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 ${questionsHTML}
             </div>
+      
+      <!-- 🏆 LEADERBOARD RANK UP CELEBRATION MODAL -->
+<div id="rank-celebration-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 70000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
+    <div class="glass-card fade-in" style="width: 100%; max-width: 400px; text-align: center; padding: 2.5rem 2rem; margin: 15px; border-radius: 20px; border: 2px solid #3b82f6; box-shadow: 0 0 40px rgba(59, 130, 246, 0.3), inset 0 0 15px rgba(59, 130, 246, 0.1);">
+        
+        <div style="font-size: 4rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.8); animation: superPop 0.5s ease;">🏆</div>
+        
+        <h2 style="color: #60a5fa; font-size: 2rem; margin-bottom: 0.2rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-shadow: 0 0 10px rgba(96, 165, 250, 0.4);">New High Score!</h2>
+        <h3 id="rc-username" style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;"></h3>
+
+        <div style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(59, 130, 246, 0.3); padding: 15px; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: inset 0 0 15px rgba(0,0,0,0.8);">
+            
+            <div id="rc-category" style="font-size: 0.75rem; font-weight: 800; color: #facc15; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; background: rgba(250, 204, 21, 0.15); display: inline-block; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(250, 204, 21, 0.4);">All-Time Achievement</div>
+            
+            <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 12px;">
+                <div>
+                    <div id="rc-wpm" style="font-size: 2.2rem; font-weight: 900; color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);">0</div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Net WPM</div>
+                </div>
+                <div>
+                    <div id="rc-acc" style="font-size: 2.2rem; font-weight: 900; color: #38bdf8; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">0%</div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Accuracy</div>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; margin-top: 5px;">
+                <div style="font-size: 0.8rem; color: #cbd5e1; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;">Global Rank Achieved</div>
+                <div id="rc-rank" style="font-size: 2rem; font-weight: 900; color: #facc15; text-shadow: 0 0 20px rgba(250, 204, 21, 0.8);">#1</div>
+            </div>
+        </div>
+
+        <button class="btn" style="width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 14px; font-weight: 800; font-size: 1rem; border: 1px solid #60a5fa; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s;" onclick="closeRankCelebration()" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Claim Glory 🚀</button>
+    </div>
+</div>
+
         </body>
         </html>
     `;
@@ -6679,6 +7138,268 @@ function loadResourcesFromFirestore() {
         console.error("Error loading resources from cloud: ", error);
     });
 }
+// ==========================================
+// 🏆 TYPING LEADERBOARD & CLOUD SYNC ENGINE
+// ==========================================
+function saveTypingScoreToCloud(wpm, accuracy) {
+    const currentUser = firebase.auth().currentUser;
+    // Agar user login nahi hai, toh bina popup ke seedha result screen dikha do
+    if (!currentUser) {
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+        return; 
+    }
+
+    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+    const db = firebase.firestore();
+    const userRef = db.collection("users").doc(currentUser.uid);
+
+    db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(userRef);
+        let data = doc.exists ? doc.data() : {};
+
+        let newAllTimeWPM = data.allTimeWPM || 0;
+        let newAllTimeAcc = data.allTimeAcc !== undefined ? data.allTimeAcc : (data.lastTypingAccuracy || accuracy); 
+
+        let newDailyWPM = data.dailyWPM || 0;
+        let newDailyAcc = data.dailyAcc !== undefined ? data.dailyAcc : (data.lastTypingAccuracy || accuracy);
+        let lastDate = data.dailyWPMDate || "";
+
+        let isNewAllTime = false;
+        let isNewDaily = false;
+
+        // 1. All-Time High Score check
+        if (wpm > newAllTimeWPM || (wpm === newAllTimeWPM && accuracy > newAllTimeAcc)) {
+            newAllTimeWPM = wpm;
+            newAllTimeAcc = accuracy; 
+            isNewAllTime = true;
+        }
+
+        // 2. Daily (24 Hours) High Score check
+        if (lastDate !== todayStr) {
+            newDailyWPM = wpm;
+            newDailyAcc = accuracy;
+            isNewDaily = true;
+        } else {
+            if (wpm > newDailyWPM || (wpm === newDailyWPM && accuracy > newDailyAcc)) {
+                newDailyWPM = wpm;
+                newDailyAcc = accuracy;
+                isNewDaily = true;
+            }
+        }
+
+        const userName = localStorage.getItem('warRoomUserName') || "Aspirant";
+
+        transaction.set(userRef, {
+            allTimeWPM: newAllTimeWPM,
+            allTimeAcc: newAllTimeAcc,
+            dailyWPM: newDailyWPM,
+            dailyAcc: newDailyAcc,
+            dailyWPMDate: todayStr,
+            name: userName
+        }, { merge: true });
+
+        return { isNewAllTime, isNewDaily, userName, wpm, accuracy }; 
+
+    }).then((result) => {
+        console.log("Typing score securely synced.");
+        
+        // Agar record tuta hai, toh Celebration Modal Trigger karo!
+        if (result.isNewAllTime) {
+            triggerRankCelebration("All-Time", result.wpm, result.accuracy, result.userName);
+        } else if (result.isNewDaily) {
+            triggerRankCelebration("Daily 24-Hour", result.wpm, result.accuracy, result.userName);
+        } else {
+            // Agar koi record nahi tuta, toh chup chaap Normal Result screen dikha do
+            document.getElementById('typing-result-screen').classList.remove('hidden');
+        }
+
+    }).catch(err => {
+        console.error("Cloud sync failed: ", err);
+        // Backup: Agar internet issue aaya tab bhi result screen dikh jaye
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+    });
+}
+
+// 🏆 Yeh function Database se Exact Rank check karke Modal show karega
+function triggerRankCelebration(typeStr, wpm, acc, userName) {
+    const db = firebase.firestore();
+    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+    let query;
+
+    if (typeStr === "All-Time") {
+        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
+    } else {
+        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
+    }
+
+    query.get().then((snapshot) => {
+        let rank = ">100"; // Default agar top 100 me nahi hai
+        let currentEmail = localStorage.getItem('warRoomUserEmail');
+        let index = 1;
+        
+        snapshot.forEach(doc => {
+            if (doc.data().email === currentEmail) {
+                rank = index;
+            }
+            index++;
+        });
+
+        // HTML elements update karna
+        document.getElementById('rc-username').innerText = `Warrior ${userName}`;
+        document.getElementById('rc-wpm').innerText = wpm;
+        document.getElementById('rc-acc').innerText = acc + "%";
+        document.getElementById('rc-rank').innerText = rank !== ">100" ? `#${rank}` : "Top 100+";
+        
+        const catEl = document.getElementById('rc-category');
+        catEl.innerText = `${typeStr} Achievement`;
+        
+        // Daily vs All-time color change
+        if(typeStr === "All-Time") {
+            catEl.style.color = '#facc15'; // Gold
+            catEl.style.borderColor = 'rgba(250, 204, 21, 0.4)';
+            catEl.style.background = 'rgba(250, 204, 21, 0.15)';
+        } else {
+            catEl.style.color = '#38bdf8'; // Blue
+            catEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+            catEl.style.background = 'rgba(56, 189, 248, 0.15)';
+        }
+
+        // Play Sound & Show Modal
+        if(typeof playChimeSound === 'function') playChimeSound();
+        const modal = document.getElementById('rank-celebration-modal');
+        modal.style.display = 'flex';
+        setTimeout(() => { modal.style.opacity = '1'; }, 10);
+    });
+}
+
+function closeRankCelebration() {
+    const modal = document.getElementById('rank-celebration-modal');
+    modal.style.opacity = '0';
+    setTimeout(() => { 
+        modal.style.display = 'none'; 
+        // Modal band hone ke theek baad normal Result Screen dikha do
+        document.getElementById('typing-result-screen').classList.remove('hidden');
+    }, 400);
+}
+
+
+
+function openTypingLeaderboard() {
+    document.getElementById('typing-setup-screen').classList.add('hidden');
+    document.getElementById('typing-result-screen').classList.add('hidden');
+    document.getElementById('typing-history-screen').classList.add('hidden');
+    document.getElementById('typing-leaderboard-screen').classList.remove('hidden');
+    
+    loadTypingLeaderboard('daily'); 
+}
+
+function backToTypingSetupFromLeaderboard() {
+    document.getElementById('typing-leaderboard-screen').classList.add('hidden');
+    document.getElementById('typing-setup-screen').classList.remove('hidden');
+}
+
+function loadTypingLeaderboard(type) {
+    const container = document.getElementById('typing-leaderboard-list');
+    const rankBanner = document.getElementById('user-typing-rank-banner');
+    const dailyTab = document.getElementById('tab-daily-lb');
+    const allTimeTab = document.getElementById('tab-alltime-lb');
+    
+    const currentEmail = localStorage.getItem('warRoomUserEmail');
+    
+    if (type === 'daily') {
+        dailyTab.style.background = 'var(--accent-primary)';
+        dailyTab.style.color = 'white';
+        dailyTab.style.borderColor = 'var(--accent-primary)';
+        allTimeTab.style.background = 'transparent';
+        allTimeTab.style.color = '#eab308';
+    } else {
+        allTimeTab.style.background = '#eab308';
+        allTimeTab.style.color = '#000';
+        allTimeTab.style.borderColor = '#eab308';
+        dailyTab.style.background = 'transparent';
+        dailyTab.style.color = 'var(--text-primary)';
+    }
+
+    container.innerHTML = `<p style="text-align: center; color: var(--accent-primary); margin-top: 20px;">Fetching Global Ranks from Cloud... 📡</p>`;
+    rankBanner.innerHTML = currentEmail ? `Calculating your rank... ⏱️` : `⚠️ Please log in to see your personal rank.`;
+
+    const db = firebase.firestore();
+    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+    
+    let query;
+    if (type === 'daily') {
+        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
+    } else {
+        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
+    }
+
+    query.get().then((snapshot) => {
+        let allUsers = [];
+        snapshot.forEach(doc => {
+            let data = doc.data();
+            let wpm = type === 'daily' ? data.dailyWPM : data.allTimeWPM;
+            let acc = type === 'daily' ? data.dailyAcc : data.allTimeAcc; 
+            
+            if (wpm && wpm > 0) {
+                allUsers.push({ 
+                    email: data.email, 
+                    name: data.name || "Aspirant", 
+                    wpm: wpm, 
+                    // BUG FIX: Ab current/last test ki jagah strictly High Score wali accuracy uthayega!
+                    acc: acc !== undefined ? acc : (data.lastTypingAccuracy || 0) 
+                });
+            }
+        });
+
+        if(allUsers.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: var(--text-secondary); margin-top: 20px;">No warriors on the board yet. Be the first! ⚔️</p>`;
+            if(currentEmail) rankBanner.innerHTML = `You are currently Unranked. Take a test!`;
+            return;
+        }
+
+        if (currentEmail) {
+            let userRankIdx = allUsers.findIndex(u => u.email === currentEmail);
+            if (userRankIdx !== -1) {
+                let badge = userRankIdx + 1 <= 3 ? "🏆" : "🎖️";
+                rankBanner.innerHTML = `${badge} Your ${type === 'daily' ? 'Daily' : 'All-Time'} Rank: <strong style="color: #eab308; font-size: 1.3rem;">#${userRankIdx + 1}</strong> (${allUsers[userRankIdx].wpm} WPM)`;
+            } else {
+                rankBanner.innerHTML = `You are not in the Top 100 for this category yet. Keep pushing! 🚀`;
+            }
+        }
+
+        container.innerHTML = allUsers.map((u, idx) => {
+            const rankNum = idx + 1;
+            let rankBadge = `#${rankNum}`;
+            let bgStyle = 'var(--bg-primary)';
+            let borderStyle = '1px solid var(--glass-border)';
+            let nameStyle = 'var(--text-primary)';
+            
+            if (rankNum === 1) { rankBadge = '👑 1'; borderStyle = '2px solid #facc15'; bgStyle = 'rgba(250, 204, 21, 0.1)'; nameStyle = '#facc15'; }
+            else if (rankNum === 2) { rankBadge = '🥈 2'; borderStyle = '2px solid #cbd5e1'; bgStyle = 'rgba(203, 213, 225, 0.1)'; }
+            else if (rankNum === 3) { rankBadge = '🥉 3'; borderStyle = '2px solid #d97706'; bgStyle = 'rgba(217, 119, 6, 0.1)'; }
+
+            return `
+                <div style="background: ${bgStyle}; padding: 12px 16px; border-radius: 12px; border: ${borderStyle}; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-weight: 900; font-size: 1.1rem; width: 40px; text-align: center; color: ${nameStyle};">${rankBadge}</span>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1.05rem; color: ${nameStyle};">${u.name} ${u.email === currentEmail ? '<span style="color:#2563eb; font-size:0.8rem;">(You)</span>' : ''}</h4>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Accuracy: ${u.acc}%</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 900; color: var(--accent-primary); font-size: 1.3rem;">${u.wpm} <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);">WPM</span></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    }).catch(err => {
+        console.error("Leaderboard error:", err);
+        container.innerHTML = `<p style="text-align: center; color: #ef4444; margin-top:20px;">Failed to load leaderboard. Check your connection.</p>`;
+    });
+}
+
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
