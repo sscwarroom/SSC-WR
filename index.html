@@ -2592,7 +2592,7 @@ loadResourcesFromFirestore();
     // Button ko uske ID ya text se select karna
     const deployBtn = document.querySelector('button[onclick*="adminSaveResource"]') || document.getElementById('deploy-arena-btn');
     
-    if (deployBtn) {
+        if (deployBtn) {
         // Agar purana onclick attribute hai toh use hata dete hain taaki conflict na ho
         deployBtn.removeAttribute('onclick');
         
@@ -2617,6 +2617,9 @@ loadResourcesFromFirestore();
                 return;
             }
 
+            // 🔥 NAYI LINE: Yahan se selected tab (mock/notes/material) ki value uthayenge
+            const selectedCategory = currentArenaTab || 'mock';
+
             if (format === 'link') {
                 const linkInput = document.getElementById('admin-res-link');
                 const linkVal = linkInput ? linkInput.value.trim() : "";
@@ -2624,7 +2627,8 @@ loadResourcesFromFirestore();
                     alert("Please enter a valid URL.");
                     return;
                 }
-                pushToFirestoreCloud(title, subject, 'link', linkVal);
+                // Update: Yahan selectedCategory add kar diya gaya hai
+                pushToFirestoreCloud(title, subject, selectedCategory, 'link', linkVal);
             } else {
                 const fileInput = document.getElementById('admin-res-file');
                 if (!fileInput || fileInput.files.length === 0) {
@@ -2635,15 +2639,18 @@ loadResourcesFromFirestore();
                 const file = fileInput.files[0];
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    pushToFirestoreCloud(title, subject, 'file', event.target.result);
+                    // Update: Yahan selectedCategory add kar diya gaya hai
+                    pushToFirestoreCloud(title, subject, selectedCategory, 'file', event.target.result);
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
+
 });
 
-function pushToFirestoreCloud(title, subject, format, content) {
+// Function definition mein 'type' add kiya
+function pushToFirestoreCloud(title, subject, type, format, content) {
     if (typeof firebase === 'undefined') {
         alert("Firebase library is missing from the page header!");
         return;
@@ -2660,6 +2667,7 @@ function pushToFirestoreCloud(title, subject, format, content) {
     const resourceData = {
         title: title,
         subject: subject,
+        type: type, // 🔥 NAYI LINE: Yahan Category save hogi ('mock', 'notes', 'material')
         format: format,
         content: content,
         createdAt: new Date().toISOString()
@@ -6585,15 +6593,7 @@ function calculateResult() {
         displayExpression = "";
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const deployBtn = document.getElementById('deploy-arena-btn');
-    if (deployBtn) {
-        deployBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            adminSaveResource();
-        });
-    }
-});
+
 const telegramBtn = document.querySelector("#telegram-overlay-icon");
 
 if (telegramBtn) {
