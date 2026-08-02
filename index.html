@@ -3638,20 +3638,75 @@ function pushToFirestoreCloud(title, subject, type, format, content) {
 }
 
         function handleAvatarUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Image = e.target.result;
-                    document.getElementById('account-avatar-img').src = base64Image;
-                    const currentEmail = localStorage.getItem('warRoomUserEmail');
-                    if (currentEmail) {
-                        localStorage.setItem(`warRoomAvatar_${currentEmail}`, base64Image);
-                    }
-                };
-                reader.readAsDataURL(file);
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Loader dikha sakte ho ya alert de sakte ho
+    document.getElementById('account-avatar-img').style.opacity = '0.5';
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            // 🌟 Canvas banakar photo ko resize karna (150x150 pixels)
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 150;
+            const MAX_HEIGHT = 150;
+            let width = img.width;
+            let height = img.height;
+
+            // Aspect ratio maintain rakhne ke liye
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
             }
-        }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // 🌟 High compression ke sath fast Base64 banana (JPEG format, 70% quality)
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+            // 1. Phone me local UI update karo
+            const avatarImg = document.getElementById('account-avatar-img');
+            avatarImg.src = compressedBase64;
+            avatarImg.style.opacity = '1'; // wapas normal karo
+
+            const currentEmail = localStorage.getItem('warRoomUserEmail');
+            if (currentEmail) {
+                localStorage.setItem(`warRoomAvatar_${currentEmail}`, compressedBase64);
+                
+                // 2. Cloud Database me Sync karo (Global Leaderboard ke liye)
+                const currentUser = firebase.auth().currentUser;
+                if(currentUser) {
+                    firebase.firestore().collection("users").doc(currentUser.uid).set({
+                        avatar: compressedBase64
+                    }, { merge: true })
+                    .then(() => {
+                        // Success aate hi user ko bata do
+                        alert("Profile photo updated successfully on the Global Leaderboard! 🚀");
+                    })
+                    .catch(err => {
+                        console.error("Avatar save error:", err);
+                        alert("Error uploading photo. Please try a different image.");
+                    });
+                }
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 
         let timerInterval;
 
@@ -4040,6 +4095,18 @@ function finishTypingTest() {
     }
     if (netWPM < 0) netWPM = 0;
 
+    // 🏆 SSC PRO POINTS SYSTEM
+    // Base score based on WPM and Accuracy
+    let totalScore = Math.round((netWPM * accuracy) / 2);
+    
+    // Time Remaining Bonus (Sirf tab jab accuracy 90% ya usse zyada ho)
+    if (typeof typingSecondsLeft !== 'undefined' && typingSecondsLeft > 0 && accuracy >= 90) {
+        totalScore += typingSecondsLeft; 
+    }
+    
+    // Negative score fallback
+    if (totalScore < 0 || isNaN(totalScore)) totalScore = 0;
+
     document.getElementById('res-wpm').innerText = netWPM;
     document.getElementById('res-accuracy').innerText = accuracy + '%';
     document.getElementById('res-kdph').innerText = kdph;
@@ -4048,132 +4115,15 @@ function finishTypingTest() {
     saveTypingHistory({
         date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
         wpm: netWPM, accuracy: accuracy + '%', kdph: kdph, duration: selectedMins + ' min',
+        score: totalScore,
         level: document.getElementById('typing-level-sel').value.toUpperCase()
     });
     
     document.getElementById('typing-active-screen').classList.add('hidden');
     if (document.fullscreenElement) document.exitFullscreen();
 
-    // Database check trigger
-    saveTypingScoreToCloud(netWPM, parseInt(accuracy));
-}
-
-function saveTypingScoreToCloud(wpm, accuracy) {
-    const currentUser = firebase.auth().currentUser;
-    if (!currentUser) {
-        document.getElementById('typing-result-screen').classList.remove('hidden');
-        return; 
-    }
-
-    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
-    const db = firebase.firestore();
-    const userRef = db.collection("users").doc(currentUser.uid);
-
-    db.runTransaction(async (transaction) => {
-        const doc = await transaction.get(userRef);
-        let data = doc.exists ? doc.data() : {};
-
-        let newAllTimeWPM = data.allTimeWPM || 0;
-        let newAllTimeAcc = data.allTimeAcc !== undefined ? data.allTimeAcc : (data.lastTypingAccuracy || accuracy); 
-
-        let newDailyWPM = data.dailyWPM || 0;
-        let newDailyAcc = data.dailyAcc !== undefined ? data.dailyAcc : (data.lastTypingAccuracy || accuracy);
-        let lastDate = data.dailyWPMDate || "";
-
-        let isNewAllTime = false;
-        let isNewDaily = false;
-
-        if (wpm > newAllTimeWPM || (wpm === newAllTimeWPM && accuracy > newAllTimeAcc)) {
-            newAllTimeWPM = wpm;
-            newAllTimeAcc = accuracy; 
-            isNewAllTime = true;
-        }
-
-        if (lastDate !== todayStr) {
-            newDailyWPM = wpm;
-            newDailyAcc = accuracy;
-            isNewDaily = true;
-        } else {
-            if (wpm > newDailyWPM || (wpm === newDailyWPM && accuracy > newDailyAcc)) {
-                newDailyWPM = wpm;
-                newDailyAcc = accuracy;
-                isNewDaily = true;
-            }
-        }
-
-        const userName = localStorage.getItem('warRoomUserName') || "Aspirant";
-
-        transaction.set(userRef, {
-            allTimeWPM: newAllTimeWPM,
-            allTimeAcc: newAllTimeAcc,
-            dailyWPM: newDailyWPM,
-            dailyAcc: newDailyAcc,
-            dailyWPMDate: todayStr,
-            name: userName
-        }, { merge: true });
-
-        return { isNewAllTime, isNewDaily, userName, wpm, accuracy }; 
-
-    }).then((result) => {
-        if (result.isNewAllTime) {
-            triggerRankCelebration("All-Time", result.wpm, result.accuracy, result.userName);
-        } else if (result.isNewDaily) {
-            triggerRankCelebration("Daily 24-Hour", result.wpm, result.accuracy, result.userName);
-        } else {
-            document.getElementById('typing-result-screen').classList.remove('hidden');
-        }
-    }).catch(err => {
-        console.error("Cloud sync failed: ", err);
-        document.getElementById('typing-result-screen').classList.remove('hidden');
-    });
-}
-
-function triggerRankCelebration(typeStr, wpm, acc, userName) {
-    const db = firebase.firestore();
-    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
-    let query;
-
-    if (typeStr === "All-Time") {
-        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
-    } else {
-        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
-    }
-
-    query.get().then((snapshot) => {
-        let rank = ">100";
-        let currentEmail = localStorage.getItem('warRoomUserEmail');
-        let index = 1;
-        
-        snapshot.forEach(doc => {
-            if (doc.data().email === currentEmail) {
-                rank = index;
-            }
-            index++;
-        });
-
-        document.getElementById('rc-username').innerText = `Warrior ${userName}`;
-        document.getElementById('rc-wpm').innerText = wpm;
-        document.getElementById('rc-acc').innerText = acc + "%";
-        document.getElementById('rc-rank').innerText = rank !== ">100" ? `#${rank}` : "Top 100+";
-        
-        const catEl = document.getElementById('rc-category');
-        catEl.innerText = `${typeStr} Achievement`;
-        
-        if(typeStr === "All-Time") {
-            catEl.style.color = '#facc15';
-            catEl.style.borderColor = 'rgba(250, 204, 21, 0.4)';
-            catEl.style.background = 'rgba(250, 204, 21, 0.15)';
-        } else {
-            catEl.style.color = '#38bdf8';
-            catEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
-            catEl.style.background = 'rgba(56, 189, 248, 0.15)';
-        }
-
-        if(typeof playChimeSound === 'function') playChimeSound();
-        const modal = document.getElementById('rank-celebration-modal');
-        modal.style.display = 'flex';
-        setTimeout(() => { modal.style.opacity = '1'; }, 10);
-    });
+    // Ab Data ke sath Score bhi cloud pe jayega
+    saveTypingScoreToCloud(netWPM, parseInt(accuracy), totalScore);
 }
 
 function closeRankCelebration() {
@@ -6587,39 +6537,7 @@ function downloadPracticePDF() {
                 ${questionsHTML}
             </div>
       
-      <!-- 🏆 LEADERBOARD RANK UP CELEBRATION MODAL -->
-<div id="rank-celebration-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 70000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
-    <div class="glass-card fade-in" style="width: 100%; max-width: 400px; text-align: center; padding: 2.5rem 2rem; margin: 15px; border-radius: 20px; border: 2px solid #3b82f6; box-shadow: 0 0 40px rgba(59, 130, 246, 0.3), inset 0 0 15px rgba(59, 130, 246, 0.1);">
-        
-        <div style="font-size: 4rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.8); animation: superPop 0.5s ease;">🏆</div>
-        
-        <h2 style="color: #60a5fa; font-size: 2rem; margin-bottom: 0.2rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-shadow: 0 0 10px rgba(96, 165, 250, 0.4);">New High Score!</h2>
-        <h3 id="rc-username" style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;"></h3>
 
-        <div style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(59, 130, 246, 0.3); padding: 15px; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: inset 0 0 15px rgba(0,0,0,0.8);">
-            
-            <div id="rc-category" style="font-size: 0.75rem; font-weight: 800; color: #facc15; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; background: rgba(250, 204, 21, 0.15); display: inline-block; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(250, 204, 21, 0.4);">All-Time Achievement</div>
-            
-            <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 12px;">
-                <div>
-                    <div id="rc-wpm" style="font-size: 2.2rem; font-weight: 900; color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);">0</div>
-                    <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Net WPM</div>
-                </div>
-                <div>
-                    <div id="rc-acc" style="font-size: 2.2rem; font-weight: 900; color: #38bdf8; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">0%</div>
-                    <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Accuracy</div>
-                </div>
-            </div>
-
-            <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; margin-top: 5px;">
-                <div style="font-size: 0.8rem; color: #cbd5e1; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;">Global Rank Achieved</div>
-                <div id="rc-rank" style="font-size: 2rem; font-weight: 900; color: #facc15; text-shadow: 0 0 20px rgba(250, 204, 21, 0.8);">#1</div>
-            </div>
-        </div>
-
-        <button class="btn" style="width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 14px; font-weight: 800; font-size: 1rem; border: 1px solid #60a5fa; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s;" onclick="closeRankCelebration()" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Claim Glory 🚀</button>
-    </div>
-</div>
 
         </body>
         </html>
@@ -7141,9 +7059,8 @@ function loadResourcesFromFirestore() {
 // ==========================================
 // 🏆 TYPING LEADERBOARD & CLOUD SYNC ENGINE
 // ==========================================
-function saveTypingScoreToCloud(wpm, accuracy) {
+function saveTypingScoreToCloud(wpm, accuracy, score) {
     const currentUser = firebase.auth().currentUser;
-    // Agar user login nahi hai, toh bina popup ke seedha result screen dikha do
     if (!currentUser) {
         document.getElementById('typing-result-screen').classList.remove('hidden');
         return; 
@@ -7157,30 +7074,38 @@ function saveTypingScoreToCloud(wpm, accuracy) {
         const doc = await transaction.get(userRef);
         let data = doc.exists ? doc.data() : {};
 
+        let currentAllTimeScore = data.allTimeScore || 0;
+        let currentDailyScore = data.dailyScore || 0;
+        let lastDate = data.dailyWPMDate || "";
+
         let newAllTimeWPM = data.allTimeWPM || 0;
-        let newAllTimeAcc = data.allTimeAcc !== undefined ? data.allTimeAcc : (data.lastTypingAccuracy || accuracy); 
+        let newAllTimeAcc = data.allTimeAcc || 0;
+        let newAllTimeScore = currentAllTimeScore;
 
         let newDailyWPM = data.dailyWPM || 0;
-        let newDailyAcc = data.dailyAcc !== undefined ? data.dailyAcc : (data.lastTypingAccuracy || accuracy);
-        let lastDate = data.dailyWPMDate || "";
+        let newDailyAcc = data.dailyAcc || 0;
+        let newDailyScore = currentDailyScore;
 
         let isNewAllTime = false;
         let isNewDaily = false;
 
-        // 1. All-Time High Score check
-        if (wpm > newAllTimeWPM || (wpm === newAllTimeWPM && accuracy > newAllTimeAcc)) {
+        // All-Time High Score check
+        if (score > currentAllTimeScore) {
+            newAllTimeScore = score;
             newAllTimeWPM = wpm;
-            newAllTimeAcc = accuracy; 
+            newAllTimeAcc = accuracy;
             isNewAllTime = true;
         }
 
-        // 2. Daily (24 Hours) High Score check
+        // Daily High Score check
         if (lastDate !== todayStr) {
+            newDailyScore = score;
             newDailyWPM = wpm;
             newDailyAcc = accuracy;
             isNewDaily = true;
         } else {
-            if (wpm > newDailyWPM || (wpm === newDailyWPM && accuracy > newDailyAcc)) {
+            if (score > currentDailyScore) {
+                newDailyScore = score;
                 newDailyWPM = wpm;
                 newDailyAcc = accuracy;
                 isNewDaily = true;
@@ -7190,98 +7115,55 @@ function saveTypingScoreToCloud(wpm, accuracy) {
         const userName = localStorage.getItem('warRoomUserName') || "Aspirant";
 
         transaction.set(userRef, {
+            allTimeScore: newAllTimeScore,
             allTimeWPM: newAllTimeWPM,
             allTimeAcc: newAllTimeAcc,
+            dailyScore: newDailyScore,
             dailyWPM: newDailyWPM,
             dailyAcc: newDailyAcc,
             dailyWPMDate: todayStr,
             name: userName
         }, { merge: true });
 
-        return { isNewAllTime, isNewDaily, userName, wpm, accuracy }; 
+        return { isNewAllTime, isNewDaily }; 
 
     }).then((result) => {
-        console.log("Typing score securely synced.");
+        document.getElementById('typing-result-screen').classList.remove('hidden');
         
-        // Agar record tuta hai, toh Celebration Modal Trigger karo!
+        // 🌟 NAYA PREMIUM TOAST NOTIFICATION TRIGGER
         if (result.isNewAllTime) {
-            triggerRankCelebration("All-Time", result.wpm, result.accuracy, result.userName);
+            showPremiumToast("🏆 BOOM! NEW ALL-TIME HIGH SCORE!");
         } else if (result.isNewDaily) {
-            triggerRankCelebration("Daily 24-Hour", result.wpm, result.accuracy, result.userName);
-        } else {
-            // Agar koi record nahi tuta, toh chup chaap Normal Result screen dikha do
-            document.getElementById('typing-result-screen').classList.remove('hidden');
+            showPremiumToast("🔥 Great Job! Highest score for today!");
         }
 
     }).catch(err => {
         console.error("Cloud sync failed: ", err);
-        // Backup: Agar internet issue aaya tab bhi result screen dikh jaye
         document.getElementById('typing-result-screen').classList.remove('hidden');
     });
 }
 
-// 🏆 Yeh function Database se Exact Rank check karke Modal show karega
-function triggerRankCelebration(typeStr, wpm, acc, userName) {
-    const db = firebase.firestore();
-    const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
-    let query;
-
-    if (typeStr === "All-Time") {
-        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
-    } else {
-        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
-    }
-
-    query.get().then((snapshot) => {
-        let rank = ">100"; // Default agar top 100 me nahi hai
-        let currentEmail = localStorage.getItem('warRoomUserEmail');
-        let index = 1;
-        
-        snapshot.forEach(doc => {
-            if (doc.data().email === currentEmail) {
-                rank = index;
-            }
-            index++;
-        });
-
-        // HTML elements update karna
-        document.getElementById('rc-username').innerText = `Warrior ${userName}`;
-        document.getElementById('rc-wpm').innerText = wpm;
-        document.getElementById('rc-acc').innerText = acc + "%";
-        document.getElementById('rc-rank').innerText = rank !== ">100" ? `#${rank}` : "Top 100+";
-        
-        const catEl = document.getElementById('rc-category');
-        catEl.innerText = `${typeStr} Achievement`;
-        
-        // Daily vs All-time color change
-        if(typeStr === "All-Time") {
-            catEl.style.color = '#facc15'; // Gold
-            catEl.style.borderColor = 'rgba(250, 204, 21, 0.4)';
-            catEl.style.background = 'rgba(250, 204, 21, 0.15)';
-        } else {
-            catEl.style.color = '#38bdf8'; // Blue
-            catEl.style.borderColor = 'rgba(56, 189, 248, 0.4)';
-            catEl.style.background = 'rgba(56, 189, 248, 0.15)';
-        }
-
-        // Play Sound & Show Modal
-        if(typeof playChimeSound === 'function') playChimeSound();
-        const modal = document.getElementById('rank-celebration-modal');
-        modal.style.display = 'flex';
-        setTimeout(() => { modal.style.opacity = '1'; }, 10);
-    });
-}
-
-function closeRankCelebration() {
-    const modal = document.getElementById('rank-celebration-modal');
-    modal.style.opacity = '0';
+// 🌟 YEH FUNCTION SCREEN PAR PREMIUM POPUP DIKHAYEGA
+function showPremiumToast(message) {
+    if(typeof playChimeSound === 'function') playChimeSound();
+    let toast = document.createElement('div');
+    toast.innerHTML = message;
+    toast.style.cssText = "position:fixed; top:-20px; left:50%; transform:translateX(-50%); background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 16px 30px; border-radius: 50px; font-weight: 800; z-index: 99999; box-shadow: 0 10px 30px rgba(37,99,235,0.6); border: 2px solid #60a5fa; text-align: center; font-size: 1.1rem; opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); white-space: nowrap;";
+    document.body.appendChild(toast);
+    
+    // Animate in
     setTimeout(() => { 
-        modal.style.display = 'none'; 
-        // Modal band hone ke theek baad normal Result Screen dikha do
-        document.getElementById('typing-result-screen').classList.remove('hidden');
-    }, 400);
+        toast.style.opacity = '1'; 
+        toast.style.top = '40px'; 
+    }, 100);
+    
+    // Animate out & remove
+    setTimeout(() => { 
+        toast.style.opacity = '0'; 
+        toast.style.top = '-20px'; 
+        setTimeout(() => toast.remove(), 500); 
+    }, 4000);
 }
-
 
 
 function openTypingLeaderboard() {
@@ -7328,9 +7210,9 @@ function loadTypingLeaderboard(type) {
     
     let query;
     if (type === 'daily') {
-        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyWPM", "desc").limit(100);
+        query = db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyScore", "desc").limit(100);
     } else {
-        query = db.collection("users").orderBy("allTimeWPM", "desc").limit(100);
+        query = db.collection("users").orderBy("allTimeScore", "desc").limit(100);
     }
 
     query.get().then((snapshot) => {
@@ -7339,14 +7221,16 @@ function loadTypingLeaderboard(type) {
             let data = doc.data();
             let wpm = type === 'daily' ? data.dailyWPM : data.allTimeWPM;
             let acc = type === 'daily' ? data.dailyAcc : data.allTimeAcc; 
+            let score = type === 'daily' ? data.dailyScore : data.allTimeScore;
             
-            if (wpm && wpm > 0) {
+            if ((score && score > 0) || (wpm && wpm > 0)) {
                 allUsers.push({ 
                     email: data.email, 
                     name: data.name || "Aspirant", 
-                    wpm: wpm, 
-                    // BUG FIX: Ab current/last test ki jagah strictly High Score wali accuracy uthayega!
-                    acc: acc !== undefined ? acc : (data.lastTypingAccuracy || 0) 
+                    wpm: wpm || 0, 
+                    acc: acc !== undefined ? acc : (data.lastTypingAccuracy || 0),
+                    score: score || 0,
+                    avatar: data.avatar || null // 🌟 Profile pic database se utha rahe hain
                 });
             }
         });
@@ -7361,11 +7245,14 @@ function loadTypingLeaderboard(type) {
             let userRankIdx = allUsers.findIndex(u => u.email === currentEmail);
             if (userRankIdx !== -1) {
                 let badge = userRankIdx + 1 <= 3 ? "🏆" : "🎖️";
-                rankBanner.innerHTML = `${badge} Your ${type === 'daily' ? 'Daily' : 'All-Time'} Rank: <strong style="color: #eab308; font-size: 1.3rem;">#${userRankIdx + 1}</strong> (${allUsers[userRankIdx].wpm} WPM)`;
+                rankBanner.innerHTML = `${badge} Your ${type === 'daily' ? 'Daily' : 'All-Time'} Rank: <strong style="color: #eab308; font-size: 1.3rem;">#${userRankIdx + 1}</strong> (${allUsers[userRankIdx].score} Pts | ${allUsers[userRankIdx].wpm} WPM)`;
             } else {
                 rankBanner.innerHTML = `You are not in the Top 100 for this category yet. Keep pushing! 🚀`;
             }
         }
+
+        // 🌟 Default Avatar SVG (Agar user ne apni photo nahi lagayi)
+        const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
 
         container.innerHTML = allUsers.map((u, idx) => {
             const rankNum = idx + 1;
@@ -7378,17 +7265,23 @@ function loadTypingLeaderboard(type) {
             else if (rankNum === 2) { rankBadge = '🥈 2'; borderStyle = '2px solid #cbd5e1'; bgStyle = 'rgba(203, 213, 225, 0.1)'; }
             else if (rankNum === 3) { rankBadge = '🥉 3'; borderStyle = '2px solid #d97706'; bgStyle = 'rgba(217, 119, 6, 0.1)'; }
 
+            let finalAvatar = u.avatar ? u.avatar : defaultAvatar;
+
             return `
                 <div style="background: ${bgStyle}; padding: 12px 16px; border-radius: 12px; border: ${borderStyle}; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-weight: 900; font-size: 1.1rem; width: 40px; text-align: center; color: ${nameStyle};">${rankBadge}</span>
-                        <div>
+                        <span style="font-weight: 900; font-size: 1.1rem; width: 35px; text-align: center; color: ${nameStyle};">${rankBadge}</span>
+                        
+                        <!-- 🌟 PROFILE PICTURE SECTION -->
+                        <img src="${finalAvatar}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid ${nameStyle === 'var(--text-primary)' ? 'var(--glass-border)' : nameStyle}; flex-shrink: 0;">
+                        
+                        <div style="margin-left: 4px;">
                             <h4 style="margin: 0; font-size: 1.05rem; color: ${nameStyle};">${u.name} ${u.email === currentEmail ? '<span style="color:#2563eb; font-size:0.8rem;">(You)</span>' : ''}</h4>
-                            <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Accuracy: ${u.acc}%</span>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Acc: ${u.acc}% • Speed: ${u.wpm} WPM</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: 900; color: var(--accent-primary); font-size: 1.3rem;">${u.wpm} <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);">WPM</span></div>
+                        <div style="font-weight: 900; color: var(--accent-primary); font-size: 1.3rem;">${u.score} <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);">PTS</span></div>
                     </div>
                 </div>
             `;
@@ -7399,6 +7292,8 @@ function loadTypingLeaderboard(type) {
         container.innerHTML = `<p style="text-align: center; color: #ef4444; margin-top:20px;">Failed to load leaderboard. Check your connection.</p>`;
     });
 }
+
+
 
 
 </script>
