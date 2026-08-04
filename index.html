@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>SSCWarRoom - Tactical Dashboard & Mock Hub</title>
+    <title>SSCWarRoom - Free Mock Tests, Study Material & PYQs for SSC CGL & CHSL</title>
+
+<meta name="description" content="Boost your SSC CGL, CHSL, and MTS preparation with SSCWarRoom. Access free daily quizzes, Tier-2 typing tests, Pomodoro focus timers, and expert study material.">
 
     <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
@@ -1699,6 +1701,354 @@
 .btn-download-app:hover svg {
     transform: translateY(2px);
 }
+/* 🌟 ULTIMATE CLEAN MOCK CARDS */
+.ultra-mock-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05), 0 2px 6px -2px rgba(0, 0, 0, 0.02) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dark theme ke liye thoda adjust */
+[data-theme="dark"] .ultra-mock-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.ultra-mock-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px -5px rgba(37, 99, 235, 0.15) !important;
+    border-color: #93c5fd !important;
+}
+
+/* Card Header (Sleek Blue Line Top Par Nahi, Left me halki si) */
+.ultra-mock-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: #3b82f6;
+    border-radius: 16px 0 0 16px;
+}
+
+/* Clean Tags */
+.ultra-mock-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #eff6ff !important;
+    color: #2563eb !important;
+    border: 1px solid #bfdbfe !important;
+}
+
+[data-theme="dark"] .ultra-mock-tag {
+    background: rgba(37, 99, 235, 0.15) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+.ultra-mock-tag-type {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .ultra-mock-tag-type {
+    background: #334155 !important;
+    color: #cbd5e1 !important;
+    border-color: #475569 !important;
+}
+
+/* Sharp Button */
+.ultra-start-btn {
+    background: #2563eb !important;
+    color: white !important;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.ultra-start-btn:hover {
+    background: #1d4ed8 !important;
+}
+/* 🌟 PREMIUM STUDY HUB STYLES 🌟 */
+.study-hub-subjects {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 5px 5px 15px 5px;
+    scrollbar-width: none;
+    margin-bottom: 10px;
+}
+.study-hub-subjects::-webkit-scrollbar { display: none; }
+
+.study-sub-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 16px 24px;
+    min-width: 220px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.study-sub-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+}
+
+/* Vertical Highlight Line */
+.study-sub-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px; /* Moti vertical line */
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.study-sub-card.active-sub {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(37, 99, 235, 0.01));
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+/* 🌟 ULTRA-PREMIUM DYNAMIC EFFECTS & ANIMATIONS 🌟 */
+
+.study-hub-subjects {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 10px 8px 20px 8px;
+    scrollbar-width: none;
+    margin-bottom: 10px;
+    scroll-behavior: smooth;
+}
+.study-hub-subjects::-webkit-scrollbar { display: none; }
+
+.study-sub-card {
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 18px 22px;
+    min-width: 210px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); /* Elastic bouncy feel */
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Hover Effect: Elevation & Lift */
+.study-sub-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+}
+
+/* Vertical Glow Line Base */
+.study-sub-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: transparent;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.4s ease;
+}
+
+/* Selected Subject Card (Glowing Active State) */
+.study-sub-card.active-sub {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.02)) !important;
+    border-color: var(--accent-primary) !important;
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3), inset 0 0 15px rgba(37, 99, 235, 0.05) !important;
+    animation: subPulse 3s infinite alternate ease-in-out;
+}
+
+/* Glowing Neon Vertical Line */
+.study-sub-card.active-sub::before {
+    background: var(--accent-primary);
+    box-shadow: 0 0 12px var(--accent-primary), 0 0 20px var(--accent-primary);
+}
+
+@keyframes subPulse {
+    0% { border-color: rgba(37, 99, 235, 0.4); box-shadow: 0 8px 20px -5px rgba(37, 99, 235, 0.2); }
+    100% { border-color: rgba(37, 99, 235, 0.9); box-shadow: 0 12px 30px -2px rgba(37, 99, 235, 0.4); }
+}
+
+/* Dynamic Icon Scaling & Pop */
+.study-sub-icon {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-block;
+}
+.study-sub-card.active-sub .study-sub-icon {
+    transform: scale(1.2) rotate(-6deg);
+}
+
+.study-sub-title {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+    transition: color 0.3s ease;
+}
+.study-sub-card.active-sub .study-sub-title {
+    color: var(--accent-primary);
+}
+
+.study-sub-desc {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+/* 🌟 PREMIUM FLOATING CHIP BUTTONS 🌟 */
+.study-cat-wrapper {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding: 6px 4px 15px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.study-cat-wrapper::-webkit-scrollbar { display: none; }
+
+.study-cat-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 50px; /* Ekdum gol pill shape */
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03); /* Soft 3D shadow */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    flex-shrink: 0; /* Mobile par dabaayega nahi */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.study-cat-pill:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: translateY(-3px);
+}
+
+.study-cat-pill.active-cat {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4); /* Glowing blue shadow */
+    font-weight: 800;
+    transform: translateY(-4px); /* Click par uthne wala effect */
+}
+
+/* Active State: Clean White/Dark Card Look */
+.study-cat-pill.active-cat {
+    background: var(--bg-secondary); /* Automatically matches dark/light mode */
+    color: var(--accent-primary) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Minimal shadow */
+    transform: none; /* No zooming, so it fits perfectly */
+    animation: none; /* No over-the-top glowing */
+}
+
+
+/* Smooth Tab Switching Animation for Content Area */
+#dedicated-mock-list {
+    animation: tabSwitchFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tabSwitchFade {
+    0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 🌟 MOBILE SCROLL HINT (Swipe Arrow) 🌟 */
+.scroll-hint-arrow {
+    display: none; /* Desktop par by default hide rahega */
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--bg-primary) 35%, var(--bg-primary));
+    padding-left: 30px;
+    padding-right: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    pointer-events: none; /* Clicks iske aar-paar ja sakenge */
+    color: var(--accent-primary);
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.95;
+    transition: opacity 0.4s ease;
+    z-index: 10;
+}
+
+.scroll-hint-arrow svg {
+    animation: swipeBounce 1.5s infinite;
+    margin-left: 4px;
+}
+
+/* Bouncing Arrow Animation */
+@keyframes swipeBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
+}
+
+/* Sirf mobile screen (900px se kam) par show karo */
+@media (max-width: 900px) {
+    .scroll-hint-arrow {
+        display: flex;
+    }
+}
 
     </style>
 </head>
@@ -1920,6 +2270,14 @@
                             <option value="file">Upload HTML / PDF File from Phone</option>
                             <option value="link">Web Link (URL)</option>
                         </select>
+                        <!-- Yahan se naya Thumbnail Input shuru -->
+<label style="font-size: 0.85rem; font-weight: 700; color: var(--accent-secondary); margin-top: 5px;">Thumbnail Image (Auto-Compress < 1MB):</label>
+<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+    <input type="file" id="admin-res-thumb" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept="image/*" onchange="compressArenaThumbnail(event)">
+    <img id="admin-res-thumb-preview" src="" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid var(--glass-border);">
+</div>
+<!-- Yahan par naya Thumbnail Input khatam -->
+
 
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <input type="file" id="admin-res-file" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept=".html,.htm,.pdf" onchange="handleArenaFileSelected(this)">
@@ -1936,7 +2294,7 @@
                 <div style="display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap;">
                     <button class="btn btn-outline" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="switchArenaTab('mock')">📝 Mocks</button>
                     <button class="btn btn-outline" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="switchArenaTab('notes')">📚 Notes</button>
-                    <button class="btn btn-outline" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="switchArenaTab('material')">⚡ Material</button>
+                    <button class="btn btn-outline" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="switchArenaTab('Pyq')">⚡ Pyq</button>
                 </div>
 
                 <div id="arena-content-list" style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 15px;"></div>
@@ -2267,7 +2625,9 @@
     <li class="nav-item premium-nav-item" onclick="navigate('premium', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg> 👑 Premium Hub
     </li>
-
+<li class="nav-item" onclick="navigate('mock-tests', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Study Materials & Mock Tests
+    </li>
     <li class="nav-item" onclick="navigate('challenges', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Daily Challenges 🎁
     </li>
@@ -2288,9 +2648,7 @@
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> My Account
     </li>
 
-    <li class="nav-item" onclick="navigate('mock-tests', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Mock Tests
-    </li>
+    
 
     <li class="nav-item" onclick="navigate('all-exams', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg> All Exams
@@ -2415,19 +2773,52 @@
                     <button class="btn btn-outline" style="position: relative; z-index: 10; margin-top: 15px; font-size: 0.75rem; padding: 6px 12px; border-color: #475569; color: #94a3b8;" onclick="resetTarget()">Reset Target</button>
                 </div>
 
-                <div class="fire-tabs-container fade-in" id="dashboard-fire-tabs">
-                    <button class="fire-tab-btn active-fire-tab" onclick="filterDashboardSubject('Quantitative Aptitude (Maths)', this)">📐 Maths</button>
-                    <button class="fire-tab-btn" onclick="filterDashboardSubject('English Language', this)">📖 English</button>
-                    <button class="fire-tab-btn" onclick="filterDashboardSubject('General Intelligence & Reasoning', this)">🧠 Reasoning</button>
-                    <button class="fire-tab-btn" onclick="filterDashboardSubject('General Awareness / GS', this)">🌍 General Studies</button>
-                    <button class="fire-tab-btn" onclick="filterDashboardSubject('Computer Knowledge', this)">💻 Computer</button>
-                    <button class="fire-tab-btn" onclick="filterDashboardSubject('Current Affairs', this)">⚡ Current Affairs</button>
-                </div>
+                <!-- 🌟 LIVE COMMANDER STATS (Replaces old Subject Tabs) 🌟 -->
+<div class="glass-card fade-in" style="padding: 22px; border-radius: 20px; border: 1px solid var(--accent-primary); background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent); margin-bottom: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);">
+    <!-- Glowing background effect -->
+    <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--accent-primary); filter: blur(80px); opacity: 0.2; border-radius: 50%;"></div>
 
-                <div class="subject-content-view fade-in">
-                    <h3 id="current-subject-title" style="color: var(--accent-secondary); margin-bottom: 1rem; font-size: 1.2rem;">📂 Quantitative Aptitude (Maths) - Deployed Intel</h3>
-                    <div id="dashboard-subject-content-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
-                </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; position: relative; z-index: 2;">
+        <h3 style="margin: 0; color: var(--text-primary); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+            📊 Commander Stats
+        </h3>
+        <span style="font-size: 0.75rem; background: rgba(37,99,235,0.1); color: var(--accent-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; letter-spacing: 1px; border: 1px solid rgba(37,99,235,0.3);">LIVE SENSORS</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; position: relative; z-index: 2;">
+        <!-- Rank Box -->
+        <div style="background: var(--bg-primary); padding: 16px 12px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Army Rank</div>
+            <div id="stat-rank-display" style="font-size: 1.1rem; font-weight: 900; color: var(--accent-secondary);">🎖️ Unranked</div>
+        </div>
+
+        <!-- Points Box -->
+        <div style="background: var(--bg-primary); padding: 16px 12px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Total Points</div>
+            <div id="stat-points-display" style="font-size: 1.4rem; font-weight: 900; color: var(--accent-primary);">0</div>
+        </div>
+
+               <!-- TOP SPEED BOX WITH DUAL LEADERBOARD BADGES -->
+        <div style="background: var(--bg-primary); padding: 16px 12px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Top Speed</div>
+            <div id="stat-wpm-display" style="font-size: 1.4rem; font-weight: 900; color: var(--text-primary); margin-bottom: 6px;">0 <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">WPM</span></div>
+            
+            <!-- 🌟 LEADERBOARD RANKS BADGES CONTAINER -->
+            <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
+                <span id="badge-daily-rank" style="font-size: 0.65rem; font-weight: 800; background: rgba(22, 163, 74, 0.12); color: #16a34a; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(22, 163, 74, 0.25); display: none;">Daily: #--</span>
+                <span id="badge-alltime-rank" style="font-size: 0.65rem; font-weight: 800; background: rgba(234, 88, 12, 0.12); color: #ea580c; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(234, 88, 12, 0.25); display: none;">All-Time: #--</span>
+            </div>
+        </div>
+
+        
+        <!-- Streak Box -->
+        <div style="background: var(--bg-primary); padding: 16px 12px; border-radius: 16px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Combat Streak</div>
+            <div id="stat-streak-display" style="font-size: 1.4rem; font-weight: 900; color: #ea580c;">🔥 0 <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">Days</span></div>
+        </div>
+    </div>
+</div>
+
 
             <div class="grid-cards" style="margin-top: 2rem;">
     
@@ -2589,15 +2980,34 @@
             </section>
 
             <section id="view-mock-tests" class="view-section hidden">
-                <div class="page-header">
-                    <h1>Uploaded Mock Tests</h1>
-                    <p>All deployed mock tests and practice papers uploaded via admin command center.</p>
-                </div>
-   
-                <div class="glass-card content-section">
-                    <div id="dedicated-mock-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
-                </div>
-            </section>
+    <div class="page-header">
+        <h1>Everything You Need to Crack SSC — Now Available in One Place.</h1>
+        <p>📚 Mock Tests • Notes • PYQs • Practice Papers — All in One Place.</p>
+    </div>
+
+    <div class="content-section">
+        
+        <!-- 🌟 NEW: Paanch Bade Premium Subject Tabs (With Scroll Hint Wrapper) -->
+        <div style="position: relative; margin-bottom: 10px;">
+            <!-- Scroll trigger add kiya gaya hai -->
+            <div id="study-subject-tabs" class="study-hub-subjects" onscroll="hideScrollHint()"></div>
+            
+            <!-- Sirf mobile par dikhne wala Swipe Arrow -->
+            <div id="mobile-scroll-hint" class="scroll-hint-arrow">
+                <span>Swipe</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            </div>
+        </div>
+        
+        <!-- Category Options -->
+        <div id="study-category-tabs" class="study-cat-wrapper"></div>
+        
+        <!-- Yahan par Filtered Content Dikhayi Dega -->
+        <div id="dedicated-mock-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
+    </div>
+</section>
+
+
              <!-- Mock Test & Practice Generator View -->
 <section id="view-mock-generator" class="view-section hidden">
     <div class="page-header" style="background: linear-gradient(135deg, #0f172a, #2563eb, #ea580c);">
@@ -2894,7 +3304,7 @@ loadResourcesFromFirestore();
         // Agar purana onclick attribute hai toh use hata dete hain taaki conflict na ho
         deployBtn.removeAttribute('onclick');
         
-        deployBtn.addEventListener('click', function(e) {
+                deployBtn.addEventListener('click', function(e) {
             e.preventDefault(); // Page refresh hone se rokkega
             
             const titleInput = document.getElementById('admin-res-title');
@@ -2915,7 +3325,6 @@ loadResourcesFromFirestore();
                 return;
             }
 
-            // 🔥 NAYI LINE: Yahan se selected tab (mock/notes/material) ki value uthayenge
             const selectedCategory = currentArenaTab || 'mock';
 
             if (format === 'link') {
@@ -2925,8 +3334,10 @@ loadResourcesFromFirestore();
                     alert("Please enter a valid URL.");
                     return;
                 }
-                // Update: Yahan selectedCategory add kar diya gaya hai
-                pushToFirestoreCloud(title, subject, selectedCategory, 'link', linkVal);
+                
+                // Yahan LINK ke saath thumbnail Cloud par jayega
+                pushToFirestoreCloud(title, subject, selectedCategory, 'link', linkVal, globalArenaThumbnailBase64);
+
             } else {
                 const fileInput = document.getElementById('admin-res-file');
                 if (!fileInput || fileInput.files.length === 0) {
@@ -2937,18 +3348,19 @@ loadResourcesFromFirestore();
                 const file = fileInput.files[0];
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    // Update: Yahan selectedCategory add kar diya gaya hai
-                    pushToFirestoreCloud(title, subject, selectedCategory, 'file', event.target.result);
+                    // 🔥 YAHI WO LINE HAI JAHAN THUMBNAIL MISSING THA 🔥
+                    pushToFirestoreCloud(title, subject, selectedCategory, 'file', event.target.result, globalArenaThumbnailBase64);
                 };
                 reader.readAsDataURL(file);
             }
         });
+
     }
 
 });
 
 // Function definition mein 'type' add kiya
-function pushToFirestoreCloud(title, subject, type, format, content) {
+function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBase64) {
     if (typeof firebase === 'undefined') {
         alert("Firebase library is missing from the page header!");
         return;
@@ -2968,6 +3380,7 @@ function pushToFirestoreCloud(title, subject, type, format, content) {
         type: type, // 🔥 NAYI LINE: Yahan Category save hogi ('mock', 'notes', 'material')
         format: format,
         content: content,
+        thumbnail: thumbnailBase64 || "",
         createdAt: new Date().toISOString()
     };
 
@@ -3153,7 +3566,7 @@ function pushToFirestoreCloud(title, subject, type, format, content) {
             initDefaultQuiz();
             initDefaultPremiumContent();
             renderDashboardExams();
-            filterDashboardSubject('Quantitative Aptitude (Maths)', document.querySelector('.fire-tab-btn'));
+            
             renderDedicatedMockTests();
             renderSocialFeed();
             renderBestBooks();
@@ -3268,24 +3681,90 @@ function pushToFirestoreCloud(title, subject, type, format, content) {
         }
 
         function updateStreakBanner() {
-            const banner = document.getElementById('streak-banner-text');
-            const currentEmail = localStorage.getItem('warRoomUserEmail');
-            
-            if (!banner) return;
-
-            if (!currentEmail) {
-                banner.style.display = 'none';
-                return;
-            }
-
-            banner.style.display = 'block';
-            const streakKey = getUserKey('warRoomStreakCount');
-            const pointsKey = getUserKey('warRoomUserPoints');
-            const streak = localStorage.getItem(streakKey) || '0';
-            const points = localStorage.getItem(pointsKey) || '0';
-
-            banner.innerHTML = `🔥 Streak: <strong>${streak} Days</strong> | 🏆 Points: <strong>${points}</strong>`;
+    const banner = document.getElementById('streak-banner-text');
+    const currentEmail = localStorage.getItem('warRoomUserEmail');
+    
+    if (!currentEmail) {
+        if (banner) banner.style.display = 'none';
+        const r = document.getElementById('stat-rank-display');
+        if(r) {
+            r.innerHTML = `🎖️ Unranked`;
+            document.getElementById('stat-points-display').innerHTML = `0`;
+            document.getElementById('stat-wpm-display').innerHTML = `0 <span style="font-size: 0.8rem; color: var(--text-secondary);">WPM</span>`;
+            document.getElementById('stat-streak-display').innerHTML = `🔥 0 <span style="font-size: 0.8rem; color: var(--text-secondary);">Days</span>`;
         }
+        return;
+    }
+
+    const streakKey = getUserKey('warRoomStreakCount');
+    const pointsKey = getUserKey('warRoomUserPoints');
+    const streak = localStorage.getItem(streakKey) || '0';
+    const points = parseFloat(localStorage.getItem(pointsKey) || '0');
+
+    if (banner) {
+        banner.style.display = 'block';
+        banner.innerHTML = `🔥 Streak: <strong>${streak} Days</strong> | 🏆 Points: <strong>${points}</strong>`;
+    }
+
+    const rankEl = document.getElementById('stat-rank-display');
+    if (rankEl) {
+        const rank = getArmyRankAndColor(points);
+        
+        let highestWpm = 0;
+        const historyKey = getUserKey('warRoomTypingHistory');
+        if (historyKey) {
+            const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+            history.forEach(h => {
+                if (h.wpm > highestWpm) highestWpm = h.wpm;
+            });
+        }
+
+        rankEl.innerHTML = `🎖️ ${rank}`;
+        document.getElementById('stat-points-display').innerHTML = points;
+        document.getElementById('stat-wpm-display').innerHTML = `${highestWpm} <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">WPM</span>`;
+        document.getElementById('stat-streak-display').innerHTML = `🔥 ${streak} <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">Days</span>`;
+
+        // 🌟 FETCH & DISPLAY LEADERBOARD BADGES IN TOP SPEED BOX
+        if (typeof firebase !== 'undefined') {
+            const db = firebase.firestore();
+            const todayStr = new Date().toLocaleString("en-CA", {timeZone: "Asia/Kolkata"}).split(',')[0];
+
+            // 1. Daily Rank Check
+            db.collection("users").where("dailyWPMDate", "==", todayStr).orderBy("dailyScore", "desc").limit(100).get().then((snapshot) => {
+                let myDailyRank = null; let idx = 1;
+                snapshot.forEach(doc => { if (doc.data().email === currentEmail) { myDailyRank = "#" + idx; } idx++; });
+                
+                const dBadge = document.getElementById('badge-daily-rank');
+                if (dBadge) {
+                    if (myDailyRank) {
+                        dBadge.innerText = `Daily: ${myDailyRank}`;
+                        dBadge.style.display = 'inline-block';
+                    } else {
+                        dBadge.style.display = 'none';
+                    }
+                }
+            }).catch(e => {});
+
+            // 2. All-Time Rank Check
+            db.collection("users").orderBy("allTimeScore", "desc").limit(100).get().then((snapshot) => {
+                let myAllTimeRank = null; let idx = 1;
+                snapshot.forEach(doc => { if (doc.data().email === currentEmail) { myAllTimeRank = "#" + idx; } idx++; });
+                
+                const aBadge = document.getElementById('badge-alltime-rank');
+                if (aBadge) {
+                    if (myAllTimeRank) {
+                        aBadge.innerText = `All-Time: ${myAllTimeRank}`;
+                        aBadge.style.display = 'inline-block';
+                    } else {
+                        aBadge.style.display = 'none';
+                    }
+                }
+            }).catch(e => {});
+        }
+    }
+}
+
+
 
         function changeAccentTheme(val) {
             document.body.setAttribute('data-accent', val);
@@ -3908,13 +4387,18 @@ function resetTypingModalToSetup() {
     typingTestActive = false;
     typingStarted = false;
     exactStartTime = null;
+
     document.getElementById('hidden-focus-input').value = "";
     previousInputLength = 0;
-    
+
+    // Setup screen ko wapas laao
     document.getElementById('typing-setup-screen').classList.remove('hidden');
+    
+    // Baaki saari sub-screens ko strictly hide kar do taaki overlap na ho
     document.getElementById('typing-active-screen').classList.add('hidden');
     document.getElementById('typing-result-screen').classList.add('hidden');
     document.getElementById('typing-history-screen').classList.add('hidden');
+    document.getElementById('typing-leaderboard-screen').classList.add('hidden'); // 🌟 Yeh wali line sabse zaroori hai!
 }
 
 function focusTypingInput() {
@@ -4406,7 +4890,7 @@ function pageNextQuizQuestion() {
     // Loading state dikhao
     container.innerHTML = `<p style="text-align: center; color: var(--accent-primary);">Fetching Global Ranks... 📡</p>`;
 
-    // 🔥 NAYA CODE: Firebase se seedha highest points wale top 10 users uthao
+    // Firebase se highest points wale top 10 users uthao
     firebase.firestore().collection("users")
         .orderBy("points", "desc")
         .limit(10)
@@ -4418,7 +4902,8 @@ function pageNextQuizQuestion() {
                 allUsers.push({ 
                     email: data.email, 
                     name: data.name || "Aspirant", 
-                    points: data.points || 0 
+                    points: data.points || 0,
+                    avatar: data.avatar || null // 🌟 Profile pic database se fetch kiya
                 });
             });
 
@@ -4441,35 +4926,54 @@ function pageNextQuizQuestion() {
                 `;
             }
 
-            // Top 10 list UI mein draw karo
+            // 🌟 Default Avatar SVG (Agar kisi ne photo nahi lagayi)
+            const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
+
+                      // Top 10 list UI mein draw karo
             container.innerHTML = allUsers.map((u, idx) => {
                 const rankNum = idx + 1;
                 const armyRank = getArmyRankAndColor(u.points);
                 
                 let rankClass = '';
                 let rankBadgeSymbol = `#${rankNum}`;
-                if (rankNum === 1) { rankClass = 'rank-gold-1'; rankBadgeSymbol = '👑 1'; }
+                let nameStyle = 'var(--text-primary)';
+                
+                if (rankNum === 1) { rankClass = 'rank-gold-1'; rankBadgeSymbol = '👑 1'; nameStyle = '#facc15'; }
                 else if (rankNum === 2) { rankClass = 'rank-silver-2'; rankBadgeSymbol = '🥈 2'; }
                 else if (rankNum === 3) { rankClass = 'rank-bronze-3'; rankBadgeSymbol = '🥉 3'; }
 
+                let finalAvatar = u.avatar ? u.avatar : defaultAvatar;
+
                 return `
-                    <div style="background: var(--bg-primary); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border);" class="${rankClass}">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="font-weight: 800; font-size: 1rem; width: 35px; text-align: center;">${rankBadgeSymbol}</span>
-                            <div>
-                                <h4 style="margin: 0; font-size: 1rem; color: var(--text-primary);">${u.name} ${u.email === currentEmail ? '(You)' : ''}</h4>
-                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-secondary); text-transform: uppercase;">🎖️ ${armyRank}</span>
+                    <div style="background: var(--bg-primary); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); gap: 10px;" class="${rankClass}">
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+                            <span style="font-weight: 800; font-size: 1rem; width: 30px; text-align: center; flex-shrink: 0; color: ${nameStyle};">${rankBadgeSymbol}</span>
+                            
+                            <img src="${finalAvatar}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid ${nameStyle === 'var(--text-primary)' ? 'var(--glass-border)' : nameStyle}; flex-shrink: 0;">
+
+                            <div style="display: flex; flex-direction: column; flex: 1; min-width: 0;">
+                                <h4 style="margin: 0; font-size: 0.95rem; color: ${nameStyle}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    ${u.name} ${u.email === currentEmail ? '<span style="color:#2563eb; font-size:0.75rem;">(You)</span>' : ''}
+                                </h4>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent-secondary); text-transform: uppercase;">🎖️ ${armyRank}</span>
                             </div>
                         </div>
-                        <div style="font-weight: 800; color: var(--accent-primary); font-size: 1.05rem;">${u.points} Pts</div>
+
+                        <div style="font-weight: 900; color: var(--accent-primary); font-size: 1.1rem; flex-shrink: 0; text-align: right; white-space: nowrap;">
+                            ${u.points} <span style="font-size: 0.7rem; color: var(--text-secondary);">Pts</span>
+                        </div>
+
                     </div>
                 `;
             }).join('');
+
         }).catch((error) => {
             console.log("Leaderboard fetch error: ", error);
             container.innerHTML = `<p style="text-align: center; color: #ef4444;">Error loading leaderboard.</p>`;
         });
 }
+
 
 
         function openAdminQuizModal() {
@@ -5252,54 +5756,168 @@ function pageNextQuizQuestion() {
         }
 
         function renderDashboardSubjectContent() {
-            const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
-            const container = document.getElementById('dashboard-subject-content-list');
-            if(!container) return;
+    const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
+    const container = document.getElementById('dashboard-subject-content-list');
+    if(!container) return;
 
-            const filtered = resources.filter(r => r.subject === currentDashboardSubject);
+    const filtered = resources.filter(r => r.subject === currentDashboardSubject);
 
-            if(filtered.length === 0) {
-                container.innerHTML = `<p style="font-size: 0.9rem; color: var(--text-secondary); margin:0; text-align:center; padding: 1rem;">No content deployed for ${currentDashboardSubject} yet.</p>`;
-                return;
-            }
+    if(filtered.length === 0) {
+        container.innerHTML = `<p style="font-size: 0.9rem; color: var(--text-secondary); margin:0; text-align:center; padding: 1rem;">No content deployed for ${currentDashboardSubject} yet.</p>`;
+        return;
+    }
 
-            container.innerHTML = filtered.map((item, idx) => {
-                return `
-                <div style="background: var(--bg-primary); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 10px;" class="fade-in">
-                    <div>
-                        <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; color: var(--text-primary);">${item.title}</h4>
-                        <span style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 700; text-transform: uppercase;">Type: ${item.format} • Category: ${item.type}</span>
-                    </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn" style="padding: 8px 16px; font-size: 0.8rem; background: var(--accent-primary); color: white;" onclick='accessResource(${JSON.stringify(item)})'>Launch 🚀</button>
+    container.innerHTML = filtered.map((item, idx) => {
+        let thumbHTML = item.thumbnail 
+            ? `<img src="${item.thumbnail}" style="width: 55px; height: 55px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.08);">` 
+            : `<div style="width: 55px; height: 55px; border-radius: 12px; background: rgba(37,99,235,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; border: 1px solid rgba(37,99,235,0.1);">📄</div>`;
+
+        return `
+        <div style="background: var(--bg-primary); padding: 16px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 14px; margin-bottom: 12px;" class="fade-in">
+            <div style="display: flex; gap: 14px; align-items: center;">
+                ${thumbHTML}
+                <div style="flex: 1; min-width: 0;">
+                    <h4 style="margin: 0; font-size: 1.05rem; color: var(--text-primary); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${item.title}
+                    </h4>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span style="color: var(--accent-primary);">📂</span> ${item.subject || 'General'}
                     </div>
                 </div>
-            `;
-            }).join('');
+            </div>
+            <button class="btn" style="width: 100%; padding: 10px; font-size: 0.85rem; background: var(--accent-primary); color: white; letter-spacing: 1px; text-transform: uppercase;" onclick='accessResource(${JSON.stringify(item)})'>Launch 🚀</button>
+        </div>
+        `;
+    }).join('');
+}
+
+
+
+        // Global States
+let currentStudySubject = 'General Intelligence & Reasoning';
+let currentStudyCategory = 'mock';
+
+// Subjects List
+const studySubjectsList = [
+    { id: 'General Intelligence & Reasoning', icon: '🧠', title: 'Reasoning', desc: 'General Intelligence' },
+    { id: 'Quantitative Aptitude (Maths)', icon: '📐', title: 'Mathematics', desc: 'Quantitative Aptitude' },
+    { id: 'English Language', icon: '📖', title: 'English', desc: 'Grammar & Vocab' },
+    { id: 'General Awareness / GS', icon: '🌍', title: 'GK & GS', desc: 'General Studies' },
+    { id: 'Computer Knowledge', icon: '💻', title: 'Computer', desc: 'Tier-2 Basics' }
+];
+
+// Categories List
+const studyCategoriesList = [
+    { id: 'material', label: '📚 Study Material' },
+    { id: 'mock', label: '📝 Mock Tests' },
+    { id: 'pyq', label: '⏳ PYQs' }
+];
+
+// Initialize Function (Isko navigate func me call karenge)
+function initStudyHub() {
+    renderStudySubjects();
+    renderStudyCategories();
+    renderDedicatedMockTests();
+}
+
+function setStudySubject(subId) {
+    currentStudySubject = subId;
+    renderStudySubjects();
+    renderDedicatedMockTests();
+}
+
+function setStudyCategory(catId) {
+    currentStudyCategory = catId;
+    renderStudyCategories();
+    renderDedicatedMockTests();
+}
+
+function renderStudySubjects() {
+    const container = document.getElementById('study-subject-tabs');
+    if(!container) return;
+    
+    container.innerHTML = studySubjectsList.map(sub => `
+        <div class="study-sub-card ${currentStudySubject === sub.id ? 'active-sub' : ''}" onclick="setStudySubject('${sub.id}')">
+            <div class="study-sub-icon">${sub.icon}</div>
+            <div class="study-sub-title">${sub.title}</div>
+            <div class="study-sub-desc">${sub.desc}</div>
+        </div>
+    `).join('');
+}
+
+function renderStudyCategories() {
+    const container = document.getElementById('study-category-tabs');
+    if(!container) return;
+
+    container.innerHTML = studyCategoriesList.map(cat => `
+        <button class="study-cat-pill ${currentStudyCategory === cat.id ? 'active-cat' : ''}" onclick="setStudyCategory('${cat.id}')">
+            ${cat.label}
+        </button>
+    `).join('');
+}
+
+// YEH TUMHARA NAYA RENDER FUNCTION HAI JO DONO CHEEZON SE FILTER KAREGA
+function renderDedicatedMockTests() {
+    const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
+    const container = document.getElementById('dedicated-mock-list');
+    if(!container) return;
+
+    // Filter Logic: Subject aur Category dono match hone chahiye
+    const filtered = resources.filter(r => {
+        const matchSubject = r.subject === currentStudySubject;
+        let matchCategory = false;
+        
+        // Notes & Material dono ko Study Material me dikhaya jayega
+        if (currentStudyCategory === 'material') {
+            matchCategory = (r.type === 'notes' || r.type === 'material');
+        } else if (currentStudyCategory === 'mock') {
+            matchCategory = (r.type === 'mock');
+        } else if (currentStudyCategory === 'pyq') {
+            matchCategory = (r.type === 'pyq');
         }
 
-        function renderDedicatedMockTests() {
-            const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
-            const container = document.getElementById('dedicated-mock-list');
-            if(!container) return;
+        return matchSubject && matchCategory;
+    });
 
-            const mocks = resources.filter(r => r.type === 'mock');
+    if(filtered.length === 0) {
+        container.innerHTML = `
+        <div class="glass-card fade-in" style="text-align: center; padding: 3rem 1rem; border: 1px dashed var(--glass-border); opacity: 0.8;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">📭</div>
+            <h3 style="color: var(--text-primary); margin-bottom: 5px;">No Content Found</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Admin has not deployed any intel for this specific Subject & Category combination yet.</p>
+        </div>`;
+        return;
+    }
 
-            if(mocks.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 1.5rem;">No mock tests deployed by admin yet.</p>`;
-                return;
-            }
+    container.innerHTML = filtered.map(item => {
+        let thumbHTML = item.thumbnail 
+            ? `<img src="${item.thumbnail}" style="width: 55px; height: 55px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.08);">` 
+            : `<div style="width: 55px; height: 55px; border-radius: 12px; background: rgba(37,99,235,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; border: 1px solid rgba(37,99,235,0.1);">📄</div>`;
 
-            container.innerHTML = mocks.map(item => `
-                <div style="background: var(--bg-primary); padding: 14px 18px; border-radius: 14px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                    <div>
-                        <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; color: var(--text-primary);">${item.title}</h4>
-                        <span style="font-size: 0.75rem; color: var(--accent-secondary); font-weight: 700;">📂 ${item.subject || 'General'} • Format: ${item.format}</span>
+        return `
+        <div class="ultra-mock-card fade-in" style="padding: 18px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; gap: 14px; align-items: center;">
+                ${thumbHTML}
+                <div style="flex: 1; min-width: 0;">
+                    <h4 style="margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${item.title}
+                    </h4>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                        <span style="color: var(--accent-primary);">📂</span> ${item.subject || 'General'}
                     </div>
-                    <button class="btn" style="padding: 10px 20px; font-size: 0.85rem; background: var(--accent-primary); color: white;" onclick='accessResource(${JSON.stringify(item)})'>Start Test 🚀</button>
                 </div>
-            `).join('');
-        }
+            </div>
+            <button class="ultra-start-btn" style="width: 100%; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem;" onclick='accessResource(${JSON.stringify(item)})'>
+                Start Mission 🚀
+            </button>
+        </div>
+        `;
+    }).join('');
+}
+
+
+
+
 
         let currentArenaTab = 'mock';
 
@@ -5341,39 +5959,51 @@ function pageNextQuizQuestion() {
         }
 
         function switchArenaTab(tabType) {
-            currentArenaTab = tabType;
-            const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
-            const container = document.getElementById('arena-content-list');
-            const userRole = localStorage.getItem('warRoomUserRole');
+    currentArenaTab = tabType;
+    const resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
+    const container = document.getElementById('arena-content-list');
+    const userRole = localStorage.getItem('warRoomUserRole');
 
-            const filteredWithIndex = [];
-            resources.forEach((r, idx) => {
-                if (r.type === tabType) {
-                    filteredWithIndex.push({ ...r, originalIndex: idx });
-                }
-            });
+    const filteredWithIndex = [];
+    resources.forEach((r, idx) => {
+        if (r.type === tabType) {
+            filteredWithIndex.push({ ...r, originalIndex: idx });
+        }
+    });
 
-            if (filteredWithIndex.length === 0) {
-                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">No tactical units deployed here yet.</div>`;
-                return;
-            }
+    if (filteredWithIndex.length === 0) {
+        container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">No tactical units deployed here yet.</div>`;
+        return;
+    }
 
-            container.innerHTML = filteredWithIndex.map((item) => `
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                    <div>
-                        <h4 style="margin: 0 0 4px 0; font-size: 1rem; color: var(--text-primary);">${item.title}</h4>
-                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            <span style="font-size: 0.75rem; color: var(--accent-secondary); font-weight: 700;">📂 ${item.subject || 'General'}</span>
-                            <span style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 700; text-transform: uppercase;">• Type: ${item.format}</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn" style="padding: 8px 16px; font-size: 0.8rem; background: var(--accent-primary); color: white;" onclick='accessResource(${JSON.stringify(item)})'>Launch Test 🚀</button>
-                        ${userRole === 'admin' ? `<button class="btn" style="padding: 8px; font-size: 0.8rem; background: #ef4444; color: white;" onclick="deleteResource(${item.originalIndex})">🗑️</button>` : ''}
+    container.innerHTML = filteredWithIndex.map((item) => {
+        let thumbHTML = item.thumbnail 
+            ? `<img src="${item.thumbnail}" style="width: 55px; height: 55px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.08);">` 
+            : `<div style="width: 55px; height: 55px; border-radius: 12px; background: rgba(37,99,235,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; border: 1px solid rgba(37,99,235,0.1);">📄</div>`;
+
+        return `
+        <div style="background: var(--bg-primary); padding: 16px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 14px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 14px; align-items: center;">
+                ${thumbHTML}
+                <div style="flex: 1; min-width: 0;">
+                    <h4 style="margin: 0; font-size: 1.05rem; color: var(--text-primary); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${item.title}
+                    </h4>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span style="color: var(--accent-primary);">📂</span> ${item.subject || 'General'}
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+            <div style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn" style="flex: 1; padding: 10px; font-size: 0.85rem; background: var(--accent-primary); color: white; letter-spacing: 1px; text-transform: uppercase;" onclick='accessResource(${JSON.stringify(item)})'>Launch 🚀</button>
+                ${userRole === 'admin' ? `<button class="btn" style="padding: 10px 14px; font-size: 0.85rem; background: #ef4444; color: white;" onclick="deleteResource(${item.originalIndex})">🗑️</button>` : ''}
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+
 
         function toggleAdminInputFormat(format) {
             if (format === 'link') {
@@ -5406,52 +6036,68 @@ function pageNextQuizQuestion() {
         }
 
         function adminSaveResource() {
-            const title = document.getElementById('admin-res-title').value.trim();
-            const subject = document.getElementById('admin-res-subject').value;
-            const format = document.getElementById('admin-res-format').value;
-            
-            if (!title) {
-                alert("Please enter a title for the test/material.");
-                return;
+    const title = document.getElementById('admin-res-title').value.trim();
+    const subject = document.getElementById('admin-res-subject').value;
+    const format = document.getElementById('admin-res-format').value;
+    
+    if (!title) {
+        alert("Please enter a title for the test/material.");
+        return;
+    }
+
+    if (format === 'link') {
+        const linkVal = document.getElementById('admin-res-link').value.trim();
+        if (!linkVal) { alert("Please enter a URL."); return; }
+        // Yahan thumbnail base64 pass kiya gaya hai
+        saveAndRefreshResource(title, subject, 'link', linkVal, globalArenaThumbnailBase64);
+    } 
+    else if (format === 'file') {
+        const fileInput = document.getElementById('admin-res-file');
+        if (fileInput.files.length === 0) { alert("Please select an HTML or PDF file."); return; }
+        
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                // Yahan bhi thumbnail base64 pass kiya gaya hai
+                saveAndRefreshResource(title, subject, 'file', e.target.result, globalArenaThumbnailBase64);
+            } catch (err) {
+                alert("File size is too large for storage! Please select a smaller file.");
             }
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
-            if (format === 'link') {
-                const linkVal = document.getElementById('admin-res-link').value.trim();
-                if (!linkVal) { alert("Please enter a URL."); return; }
-                saveAndRefreshResource(title, subject, 'link', linkVal);
-            } 
-            else if (format === 'file') {
-                const fileInput = document.getElementById('admin-res-file');
-                if (fileInput.files.length === 0) { alert("Please select an HTML or PDF file."); return; }
-                
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        saveAndRefreshResource(title, subject, 'file', e.target.result);
-                    } catch (err) {
-                        alert("File size is too large for storage! Please select a smaller file.");
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+        function saveAndRefreshResource(title, subject, format, content, thumbnailBase64) {
+    let resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
+    resources.push({ 
+        id: 'res_' + Date.now(), 
+        type: currentArenaTab, 
+        title: title, 
+        subject: subject, 
+        format: format, 
+        content: content,
+        thumbnail: thumbnailBase64 || "" // 🔥 YAHAN THUMBNAIL SAVE HOGA
+    });
+    localStorage.setItem('warRoomResources', JSON.stringify(resources));
 
-        function saveAndRefreshResource(title, subject, format, content) {
-            let resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
-            resources.push({ id: 'res_' + Date.now(), type: currentArenaTab, title: title, subject: subject, format: format, content: content });
-            localStorage.setItem('warRoomResources', JSON.stringify(resources));
+    document.getElementById('admin-res-title').value = '';
+    document.getElementById('admin-res-link').value = '';
+    document.getElementById('admin-res-file').value = '';
+    document.getElementById('admin-res-remove-btn').classList.add('hidden');
+    
+    // Test upload hone ke baad Thumbnail box ko wapas khali karna
+    document.getElementById('admin-res-thumb').value = '';
+    document.getElementById('admin-res-thumb-preview').style.display = 'none';
+    globalArenaThumbnailBase64 = "";
 
-            document.getElementById('admin-res-title').value = '';
-            document.getElementById('admin-res-link').value = '';
-            document.getElementById('admin-res-file').value = '';
-            document.getElementById('admin-res-remove-btn').classList.add('hidden');
+    switchArenaTab(currentArenaTab);
+    renderDashboardSubjectContent();
+    renderDedicatedMockTests();
+    alert("Mock test/material deployed successfully!");
+}
 
-            switchArenaTab(currentArenaTab);
-            renderDashboardSubjectContent();
-            renderDedicatedMockTests();
-            alert("Mock test/material deployed successfully with subject classification!");
-        }
 
         function accessResource(item) {
             if (item.format === 'link') {
@@ -5472,20 +6118,37 @@ function pageNextQuizQuestion() {
         }
 
         function deleteResource(index) {
-            const userRole = localStorage.getItem('warRoomUserRole');
-            if (userRole !== 'admin') {
-                alert("Unauthorized action.");
-                return;
-            }
-            if (confirm("Are you sure you want to remove this resource from the arena?")) {
-                let resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
-                resources.splice(index, 1);
-                localStorage.setItem('warRoomResources', JSON.stringify(resources));
-                switchArenaTab(currentArenaTab);
-                renderDashboardSubjectContent();
-                renderDedicatedMockTests();
-            }
+    const userRole = localStorage.getItem('warRoomUserRole');
+    if (userRole !== 'admin') {
+        alert("Unauthorized action.");
+        return;
+    }
+    
+    if (confirm("Are you sure you want to permanently delete this resource from Cloud and Arena?")) {
+        let resources = JSON.parse(localStorage.getItem('warRoomResources') || '[]');
+        let itemToDelete = resources[index];
+
+        // 1. Local Storage se turant delete karo
+        resources.splice(index, 1);
+        localStorage.setItem('warRoomResources', JSON.stringify(resources));
+        
+        switchArenaTab(currentArenaTab);
+        if(typeof renderDashboardSubjectContent === 'function') renderDashboardSubjectContent();
+        if(typeof renderDedicatedMockTests === 'function') renderDedicatedMockTests();
+
+        // 2. Firebase Cloud Database se permanently delete karo
+        if (itemToDelete && itemToDelete.docId && typeof firebase !== 'undefined') {
+            firebase.firestore().collection("ssc_app_data").doc(itemToDelete.docId).delete()
+            .then(() => {
+                console.log("Successfully deleted from Firebase Cloud!");
+            })
+            .catch((error) => {
+                console.error("Error removing document from cloud: ", error);
+            });
         }
+    }
+}
+
 
         function resetArenaResources() {
             const userRole = localStorage.getItem('warRoomUserRole');
@@ -5614,7 +6277,7 @@ function pageNextQuizQuestion() {
                 renderDeptGrid();
                 renderFaq();
                 renderDashboardSubjectContent();
-                renderDedicatedMockTests();
+                initStudyHub();
                 renderSocialFeed();
                 renderBestBooks();
                 renderPremiumHubContent();
@@ -5647,6 +6310,9 @@ function pageNextQuizQuestion() {
             if (viewId === 'daily-quiz-view') {
                 pageQuizIndex = 0;
                 loadPageQuiz();
+                if (viewId === 'mock-tests') {
+    initStudyHub();
+}
             }
             if (viewId === 'premium') {
                 renderPremiumHubContent();
@@ -7037,25 +7703,25 @@ function loadResourcesFromFirestore() {
     
     const db = firebase.firestore();
     
-    // 1. Deployed Resources / Mocks load karein
     db.collection("ssc_app_data").get().then((querySnapshot) => {
         let cloudResources = [];
         querySnapshot.forEach((doc) => {
-            cloudResources.push(doc.data());
+            let data = doc.data();
+            data.docId = doc.id; // 🔥 NAYI LINE: Ye ID delete karne me kaam aayegi
+            cloudResources.push(data);
         });
         
         if (cloudResources.length > 0) {
-            // Local storage ko cloud data se sync kar do taaki UI me turant dikhe
             localStorage.setItem('warRoomResources', JSON.stringify(cloudResources));
-            
-            // UI functions ko wapas call karo taaki screen update ho jaye
-            renderDashboardSubjectContent();
-            renderDedicatedMockTests();
+            if(typeof renderDashboardSubjectContent === 'function') renderDashboardSubjectContent();
+            if(typeof renderDedicatedMockTests === 'function') renderDedicatedMockTests();
         }
     }).catch((error) => {
         console.error("Error loading resources from cloud: ", error);
     });
 }
+
+
 // ==========================================
 // 🏆 TYPING LEADERBOARD & CLOUD SYNC ENGINE
 // ==========================================
@@ -7294,7 +7960,63 @@ function loadTypingLeaderboard(type) {
 }
 
 
+let globalArenaThumbnailBase64 = "";
 
+function compressArenaThumbnail(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('admin-res-thumb-preview');
+    
+    if (!file) {
+        globalArenaThumbnailBase64 = "";
+        preview.style.display = 'none';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800; // Resolution limit
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            } else {
+                if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // 0.7 quality se image compress hogi aur 1MB se chhoti banegi
+            globalArenaThumbnailBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            
+            preview.src = globalArenaThumbnailBase64;
+            preview.style.display = 'block';
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function hideScrollHint() {
+    const hint = document.getElementById('mobile-scroll-hint');
+    const container = document.getElementById('study-subject-tabs');
+    
+    // Agar user ne thoda sa bhi scroll kiya (> 10px), arrow fade out kar do
+    if (hint && container) {
+        if (container.scrollLeft > 10) {
+            hint.style.opacity = '0';
+            // 400ms CSS transition ke baad element ko screen se hata do
+            setTimeout(() => { hint.style.display = 'none'; }, 400); 
+        }
+    }
+}
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
@@ -7450,4 +8172,5 @@ document.addEventListener('fullscreenchange', function() {
 </script>
 
 </body>
+</html>ody>
 </html>
