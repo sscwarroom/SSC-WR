@@ -1803,6 +1803,15 @@
     scrollbar-width: none;
     margin-bottom: 10px;
 }
+/* DESKTOP FIX FOR STUDY HUB SUBJECTS */
+@media (min-width: 901px) {
+    .study-hub-subjects {
+        flex-wrap: wrap !important; /* Badi screen par boxes ko agi line mein bhej dega */
+        overflow-x: visible !important; /* Badi screen par horizontal scroll band kar dega */
+        justify-content: center; /* Cards ko center me layega */
+    }
+}
+
 .study-hub-subjects::-webkit-scrollbar { display: none; }
 
 .study-sub-card {
