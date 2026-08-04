@@ -2168,8 +2168,43 @@
     .gateway-content { padding: 15px; margin-top: 20px; }
     #gateway-screen h1 { font-size: 2.2rem !important; }
 }
+/* ==========================================
+   🌟 ULTRA PREMIUM VIP CARDS CSS
+   ========================================== */
+@keyframes premiumFoilShine {
+    0% { transform: translateX(-150%) skewX(-25deg); }
+    100% { transform: translateX(250%) skewX(-25deg); }
+}
+
+.vip-card-ultra {
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Holographic Shine Effect */
+.vip-card-ultra::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    animation: premiumFoilShine 3.5s infinite; pointer-events: none;
+}
+
+/* 👑 ADMIN CARD (Gold & Black) */
+.vip-card-admin { background: linear-gradient(145deg, #170f02, #020617); border: 1px solid #a16207; box-shadow: 0 10px 30px rgba(161, 98, 7, 0.15); }
+.vip-card-admin:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(202, 138, 4, 0.4), inset 0 0 15px rgba(250, 204, 21, 0.1); border-color: #facc15; }
+
+/* ✅ UNLOCKED CARD (Emerald & Black) */
+.vip-card-unlocked { background: linear-gradient(145deg, #022c22, #020617); border: 1px solid #15803d; box-shadow: 0 10px 30px rgba(21, 128, 61, 0.15); }
+.vip-card-unlocked:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4), inset 0 0 15px rgba(134, 239, 172, 0.1); border-color: #4ade80; }
+
+/* 🔒 LOCKED CARD (Dark Slate & Crimson) */
+.vip-card-locked { background: linear-gradient(145deg, #1e1b4b, #0f172a); border: 1px dashed #475569; opacity: 0.95; }
+.vip-card-locked:hover { transform: translateY(-5px); border-color: #ef4444; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); opacity: 1; }
 
     </style>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 </head>
 <body>
     <!-- 🌟 NEW GATEWAY SCREEN (FIRST IMPRESSION) 🌟 -->
@@ -2409,7 +2444,7 @@
 
             <div style="overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 1rem; padding-right: 5px;">
                 
-                <div id="admin-resource-bar" style="display: none; background: var(--bg-primary); padding: 12px; border-radius: 12px; border: 1px dashed var(--accent-secondary); flex-shrink: 0;">
+                                <div id="admin-resource-bar" style="display: none; background: var(--bg-primary); padding: 12px; border-radius: 12px; border: 1px dashed var(--accent-secondary); flex-shrink: 0;">
                     <h4 style="margin: 0 0 8px 0; font-size: 0.9rem; color: var(--accent-secondary);">Admin Command: Upload Mock Test / Material</h4>
                     <div style="display: flex; flex-direction: column; gap: 8px;">
                         <input type="text" id="admin-res-title" class="search-input" placeholder="Title (e.g. Number System Test)" style="padding: 10px 15px; font-size: 0.9rem;">
@@ -2427,14 +2462,13 @@
                             <option value="file">Upload HTML / PDF File from Phone</option>
                             <option value="link">Web Link (URL)</option>
                         </select>
-                        <!-- Yahan se naya Thumbnail Input shuru -->
-<label style="font-size: 0.85rem; font-weight: 700; color: var(--accent-secondary); margin-top: 5px;">Thumbnail Image (Auto-Compress < 1MB):</label>
-<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-    <input type="file" id="admin-res-thumb" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept="image/*" onchange="compressArenaThumbnail(event)">
-    <img id="admin-res-thumb-preview" src="" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid var(--glass-border);">
-</div>
-<!-- Yahan par naya Thumbnail Input khatam -->
 
+                        <!-- 🔥 YAHAN THA WO ERROR, AB THEEK HAI 🔥 -->
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--accent-secondary); margin-top: 5px;">Thumbnail Image (Auto-Compress Max 1MB):</label>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <input type="file" id="admin-res-thumb" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept="image/*" onchange="compressArenaThumbnail(event)">
+                            <img id="admin-res-thumb-preview" src="" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid var(--glass-border);">
+                        </div>
 
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <input type="file" id="admin-res-file" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept=".html,.htm,.pdf" onchange="handleArenaFileSelected(this)">
@@ -2442,9 +2476,7 @@
                         </div>
                         <input type="text" id="admin-res-link" class="search-input hidden" placeholder="Paste URL (https://...)" style="padding: 10px 15px; font-size: 0.9rem;">
 
-                      <button class="btn" id="deploy-arena-btn" style="background: var(--accent-secondary); color: white; padding: 10px; font-size: 0.85rem;">🚀 Deploy to Arena</button>
-
-
+                        <button class="btn" id="deploy-arena-btn" style="background: var(--accent-secondary); color: white; padding: 10px; font-size: 0.85rem;">🚀 Deploy to Arena</button>
                     </div>
                 </div>
 
@@ -2703,30 +2735,44 @@
         </div>
     </div>
 </div>
-    <div id="admin-premium-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 25000; display: none; justify-content: center; align-items: center;">
+        <div id="admin-premium-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 25000; display: none; justify-content: center; align-items: center;">
         <div class="glass-card" style="width: 100%; max-width: 480px; background: var(--bg-secondary); margin: 15px; position: relative;">
             <button onclick="closeAdminPremiumModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
             <h3 style="color: #eab308; margin-bottom: 10px; padding-right: 25px;">👑 Admin: Upload Premium Content</h3>
             
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
                 <input type="text" id="admin-p-title" class="search-input" placeholder="Premium Title (e.g. Secret Officer Strategy PDF)" style="padding: 10px 14px; font-size: 0.9rem;">
-                <textarea id="admin-p-desc" class="search-input" placeholder="Description..." style="height: 70px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none;">            </textarea>
+                                <textarea id="admin-p-desc" class="search-input" placeholder="Description..." style="height: 70px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none;"></textarea>
                 
-                <select id="admin-p-format" class="search-input" style="padding: 10px 14px; font-size: 0.9rem;" onchange="toggleAdminPremiumFormat(this.value)">
+                <!-- 1. Format Selector (File ya Link) -->
+                <select id="admin-p-format" class="search-input" style="padding: 10px 14px; font-size: 0.9rem; margin-top: 5px;" onchange="toggleAdminPremiumFormat(this.value)">
                     <option value="file">Upload HTML / PDF File</option>
                     <option value="link">Web Link URL</option>
                 </select>
 
+                <!-- 2. THUMBNAIL INPUT (Sirf Card ki Image ke liye) -->
+                <label style="font-size: 0.85rem; font-weight: 700; color: #eab308; margin-top: 5px;">🖼️ 1. Upload Card Thumbnail (Photo):</label>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <input type="file" id="admin-p-thumb" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept="image/*" onchange="compressPremiumThumbnail(event)">
+                    <img id="admin-p-thumb-preview" src="" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid var(--glass-border);">
+                </div>
+
+                <!-- 3. MAIN CONTENT INPUT (Asli PDF/HTML File ke liye) -->
+                <label id="admin-p-file-label" style="font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 5px;">📄 2. Upload Main Content (PDF/HTML):</label>
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                     <input type="file" id="admin-p-file" class="search-input" style="padding: 8px; font-size: 0.9rem; flex: 1;" accept=".html,.htm,.pdf,image/*" onchange="handleAdminPremiumFile(this)">
                     <button type="button" id="admin-p-remove-btn" class="hidden btn" style="background: #ef4444; color: white; padding: 8px 12px; font-size: 0.8rem;" onclick="clearAdminPremiumFile()">❌ Remove</button>
                 </div>
+                
+                <!-- 4. MAIN CONTENT LINK (Agar upar URL format select kiya ho) -->
                 <input type="text" id="admin-p-link" class="search-input hidden" placeholder="Paste URL (https://...)" style="padding: 10px 14px; font-size: 0.9rem;">
 
-                <button class="btn" style="background: linear-gradient(135deg, #eab308, #ea580c); color: white; padding: 12px; font-weight: 800;" onclick="saveAdminPremiumContent()">🚀 Deploy VIP Content</button>
+                <button class="btn" style="background: linear-gradient(135deg, #eab308, #ea580c); color: white; padding: 12px; font-weight: 800; margin-top: 10px;" onclick="saveAdminPremiumContent()">🚀 Deploy VIP Content</button>
+
             </div>
         </div>
     </div>
+
 
     <div id="landing-page">
         
@@ -5193,20 +5239,16 @@ function pageNextQuizQuestion() {
     const currentPhone = localStorage.getItem(`user_phone_${currentEmail}`);
 
     if(items.length === 0) {
-        container.innerHTML = `<div class="glass-card" style="text-align: center; color: var(--text-secondary);">No VIP content deployed yet. Commander Shiva will upload soon.</div>`;
+        container.innerHTML = `<div class="glass-card" style="text-align: center; color: var(--text-secondary); border: 1px dashed var(--glass-border);">📭 No VIP content deployed yet. Commander Shiva will upload soon.</div>`;
         return;
     }
 
-    // Har item ke liye alag se check aur render
     container.innerHTML = items.map((item, idx) => {
         const isAdmin = (userRole === 'admin');
-        
-        // NEW: Check access FOR THIS SPECIFIC ITEM only
         const isVipApproved = hasVipAccess(currentEmail, item.id) || hasVipAccess(currentPhone, item.id);
 
         let expiryText = "";
         if (isVipApproved && !isAdmin) {
-            // NEW: Fetch expiry using specific item ID
             let expiry = localStorage.getItem(`vip_access_${item.id}_${currentEmail}`) || localStorage.getItem(`vip_access_${item.id}_${currentPhone}`);
             if (expiry) {
                 let timeLeft = parseInt(expiry) - Date.now();
@@ -5225,79 +5267,71 @@ function pageNextQuizQuestion() {
             }
         }
 
+        // 🌟 Bada aur Premium Thumbnail (85x85)
+        let thumbHTML = item.thumbnail 
+            ? `<img src="${item.thumbnail}" style="width: 85px; height: 85px; border-radius: 16px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.1);">` 
+            : `<div style="width: 85px; height: 85px; border-radius: 16px; background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.6);">💎</div>`;
+
         if (isAdmin) {
-            // 👑 Admin View (Full Control)
+            // 👑 Admin View (Gold Theme)
             return `
-                <div class="glass-card" style="border: 2px solid rgba(234, 179, 8, 0.6); background: linear-gradient(135deg, rgba(234, 179, 8, 0.05), rgba(15, 23, 42, 0.05)); display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                            <span style="font-size: 1.1rem;">👑</span>
-                            <h3 style="margin: 0; color: #eab308; font-size: 1.2rem;">${item.title}</h3>
+                <div class="vip-card-ultra vip-card-admin" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #eab308; text-transform: uppercase;">Admin</div>
                         </div>
-                        <p style="margin: 0 0 8px 0; font-size: 0.9rem; color: var(--text-secondary);">${item.desc}</p>
-                        <span style="font-size: 0.75rem; color: var(--accent-tertiary); font-weight: 700; text-transform: uppercase;">Admin Access Granted ✅ • Type: ${item.format}</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #fef08a; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">${item.title}</h3>
+                            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn" style="background: linear-gradient(135deg, #eab308, #ea580c); color: white; padding: 10px 20px; font-size: 0.85rem;" onclick='accessPremiumResource(${JSON.stringify(item)})'>Open VIP File 🚀</button>
-                        <button class="btn" style="background: #ef4444; color: white; padding: 10px; font-size: 0.85rem;" onclick="deletePremiumContent(${idx})">🗑️</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: black; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); border: none;" onclick='accessPremiumResource(${JSON.stringify(item)})'>🚀 Launch VIP File</button>
+                        <button class="btn" style="background: #7f1d1d; color: #fca5a5; padding: 14px; border: 1px solid #b91c1c;" onclick="deletePremiumContent(${idx})">🗑️</button>
                     </div>
                 </div>
             `;
         } else if (isVipApproved) {
-            // ✅ Unlocked View for Approved Student
+            // ✅ Unlocked View (Neon Green Theme)
             return `
-                <div class="glass-card" style="border: 2px solid #16a34a; background: linear-gradient(135deg, rgba(22, 163, 74, 0.05), rgba(15, 23, 42, 0.05)); display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                            <span style="font-size: 1.1rem;">✅</span>
-                            <h3 style="margin: 0; color: #16a34a; font-size: 1.2rem;">${item.title}</h3>
+                <div class="vip-card-ultra vip-card-unlocked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #16a34a; text-transform: uppercase;">Unlocked</div>
                         </div>
-                        <p style="margin: 0 0 8px 0; font-size: 0.9rem; color: var(--text-secondary);">${item.desc}</p>
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
-    <span style="background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(22, 163, 74, 0.4); color: #16a34a; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">✅ VIP Active</span>
-    
-    <span style="background: linear-gradient(135deg, rgba(234, 88, 12, 0.15), rgba(220, 38, 38, 0.15)); border: 1px solid rgba(234, 88, 12, 0.5); color: #ea580c; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; box-shadow: 0 0 10px rgba(234, 88, 12, 0.2); letter-spacing: 0.5px;">${expiryText}</span>
-    
-    <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; padding: 4px 0;">📂 Type: ${item.format}</span>
-</div>
-
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #86efac; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(34, 197, 94, 0.4);">${item.title}</h3>
+                            <p style="margin: 6px 0 10px 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                            <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">${expiryText}</span>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn" style="background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 10px 20px; font-size: 0.85rem;" onclick='openApprovedVipFile(${JSON.stringify(item)})'>Open VIP File 🚀</button>
-                    </div>
+                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(22, 163, 74, 0.4); border: none;" onclick='openApprovedVipFile(${JSON.stringify(item)})'>🚀 Access Secure File</button>
                 </div>
             `;
         } else {
-            // 🔒 Locked View for Normal Students
+            // 🔒 Locked View (Crimson/Slate Dark Theme)
             return `
-                <div class="glass-card" style="border: 2px dashed rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.03); display: flex; flex-direction: column; gap: 12px; opacity: 0.9;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                            <span style="font-size: 1.1rem;">🔒</span>
-                            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.2rem;">${item.title}</h3>
+                <div class="vip-card-ultra vip-card-locked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0; filter: grayscale(100%) brightness(0.7);">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.8rem; padding: 3px 6px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 10px #ef4444;">🔒</div>
                         </div>
-                        <p style="margin: 0 0 8px 0; font-size: 0.9rem; color: var(--text-secondary);">${item.desc}</p>
-                        
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">🚫 Access Locked</span>
-                            <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; padding: 4px 0;">📂 Type: ${item.format}</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #cbd5e1; font-size: 1.25rem; font-weight: 900; letter-spacing: -0.5px;">${item.title}</h3>
+                            <p style="margin: 6px 0 10px 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                            <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">🚫 Top Secret - Classified</span>
                         </div>
                     </div>
                     
-                    <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
-                        <button class="btn" style="flex: 1; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 10px; font-size: 0.85rem; border: 1px solid #60a5fa; min-width: 140px; white-space: nowrap;" onclick="requestVipAccess('${item.title}')"> Request Access</button>
-                        
-                        <button class="btn" style="flex: 1; background: #334155; color: #94a3b8; padding: 10px; font-size: 0.85rem; cursor: not-allowed; border: 1px solid #475569; min-width: 140px; white-space: nowrap;" disabled>🔒 Locked</button>
-                    </div>
-                    <div style="text-align: right; width: 100%;">
-                        <span style="font-size: 0.65rem; color: #ef4444; font-weight: 700;">Admin Clearance Required</span>
-                    </div>
+                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid #60a5fa;" onclick="requestVipAccess('${item.title}')">🔓 Request Access</button>
                 </div>
             `;
         }
     }).join('');
 }
-
 
 
         function openAdminPremiumModal() {
@@ -5341,51 +5375,62 @@ function pageNextQuizQuestion() {
         }
 
         function saveAdminPremiumContent() {
-            const title = document.getElementById('admin-p-title').value.trim();
-            const desc = document.getElementById('admin-p-desc').value.trim();
-            const format = document.getElementById('admin-p-format').value;
+    const title = document.getElementById('admin-p-title').value.trim();
+    const desc = document.getElementById('admin-p-desc').value.trim();
+    const format = document.getElementById('admin-p-format').value;
 
-            if(!title) {
-                alert("Please enter a title for the VIP content.");
-                return;
+    if(!title) {
+        alert("Please enter a title for the VIP content.");
+        return;
+    }
+
+    if (format === 'link') {
+        const linkVal = document.getElementById('admin-p-link').value.trim();
+        if(!linkVal) { alert("Please paste a valid URL."); return; }
+        // Thumbnail bhej rahe hain
+        pushPremiumToStorage(title, desc, 'link', linkVal, globalPremiumThumbnailBase64);
+    } else {
+        const fileInput = document.getElementById('admin-p-file');
+        if(fileInput.files.length === 0) { alert("Please select a file."); return; }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                // Thumbnail bhej rahe hain
+                pushPremiumToStorage(title, desc, 'file', e.target.result, globalPremiumThumbnailBase64);
+            } catch (err) {
+                alert("File size is too large for storage! Use a smaller file.");
             }
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
-            if (format === 'link') {
-                const linkVal = document.getElementById('admin-p-link').value.trim();
-                if(!linkVal) { alert("Please paste a valid URL."); return; }
-                pushPremiumToStorage(title, desc, 'link', linkVal);
-            } else {
-                const fileInput = document.getElementById('admin-p-file');
-                if(fileInput.files.length === 0) { alert("Please select a file."); return; }
+function pushPremiumToStorage(title, desc, format, content, thumbnailBase64) {
+    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    
+    // Thumbnail database mein save hoga
+    items.push({ id: 'prem_' + Date.now(), title: title, desc: desc, format: format, content: content, thumbnail: thumbnailBase64 || "" });
+    localStorage.setItem('warRoomPremiumContent', JSON.stringify(items));
 
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        pushPremiumToStorage(title, desc, 'file', e.target.result);
-                    } catch (err) {
-                        alert("File size is too large for storage! Use a smaller file.");
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+    // Inputs clear karna
+    document.getElementById('admin-p-title').value = '';
+    document.getElementById('admin-p-desc').value = '';
+    document.getElementById('admin-p-link').value = '';
+    document.getElementById('admin-p-file').value = '';
+    document.getElementById('admin-p-remove-btn').classList.add('hidden');
+    
+    // Thumbnail wala preview bhi clear karna
+    document.getElementById('admin-p-thumb').value = '';
+    document.getElementById('admin-p-thumb-preview').style.display = 'none';
+    globalPremiumThumbnailBase64 = "";
 
-        function pushPremiumToStorage(title, desc, format, content) {
-            let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
-            items.push({ id: 'prem_' + Date.now(), title: title, desc: desc, format: format, content: content });
-            localStorage.setItem('warRoomPremiumContent', JSON.stringify(items));
+    closeAdminPremiumModal();
+    renderPremiumHubContent();
+    alert("VIP Premium Content deployed successfully!");
+}
 
-            document.getElementById('admin-p-title').value = '';
-            document.getElementById('admin-p-desc').value = '';
-            document.getElementById('admin-p-link').value = '';
-            document.getElementById('admin-p-file').value = '';
-            document.getElementById('admin-p-remove-btn').classList.add('hidden');
-
-            closeAdminPremiumModal();
-            renderPremiumHubContent();
-            alert("VIP Premium Content deployed successfully!");
-        }
 
         function accessPremiumResource(item) {
             const userRole = localStorage.getItem('warRoomUserRole');
@@ -6854,13 +6899,76 @@ function requestVipAccess(documentTitle) {
 function closePricingModal() {
     document.getElementById('pricing-modal').style.display = "none";
 }
+function initiatePayment() {
+    let days = parseInt(document.getElementById('req-days-input').value);
+    if (!days || days <= 0) return;
+    
+    let price = days * 9; // Price in INR
+    let docTitle = document.getElementById('req-doc-title').innerText;
+    let currentEmail = localStorage.getItem('warRoomUserEmail');
 
-// 4. Proceed (Join Group) dabane par WhatsApp kholna
-function proceedToWhatsApp() {
-    closePricingModal();
-    // Tumhara WhatsApp Group Link
-    window.location.href = "https://chat.whatsapp.com/HTPe3eMYTQ46CUB6zj8C8q";
+    if (!currentEmail) {
+        alert("Please login first to purchase VIP access.");
+        closePricingModal();
+        openAuthModal();
+        return;
+    }
+
+    // 1. File ki ID dhoondhna (Taaki sirf wahi file unlock ho)
+    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    let currentItem = items.find(i => i.title === currentRequestTitle);
+    
+    if (!currentItem) {
+        alert("Error finding the file. Please try again.");
+        return;
+    }
+
+    // 2. Razorpay Popup Settings
+    var options = {
+        "key": "rzp_live_TLl4cQ2FJnrsx6", // ⚠️ APNI rzp_live_... WALI KEY YAHAN DAALO
+        "amount": price * 100, // Razorpay amount paise mein leta hai (so * 100)
+        "currency": "INR",
+        "name": "SSCWarRoom",
+        "description": "VIP Access: " + docTitle,
+        "image": "SSCWARROOM.PNG", // Tumhara logo popup me dikhega
+        
+        // 3. AUTO UNLOCK LOGIC (Jab payment successful ho jaye)
+        "handler": function (response) {
+            // response.razorpay_payment_id mein payment ID aati hai
+            console.log("Payment Success ID:", response.razorpay_payment_id);
+            
+            // Expiry time calculate karna
+            let totalHours = days * 24;
+            let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
+            
+            // System mein access grant karna (Exactly waisa hi jaise admin karta hai)
+            localStorage.setItem(`vip_access_${currentItem.id}_${currentEmail}`, expiryTime);
+            
+            // UI ko update karna
+            closePricingModal();
+            renderPremiumHubContent(); // Isse lock icon turant Green "Unlocked" ban jayega
+            
+            alert(`🎉 Payment Successful! VIP Access for ${days} days has been auto-unlocked.`);
+        },
+        "prefill": {
+            "email": currentEmail, // Student ka email pehle se bhara aayega
+        },
+        "theme": {
+            "color": "#16a34a" // Tumhari theme ka green color
+        }
+    };
+
+    // Razorpay Popup Kholna
+    var rzp1 = new Razorpay(options);
+    
+    // Agar user popup band kar de bina pay kiye
+    rzp1.on('payment.failed', function (response){
+        alert("Payment Failed or Cancelled. Reason: " + response.error.description);
+    });
+
+    rzp1.open();
 }
+
 
 // Ensure event listeners are added ONLY after the elements are fully loaded
 document.addEventListener("DOMContentLoaded", function() {
@@ -6871,22 +6979,27 @@ document.addEventListener("DOMContentLoaded", function() {
         reqDaysInput.addEventListener('input', function(e) {
             let days = parseInt(e.target.value);
             let btn = document.getElementById('req-proceed-btn');
+            let btnText = document.getElementById('pay-btn-text');
             let priceDisplay = document.getElementById('req-price-display');
 
             if (days > 0) {
-                let price = days * 9; // ₹19 Per day ki calculation
+                let price = days * 9; // ₹9 Per day calculation
                 priceDisplay.innerText = "₹" + price;
                 
-                // Button ko active karna
+                // Button ko active karna aur amount dikhana
+                if(btnText) btnText.innerText = "Pay ₹" + price;
                 btn.disabled = false;
                 btn.style.opacity = "1";
                 btn.style.cursor = "pointer";
+                btn.style.boxShadow = "0 4px 15px rgba(22, 163, 74, 0.4)";
             } else {
-                // Agar galti se 0 ya negative daala toh wapas lock kar do
+                // Agar 0 ya negative daala toh wapas lock kar do
                 priceDisplay.innerText = "₹0";
+                if(btnText) btnText.innerText = "Pay Securely";
                 btn.disabled = true;
                 btn.style.opacity = "0.5";
                 btn.style.cursor = "not-allowed";
+                btn.style.boxShadow = "none";
             }
         });
     }
@@ -6907,6 +7020,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
 
 // Function to check if user has unseen VIP grants
 function checkNewVipGrants() {
@@ -7552,7 +7666,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loader && progressBar) {
         let progress = 0;
         const startTime = Date.now();
-        const minLoadingTime = 2000;
+        const minLoadingTime = 100;
         
         const interval = setInterval(() => {
             let elapsedTime = Date.now() - startTime;
@@ -8120,6 +8234,52 @@ function loadTypingLeaderboard(type) {
     });
 }
 
+// ==========================================
+// 🌟 VIP PREMIUM THUMBNAIL COMPRESSOR
+// ==========================================
+let globalPremiumThumbnailBase64 = "";
+
+function compressPremiumThumbnail(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('admin-p-thumb-preview');
+    
+    if (!file) {
+        globalPremiumThumbnailBase64 = "";
+        preview.style.display = 'none';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            } else {
+                if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Compress to 70% quality
+            globalPremiumThumbnailBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            
+            preview.src = globalPremiumThumbnailBase64;
+            preview.style.display = 'block';
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
 let globalArenaThumbnailBase64 = "";
 
@@ -8322,9 +8482,15 @@ function launchGatewayMission(missionType) {
         </div>
 
         <div style="display: flex; gap: 10px;">
-            <button class="btn" style="flex: 1; background: #334155; color: white; padding: 12px; border-radius: 8px; font-weight: bold;" onclick="closePricingModal()">Cancel</button>
-            <button class="btn" id="req-proceed-btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; cursor: not-allowed;" disabled onclick="proceedToWhatsApp()">Join Group</button>
-        </div>
+    <button class="btn" style="flex: 1; background: #334155; color: white; padding: 12px; border-radius: 8px; font-weight: bold;" onclick="closePricingModal()">Cancel</button>
+    
+    <!-- Updated Payment Button -->
+    <button class="btn" id="req-proceed-btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; cursor: not-allowed; display: flex; justify-content: center; align-items: center; gap: 8px;" disabled onclick="initiatePayment()">
+        <span id="pay-btn-text">Pay Securely</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+    </button>
+</div>
+
     </div>
 </div>
 <script>
