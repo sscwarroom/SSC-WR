@@ -2077,10 +2077,139 @@
         margin-bottom: 10px;
     }
 }
+/* ==========================================
+   🌟 GATEWAY SCREEN (PRE-LANDING) CSS
+   ========================================== */
+.loader-overlay { z-index: 100005 !important; } /* Loader ko sabse upar rakhna hai */
+
+#gateway-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s;
+}
+
+.gateway-particles {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.gateway-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+    animation: smoothSlideUp 0.8s ease forwards;
+}
+
+.gateway-cards-container {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.gateway-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(2, 6, 23, 0.9));
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 40px 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.gateway-card.type-card:hover { border-color: #ea580c; transform: translateY(-12px); box-shadow: 0 20px 40px rgba(234, 88, 12, 0.25), inset 0 0 25px rgba(234, 88, 12, 0.1); }
+.gateway-card.mock-card:hover { border-color: #3b82f6; transform: translateY(-12px); box-shadow: 0 20px 40px rgba(59, 130, 246, 0.25), inset 0 0 25px rgba(59, 130, 246, 0.1); }
+.gateway-card.war-card:hover { border-color: #16a34a; transform: translateY(-12px); box-shadow: 0 20px 40px rgba(22, 163, 74, 0.25), inset 0 0 25px rgba(22, 163, 74, 0.1); }
+
+.gw-icon { font-size: 4.5rem; margin-bottom: 20px; transition: transform 0.4s ease; display: inline-block; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+.gateway-card:hover .gw-icon { transform: scale(1.15) rotate(5deg); }
+
+.gw-title { color: white; font-size: 1.5rem; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.gw-hook { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; font-weight: 500; margin-bottom: 30px; }
+
+.gw-btn {
+    display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 50px; font-weight: 800; text-transform: uppercase;
+    font-size: 0.9rem; letter-spacing: 1px; transition: all 0.3s; width: 100%; box-sizing: border-box;
+}
+
+.type-card .gw-btn { background: rgba(234, 88, 12, 0.1); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.5); }
+.type-card:hover .gw-btn { background: #ea580c; color: white; box-shadow: 0 0 25px rgba(234, 88, 12, 0.6); border-color: #ea580c; }
+
+.mock-card .gw-btn { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.5); }
+.mock-card:hover .gw-btn { background: #3b82f6; color: white; box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); border-color: #3b82f6; }
+
+.war-card .gw-btn { background: rgba(22, 163, 74, 0.1); color: #16a34a; border: 1px solid rgba(22, 163, 74, 0.5); }
+.war-card:hover .gw-btn { background: #16a34a; color: white; box-shadow: 0 0 25px rgba(22, 163, 74, 0.6); border-color: #16a34a; }
+
+/* Mobile Optimization */
+@media (max-width: 900px) {
+    .gateway-card { min-width: 100%; padding: 30px 20px; }
+    .gw-icon { font-size: 3.5rem; margin-bottom: 15px; }
+    .gw-title { font-size: 1.3rem; }
+    .gateway-content { padding: 15px; margin-top: 20px; }
+    #gateway-screen h1 { font-size: 2.2rem !important; }
+}
 
     </style>
 </head>
 <body>
+    <!-- 🌟 NEW GATEWAY SCREEN (FIRST IMPRESSION) 🌟 -->
+<div id="gateway-screen">
+    <div class="gateway-particles"></div>
+    <div class="gateway-content">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="color: white; font-size: 3rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px;">Select Your <span style="color: #3b82f6;">Mission</span></h1>
+            <p style="color: #94a3b8; font-size: 1.1rem; font-weight: 500;">India's Most Elite SSC Preparation Platform.</p>
+        </div>
+        
+        <div class="gateway-cards-container">
+            <!-- CARD 1: TYPING -->
+            <div class="gateway-card type-card" onclick="launchGatewayMission('typing')">
+                <div class="gw-icon">⌨️</div>
+                <h3 class="gw-title">DEST Typing Pro</h3>
+                <p class="gw-hook">Master Tier-2 Typing with TCS-like Live Interface, WPM Tracking & 100% Accuracy.</p>
+                <span class="gw-btn">Start Typing ➔</span>
+            </div>
+
+            <!-- CARD 2: MOCKS -->
+            <div class="gateway-card mock-card" onclick="launchGatewayMission('mocks')">
+                <div class="gw-icon">📝</div>
+                <h3 class="gw-title">Mocks & PYQs</h3>
+                <p class="gw-hook">Solve Chapter-wise PYQs & Full Mocks. Build speed with Real Exam Simulation.</p>
+                <span class="gw-btn">Attempt Mock ➔</span>
+            </div>
+
+            <!-- CARD 3: WAR ROOM (Landing Page) -->
+            <div class="gateway-card war-card" onclick="closeGateway()">
+                <div class="gw-icon">🛡️</div>
+                <h3 class="gw-title">Enter War Room</h3>
+                <p class="gw-hook">Access the Ultimate Tactical Dashboard. Manage your studies & claim your Army Rank.</p>
+                <span class="gw-btn">Proceed to Base ➔</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 🌟 GATEWAY SCREEN END 🌟 -->
+
     
 <!-- Army Tactical Loading Screen -->
 <div id="armyLoader" class="loader-overlay">
@@ -8047,6 +8176,48 @@ function hideScrollHint() {
             // 400ms CSS transition ke baad element ko screen se hata do
             setTimeout(() => { hint.style.display = 'none'; }, 400); 
         }
+    }
+}
+// ==========================================
+// 🌟 GATEWAY SCREEN LOGIC
+// ==========================================
+function closeGateway() {
+    const gw = document.getElementById('gateway-screen');
+    gw.style.opacity = '0';
+    gw.style.transform = 'scale(1.05)';
+    setTimeout(() => { gw.style.display = 'none'; }, 500);
+}
+
+function launchGatewayMission(missionType) {
+    closeGateway();
+    
+    // Landing page ko chupana aur main app dikhana
+    const landing = document.getElementById('landing-page');
+    landing.style.display = 'none';
+    document.getElementById('app').classList.remove('hidden');
+    
+    // Website ke baaki saare data ko load karna
+    checkStreakAndLogin(true);
+    renderDashboardExams();
+    renderAccordions();
+    renderPostGrid();
+    renderDeptGrid();
+    renderFaq();
+    renderDashboardSubjectContent();
+    initStudyHub();
+    renderSocialFeed();
+    renderBestBooks();
+    renderPremiumHubContent();
+    loadPageQuiz();
+
+    // User ko uske chune hue section mein seedha bhejna
+    if (missionType === 'typing') {
+        navigate('dashboard', document.querySelectorAll('.nav-item')[0]);
+        setTimeout(() => {
+            openTypingModal();
+        }, 600);
+    } else if (missionType === 'mocks') {
+        navigate('mock-tests', document.querySelectorAll('.nav-item')[2]);
     }
 }
 
