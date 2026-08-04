@@ -1639,7 +1639,7 @@
         0% { transform: translateX(80vw); }
         100% { transform: translateX(-100%); }
     }
-
+}
 
 /* --- PREMIUM APP DOWNLOAD SECTION --- */
 #app-promo-box {
@@ -2056,6 +2056,25 @@
 @media (max-width: 900px) {
     .scroll-hint-arrow {
         display: flex;
+    }
+}
+/* FINAL BULLETPROOF DESKTOP FIX FOR STUDY HUB */
+@media (min-width: 901px) {
+    .study-hub-subjects {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        justify-content: center !important;
+    }
+    
+    .study-cat-wrapper {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        overflow-x: visible !important;
+    }
+    
+    .study-cat-pill {
+        flex-shrink: 1 !important; /* Buttons ko shrink hone dega taaki screen ke bahar na jayein */
+        margin-bottom: 10px;
     }
 }
 
