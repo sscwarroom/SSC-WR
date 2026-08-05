@@ -2143,6 +2143,46 @@
 .vip-card-locked { background: linear-gradient(145deg, #1e1b4b, #0f172a); border: 1px dashed #475569; opacity: 0.95; }
 .vip-card-locked:hover { transform: translateY(-5px); border-color: #ef4444; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); opacity: 1; }
 
+/* 🌟 VIP ROYAL CATEGORY TABS 🌟 */
+.royal-cat-wrapper {
+    display: flex; gap: 12px; margin-bottom: 20px; padding: 6px 4px 15px 4px;
+    overflow-x: auto; scrollbar-width: none;
+}
+.royal-cat-wrapper::-webkit-scrollbar { display: none; }
+
+.royal-cat-pill {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 24px; border-radius: 50px; font-size: 0.85rem; font-weight: 800;
+    color: #ca8a04; background: linear-gradient(145deg, #0f172a, #020617);
+    border: 1px solid #a16207; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.royal-cat-pill:hover {
+    border-color: #facc15; color: #facc15; transform: translateY(-3px);
+}
+.royal-cat-pill.active-royal {
+    background: linear-gradient(135deg, #ca8a04, #854d0e); color: white;
+    border-color: #fef08a; box-shadow: 0 8px 20px rgba(202, 138, 4, 0.4);
+    transform: translateY(-4px);
+}
+@keyframes warRoomEnterAnim {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+        filter: blur(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+.war-room-entering {
+    animation: warRoomEnterAnim 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -2683,13 +2723,22 @@
             
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
                 <input type="text" id="admin-p-title" class="search-input" placeholder="Premium Title (e.g. Secret Officer Strategy PDF)" style="padding: 10px 14px; font-size: 0.9rem;">
-                                <textarea id="admin-p-desc" class="search-input" placeholder="Description..." style="height: 70px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none;"></textarea>
-                
-                <!-- 1. Format Selector (File ya Link) -->
-                <select id="admin-p-format" class="search-input" style="padding: 10px 14px; font-size: 0.9rem; margin-top: 5px;" onchange="toggleAdminPremiumFormat(this.value)">
-                    <option value="file">Upload HTML / PDF File</option>
-                    <option value="link">Web Link URL</option>
-                </select>
+
+<!-- Ek hi description box rahega -->
+<textarea id="admin-p-desc" class="search-input" placeholder="Description..." style="height: 70px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none;"></textarea>
+
+<!-- Naya VIP Category Dropdown Yahan Paste Karo -->
+<select id="admin-p-category" class="search-input" style="padding: 10px 14px; font-size: 0.9rem; margin-top: 5px;">
+    <option value="material">📚 Study Material / Notes</option>
+    <option value="mock">📝 Premium Mock Test</option>
+</select>
+
+
+<!-- 1. Format Selector (File ya Link) -->
+<select id="admin-p-format" class="search-input" style="padding: 10px 14px; font-size: 0.9rem; margin-top: 5px;" onchange="toggleAdminPremiumFormat(this.value)">
+    <option value="file">Upload HTML / PDF File</option>
+    <option value="link">Web Link URL</option>
+</select>
 
                 <!-- 2. THUMBNAIL INPUT (Sirf Card ki Image ke liye) -->
                 <label style="font-size: 0.85rem; font-weight: 700; color: #eab308; margin-top: 5px;">🖼️ 1. Upload Card Thumbnail (Photo):</label>
@@ -3026,6 +3075,14 @@
                         <p>Exclusive high-level strategy documents, topper notes, and classified test materials.</p>
                     </div>
                     <button id="admin-add-premium-btn" class="btn hidden" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: white; font-weight: 800; border: 1px solid #fef08a;" onclick="openAdminPremiumModal()">➕ Upload VIP Content (Admin)</button><button id="admin-grant-vip-btn" class="btn hidden" style="background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 800; border: 1px solid #bbf7d0; margin-left: 10px;" onclick="openAdminGrantModal()">✅ Grant VIP Access</button>
+                   <!-- View VIP Subscribers Button -->
+<button id="viewVipUsersBtn" class="btn hidden" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; font-weight: 800; border: 1px solid #bfdbfe; width: 100%; margin-top: 12px;">
+    🔍 VIEW VIP SUBSCRIBERS
+</button>
+
+
+
+
                     
                 </div>
 
@@ -3035,6 +3092,20 @@
                         This zone contains elite material uploaded by Commander Shiva. Regular recruits see these resources locked. Only admin clearance grants instant access to these weaponized mock papers and PDFs.
                     </p>
                 </div>
+<!-- Royal VIP Category Tabs with Swipe Hint -->
+<div style="position: relative; margin-bottom: 20px;">
+    <div id="vip-category-tabs" class="royal-cat-wrapper" style="margin-bottom: 0;" onscroll="hideVipScrollHint()">
+        <button class="royal-cat-pill active-royal" onclick="setVipCategory('all', this)">🌟 All VIP Intel</button>
+        <button class="royal-cat-pill" onclick="setVipCategory('material', this)">📚 Study Material</button>
+        <button class="royal-cat-pill" onclick="setVipCategory('mock', this)">📝 Premium Mocks</button>
+    </div>
+    
+    <!-- Sirf mobile par dikhne wala Swipe Arrow -->
+    <div id="vip-mobile-scroll-hint" class="scroll-hint-arrow">
+        <span>Swipe</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </div>
+</div>
 
                 <div id="premium-content-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
             </section>
@@ -3043,7 +3114,7 @@
                 <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
                         <h1>🎯 Daily Quizzes & Leaderboard</h1>
-                        <p>Attempt daily tactical challenges, earn <strong>+2 points</strong> (or -0.5 for mistakes), and climb the Army Ranks!</p>
+                        <p>Attempt daily tactical challenges, earn <strong>+10 points</strong> (or -5 for mistakes), and climb the Army Ranks!</p>
                     </div>
                     <button id="admin-add-quiz-btn-page" class="btn btn-outline hidden" style="border-color: white; color: white;" onclick="openAdminQuizModal()">➕ Add Question (Admin)</button>
                 </div>
@@ -3081,7 +3152,7 @@
                     <h3 style="color: var(--accent-secondary); margin-bottom: 0.5rem; font-size: 1.1rem;">📢 Tactical Disclaimer & Rank System Criteria</h3>
                     <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
                         <strong>1. Monthly Rank Update:</strong> Leaderboards and army ranks reset / update automatically on the 1st of every month, reducing total accumulated points by <strong>40%</strong> to test ongoing consistency.<br>
-                        <strong>2. Point Criteria:</strong> Correct answer = <strong>+2 Points</strong> | Incorrect answer = <strong>-0.5 Points</strong>.<br>
+                        <strong>2. Point Criteria:</strong> Correct answer = <strong>+10 Points</strong> | Incorrect answer = <strong>-5 Points</strong>.<br>
                         <strong>3. Rank Progression:</strong> < 50 Pts (Sepoy) | 50–99 Pts (Lance Naik) | 100+ Pts (25-point gap increments scaling up to Field Marshal). Top 3 ranks feature distinct dynamic glowing effects.
                     </p>
                 </div>
@@ -3834,7 +3905,7 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
         function closeStreakPopup() {
             const modal = document.getElementById('streak-popup-modal');
             modal.style.opacity = '0';
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            setTimeout(() => { modal.style.display = 'none'; }, 1000);
         }
 
         function updateStreakBanner() {
@@ -3902,12 +3973,27 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
                 }
             }).catch(e => {});
 
-            // 2. All-Time Rank Check
+                       // 2. All-Time Rank Check
             db.collection("users").orderBy("allTimeScore", "desc").limit(100).get().then((snapshot) => {
-                let myAllTimeRank = null; let idx = 1;
-                snapshot.forEach(doc => { if (doc.data().email === currentEmail) { myAllTimeRank = "#" + idx; } idx++; });
+                let myAllTimeRank = null; 
+                let myCloudWPM = 0; // Nayi line
+                let idx = 1;
+                
+                snapshot.forEach(doc => { 
+                    if (doc.data().email === currentEmail) { 
+                        myAllTimeRank = "#" + idx; 
+                        myCloudWPM = doc.data().allTimeWPM || 0; // Cloud se WPM nikaali
+                    } 
+                    idx++; 
+                });
+
+                // 🔥 Agar cloud WPM local history se zyada hai, toh usko Update kar do
+                if (myCloudWPM > highestWpm) {
+                    document.getElementById('stat-wpm-display').innerHTML = `${myCloudWPM} <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">WPM</span>`;
+                }
                 
                 const aBadge = document.getElementById('badge-alltime-rank');
+
                 if (aBadge) {
                     if (myAllTimeRank) {
                         aBadge.innerText = `All-Time: ${myAllTimeRank}`;
@@ -3933,9 +4019,9 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
     const profileDisplay = document.getElementById('user-profile-display');
     const nameDisplay = document.getElementById('welcome-user-name');
     const adminElements = [
-        'admin-post-creator-box', 'admin-add-book-btn', 
-        'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn'
-    ];
+    'admin-post-creator-box', 'admin-add-book-btn', 
+    'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn', 'viewVipUsersBtn'
+];
 
     if (user) {
         loginBtn.style.display = 'none';
@@ -4104,9 +4190,15 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
                     
                     // Admin buttons hide/show
                     const adminElements = [
-                        'admin-post-creator-box', 'admin-add-book-btn', 
-                        'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn'
-                    ];
+    'admin-post-creator-box',
+    'admin-add-book-btn',
+    'admin-add-quiz-btn-page',
+    'admin-add-premium-btn',
+    'admin-grant-vip-btn',
+    'viewVipUsersBtn'
+];
+
+
                     adminElements.forEach(id => {
                         const el = document.getElementById(id);
                         if(el) newRole === 'admin' ? el.classList.remove('hidden') : el.classList.add('hidden');
@@ -4993,19 +5085,19 @@ function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     let points = parseFloat(localStorage.getItem(pointsKey) || '0');
 
     if (selectedIdx === correctIdx) {
-        points += 2;
+        points += 10; // ✅ Sahi hone par 10 points
         feedback.style.color = 'var(--accent-tertiary)';
-        feedback.innerHTML = `🎉 <strong>Correct! +2 Points earned.</strong><br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
+        feedback.innerHTML = `🎉 <strong>Correct! +10 Points earned.</strong><br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     } else {
-        points -= 0.5;
+        points -= 5; // ❌ Galat hone par -5 points
         feedback.style.color = '#ef4444';
-        feedback.innerHTML = `❌ Incorrect (-0.5 Points). Correct answer was <strong>${String.fromCharCode(65 + correctIdx)}</strong>.<br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
+        feedback.innerHTML = `❌ Incorrect (-5 Points). Correct answer was <strong>${String.fromCharCode(65 + correctIdx)}</strong>.<br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     }
     
     // Local storage update for fast UI
     localStorage.setItem(pointsKey, points);
 
-    // 🔥 NAYA CODE: Cloud Database (Firebase) mein Global Leaderboard ke liye score bhejo
+    // Cloud Database (Firebase) mein Global Leaderboard ke liye score bhejo
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
         firebase.firestore().collection("users").doc(currentUser.uid).set({
@@ -5022,9 +5114,6 @@ function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     }
 
     updateStreakBanner();
-    
-    // Yahan hum renderPageLeaderboard() nahi bulayenge kyunki wo cloud se fetch karega.
-    // Hum sirf Next button dikhayenge.
     document.getElementById('page-quiz-next-btn').classList.remove('hidden');
 }
 
@@ -5182,7 +5271,16 @@ function pageNextQuizQuestion() {
         function renderPremiumHubContent() {
     const container = document.getElementById('premium-content-list');
     if(!container) return;
-    const items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    
+    // 👇 Sirf 'let' aayega yahan 👇
+    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+
+// 🔥 VIP CATEGORY FILTER LOGIC 🔥
+if (typeof currentVipCategory !== 'undefined' && currentVipCategory !== 'all') {
+    items = items.filter(item => (item.category || 'material') === currentVipCategory);
+}
+
+
     const userRole = localStorage.getItem('warRoomUserRole');
     
     const currentEmail = localStorage.getItem('warRoomUserEmail');
@@ -5276,7 +5374,7 @@ function pageNextQuizQuestion() {
                         </div>
                     </div>
                     
-                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid #60a5fa;" onclick="requestVipAccess('${item.title}')">🔓 Request Access</button>
+                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid #60a5fa;" onclick="requestVipAccess('${item.title}')">🚀 GET INSTANT ACCESS</button>
                 </div>
             `;
         }
@@ -5327,6 +5425,8 @@ function pageNextQuizQuestion() {
         function saveAdminPremiumContent() {
     const title = document.getElementById('admin-p-title').value.trim();
     const desc = document.getElementById('admin-p-desc').value.trim();
+    const category = document.getElementById('admin-p-category').value;
+    
     const format = document.getElementById('admin-p-format').value;
 
     if(!title) {
@@ -5338,18 +5438,19 @@ function pageNextQuizQuestion() {
         const linkVal = document.getElementById('admin-p-link').value.trim();
         if(!linkVal) { alert("Please paste a valid URL."); return; }
         // Thumbnail bhej rahe hain
-        pushPremiumToStorage(title, desc, 'link', linkVal, globalPremiumThumbnailBase64);
+        pushPremiumToStorage(title, desc, category, 'link', linkVal, globalPremiumThumbnailBase64);
     } else {
         const fileInput = document.getElementById('admin-p-file');
         if(fileInput.files.length === 0) { alert("Please select a file."); return; }
 
         const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                // Thumbnail bhej rahe hain
-                pushPremiumToStorage(title, desc, 'file', e.target.result, globalPremiumThumbnailBase64);
-            } catch (err) {
+                        const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        // Thumbnail bhej rahe hain
+                        pushPremiumToStorage(title, desc, category, 'file', e.target.result, globalPremiumThumbnailBase64);
+                    } catch (err) {
+
                 alert("File size is too large for storage! Use a smaller file.");
             }
         };
@@ -5357,11 +5458,20 @@ function pageNextQuizQuestion() {
     }
 }
 
-function pushPremiumToStorage(title, desc, format, content, thumbnailBase64) {
+function pushPremiumToStorage(title, desc, category, format, content, thumbnailBase64) {
     let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
     
-    // Thumbnail database mein save hoga
-    items.push({ id: 'prem_' + Date.now(), title: title, desc: desc, format: format, content: content, thumbnail: thumbnailBase64 || "" });
+    // Yahan naya category system aur data save ho raha hai 👇
+    items.push({ 
+        id: 'prem_' + Date.now(), 
+        title: title, 
+        desc: desc, 
+        category: category, 
+        format: format, 
+        content: content, 
+        thumbnail: thumbnailBase64 || "" 
+    });
+    
     localStorage.setItem('warRoomPremiumContent', JSON.stringify(items));
 
     // Inputs clear karna
@@ -5380,6 +5490,7 @@ function pushPremiumToStorage(title, desc, format, content, thumbnailBase64) {
     renderPremiumHubContent();
     alert("VIP Premium Content deployed successfully!");
 }
+
 
 
         function accessPremiumResource(item) {
@@ -6418,32 +6529,38 @@ function renderDedicatedMockTests() {
         });
 
                                 function enterWarRoom() {
-            checkStreakAndLogin(true);
-            const landing = document.getElementById('landing-page');
-            landing.style.opacity = '0';
-            landing.style.transform = 'scale(1.1)';
-            
-            setTimeout(() => {
-                landing.style.display = 'none';
-                document.getElementById('app').classList.remove('hidden');
-                
-                renderDashboardExams();
-                renderAccordions();
-                renderPostGrid();
-                renderDeptGrid();
-                renderFaq();
-                renderDashboardSubjectContent();
-                initStudyHub();
-                renderSocialFeed();
-                renderBestBooks();
-                renderPremiumHubContent();
-                loadPageQuiz();
+    checkStreakAndLogin(true);
+    const landing = document.getElementById('landing-page');
+    landing.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    landing.style.opacity = '0';
+    landing.style.transform = 'scale(1.05)';
+    
+    setTimeout(() => {
+        landing.style.display = 'none';
+        
+        const appContainer = document.getElementById('app');
+        appContainer.classList.remove('hidden');
+        
+        // 🔥 Naya tagda entering animation trigger karna
+        appContainer.classList.add('war-room-entering');
+        
+        renderDashboardExams();
+        renderAccordions();
+        renderPostGrid();
+        renderDeptGrid();
+        renderFaq();
+        renderDashboardSubjectContent();
+        initStudyHub();
+        renderSocialFeed();
+        renderBestBooks();
+        renderPremiumHubContent();
+        loadPageQuiz();
 
-                setTimeout(() => {
-                    startOnboardingTour();
-                }, 1000);
-            }, 600);
-        }
+        setTimeout(() => {
+            startOnboardingTour();
+        }, 1000);
+    }, 500);
+}
 
 
         function navigate(viewId, navElement) {
@@ -8299,35 +8416,79 @@ function closeGateway() {
 }
 
 function launchGatewayMission(missionType) {
-    closeGateway();
+    const gw = document.getElementById('gateway-screen');
     
-    // Landing page ko chupana aur main app dikhana
-    const landing = document.getElementById('landing-page');
-    landing.style.display = 'none';
-    document.getElementById('app').classList.remove('hidden');
+    // 🌟 Ultra-Smooth Cinematic Premium Zoom & Blur Transition
+    gw.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    gw.style.opacity = '0';
+    gw.style.transform = 'scale(1.15)';
+    gw.style.filter = 'blur(12px)';
     
-    // Website ke baaki saare data ko load karna
-    checkStreakAndLogin(true);
-    renderDashboardExams();
-    renderAccordions();
-    renderPostGrid();
-    renderDeptGrid();
-    renderFaq();
-    renderDashboardSubjectContent();
-    initStudyHub();
-    renderSocialFeed();
-    renderBestBooks();
-    renderPremiumHubContent();
-    loadPageQuiz();
+    setTimeout(() => {
+        gw.style.display = 'none';
+        
+        // Reset styles for future use if needed
+        gw.style.opacity = '1';
+        gw.style.transform = 'scale(1)';
+        gw.style.filter = 'none';
+        
+        // Landing page ko chupana aur main app dikhana
+        const landing = document.getElementById('landing-page');
+        if (landing) landing.style.display = 'none';
+        
+        const app = document.getElementById('app');
+        if (app) app.classList.remove('hidden');
+        
+        // Website ke baaki saare data ko load karna
+        checkStreakAndLogin(true);
+        renderDashboardExams();
+        renderAccordions();
+        renderPostGrid();
+        renderDeptGrid();
+        renderFaq();
+        renderDashboardSubjectContent();
+        initStudyHub();
+        renderSocialFeed();
+        renderBestBooks();
+        renderPremiumHubContent();
+        loadPageQuiz();
 
-    // User ko uske chune hue section mein seedha bhejna
-    if (missionType === 'typing') {
-        navigate('dashboard', document.querySelectorAll('.nav-item')[0]);
-        setTimeout(() => {
-            openTypingModal();
-        }, 600);
-    } else if (missionType === 'mocks') {
-        navigate('mock-tests', document.querySelectorAll('.nav-item')[2]);
+        // User ko uske chune hue section mein seedha bhejna
+        if (missionType === 'typing') {
+            navigate('dashboard', document.querySelectorAll('.nav-item')[0]);
+            setTimeout(() => {
+                openTypingModal();
+            }, 400);
+        } else if (missionType === 'mocks') {
+            navigate('mock-tests', document.querySelectorAll('.nav-item')[2]);
+        } else if (missionType === 'war' || missionType === 'base') {
+            navigate('dashboard', document.querySelectorAll('.nav-item')[0]);
+        }
+    }, 550); // Exact timing match ke liye 0.55 seconds
+}
+
+let currentVipCategory = 'all';
+
+function setVipCategory(cat, btnElement) {
+    currentVipCategory = cat;
+    // Puraane active buttons se style hatao aur click wale par lagao
+    document.querySelectorAll('.royal-cat-pill').forEach(btn => btn.classList.remove('active-royal'));
+    btnElement.classList.add('active-royal');
+    // Content dobara render karo
+    renderPremiumHubContent();
+}
+
+function hideVipScrollHint() {
+    const hint = document.getElementById('vip-mobile-scroll-hint');
+    const container = document.getElementById('vip-category-tabs');
+    
+    // Agar user ne thoda sa bhi scroll kiya (> 10px), arrow fade out kar do
+    if (hint && container) {
+        if (container.scrollLeft > 10) {
+            hint.style.opacity = '0';
+            // 400ms CSS transition ke baad element ko screen se hata do
+            setTimeout(() => { hint.style.display = 'none'; }, 400); 
+        }
     }
 }
 
@@ -8486,6 +8647,77 @@ document.addEventListener('fullscreenchange', function() {
         if (screen.orientation && screen.orientation.unlock) {
             try { screen.orientation.unlock(); } catch(e) {}
         }
+    }
+});
+</script>
+<!-- VIP Users Dashboard Modal -->
+<div id="vipModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999;"></div>
+
+<div id="vipUsersModal" style="display: none; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; background: var(--bg-secondary, white); border-radius: 12px; z-index: 10000; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow-y: auto; border: 1px solid #cbd5e1;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+        <h2 style="margin: 0; font-size: 1.2rem;">👑 VIP Access Logs</h2>
+        <button id="closeVipModal" style="background: #ef4444; color: white; border: none; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-weight: bold;">Close ✖</button>
+    </div>
+
+    <!-- Live Search Bar -->
+    <input type="text" id="searchVipEmail" placeholder="🔍 Enter Gmail ID to search..." style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; outline: none; background: var(--bg-primary, white); color: var(--text-primary, black);">
+
+    <!-- Users Data Table -->
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; text-align: left; border-collapse: collapse; min-width: 500px; color: var(--text-primary, black);">
+            <thead>
+                <tr style="background: rgba(0,0,0,0.05); border-bottom: 2px solid #cbd5e1;">
+                    <th style="padding: 12px;">Email ID</th>
+                    <th style="padding: 12px;">Plan</th>
+                    <th style="padding: 12px;">Valid Till</th>
+                    <th style="padding: 12px;">Status</th>
+                </tr>
+            </thead>
+            <tbody id="vipUsersTableBody">
+                <tr><td colspan="4" style="text-align:center; padding: 15px;">Connect your database to load users...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// VIP Dashboard Logic
+document.addEventListener('DOMContentLoaded', function() {
+    const viewVipBtn = document.getElementById('viewVipUsersBtn');
+    const vipModal = document.getElementById('vipUsersModal');
+    const vipOverlay = document.getElementById('vipModalOverlay');
+    const closeVipBtn = document.getElementById('closeVipModal');
+    const searchInput = document.getElementById('searchVipEmail');
+
+    if(viewVipBtn) {
+        viewVipBtn.addEventListener('click', () => {
+            vipModal.style.display = 'block';
+            vipOverlay.style.display = 'block';
+        });
+    }
+
+    function closeVipDashboard() {
+        vipModal.style.display = 'none';
+        vipOverlay.style.display = 'none';
+    }
+
+    if(closeVipBtn) closeVipBtn.addEventListener('click', closeVipDashboard);
+    if(vipOverlay) vipOverlay.addEventListener('click', closeVipDashboard);
+
+    if(searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#vipUsersTableBody tr');
+            rows.forEach(row => {
+                let emailText = row.cells[0]?.textContent.toLowerCase() || "";
+                if (emailText.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
     }
 });
 </script>
