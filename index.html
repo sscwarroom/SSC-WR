@@ -8029,17 +8029,37 @@ function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
         .then((result) => {
-            alert("Google Login Successful! Welcome " + result.user.displayName);
-            closeAuthModal();
+            const user = result.user;
+            const db = firebase.firestore();
+            
+            // Check karo ki is email se pehle koi account bana hai ya nahi
+            db.collection("users").where("email", "==", user.email).get().then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                    // Agar purana account mil gaya, toh naye wale ko ignore karke purane data ko link/use karo
+                    console.log("Existing user found, syncing profile...");
+                } else {
+                    // Agar bilkul naya user hai, toh naya document banao
+                    db.collection("users").doc(user.uid).set({
+                        name: user.displayName || "Aspirant",
+                        email: user.email,
+                        role: user.email === "shivasaroj8750@gmail.com" ? "admin" : "aspirant",
+                        points: 0,
+                        createdAt: new Date().toISOString()
+                    }, { merge: true });
+                }
+                
+                alert("Google Login Successful! Welcome " + (user.displayName || "Aspirant"));
+                closeAuthModal();
+            });
         })
         .catch((error) => {
             console.error("Google Login Error:", error);
-            // Agar popup open ho raha hai, toh environment warning ko ignore karo
             if (!error.message.includes("not supported in the environment")) {
                 alert("Google Login Failed: " + error.message);
             }
         });
 }
+
 function loadResourcesFromFirestore() {
     if (typeof firebase === 'undefined') return;
     
