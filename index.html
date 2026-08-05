@@ -8738,30 +8738,33 @@ function realLogout() {
 
     </div>
 </div>
-<!-- 🔄 MODERN PREMIUM ACCOUNT SWITCHER MODAL -->
-<div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+<!-- 🔄 ULTRA-PREMIUM ACCOUNT SWITCHER MODAL -->
+<div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
     
-    <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif;">
+    <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; overflow: hidden;">
         
+        <!-- Top Ambient Glow Effect -->
+        <div style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 150px; height: 150px; background: #3b82f6; filter: blur(60px); opacity: 0.25; pointer-events: none;"></div>
+
         <!-- Header -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.5px;">Manage Accounts</h3>
-            <button onclick="closeAccountSwitcher()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">&times;</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; position: relative; z-index: 2;">
+            <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.5px;">Manage Accounts</h3>
+            <button onclick="closeAccountSwitcher()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#94a3b8'">&times;</button>
         </div>
-        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; font-weight: 500;">Switch seamlessly between your tactical IDs.</p>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; font-weight: 500; position: relative; z-index: 2;">Switch seamlessly between your tactical combat IDs.</p>
         
         <!-- Saved Accounts List Container -->
-        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none;">
+        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none; position: relative; z-index: 2;">
             <!-- JavaScript dynamically renders items here -->
         </div>
 
-        <!-- Add Another Account Button -->
-        <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px dashed rgba(59, 130, 246, 0.4); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.18)'; this.style.borderColor='#3b82f6'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'; this.style.borderColor='rgba(59, 130, 246, 0.4)'">
+        <!-- Add Another Account Button with Premium Glow -->
+        <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.08); color: #60a5fa; border: 1px dashed rgba(59, 130, 246, 0.4); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(59, 130, 246, 0.18)'; this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59,130,246,0.25)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.08)'; this.style.borderColor='rgba(59, 130, 246, 0.4)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             <span style="font-size: 1.1rem; line-height: 0;">+</span> Add Another Account
         </button>
         
         <!-- Real Logout Button -->
-        <button onclick="realLogout()" style="width: 100%; padding: 13px; background: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.08)'">
+        <button onclick="realLogout()" style="width: 100%; padding: 13px; background: rgba(239, 68, 68, 0.06); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.06)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             🚪 Log Out Safely
         </button>
         
@@ -8769,7 +8772,7 @@ function realLogout() {
 </div>
 
 <script>
-// 🌟 Updated Modern Renderer for Account Switcher List
+// 🌟 Premium Renderer for Account Switcher List with Micro-Interactions
 function openAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     const listContainer = document.getElementById('saved-accounts-list');
@@ -8794,23 +8797,26 @@ function openAccountSwitcher() {
         listContainer.innerHTML = savedAccounts.map((acc, index) => {
             const isCurrent = currentUser && (currentUser.email === acc.email || currentUser.phoneNumber === acc.email);
             return `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.03)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.3)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: transform 0.2s;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.02)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: all 0.25s ease;" onmouseover="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.6)' : 'rgba(255, 255, 255, 0.15)'}'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}'; this.style.transform='translateY(0)'">
+                    
                     <div style="display: flex; align-items: center; gap: 12px; overflow: hidden; min-width: 0;">
-                        <div style="width: 38px; height: 38px; border-radius: 50%; background: ${isCurrent ? 'linear-gradient(135deg, #22c55e, #15803d)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: ${isCurrent ? 'linear-gradient(135deg, #22c55e, #15803d)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px ${isCurrent ? 'rgba(34, 197, 94, 0.4)' : 'rgba(37, 99, 235, 0.4)'};">
                             ${acc.name ? acc.name.charAt(0).toUpperCase() : '👤'}
                         </div>
                         <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
-                            <div style="font-weight: 700; font-size: 0.9rem; color: #f8fafc; display: flex; align-items: center; gap: 6px;">
+                            <div style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; display: flex; align-items: center; gap: 6px;">
                                 ${acc.name || 'Aspirant'} 
-                                ${isCurrent ? '<span style="font-size: 0.65rem; background: rgba(34,197,94,0.2); color: #4ade80; padding: 2px 6px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px;">ACTIVE</span>' : ''}
+                                ${isCurrent ? '<span style="font-size: 0.65rem; background: rgba(34,197,94,0.2); color: #4ade80; padding: 2px 8px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(34,197,94,0.3);">ACTIVE</span>' : ''}
                             </div>
-                            <div style="font-size: 0.75rem; color: #94a3b8; text-overflow: ellipsis; overflow: hidden;">${acc.email}</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8; text-overflow: ellipsis; overflow: hidden; margin-top: 2px;">${acc.email}</div>
                         </div>
                     </div>
+
                     <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
-                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: #2563eb; color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.4); transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Switch</button>` : ''}
-                        <button onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.08); padding: 7px 9px; border-radius: 10px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.15)'; this.style.color='#f87171'; this.style.borderColor='rgba(239,68,68,0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.color='#94a3b8'; this.style.borderColor='rgba(255, 255, 255, 0.08)'" title="Remove ID">🗑️</button>
+                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Switch</button>` : ''}
+                        <button onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.06); padding: 7px 10px; border-radius: 10px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.18)'; this.style.color='#f87171'; this.style.borderColor='rgba(239,68,68,0.35)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.color='#94a3b8'; this.style.borderColor='rgba(255, 255, 255, 0.06)'" title="Remove ID">🗑️</button>
                     </div>
+
                 </div>
             `;
         }).join('');
@@ -8823,9 +8829,10 @@ function openAccountSwitcher() {
 function closeAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     modal.style.opacity = '0';
-    setTimeout(() => { modal.style.display = 'none'; }, 300);
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
 }
 </script>
+
 
 
 
