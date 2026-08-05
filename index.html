@@ -8738,33 +8738,41 @@ function realLogout() {
 
     </div>
 </div>
-<!-- 🔄 UPDATED ACCOUNT SWITCHER & MANAGER MODAL -->
-<div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center;">
-    <div class="glass-card fade-in" style="width: 90%; max-width: 400px; padding: 25px; border-radius: 16px; background: var(--bg-primary); border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+<!-- 🔄 ULTRA-PREMIUM ACCOUNT SWITCHER MODAL -->
+<div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
+    
+    <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; overflow: hidden;">
         
-        <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.3rem;">Manage Accounts</h3>
-        <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Switch between accounts or remove unwanted IDs.</p>
+        <!-- Top Ambient Glow Effect -->
+        <div style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 150px; height: 150px; background: #3b82f6; filter: blur(60px); opacity: 0.25; pointer-events: none;"></div>
+
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; position: relative; z-index: 2;">
+            <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.5px;">Manage Accounts</h3>
+            <button onclick="closeAccountSwitcher()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#94a3b8'">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; font-weight: 500; position: relative; z-index: 2;">Switch seamlessly between your tactical combat IDs.</p>
         
         <!-- Saved Accounts List Container -->
-        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
+        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none; position: relative; z-index: 2;">
+            <!-- JavaScript dynamically renders items here -->
+        </div>
 
-        <!-- Add / Switch Account Button (Google Chooser) -->
-        <button onclick="switchAccountGoogle()" style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(37, 99, 235, 0.1); color: var(--accent-primary); border: 1px dashed var(--accent-primary); border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            ➕ Add Another Account
+        <!-- Add Another Account Button with Premium Glow -->
+        <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.08); color: #60a5fa; border: 1px dashed rgba(59, 130, 246, 0.4); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(59, 130, 246, 0.18)'; this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59,130,246,0.25)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.08)'; this.style.borderColor='rgba(59, 130, 246, 0.4)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <span style="font-size: 1.1rem; line-height: 0;">+</span> Add Another Account
         </button>
         
         <!-- Real Logout Button -->
-        <button onclick="realLogout()" style="width: 100%; padding: 12px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <button onclick="realLogout()" style="width: 100%; padding: 13px; background: rgba(239, 68, 68, 0.06); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.06)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             🚪 Log Out Safely
         </button>
         
-        <!-- Cancel -->
-        <button onclick="closeAccountSwitcher()" style="width: 100%; padding: 10px; margin-top: 8px; background: transparent; color: var(--text-secondary); border: none; cursor: pointer; text-decoration: underline;">Cancel</button>
     </div>
 </div>
 
 <script>
-// 1. Popup Dikhane aur Saved Accounts Render Karne Ka Function
+// 🌟 Premium Renderer for Account Switcher List with Micro-Interactions
 function openAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     const listContainer = document.getElementById('saved-accounts-list');
@@ -8784,258 +8792,48 @@ function openAccountSwitcher() {
     }
 
     if (savedAccounts.length === 0) {
-        listContainer.innerHTML = `<p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary);">No accounts saved locally.</p>`;
+        listContainer.innerHTML = `<p style="text-align: center; font-size: 0.85rem; color: #64748b; padding: 15px 0;">No accounts saved locally.</p>`;
     } else {
         listContainer.innerHTML = savedAccounts.map((acc, index) => {
             const isCurrent = currentUser && (currentUser.email === acc.email || currentUser.phoneNumber === acc.email);
             return `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.1)' : 'var(--bg-secondary)'}; border: 1px solid ${isCurrent ? '#22c55e' : 'var(--glass-border)'}; border-radius: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
-                        <div style="width: 32px; height: 32px; border-radius: 50%; background: ${isCurrent ? '#22c55e' : 'var(--accent-primary)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0;">
-                            ${isCurrent ? '✓' : '👤'}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.02)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: all 0.25s ease;" onmouseover="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.6)' : 'rgba(255, 255, 255, 0.15)'}'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}'; this.style.transform='translateY(0)'">
+                    
+                    <div style="display: flex; align-items: center; gap: 12px; overflow: hidden; min-width: 0;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: ${isCurrent ? 'linear-gradient(135deg, #22c55e, #15803d)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px ${isCurrent ? 'rgba(34, 197, 94, 0.4)' : 'rgba(37, 99, 235, 0.4)'};">
+                            ${acc.name ? acc.name.charAt(0).toUpperCase() : '👤'}
                         </div>
-                        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">${acc.name || 'Aspirant'}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">${acc.email}</div>
+                        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">
+                            <div style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; display: flex; align-items: center; gap: 6px;">
+                                ${acc.name || 'Aspirant'} 
+                                ${isCurrent ? '<span style="font-size: 0.65rem; background: rgba(34,197,94,0.2); color: #4ade80; padding: 2px 8px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(34,197,94,0.3);">ACTIVE</span>' : ''}
+                            </div>
+                            <div style="font-size: 0.75rem; color: #94a3b8; text-overflow: ellipsis; overflow: hidden; margin-top: 2px;">${acc.email}</div>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 6px; flex-shrink: 0;">
-                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: var(--accent-primary); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">Switch</button>` : ''}
-                        <button onclick="removeSavedAccount(${index})" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;" title="Remove ID">🗑️</button>
+
+                    <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
+                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Switch</button>` : ''}
+                        <button onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.06); padding: 7px 10px; border-radius: 10px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.18)'; this.style.color='#f87171'; this.style.borderColor='rgba(239,68,68,0.35)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.color='#94a3b8'; this.style.borderColor='rgba(255, 255, 255, 0.06)'" title="Remove ID">🗑️</button>
                     </div>
+
                 </div>
             `;
         }).join('');
     }
 
     modal.style.display = 'flex';
+    setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
-// 2. Popup Band Karne Ka Function
 function closeAccountSwitcher() {
-    document.getElementById('account-switcher-modal').style.display = 'none';
+    const modal = document.getElementById('account-switcher-modal');
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
 }
-
-// 3. Saved Account par Switch Karne Ka Function
-function selectSavedAccount(email) {
-    firebase.auth().signOut().then(() => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({
-            prompt: 'select_account',
-            login_hint: email
-        });
-        
-        firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                alert("Switched account successfully to " + result.user.email);
-                closeAccountSwitcher();
-                location.reload();
-            }).catch((error) => {
-                console.error("Switch error:", error);
-                alert("Account switch nahi ho paya: " + error.message);
-            });
-    });
-}
-
-// 4. Naya Account Add Karne ke liye Google Prompt
-function switchAccountGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    
-    firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
-            
-            const exists = savedAccounts.find(acc => acc.email === user.email);
-            if (!exists) {
-                savedAccounts.push({
-                    email: user.email,
-                    name: user.displayName || user.email,
-                    uid: user.uid
-                });
-                localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
-            }
-
-            alert("Account added / switched successfully!");
-            closeAccountSwitcher();
-            location.reload(); 
-        }).catch((error) => {
-            console.error("Google Auth Error:", error);
-            alert("Could not add account: " + error.message);
-        });
-}
-
-// 5. List se kisi saved account ko hatane (Delete) ka function
-function removeSavedAccount(index) {
-    let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
-    
-    if (index >= 0 && index < savedAccounts.length) {
-        const removed = savedAccounts.splice(index, 1)[0];
-        localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
-        
-        const currentUser = firebase.auth().currentUser;
-        if (currentUser && currentUser.email === removed.email) {
-            firebase.auth().signOut().then(() => {
-                location.reload();
-            });
-        } else {
-            openAccountSwitcher();
-        }
-    }
-}
-
-// 6. Asli Logout Function
-function realLogout() {
-    firebase.auth().signOut().then(() => {
-        localStorage.removeItem('warRoomUserRole');
-        localStorage.removeItem('warRoomUserEmail');
-        location.reload(); 
-    });
-}
-// 👑 VIP Access Logs ko Firestore se Load karne ka Function
-function loadVipUsersTable() {
-    const tableBody = document.getElementById('vipUsersTableBody');
-    if (!tableBody) return;
-
-    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">Fetching VIP logs from cloud... 📡</td></tr>`;
-
-    if (typeof firebase === 'undefined') {
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Firebase is not initialized!</td></tr>`;
-        return;
-    }
-
-    const db = firebase.firestore();
-
-    db.collection("users").get().then((querySnapshot) => {
-        let rowsHtml = "";
-        let count = 0;
-
-        querySnapshot.forEach((doc) => {
-            let data = doc.data();
-            let email = data.email || data.phone || "Unknown User";
-            
-            let planType = "Standard / Free";
-            let statusBadge = `<span style="background: rgba(100,116,139,0.1); color: #64748b; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Inactive</span>`;
-            let validTill = "N/A";
-
-            if (data.role === 'admin') {
-                planType = "👑 Admin Commander";
-                statusBadge = `<span style="background: rgba(234,179,8,0.15); color: #eab308; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Lifetime Active</span>`;
-                validTill = "Never Expires";
-                count++;
-            } else {
-                let expiryTimestamp = data.vipExpiry || 0;
-                if (expiryTimestamp > Date.now()) {
-                    planType = "⭐ Pro VIP Pass";
-                    statusBadge = `<span style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Active</span>`;
-                    validTill = new Date(expiryTimestamp).toLocaleDateString();
-                    count++;
-                } else {
-                    validTill = "Expired / None";
-                }
-            }
-
-            rowsHtml += `
-                <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s;">
-                    <td style="padding: 12px; font-weight: 600;">${email}</td>
-                    <td style="padding: 12px;">${planType}</td>
-                    <td style="padding: 12px; font-size: 0.85rem; color: var(--text-secondary);">${validTill}</td>
-                    <td style="padding: 12px;">${statusBadge}</td>
-                </tr>
-            `;
-            count++;
-        });
-
-        if (count === 0) {
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">No user logs found in database.</td></tr>`;
-        } else {
-            tableBody.innerHTML = rowsHtml;
-        }
-
-    }).catch((error) => {
-        console.error("Error fetching VIP users: ", error);
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Failed to load data from Firestore. Check console.</td></tr>`;
-    });
-}
-
 </script>
 
-<!-- VIP Users Dashboard Modal -->
-<div id="vipModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999;"></div>
 
-<div id="vipUsersModal" style="display: none; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; background: var(--bg-secondary, white); border-radius: 12px; z-index: 10000; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow-y: auto; border: 1px solid #cbd5e1;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
-        <h2 style="margin: 0; font-size: 1.2rem;">👑 VIP Access Logs</h2>
-        <button id="closeVipModal" style="background: #ef4444; color: white; border: none; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-weight: bold;">Close ✖</button>
-    </div>
-
-    <!-- Live Search Bar -->
-    <input type="text" id="searchVipEmail" placeholder="🔍 Enter Gmail ID to search..." style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; outline: none; background: var(--bg-primary, white); color: var(--text-primary, black);">
-
-    <!-- Users Data Table -->
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; text-align: left; border-collapse: collapse; min-width: 500px; color: var(--text-primary, black);">
-            <thead>
-                <tr style="background: rgba(0,0,0,0.05); border-bottom: 2px solid #cbd5e1;">
-                    <th style="padding: 12px;">Email ID</th>
-                    <th style="padding: 12px;">Plan</th>
-                    <th style="padding: 12px;">Valid Till</th>
-                    <th style="padding: 12px;">Status</th>
-                </tr>
-            </thead>
-            <tbody id="vipUsersTableBody">
-                <tr><td colspan="4" style="text-align:center; padding: 15px;">Connect your database to load users...</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<script>
-// VIP Dashboard Logic
-document.addEventListener('DOMContentLoaded', function() {
-    const viewVipBtn = document.getElementById('viewVipUsersBtn');
-    const vipModal = document.getElementById('vipUsersModal');
-    const vipOverlay = document.getElementById('vipModalOverlay');
-    const closeVipBtn = document.getElementById('closeVipModal');
-    const searchInput = document.getElementById('searchVipEmail');
-
-    if(viewVipBtn) {
-        viewVipBtn.addEventListener('click', () => {
-            vipModal.style.display = 'block';
-            vipOverlay.style.display = 'block';
-            
-            // 🔥 Yahan function call hona zaroori hai taaki table bhare
-            loadVipUsersTable();
-        });
-    }
-
-    function closeVipDashboard() {
-        vipModal.style.display = 'none';
-        vipOverlay.style.display = 'none';
-    }
-
-    if(closeVipBtn) closeVipBtn.addEventListener('click', closeVipDashboard);
-    if(vipOverlay) vipOverlay.addEventListener('click', closeVipDashboard);
-
-    if(searchInput) {
-        searchInput.addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            let rows = document.querySelectorAll('#vipUsersTableBody tr');
-            rows.forEach(row => {
-                let emailText = row.cells[0]?.textContent.toLowerCase() || "";
-                if (emailText.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    }
-});
-
-</script>
 
 </body>
 </html>
