@@ -2342,47 +2342,67 @@
         <div class="glass-card" style="width: 100%; max-width: 400px; position: relative; padding: 2.5rem 2rem; margin: 15px;">
             <button onclick="closeAuthModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; transition: color 0.3s;">&times;</button>
 
-            <div id="login-form">
-                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Access <span style="color: var(--accent-primary)">WarRoom</span></h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Resume your tactical preparation.</p>
-                
-                <input type="text" id="login-email-phone" class="search-input" placeholder="Email Address or Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                <input type="password" id="login-pwd" class="search-input" placeholder="Password" style="width: 100%; margin-bottom: 10px; border: 1px solid var(--glass-border);">
-                
-                <div style="text-align: right; margin-bottom: 20px;">
-                    <a href="javascript:void(0)" onclick="toggleAuthView('forgot')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-primary);">Forgot Password?</a>
-                </div>
+      <!-- LOGIN FORM -->
+<div id="login-form">
+    <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Access <span style="color: var(--accent-primary)">WarRoom</span></h2>
+    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Resume your tactical preparation.</p>
+    
+    <input type="text" id="login-username-phone" class="search-input" placeholder="Username or Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
+    
+    <!-- 👁️ NAYA LOGIN PASSWORD BAX WITH EYE ICON -->
+    <div style="position: relative; margin-bottom: 10px;">
+        <input type="password" id="login-pwd" class="search-input" placeholder="Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
+        <span id="login-pwd-eye" onclick="togglePasswordVisibility('login-pwd', 'login-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
+    </div>
+    
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="javascript:void(0)" onclick="toggleAuthView('forgot')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-primary);">Forgot Password?</a>
+    </div>
 
-                <button class="btn-launch" onclick="handleAuthSubmit('login')" style="padding: 14px;">Log In</button>
-                <div style="margin: 15px 0; text-align: center; color: #666; font-size: 0.9rem;">OR</div>
+    <button class="btn-launch" onclick="handleAuthSubmit('login')" style="padding: 14px;">Log In</button>
+    
+    <div style="margin: 15px 0; text-align: center; color: #666; font-size: 0.9rem;">OR</div>
 
-<button type="button" onclick="loginWithGoogle()" style="width: 100%; padding: 12px; background: #ffffff; color: #444; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-    Continue with Google
-</button>
+    <button type="button" onclick="loginWithGoogle()" style="width: 100%; padding: 12px; background: #ffffff; color: #444; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+        Continue with Google
+    </button>
 
-                <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">New recruit? <a href="javascript:void(0)" onclick="toggleAuthView('signup')" style="text-decoration: underline;">Enlist Here</a></p>
-            </div>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">New recruit? <a href="javascript:void(0)" onclick="toggleAuthView('signup')" style="text-decoration: underline;">Enlist Here</a></p>
+</div>
 
-            <div id="signup-form" style="display: none;">
-                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Enlist in <span style="color: var(--accent-primary)">WarRoom</span></h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Start your journey to becoming an officer.</p>
-                
-                <input type="text" id="signup-name" class="search-input" placeholder="Full Name" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                <input type="text" id="signup-email" class="search-input" placeholder="Email Address" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                <input type="text" id="signup-phone" class="search-input" placeholder="Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                                <input type="password" id="signup-pwd" class="search-input" placeholder="Create Password" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                
-                <!-- NAYA CONFIRM PASSWORD BOX -->
-                <input type="password" id="signup-confirm-pwd" class="search-input" placeholder="Confirm Password" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                
-                <input type="text" id="signup-sec-q" class="search-input" placeholder="Security Question: What is your pet's name / Dadi's name?" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); font-size: 0.85rem !important;">
+<!-- SIGNUP FORM -->
+<div id="signup-form" style="display: none;">
+    <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Enlist in <span style="color: var(--accent-primary)">WarRoom</span></h2>
+    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Start your journey to becoming an officer.</p>
+    
+    <input type="text" id="signup-name" class="search-input" placeholder="Full Name" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
+    
+    <input type="text" id="signup-username" class="search-input" placeholder="Create Username (e.g. veer123)" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
+    
+    <input type="email" id="signup-real-email" class="search-input" placeholder="Active Email Address" style="width: 100%; margin-bottom: 5px; border: 1px solid var(--glass-border); box-sizing: border-box;">
+    <p style="font-size: 0.75rem; color: #ea580c; margin-bottom: 15px; font-weight: 600; text-align: left; padding-left: 5px; line-height: 1.4;">
+        ⚠️ Disclaimer: Valid email is mandatory. Your Username & Password will be linked to this email for account recovery.
+    </p>
 
-                <input type="text" id="signup-sec-a" class="search-input" placeholder="Security Answer" style="width: 100%; margin-bottom: 20px; border: 1px solid var(--glass-border);">
-                
-                <button class="btn-launch" onclick="handleAuthSubmit('signup')" style="padding: 14px;">Create Account</button>
-                <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">Already enlisted? <a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Log In</a></p>
-            </div>
+    <input type="number" id="signup-phone" class="search-input" placeholder="Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
+    
+    <!-- 👁️ NAYA SIGNUP PASSWORD BAX WITH EYE ICON -->
+    <div style="position: relative; margin-bottom: 15px;">
+        <input type="password" id="signup-pwd" class="search-input" placeholder="Create Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
+        <span id="signup-pwd-eye" onclick="togglePasswordVisibility('signup-pwd', 'signup-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
+    </div>
+    
+    <!-- 👁️ NAYA CONFIRM PASSWORD BAX WITH EYE ICON -->
+    <div style="position: relative; margin-bottom: 20px;">
+        <input type="password" id="signup-confirm-pwd" class="search-input" placeholder="Confirm Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
+        <span id="signup-confirm-pwd-eye" onclick="togglePasswordVisibility('signup-confirm-pwd', 'signup-confirm-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
+    </div>
+    
+    <button class="btn-launch" onclick="handleAuthSubmit('signup')" style="padding: 14px;">Create Account</button>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">Already enlisted? <a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Log In</a></p>
+</div>
+
 
             <div id="forgot-form" style="display: none;">
     <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Reset Password</h2>
@@ -4143,14 +4163,15 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
         }
 
                 function handleAuthSubmit(action) {
-    if (action === 'signup') {
+        if (action === 'signup') {
         const nameInput = document.getElementById('signup-name').value.trim();
-        const emailInput = document.getElementById('signup-email').value.trim();
+        const rawUsername = document.getElementById('signup-username').value.trim().toLowerCase().replace(/\s+/g, '');
+        const realEmailInput = document.getElementById('signup-real-email').value.trim().toLowerCase(); // 👈 Asli Email
         const phoneInput = document.getElementById('signup-phone').value.trim();
         const pwdInput = document.getElementById('signup-pwd').value;
         const confirmPwdInput = document.getElementById('signup-confirm-pwd').value; 
 
-        if (!nameInput || !emailInput || pwdInput.length < 8) {
+        if (!nameInput || !rawUsername || !realEmailInput || !phoneInput || pwdInput.length < 8) {
             alert("Please fill all fields properly. Password must be at least 8 chars.");
             return;
         }
@@ -4160,87 +4181,105 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             return;
         }
 
-        // Firebase Secure Signup
-        firebase.auth().createUserWithEmailAndPassword(emailInput, pwdInput)
+        // 🌟 Asli Email se Firebase Auth Account Banega!
+        firebase.auth().createUserWithEmailAndPassword(realEmailInput, pwdInput)
             .then((userCredential) => {
                 const user = userCredential.user;
-                // Save user details to Firestore securely
+                
+                // Firestore mein saari details save kardo
                 firebase.firestore().collection("users").doc(user.uid).set({
                     name: nameInput,
-                    email: emailInput,
+                    username: rawUsername,
+                    email: realEmailInput, 
                     phone: phoneInput,
-                    role: emailInput === "shivasaroj8750@gmail.com" ? "admin" : "aspirant",
+                    role: "aspirant",
                     createdAt: new Date().toISOString()
                 }).then(() => {
-                    // 🔥 NAYA CODE: Local Storage aur UI ko turant update karne ke liye
-                    const newRole = emailInput === "shivasaroj8750@gmail.com" ? "admin" : "aspirant";
-                    
-                    // LocalStorage update
-                    localStorage.setItem('warRoomUserEmail', emailInput);
+                    localStorage.setItem('warRoomUserEmail', realEmailInput);
                     localStorage.setItem('warRoomUserName', nameInput);
-                    localStorage.setItem('warRoomUserRole', newRole);
+                    localStorage.setItem('warRoomUserRole', "aspirant");
                     
-                    // Dashboard aur Account screen update
                     const nameDisplay = document.getElementById('welcome-user-name');
                     if (nameDisplay) nameDisplay.innerText = nameInput;
                     
                     if (typeof updateDashboardGreeting === "function") updateDashboardGreeting(nameInput);
-                    if (typeof loadAccountDetails === "function") loadAccountDetails(nameInput, emailInput);
+                    if (typeof loadAccountDetails === "function") loadAccountDetails(nameInput, realEmailInput);
                     
-                    // Admin buttons hide/show
-                    const adminElements = [
-    'admin-post-creator-box',
-    'admin-add-book-btn',
-    'admin-add-quiz-btn-page',
-    'admin-add-premium-btn',
-    'admin-grant-vip-btn',
-    'viewVipUsersBtn'
-];
-
-
+                    const adminElements = ['admin-post-creator-box', 'admin-add-book-btn', 'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn', 'viewVipUsersBtn'];
                     adminElements.forEach(id => {
                         const el = document.getElementById(id);
-                        if(el) newRole === 'admin' ? el.classList.remove('hidden') : el.classList.add('hidden');
+                        if(el) el.classList.add('hidden');
                     });
-                    // 🔥 NAYA CODE KHATAM
 
-                    alert("Account created successfully! Welcome to WarRoom.");
+                    alert("Account created successfully! Welcome to WarRoom.\nYour account is linked to your email.");
                     closeAuthModal();
                     setTimeout(() => startOnboardingTour(), 800);
                 });
             })
             .catch((error) => {
-                alert("Error: " + error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("❌ This Email is already registered! Please Log In.");
+                } else {
+                    alert("Error: " + error.message);
+                }
             });
             
-    } else if (action === 'login') {
-        const emailInput = document.getElementById('login-email-phone').value.trim();
+    }
+
+            
+       else if (action === 'login') {
+        const loginInputVal = document.getElementById('login-username-phone').value.trim().toLowerCase().replace(/\s+/g, '');
         const pwdInput = document.getElementById('login-pwd').value;
 
-        if (!emailInput || !pwdInput) {
-            alert("Please enter your email and password.");
+        if (!loginInputVal || !pwdInput) {
+            alert("Please enter your Username or Phone Number, and Password.");
             return;
         }
 
-        // Firebase Secure Login
-        firebase.auth().signInWithEmailAndPassword(emailInput, pwdInput)
-            .then((userCredential) => {
-                alert("Login successful! Welcome back.");
-                closeAuthModal();
-            })
-            .catch((error) => {
-                let errCode = error.code || '';
-                let errMessage = error.message || JSON.stringify(error);
+        // 🧠 SMART CHECK: Dekho ki user ne sirf numbers (Phone No) daale hain ya ABCD (Username)
+        const isPhone = /^\d+$/.test(loginInputVal);
 
-                if (errCode.includes('invalid-credential') || errCode.includes('user-not-found') || errCode.includes('wrong-password') || errMessage.includes('INVALID_LOGIN_CREDENTIALS')) {
-                    alert("Account not found or incorrect password. Please register first.");
-                } else {
-                    alert("Login Failed: Account not found or incorrect password. Please register first.");
-                }
-            });
+        if (isPhone) {
+            // Agar Phone number hai toh pehle Database mein se uski email nikalo
+            firebase.firestore().collection("users").where("phone", "==", loginInputVal).get()
+                .then((snapshot) => {
+                    if (snapshot.empty) {
+                        alert("❌ Login Failed: This phone number is not registered.");
+                        return;
+                    }
+                    
+                    let userEmail = '';
+                    snapshot.forEach(doc => { userEmail = doc.data().email; });
+
+                    // Asli email milne ke baad Firebase mein login karwa do
+                    firebase.auth().signInWithEmailAndPassword(userEmail, pwdInput)
+                        .then((userCredential) => {
+                            alert("Login successful! Welcome back.");
+                            closeAuthModal();
+                        })
+                        .catch((error) => {
+                            alert("❌ Login Failed: Incorrect password.");
+                        });
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert("Error checking phone number. Please try logging in with your Username instead.");
+                });
+        } else {
+            // Agar Username daala hai toh seedha login karo
+            const dummyEmail = loginInputVal + "@warroom.local";
+
+            firebase.auth().signInWithEmailAndPassword(dummyEmail, pwdInput)
+                .then((userCredential) => {
+                    alert("Login successful! Welcome back.");
+                    closeAuthModal();
+                })
+                .catch((error) => {
+                    alert("❌ Login Failed: Username not found or incorrect password.");
+                });
+        }
     }
 }
-
 
 
         function handleForgotPassword() {
@@ -8465,6 +8504,19 @@ function hideVipScrollHint() {
             // 400ms CSS transition ke baad element ko screen se hata do
             setTimeout(() => { hint.style.display = 'none'; }, 400); 
         }
+    }
+}
+// Function to toggle password visibility
+function togglePasswordVisibility(inputId, eyeId) {
+    const inputField = document.getElementById(inputId);
+    const eyeIcon = document.getElementById(eyeId);
+    
+    if (inputField.type === "password") {
+        inputField.type = "text";
+        eyeIcon.innerText = "🙈"; // Hide icon
+    } else {
+        inputField.type = "password";
+        eyeIcon.innerText = "👁️"; // Show icon
     }
 }
 
