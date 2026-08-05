@@ -8664,6 +8664,29 @@ function realLogout() {
         background-size: 200% auto;
         animation: royalShine 3s infinite linear;
     }
+    // 🔄 Saved Account par Switch Karne Ka Function
+function selectSavedAccount(email) {
+    // 1. Pehle current session ko safely sign out karo
+    firebase.auth().signOut().then(() => {
+        // 2. Google Provider ko prompt select_account ke sath trigger karo
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account',
+            login_hint: email // Yeh specific email ko Google popup mein pehle se highlight/suggest karega
+        });
+        
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                alert("Switched account successfully to " + result.user.email);
+                closeAccountSwitcher();
+                location.reload();
+            }).catch((error) => {
+                console.error("Switch error:", error);
+                alert("Account switch nahi ho paya: " + error.message);
+            });
+    });
+}
+
 </style>
 
 <div id="vip-welcome-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 60000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
