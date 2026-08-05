@@ -2343,12 +2343,13 @@
             <button onclick="closeAuthModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; transition: color 0.3s;">&times;</button>
 
             <!-- WARROOM SINGLE-CLICK & OTP AUTHENTICATION -->
+<!-- WARROOM SINGLE-CLICK AUTHENTICATION -->
 <div id="login-form">
     <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Access <span style="color: var(--accent-primary)">WarRoom</span></h2>
     <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Fast, secure, and hassle-free entry.</p>
     
-    <!-- 📱 MOBILE NUMBER (OTP) SECTION -->
-    <div id="phone-auth-section" style="margin-bottom: 20px;">
+    <!-- 📱 MOBILE NUMBER (OTP) SECTION (HIDDEN FOR NOW) -->
+    <div id="phone-auth-section" style="display: none; margin-bottom: 20px;">
         <!-- Number Input -->
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <span style="display: flex; align-items: center; padding: 0 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; font-weight: 600; color: var(--text-secondary);">+91</span>
@@ -2358,29 +2359,30 @@
         <!-- Get OTP Button -->
         <button id="send-otp-btn" class="btn-launch" onclick="sendOTP()" style="width: 100%; padding: 14px; font-size: 1rem;">Get OTP</button>
         
-        <!-- OTP Input & Verify Button (Yeh tab dikhega jab OTP chala jayega) -->
+        <!-- OTP Input & Verify Button -->
         <div id="otp-section" style="display: none; margin-top: 15px;">
             <p style="text-align: center; font-size: 0.8rem; color: #22c55e; margin-bottom: 10px; font-weight: 600;">✅ OTP sent successfully!</p>
             <input type="number" id="login-otp" class="search-input" placeholder="Enter 6-digit OTP" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box; text-align: center; letter-spacing: 5px; font-size: 1.2rem;">
             <button class="btn-launch" onclick="verifyOTP()" style="width: 100%; padding: 14px; background: #22c55e; font-size: 1rem;">Verify & Log In</button>
         </div>
         
-        <!-- Firebase ReCaptcha Container (OTP bhejne ke liye zaroori hai) -->
+        <!-- Firebase ReCaptcha Container -->
         <div id="recaptcha-container" style="margin-top: 10px; display: flex; justify-content: center;"></div>
     </div>
 
-    <!-- OR DIVIDER -->
-    <div style="margin: 20px 0; text-align: center; color: #666; font-size: 0.9rem; position: relative;">
+    <!-- OR DIVIDER (HIDDEN FOR NOW) -->
+    <div id="or-divider" style="display: none; margin: 20px 0; text-align: center; color: #666; font-size: 0.9rem; position: relative;">
         <hr style="border: 0; border-top: 1px solid var(--glass-border); position: absolute; top: 50%; width: 100%; z-index: 1;">
         <span style="background: var(--bg-primary); padding: 0 15px; position: relative; z-index: 2; font-weight: 600;">OR</span>
     </div>
 
-    <!-- 🚀 GOOGLE AUTHENTICATION SECTION -->
+    <!-- 🚀 GOOGLE AUTHENTICATION SECTION (VISIBLE) -->
     <button type="button" onclick="loginWithGoogle()" style="width: 100%; padding: 14px; background: #ffffff; color: #444; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1rem; transition: 0.3s;">
         <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
         Continue with Google
     </button>
 </div>
+
 
 <!-- AB SIGNUP FORM KI ZAROORAT NAHI HAI -->
 <div id="signup-form" style="display: none;"> </div>
