@@ -2342,80 +2342,56 @@
         <div class="glass-card" style="width: 100%; max-width: 400px; position: relative; padding: 2.5rem 2rem; margin: 15px;">
             <button onclick="closeAuthModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; transition: color 0.3s;">&times;</button>
 
-      <!-- LOGIN FORM -->
+            <!-- WARROOM SINGLE-CLICK & OTP AUTHENTICATION -->
 <div id="login-form">
     <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Access <span style="color: var(--accent-primary)">WarRoom</span></h2>
-    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Resume your tactical preparation.</p>
+    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Fast, secure, and hassle-free entry.</p>
     
-    <input type="text" id="login-username-phone" class="search-input" placeholder="Username or Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
-    
-    <!-- 👁️ NAYA LOGIN PASSWORD BAX WITH EYE ICON -->
-    <div style="position: relative; margin-bottom: 10px;">
-        <input type="password" id="login-pwd" class="search-input" placeholder="Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
-        <span id="login-pwd-eye" onclick="togglePasswordVisibility('login-pwd', 'login-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
-    </div>
-    
-    <div style="text-align: right; margin-bottom: 20px;">
-        <a href="javascript:void(0)" onclick="toggleAuthView('forgot')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-primary);">Forgot Password?</a>
+    <!-- 📱 MOBILE NUMBER (OTP) SECTION -->
+    <div id="phone-auth-section" style="margin-bottom: 20px;">
+        <!-- Number Input -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <span style="display: flex; align-items: center; padding: 0 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; font-weight: 600; color: var(--text-secondary);">+91</span>
+            <input type="tel" id="login-phone" class="search-input" placeholder="Mobile Number" style="width: 100%; border: 1px solid var(--glass-border); box-sizing: border-box; font-size: 1.05rem;" maxlength="10">
+        </div>
+        
+        <!-- Get OTP Button -->
+        <button id="send-otp-btn" class="btn-launch" onclick="sendOTP()" style="width: 100%; padding: 14px; font-size: 1rem;">Get OTP</button>
+        
+        <!-- OTP Input & Verify Button (Yeh tab dikhega jab OTP chala jayega) -->
+        <div id="otp-section" style="display: none; margin-top: 15px;">
+            <p style="text-align: center; font-size: 0.8rem; color: #22c55e; margin-bottom: 10px; font-weight: 600;">✅ OTP sent successfully!</p>
+            <input type="number" id="login-otp" class="search-input" placeholder="Enter 6-digit OTP" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box; text-align: center; letter-spacing: 5px; font-size: 1.2rem;">
+            <button class="btn-launch" onclick="verifyOTP()" style="width: 100%; padding: 14px; background: #22c55e; font-size: 1rem;">Verify & Log In</button>
+        </div>
+        
+        <!-- Firebase ReCaptcha Container (OTP bhejne ke liye zaroori hai) -->
+        <div id="recaptcha-container" style="margin-top: 10px; display: flex; justify-content: center;"></div>
     </div>
 
-    <button class="btn-launch" onclick="handleAuthSubmit('login')" style="padding: 14px;">Log In</button>
-    
-    <div style="margin: 15px 0; text-align: center; color: #666; font-size: 0.9rem;">OR</div>
+    <!-- OR DIVIDER -->
+    <div style="margin: 20px 0; text-align: center; color: #666; font-size: 0.9rem; position: relative;">
+        <hr style="border: 0; border-top: 1px solid var(--glass-border); position: absolute; top: 50%; width: 100%; z-index: 1;">
+        <span style="background: var(--bg-primary); padding: 0 15px; position: relative; z-index: 2; font-weight: 600;">OR</span>
+    </div>
 
-    <button type="button" onclick="loginWithGoogle()" style="width: 100%; padding: 12px; background: #ffffff; color: #444; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+    <!-- 🚀 GOOGLE AUTHENTICATION SECTION -->
+    <button type="button" onclick="loginWithGoogle()" style="width: 100%; padding: 14px; background: #ffffff; color: #444; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1rem; transition: 0.3s;">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
         Continue with Google
     </button>
-
-    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">New recruit? <a href="javascript:void(0)" onclick="toggleAuthView('signup')" style="text-decoration: underline;">Enlist Here</a></p>
 </div>
 
-<!-- SIGNUP FORM -->
-<div id="signup-form" style="display: none;">
-    <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Enlist in <span style="color: var(--accent-primary)">WarRoom</span></h2>
-    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Start your journey to becoming an officer.</p>
-    
-    <input type="text" id="signup-name" class="search-input" placeholder="Full Name" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
-    
-    <input type="text" id="signup-username" class="search-input" placeholder="Create Username (e.g. veer123)" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
-    
-    <input type="email" id="signup-real-email" class="search-input" placeholder="Active Email Address" style="width: 100%; margin-bottom: 5px; border: 1px solid var(--glass-border); box-sizing: border-box;">
-    <p style="font-size: 0.75rem; color: #ea580c; margin-bottom: 15px; font-weight: 600; text-align: left; padding-left: 5px; line-height: 1.4;">
-        ⚠️ Disclaimer: Valid email is mandatory. Your Username & Password will be linked to this email for account recovery.
-    </p>
-
-    <input type="number" id="signup-phone" class="search-input" placeholder="Phone Number" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border); box-sizing: border-box;">
-    
-    <!-- 👁️ NAYA SIGNUP PASSWORD BAX WITH EYE ICON -->
-    <div style="position: relative; margin-bottom: 15px;">
-        <input type="password" id="signup-pwd" class="search-input" placeholder="Create Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
-        <span id="signup-pwd-eye" onclick="togglePasswordVisibility('signup-pwd', 'signup-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
+<!-- AB SIGNUP FORM KI ZAROORAT NAHI HAI -->
+<div id="signup-form" style="display: none;"> </div>
+  </div>
     </div>
-    
-    <!-- 👁️ NAYA CONFIRM PASSWORD BAX WITH EYE ICON -->
-    <div style="position: relative; margin-bottom: 20px;">
-        <input type="password" id="signup-confirm-pwd" class="search-input" placeholder="Confirm Password" style="width: 100%; border: 1px solid var(--glass-border); padding-right: 45px; box-sizing: border-box;">
-        <span id="signup-confirm-pwd-eye" onclick="togglePasswordVisibility('signup-confirm-pwd', 'signup-confirm-pwd-eye')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--text-secondary); user-select: none;">👁️</span>
-    </div>
-    
-    <button class="btn-launch" onclick="handleAuthSubmit('signup')" style="padding: 14px;">Create Account</button>
-    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;">Already enlisted? <a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Log In</a></p>
 </div>
+<!-- DUMMY DIVS TAAKI JS CRASH NA HO -->
+<div id="signup-form" style="display: none;"></div>
+<div id="forgot-form" style="display: none;"></div>
+<div id="forgot-password-form" style="display: none;"></div>
 
-
-            <div id="forgot-form" style="display: none;">
-    <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Reset Password</h2>
-    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Enter your email to receive a password reset link.</p>
-    
-    <input type="email" id="forgot-email" class="search-input" placeholder="Registered Email Address" style="width: 100%; margin-bottom: 20px; border: 1px solid var(--glass-border);">
-    
-    <button class="btn-launch" onclick="handleForgotPassword()" style="padding: 14px; background: var(--accent-secondary); border-color: var(--accent-secondary);">Send Reset Link 📩</button>
-    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;"><a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Back to Log In</a></p>
-</div>
-
-        </div>
-    </div>
 
     <div id="streak-popup-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 50000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
         <div class="glass-card fade-in" style="width: 100%; max-width: 440px; text-align: center; background: var(--bg-secondary); border: 2px solid var(--accent-secondary); position: relative; padding: 2.5rem 2rem;">
@@ -4148,30 +4124,17 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
 
-        function toggleAuthView(view) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('forgot-form').style.display = 'none';
-
-            if (view === 'signup') {
-                document.getElementById('signup-form').style.display = 'block';
-            } else if (view === 'forgot') {
-                document.getElementById('forgot-form').style.display = 'block';
-            } else {
-                document.getElementById('login-form').style.display = 'block';
-            }
-        }
+        
 
                 function handleAuthSubmit(action) {
-        if (action === 'signup') {
+    if (action === 'signup') {
         const nameInput = document.getElementById('signup-name').value.trim();
-        const rawUsername = document.getElementById('signup-username').value.trim().toLowerCase().replace(/\s+/g, '');
-        const realEmailInput = document.getElementById('signup-real-email').value.trim().toLowerCase(); // 👈 Asli Email
+        const emailInput = document.getElementById('signup-email').value.trim();
         const phoneInput = document.getElementById('signup-phone').value.trim();
         const pwdInput = document.getElementById('signup-pwd').value;
         const confirmPwdInput = document.getElementById('signup-confirm-pwd').value; 
 
-        if (!nameInput || !rawUsername || !realEmailInput || !phoneInput || pwdInput.length < 8) {
+        if (!nameInput || !emailInput || pwdInput.length < 8) {
             alert("Please fill all fields properly. Password must be at least 8 chars.");
             return;
         }
@@ -4181,130 +4144,135 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             return;
         }
 
-        // 🌟 Asli Email se Firebase Auth Account Banega!
-        firebase.auth().createUserWithEmailAndPassword(realEmailInput, pwdInput)
+        // Firebase Secure Signup
+        firebase.auth().createUserWithEmailAndPassword(emailInput, pwdInput)
             .then((userCredential) => {
                 const user = userCredential.user;
-                
-                // Firestore mein saari details save kardo
+                // Save user details to Firestore securely
                 firebase.firestore().collection("users").doc(user.uid).set({
                     name: nameInput,
-                    username: rawUsername,
-                    email: realEmailInput, 
+                    email: emailInput,
                     phone: phoneInput,
-                    role: "aspirant",
+                    role: emailInput === "shivasaroj8750@gmail.com" ? "admin" : "aspirant",
                     createdAt: new Date().toISOString()
                 }).then(() => {
-                    localStorage.setItem('warRoomUserEmail', realEmailInput);
-                    localStorage.setItem('warRoomUserName', nameInput);
-                    localStorage.setItem('warRoomUserRole', "aspirant");
+                    // 🔥 NAYA CODE: Local Storage aur UI ko turant update karne ke liye
+                    const newRole = emailInput === "shivasaroj8750@gmail.com" ? "admin" : "aspirant";
                     
+                    // LocalStorage update
+                    localStorage.setItem('warRoomUserEmail', emailInput);
+                    localStorage.setItem('warRoomUserName', nameInput);
+                    localStorage.setItem('warRoomUserRole', newRole);
+                    
+                    // Dashboard aur Account screen update
                     const nameDisplay = document.getElementById('welcome-user-name');
                     if (nameDisplay) nameDisplay.innerText = nameInput;
                     
                     if (typeof updateDashboardGreeting === "function") updateDashboardGreeting(nameInput);
-                    if (typeof loadAccountDetails === "function") loadAccountDetails(nameInput, realEmailInput);
+                    if (typeof loadAccountDetails === "function") loadAccountDetails(nameInput, emailInput);
                     
-                    const adminElements = ['admin-post-creator-box', 'admin-add-book-btn', 'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn', 'viewVipUsersBtn'];
+                    // Admin buttons hide/show
+                    const adminElements = [
+    'admin-post-creator-box',
+    'admin-add-book-btn',
+    'admin-add-quiz-btn-page',
+    'admin-add-premium-btn',
+    'admin-grant-vip-btn',
+    'viewVipUsersBtn'
+];
+
+
                     adminElements.forEach(id => {
                         const el = document.getElementById(id);
-                        if(el) el.classList.add('hidden');
+                        if(el) newRole === 'admin' ? el.classList.remove('hidden') : el.classList.add('hidden');
                     });
+                    // 🔥 NAYA CODE KHATAM
 
-                    alert("Account created successfully! Welcome to WarRoom.\nYour account is linked to your email.");
+                    alert("Account created successfully! Welcome to WarRoom.");
                     closeAuthModal();
                     setTimeout(() => startOnboardingTour(), 800);
                 });
             })
             .catch((error) => {
-                if (error.code === 'auth/email-already-in-use') {
-                    alert("❌ This Email is already registered! Please Log In.");
-                } else {
-                    alert("Error: " + error.message);
-                }
+                alert("Error: " + error.message);
             });
             
-    }
-
-            
-       else if (action === 'login') {
-        const loginInputVal = document.getElementById('login-username-phone').value.trim().toLowerCase().replace(/\s+/g, '');
+    } else if (action === 'login') {
+        const emailInput = document.getElementById('login-email-phone').value.trim();
         const pwdInput = document.getElementById('login-pwd').value;
 
-        if (!loginInputVal || !pwdInput) {
-            alert("Please enter your Username or Phone Number, and Password.");
+        if (!emailInput || !pwdInput) {
+            alert("Please enter your email and password.");
             return;
         }
 
-        // 🧠 SMART CHECK: Dekho ki user ne sirf numbers (Phone No) daale hain ya ABCD (Username)
-        const isPhone = /^\d+$/.test(loginInputVal);
+        // Firebase Secure Login
+        firebase.auth().signInWithEmailAndPassword(emailInput, pwdInput)
+            .then((userCredential) => {
+                alert("Login successful! Welcome back.");
+                closeAuthModal();
+            })
+            .catch((error) => {
+                let errCode = error.code || '';
+                let errMessage = error.message || JSON.stringify(error);
 
-        if (isPhone) {
-            // Agar Phone number hai toh pehle Database mein se uski email nikalo
-            firebase.firestore().collection("users").where("phone", "==", loginInputVal).get()
-                .then((snapshot) => {
-                    if (snapshot.empty) {
-                        alert("❌ Login Failed: This phone number is not registered.");
-                        return;
-                    }
-                    
-                    let userEmail = '';
-                    snapshot.forEach(doc => { userEmail = doc.data().email; });
-
-                    // Asli email milne ke baad Firebase mein login karwa do
-                    firebase.auth().signInWithEmailAndPassword(userEmail, pwdInput)
-                        .then((userCredential) => {
-                            alert("Login successful! Welcome back.");
-                            closeAuthModal();
-                        })
-                        .catch((error) => {
-                            alert("❌ Login Failed: Incorrect password.");
-                        });
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert("Error checking phone number. Please try logging in with your Username instead.");
-                });
-        } else {
-            // Agar Username daala hai toh seedha login karo
-            const dummyEmail = loginInputVal + "@warroom.local";
-
-            firebase.auth().signInWithEmailAndPassword(dummyEmail, pwdInput)
-                .then((userCredential) => {
-                    alert("Login successful! Welcome back.");
-                    closeAuthModal();
-                })
-                .catch((error) => {
-                    alert("❌ Login Failed: Username not found or incorrect password.");
-                });
-        }
+                if (errCode.includes('invalid-credential') || errCode.includes('user-not-found') || errCode.includes('wrong-password') || errMessage.includes('INVALID_LOGIN_CREDENTIALS')) {
+                    alert("Account not found or incorrect password. Please register first.");
+                } else {
+                    alert("Login Failed: Account not found or incorrect password. Please register first.");
+                }
+            });
     }
 }
+
 
 
         function handleForgotPassword() {
-    const inputVal = document.getElementById('forgot-email').value.trim();
+            const inputVal = document.getElementById('forgot-email').value.trim();
+            const ansInput = document.getElementById('forgot-sec-a').value.trim().toLowerCase();
+            const newPwd = document.getElementById('forgot-new-pwd').value;
 
-    if (!inputVal) {
-        alert("Please enter your registered email address.");
-        return;
-    }
-
-    // Firebase ka asli Password Reset function
-    firebase.auth().sendPasswordResetEmail(inputVal)
-        .then(() => {
-            alert("✅ Password reset link sent! Please check your Email inbox to set a new password.");
-            toggleAuthView('login'); // Wapas login screen par bhej dega
-        })
-        .catch((error) => {
-            if (error.code === 'auth/user-not-found') {
-                alert("❌ No account found with this email.");
-            } else {
-                alert("Error: " + error.message);
+            if (!inputVal || !ansInput || newPwd.length < 8) {
+                alert("Please fill all fields. New password must be at least 8 digits.");
+                return;
             }
-        });
-}
 
+            let foundEmail = null;
+            if (inputVal === "shivasaroj8750@gmail.com" || inputVal === "8595434345") {
+                foundEmail = "shivasaroj8750@gmail.com";
+            } else {
+                for(let i=0; i<localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if(k && k.startsWith('user_pwd_')) {
+                        const em = k.replace('user_pwd_', '');
+                        const ph = localStorage.getItem(`user_phone_${em}`);
+                        if(em === inputVal || ph === inputVal) {
+                            foundEmail = em;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!foundEmail) {
+                alert("Account not found with this email/phone.");
+                return;
+            }
+
+            let savedAns = localStorage.getItem(`user_sec_a_${foundEmail}`);
+            if (!savedAns && foundEmail === "shivasaroj8750@gmail.com") {
+                savedAns = "9650335512";
+            }
+
+            if (ansInput !== savedAns) {
+                alert("Incorrect Security Answer! Verification failed.");
+                return;
+            }
+
+            localStorage.setItem(`user_pwd_${foundEmail}`, newPwd);
+            alert("Password successfully reset! You can now log in with your new password.");
+            toggleAuthView('login');
+        }
 
         function handleLogout() {
     firebase.auth().signOut().then(() => {
@@ -8506,19 +8474,6 @@ function hideVipScrollHint() {
         }
     }
 }
-// Function to toggle password visibility
-function togglePasswordVisibility(inputId, eyeId) {
-    const inputField = document.getElementById(inputId);
-    const eyeIcon = document.getElementById(eyeId);
-    
-    if (inputField.type === "password") {
-        inputField.type = "text";
-        eyeIcon.innerText = "🙈"; // Hide icon
-    } else {
-        inputField.type = "password";
-        eyeIcon.innerText = "👁️"; // Show icon
-    }
-}
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
@@ -8677,6 +8632,119 @@ document.addEventListener('fullscreenchange', function() {
         }
     }
 });
+// OTP ko verify karne ke liye yeh global variable zaroori hai
+window.confirmationResult = null;
+
+// 1. OTP Bhejne ka function
+function sendOTP() {
+    const phoneInput = document.getElementById('login-phone').value.trim();
+    
+    // Check karo ki number 10 digit ka hai ya nahi
+    if (phoneInput.length !== 10) {
+        alert("Bhai, please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    const phoneNumber = "+91" + phoneInput;
+    const sendBtn = document.getElementById('send-otp-btn');
+    
+    // Button ko loading state mein daalo
+    sendBtn.innerText = "Sending OTP...";
+    sendBtn.disabled = true;
+
+    // Firebase reCAPTCHA setup (Spam rokne ke liye)
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible',
+        'callback': (response) => {
+            // reCAPTCHA solved
+        }
+    });
+
+    // Firebase se OTP bhejo
+    firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+        .then((confirmationResult) => {
+            // SMS chala gaya!
+            window.confirmationResult = confirmationResult;
+            
+            // Get OTP button chupao aur OTP dalne wala dabba dikhao
+            document.getElementById('send-otp-btn').style.display = 'none';
+            document.getElementById('otp-section').style.display = 'block';
+            
+            // reCAPTCHA container ko chupa do
+            document.getElementById('recaptcha-container').style.display = 'none';
+        }).catch((error) => {
+            console.error("OTP Error:", error);
+            alert("OTP bhejne mein error aayi: " + error.message);
+            
+            // Agar error aaye toh button ko wapas normal kar do
+            sendBtn.innerText = "Get OTP";
+            sendBtn.disabled = false;
+            
+            // reCAPTCHA reset karo taaki user wapas try kar sake
+            if(window.recaptchaVerifier) {
+                window.recaptchaVerifier.clear();
+            }
+        });
+}
+
+// 2. OTP Check karne ka function
+function verifyOTP() {
+    const otpInput = document.getElementById('login-otp').value.trim();
+    
+    if (otpInput.length !== 6) {
+        alert("Please enter the 6-digit OTP.");
+        return;
+    }
+
+    // Firebase se OTP match karo
+    window.confirmationResult.confirm(otpInput).then((result) => {
+        const user = result.user;
+        
+        // Database mein check karo ki user naya hai ya purana
+        const userRef = firebase.firestore().collection("users").doc(user.uid);
+        userRef.get().then((doc) => {
+            if (!doc.exists) {
+                // Naya Aspirant hai, database mein save karo
+                userRef.set({
+                    phone: user.phoneNumber,
+                    role: "aspirant",
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            // LocalStorage update
+            localStorage.setItem('warRoomUserPhone', user.phoneNumber);
+            localStorage.setItem('warRoomUserRole', "aspirant");
+                        // 💾 SAVED ACCOUNTS LOGIC (One-Click Login ke liye)
+            let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+            
+            // Check karo ki yeh number pehle se list mein hai ya nahi
+            const existingAccount = savedAccounts.find(acc => acc.phone === user.phoneNumber);
+            
+            if (!existingAccount) {
+                // Naya number hai, toh list mein add kar do
+                savedAccounts.push({
+                    uid: user.uid,
+                    phone: user.phoneNumber,
+                    lastLogin: new Date().getTime()
+                });
+                localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+            }
+            
+            alert("Login Successful! Welcome to WarRoom.");
+            
+            // Form band karne ka function (agar aapke code mein closeAuthModal hai toh)
+            if(typeof closeAuthModal === 'function') {
+                closeAuthModal();
+            }
+        });
+        
+    }).catch((error) => {
+        alert("❌ Invalid OTP! Please check and try again.");
+        console.error(error);
+    });
+}
+
 </script>
 <!-- VIP Users Dashboard Modal -->
 <div id="vipModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999;"></div>
@@ -8710,93 +8778,18 @@ document.addEventListener('fullscreenchange', function() {
 </div>
 
 <script>
-// VIP Dashboard Logic & Database Connection
+// VIP Dashboard Logic
 document.addEventListener('DOMContentLoaded', function() {
     const viewVipBtn = document.getElementById('viewVipUsersBtn');
     const vipModal = document.getElementById('vipUsersModal');
     const vipOverlay = document.getElementById('vipModalOverlay');
     const closeVipBtn = document.getElementById('closeVipModal');
     const searchInput = document.getElementById('searchVipEmail');
-    const tableBody = document.getElementById('vipUsersTableBody');
-
-    // Firebase Database se Users fetch karne ka function
-    function loadVipUsersFromDatabase() {
-        if (typeof firebase === 'undefined') {
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: red;">Database connection failed! Firebase is missing.</td></tr>';
-            return;
-        }
-
-        // Loading state
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: #3b82f6; font-weight: bold;">Fetching recruits from secure database... 📡</td></tr>';
-
-        // Firebase Firestore se users collection ko read karna
-        firebase.firestore().collection("users").get().then((snapshot) => {
-            let usersHTML = '';
-            
-            snapshot.forEach((doc) => {
-                let userData = doc.data();
-                let email = userData.email || 'Unknown';
-                let role = userData.role || 'aspirant';
-                
-                let isVip = false;
-                let validTill = 'N/A';
-                let statusHtml = '<span style="color: #ef4444; font-weight: 800; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px;">Inactive</span>';
-                let planText = 'Free Recruit';
-
-                // Agar admin hai toh by default lifetime access
-                if (role === 'admin') {
-                    isVip = true;
-                    planText = '👑 Admin';
-                    validTill = 'Lifetime';
-                    statusHtml = '<span style="color: #16a34a; font-weight: 800; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 6px;">Active</span>';
-                } else {
-                    // LocalStorage scan karke VIP access check karna (Kyunki admin grant local storage me save hota hai)
-                    for (let i = 0; i < localStorage.length; i++) {
-                        let key = localStorage.key(i);
-                        if (key && key.startsWith('vip_access_') && key.endsWith(`_${email}`)) {
-                            let expiryTime = parseInt(localStorage.getItem(key));
-                            if (expiryTime > Date.now()) {
-                                isVip = true;
-                                planText = '💎 VIP Premium';
-                                let dateObj = new Date(expiryTime);
-                                validTill = dateObj.toLocaleDateString('en-IN') + ' ' + dateObj.toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'});
-                                statusHtml = '<span style="color: #16a34a; font-weight: 800; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 6px;">Active</span>';
-                                break; // Agar koi bhi active plan mila toh loop break kardo
-                            } else {
-                                validTill = 'Expired';
-                                statusHtml = '<span style="color: #ea580c; font-weight: 800; background: rgba(234, 88, 12, 0.1); padding: 4px 8px; border-radius: 6px;">Expired</span>';
-                            }
-                        }
-                    }
-                }
-
-                usersHTML += `
-                    <tr style="border-bottom: 1px solid #e5e7eb;">
-                        <td style="padding: 12px; font-weight: 700; color: #1e293b;">${email}</td>
-                        <td style="padding: 12px; font-weight: 600; color: ${isVip ? '#3b82f6' : '#64748b'};">${planText}</td>
-                        <td style="padding: 12px; font-size: 0.85rem; color: #475569;">${validTill}</td>
-                        <td style="padding: 12px;">${statusHtml}</td>
-                    </tr>
-                `;
-            });
-
-            if (usersHTML === '') {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px;">No users found in the database.</td></tr>';
-            } else {
-                tableBody.innerHTML = usersHTML; // Table mein data inject kardo
-            }
-
-        }).catch((error) => {
-            console.error("Error fetching VIP users: ", error);
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Error loading data! Check console.</td></tr>';
-        });
-    }
 
     if(viewVipBtn) {
         viewVipBtn.addEventListener('click', () => {
             vipModal.style.display = 'block';
             vipOverlay.style.display = 'block';
-            loadVipUsersFromDatabase(); // Modal open hote hi database call hit hogi
         });
     }
 
@@ -8808,26 +8801,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if(closeVipBtn) closeVipBtn.addEventListener('click', closeVipDashboard);
     if(vipOverlay) vipOverlay.addEventListener('click', closeVipDashboard);
 
-    // Live Search Filter Logic
     if(searchInput) {
         searchInput.addEventListener('keyup', function() {
             let filter = this.value.toLowerCase();
             let rows = document.querySelectorAll('#vipUsersTableBody tr');
             rows.forEach(row => {
                 let emailText = row.cells[0]?.textContent.toLowerCase() || "";
-                // Jab API load ho rahi ho toh filter apply mat karo
-                if (row.cells.length > 1) {
-                    if (emailText.includes(filter)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+                if (emailText.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
                 }
             });
         });
     }
 });
-
 </script>
 
 </body>
