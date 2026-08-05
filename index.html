@@ -8682,18 +8682,93 @@ document.addEventListener('fullscreenchange', function() {
 </div>
 
 <script>
-// VIP Dashboard Logic
+// VIP Dashboard Logic & Database Connection
 document.addEventListener('DOMContentLoaded', function() {
     const viewVipBtn = document.getElementById('viewVipUsersBtn');
     const vipModal = document.getElementById('vipUsersModal');
     const vipOverlay = document.getElementById('vipModalOverlay');
     const closeVipBtn = document.getElementById('closeVipModal');
     const searchInput = document.getElementById('searchVipEmail');
+    const tableBody = document.getElementById('vipUsersTableBody');
+
+    // Firebase Database se Users fetch karne ka function
+    function loadVipUsersFromDatabase() {
+        if (typeof firebase === 'undefined') {
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: red;">Database connection failed! Firebase is missing.</td></tr>';
+            return;
+        }
+
+        // Loading state
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: #3b82f6; font-weight: bold;">Fetching recruits from secure database... 📡</td></tr>';
+
+        // Firebase Firestore se users collection ko read karna
+        firebase.firestore().collection("users").get().then((snapshot) => {
+            let usersHTML = '';
+            
+            snapshot.forEach((doc) => {
+                let userData = doc.data();
+                let email = userData.email || 'Unknown';
+                let role = userData.role || 'aspirant';
+                
+                let isVip = false;
+                let validTill = 'N/A';
+                let statusHtml = '<span style="color: #ef4444; font-weight: 800; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px;">Inactive</span>';
+                let planText = 'Free Recruit';
+
+                // Agar admin hai toh by default lifetime access
+                if (role === 'admin') {
+                    isVip = true;
+                    planText = '👑 Admin';
+                    validTill = 'Lifetime';
+                    statusHtml = '<span style="color: #16a34a; font-weight: 800; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 6px;">Active</span>';
+                } else {
+                    // LocalStorage scan karke VIP access check karna (Kyunki admin grant local storage me save hota hai)
+                    for (let i = 0; i < localStorage.length; i++) {
+                        let key = localStorage.key(i);
+                        if (key && key.startsWith('vip_access_') && key.endsWith(`_${email}`)) {
+                            let expiryTime = parseInt(localStorage.getItem(key));
+                            if (expiryTime > Date.now()) {
+                                isVip = true;
+                                planText = '💎 VIP Premium';
+                                let dateObj = new Date(expiryTime);
+                                validTill = dateObj.toLocaleDateString('en-IN') + ' ' + dateObj.toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'});
+                                statusHtml = '<span style="color: #16a34a; font-weight: 800; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 6px;">Active</span>';
+                                break; // Agar koi bhi active plan mila toh loop break kardo
+                            } else {
+                                validTill = 'Expired';
+                                statusHtml = '<span style="color: #ea580c; font-weight: 800; background: rgba(234, 88, 12, 0.1); padding: 4px 8px; border-radius: 6px;">Expired</span>';
+                            }
+                        }
+                    }
+                }
+
+                usersHTML += `
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px; font-weight: 700; color: #1e293b;">${email}</td>
+                        <td style="padding: 12px; font-weight: 600; color: ${isVip ? '#3b82f6' : '#64748b'};">${planText}</td>
+                        <td style="padding: 12px; font-size: 0.85rem; color: #475569;">${validTill}</td>
+                        <td style="padding: 12px;">${statusHtml}</td>
+                    </tr>
+                `;
+            });
+
+            if (usersHTML === '') {
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px;">No users found in the database.</td></tr>';
+            } else {
+                tableBody.innerHTML = usersHTML; // Table mein data inject kardo
+            }
+
+        }).catch((error) => {
+            console.error("Error fetching VIP users: ", error);
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Error loading data! Check console.</td></tr>';
+        });
+    }
 
     if(viewVipBtn) {
         viewVipBtn.addEventListener('click', () => {
             vipModal.style.display = 'block';
             vipOverlay.style.display = 'block';
+            loadVipUsersFromDatabase(); // Modal open hote hi database call hit hogi
         });
     }
 
@@ -8705,21 +8780,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if(closeVipBtn) closeVipBtn.addEventListener('click', closeVipDashboard);
     if(vipOverlay) vipOverlay.addEventListener('click', closeVipDashboard);
 
+    // Live Search Filter Logic
     if(searchInput) {
         searchInput.addEventListener('keyup', function() {
             let filter = this.value.toLowerCase();
             let rows = document.querySelectorAll('#vipUsersTableBody tr');
             rows.forEach(row => {
                 let emailText = row.cells[0]?.textContent.toLowerCase() || "";
-                if (emailText.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+                // Jab API load ho rahi ho toh filter apply mat karo
+                if (row.cells.length > 1) {
+                    if (emailText.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
                 }
             });
         });
     }
 });
+
 </script>
 
 </body>
