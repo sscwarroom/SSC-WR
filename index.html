@@ -8738,7 +8738,7 @@ function realLogout() {
 
     </div>
 </div>
-<!-- 🔄 ULTRA-PREMIUM ACCOUNT SWITCHER MODAL -->
+<!-- 🔄 100% Working Account Switcher Engine & UI -->
 <div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
     
     <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; overflow: hidden;">
@@ -8772,20 +8772,30 @@ function realLogout() {
 </div>
 
 <script>
-// 🌟 Premium Renderer for Account Switcher List with Micro-Interactions
+// 1. Popup Dikhane aur Saved Accounts Render Karne Ka Function
 function openAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     const listContainer = document.getElementById('saved-accounts-list');
     
+    if (!modal || !listContainer) return;
+
     let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
-    const currentUser = firebase.auth().currentUser;
+    let currentUser = null;
+    
+    try {
+        if (typeof firebase !== 'undefined' && firebase.auth()) {
+            currentUser = firebase.auth().currentUser;
+        }
+    } catch (e) {
+        console.log("Firebase auth error:", e);
+    }
 
     if (currentUser) {
         const email = currentUser.email || currentUser.phoneNumber;
         const name = currentUser.displayName || email;
         const exists = savedAccounts.find(acc => acc.email === email);
         
-        if (!exists) {
+        if (!exists && email) {
             savedAccounts.push({ email: email, name: name, uid: currentUser.uid });
             localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
         }
@@ -8797,7 +8807,7 @@ function openAccountSwitcher() {
         listContainer.innerHTML = savedAccounts.map((acc, index) => {
             const isCurrent = currentUser && (currentUser.email === acc.email || currentUser.phoneNumber === acc.email);
             return `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.02)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: all 0.25s ease;" onmouseover="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.6)' : 'rgba(255, 255, 255, 0.15)'}'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}'; this.style.transform='translateY(0)'">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.02)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: all 0.25s ease;">
                     
                     <div style="display: flex; align-items: center; gap: 12px; overflow: hidden; min-width: 0;">
                         <div style="width: 40px; height: 40px; border-radius: 50%; background: ${isCurrent ? 'linear-gradient(135deg, #22c55e, #15803d)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px ${isCurrent ? 'rgba(34, 197, 94, 0.4)' : 'rgba(37, 99, 235, 0.4)'};">
@@ -8813,8 +8823,8 @@ function openAccountSwitcher() {
                     </div>
 
                     <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
-                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4); transition: transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Switch</button>` : ''}
-                        <button onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.06); padding: 7px 10px; border-radius: 10px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.18)'; this.style.color='#f87171'; this.style.borderColor='rgba(239,68,68,0.35)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.color='#94a3b8'; this.style.borderColor='rgba(255, 255, 255, 0.06)'" title="Remove ID">🗑️</button>
+                        ${!isCurrent ? `<button type="button" onclick="selectSavedAccount('${acc.email}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4);">Switch</button>` : ''}
+                        <button type="button" onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.06); padding: 7px 10px; border-radius: 10px; font-size: 0.8rem; cursor: pointer;" title="Remove ID">🗑️</button>
                     </div>
 
                 </div>
@@ -8826,13 +8836,120 @@ function openAccountSwitcher() {
     setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
+// 2. Popup Band Karne Ka Function
 function closeAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
-    modal.style.opacity = '0';
-    setTimeout(() => { modal.style.display = 'none'; }, 350);
+    if (modal) {
+        modal.style.opacity = '0';
+        setTimeout(() => { modal.style.display = 'none'; }, 350);
+    }
 }
-</script>
 
+// 3. Saved Account par Switch Karne Ka Async Function
+window.selectSavedAccount = async function(email) {
+    try {
+        if (typeof firebase === 'undefined') {
+            alert("Firebase not initialized!");
+            return;
+        }
+
+        if (firebase.auth().currentUser) {
+            await firebase.auth().signOut();
+        }
+
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account',
+            login_hint: email
+        });
+
+        const result = await firebase.auth().signInWithPopup(provider);
+        
+        if (result && result.user) {
+            let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+            const exists = savedAccounts.find(acc => acc.email === result.user.email);
+            
+            if (!exists) {
+                savedAccounts.push({
+                    email: result.user.email,
+                    name: result.user.displayName || result.user.email,
+                    uid: result.user.uid
+                });
+                localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+            }
+
+            alert("Switched account successfully to " + result.user.email);
+            closeAccountSwitcher();
+            location.reload();
+        }
+    } catch (error) {
+        console.error("Account switch error:", error);
+        alert("Switch nahi ho paya: " + (error.message || error));
+    }
+};
+
+// 4. Naya Account Add Karne ke liye Google Prompt
+window.switchAccountGoogle = async function() {
+    try {
+        if (typeof firebase === 'undefined') return;
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        
+        const result = await firebase.auth().signInWithPopup(provider);
+        
+        if (result && result.user) {
+            const user = result.user;
+            let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+            
+            const exists = savedAccounts.find(acc => acc.email === user.email);
+            if (!exists) {
+                savedAccounts.push({
+                    email: user.email,
+                    name: user.displayName || user.email,
+                    uid: user.uid
+                });
+                localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+            }
+
+            alert("Account added successfully!");
+            closeAccountSwitcher();
+            location.reload();
+        }
+    } catch (error) {
+        console.error("Google Auth Error:", error);
+        alert("Could not add account: " + error.message);
+    }
+};
+
+// 5. List se kisi saved account ko hatane (Delete) ka function
+window.removeSavedAccount = function(index) {
+    let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+    
+    if (index >= 0 && index < savedAccounts.length) {
+        const removed = savedAccounts.splice(index, 1)[0];
+        localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+        
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser && currentUser.email === removed.email) {
+            firebase.auth().signOut().then(() => {
+                location.reload();
+            });
+        } else {
+            openAccountSwitcher();
+        }
+    }
+};
+
+// 6. Asli Logout Function
+window.realLogout = function() {
+    if (typeof firebase === 'undefined') return;
+    firebase.auth().signOut().then(() => {
+        localStorage.removeItem('warRoomUserRole');
+        localStorage.removeItem('warRoomUserEmail');
+        location.reload(); 
+    });
+};
+</script>
 
 
 
