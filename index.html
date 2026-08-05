@@ -2385,16 +2385,15 @@
             </div>
 
             <div id="forgot-form" style="display: none;">
-                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Reset Password</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Verify your security answer to reset password.</p>
-                
-                <input type="text" id="forgot-email" class="search-input" placeholder="Registered Email or Phone" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                <input type="text" id="forgot-sec-a" class="search-input" placeholder="Enter Security Answer" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--glass-border);">
-                <input type="password" id="forgot-new-pwd" class="search-input" placeholder="Enter New Password (min 8 chars)" style="width: 100%; margin-bottom: 20px; border: 1px solid var(--glass-border);">
-                
-                <button class="btn-launch" onclick="handleForgotPassword()" style="padding: 14px; background: var(--accent-secondary); border-color: var(--accent-secondary);">Reset Password 🔄</button>
-                <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;"><a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Back to Log In</a></p>
-            </div>
+    <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;">Reset Password</h2>
+    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">Enter your email to receive a password reset link.</p>
+    
+    <input type="email" id="forgot-email" class="search-input" placeholder="Registered Email Address" style="width: 100%; margin-bottom: 20px; border: 1px solid var(--glass-border);">
+    
+    <button class="btn-launch" onclick="handleForgotPassword()" style="padding: 14px; background: var(--accent-secondary); border-color: var(--accent-secondary);">Send Reset Link 📩</button>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-weight: 600;"><a href="javascript:void(0)" onclick="toggleAuthView('login')" style="text-decoration: underline;">Back to Log In</a></p>
+</div>
+
         </div>
     </div>
 
@@ -4245,51 +4244,28 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
 
 
         function handleForgotPassword() {
-            const inputVal = document.getElementById('forgot-email').value.trim();
-            const ansInput = document.getElementById('forgot-sec-a').value.trim().toLowerCase();
-            const newPwd = document.getElementById('forgot-new-pwd').value;
+    const inputVal = document.getElementById('forgot-email').value.trim();
 
-            if (!inputVal || !ansInput || newPwd.length < 8) {
-                alert("Please fill all fields. New password must be at least 8 digits.");
-                return;
-            }
+    if (!inputVal) {
+        alert("Please enter your registered email address.");
+        return;
+    }
 
-            let foundEmail = null;
-            if (inputVal === "shivasaroj8750@gmail.com" || inputVal === "8595434345") {
-                foundEmail = "shivasaroj8750@gmail.com";
+    // Firebase ka asli Password Reset function
+    firebase.auth().sendPasswordResetEmail(inputVal)
+        .then(() => {
+            alert("✅ Password reset link sent! Please check your Email inbox to set a new password.");
+            toggleAuthView('login'); // Wapas login screen par bhej dega
+        })
+        .catch((error) => {
+            if (error.code === 'auth/user-not-found') {
+                alert("❌ No account found with this email.");
             } else {
-                for(let i=0; i<localStorage.length; i++) {
-                    const k = localStorage.key(i);
-                    if(k && k.startsWith('user_pwd_')) {
-                        const em = k.replace('user_pwd_', '');
-                        const ph = localStorage.getItem(`user_phone_${em}`);
-                        if(em === inputVal || ph === inputVal) {
-                            foundEmail = em;
-                            break;
-                        }
-                    }
-                }
+                alert("Error: " + error.message);
             }
+        });
+}
 
-            if (!foundEmail) {
-                alert("Account not found with this email/phone.");
-                return;
-            }
-
-            let savedAns = localStorage.getItem(`user_sec_a_${foundEmail}`);
-            if (!savedAns && foundEmail === "shivasaroj8750@gmail.com") {
-                savedAns = "9650335512";
-            }
-
-            if (ansInput !== savedAns) {
-                alert("Incorrect Security Answer! Verification failed.");
-                return;
-            }
-
-            localStorage.setItem(`user_pwd_${foundEmail}`, newPwd);
-            alert("Password successfully reset! You can now log in with your new password.");
-            toggleAuthView('login');
-        }
 
         function handleLogout() {
     firebase.auth().signOut().then(() => {
