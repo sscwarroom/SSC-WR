@@ -8664,29 +8664,6 @@ function realLogout() {
         background-size: 200% auto;
         animation: royalShine 3s infinite linear;
     }
-    // 🔄 Saved Account par Switch Karne Ka Function
-function selectSavedAccount(email) {
-    // 1. Pehle current session ko safely sign out karo
-    firebase.auth().signOut().then(() => {
-        // 2. Google Provider ko prompt select_account ke sath trigger karo
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({
-            prompt: 'select_account',
-            login_hint: email // Yeh specific email ko Google popup mein pehle se highlight/suggest karega
-        });
-        
-        firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                alert("Switched account successfully to " + result.user.email);
-                closeAccountSwitcher();
-                location.reload();
-            }).catch((error) => {
-                console.error("Switch error:", error);
-                alert("Account switch nahi ho paya: " + error.message);
-            });
-    });
-}
-
 </style>
 
 <div id="vip-welcome-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 60000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
@@ -8769,9 +8746,7 @@ function selectSavedAccount(email) {
         <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Switch between accounts or remove unwanted IDs.</p>
         
         <!-- Saved Accounts List Container -->
-        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
-            <!-- Yeh JavaScript se dynamically bhara jayega -->
-        </div>
+        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
 
         <!-- Add / Switch Account Button (Google Chooser) -->
         <button onclick="switchAccountGoogle()" style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(37, 99, 235, 0.1); color: var(--accent-primary); border: 1px dashed var(--accent-primary); border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -8788,166 +8763,138 @@ function selectSavedAccount(email) {
     </div>
 </div>
 
-
 <script>
-// === DIRECT MOBILE BACK BUTTON CATCHER ===
-
-// 1. Ek dummy history state push karo taaki phone ka back button browser close na kare
-window.history.pushState({ backButtonCatcher: true }, '');
-
-window.addEventListener('popstate', function(event) {
-    // 2. Jaise hi physical Back Button dabega, ye sab forcefully OFF ho jayega:
-
-    // A) Full-Screen Auto OFF
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-    }
-
-    // B) Screen Rotation Auto Unlock (Portrait mode)
-    if (screen.orientation && screen.orientation.unlock) {
-        try { screen.orientation.unlock(); } catch(e) {}
-    }
-
-    // C) Pomodoro Maximize Auto OFF
-    const pomodoroEl = document.getElementById('floating-pomodoro');
-    if (pomodoroEl && pomodoroEl.classList.contains('pomodoro-maximized')) {
-        pomodoroEl.classList.remove('pomodoro-maximized');
-        pomodoroEl.style.left = 'auto';
-        pomodoroEl.style.top = 'auto';
-        pomodoroEl.style.bottom = '70px';
-        pomodoroEl.style.right = '20px';
-    }
-
-    // 3. Wapas dummy state push karo taaki agli baar ke liye bhi back button ready rahe
-    window.history.pushState({ backButtonCatcher: true }, '');
-});
-
-// Fullscreen exit via button (agar koi on-screen 'Close' button dabata hai)
-document.addEventListener('fullscreenchange', function() {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        if (screen.orientation && screen.orientation.unlock) {
-            try { screen.orientation.unlock(); } catch(e) {}
-        }
-    }
-});
-// OTP ko verify karne ke liye yeh global variable zaroori hai
-window.confirmationResult = null;
-
-// 1. OTP Bhejne ka function
-function sendOTP() {
-    const phoneInput = document.getElementById('login-phone').value.trim();
+// 1. Popup Dikhane aur Saved Accounts Render Karne Ka Function
+function openAccountSwitcher() {
+    const modal = document.getElementById('account-switcher-modal');
+    const listContainer = document.getElementById('saved-accounts-list');
     
-    // Check karo ki number 10 digit ka hai ya nahi
-    if (phoneInput.length !== 10) {
-        alert("Bhai, please enter a valid 10-digit mobile number.");
-        return;
+    let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+    const currentUser = firebase.auth().currentUser;
+
+    if (currentUser) {
+        const email = currentUser.email || currentUser.phoneNumber;
+        const name = currentUser.displayName || email;
+        const exists = savedAccounts.find(acc => acc.email === email);
+        
+        if (!exists) {
+            savedAccounts.push({ email: email, name: name, uid: currentUser.uid });
+            localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+        }
     }
 
-    const phoneNumber = "+91" + phoneInput;
-    const sendBtn = document.getElementById('send-otp-btn');
-    
-    // Button ko loading state mein daalo
-    sendBtn.innerText = "Sending OTP...";
-    sendBtn.disabled = true;
+    if (savedAccounts.length === 0) {
+        listContainer.innerHTML = `<p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary);">No accounts saved locally.</p>`;
+    } else {
+        listContainer.innerHTML = savedAccounts.map((acc, index) => {
+            const isCurrent = currentUser && (currentUser.email === acc.email || currentUser.phoneNumber === acc.email);
+            return `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.1)' : 'var(--bg-secondary)'}; border: 1px solid ${isCurrent ? '#22c55e' : 'var(--glass-border)'}; border-radius: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: ${isCurrent ? '#22c55e' : 'var(--accent-primary)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0;">
+                            ${isCurrent ? '✓' : '👤'}
+                        </div>
+                        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">${acc.name || 'Aspirant'}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">${acc.email}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                        ${!isCurrent ? `<button onclick="selectSavedAccount('${acc.email}')" style="background: var(--accent-primary); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">Switch</button>` : ''}
+                        <button onclick="removeSavedAccount(${index})" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;" title="Remove ID">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
 
-    // Firebase reCAPTCHA setup (Spam rokne ke liye)
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {
-            // reCAPTCHA solved
-        }
-    });
-
-    // Firebase se OTP bhejo
-    firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-            // SMS chala gaya!
-            window.confirmationResult = confirmationResult;
-            
-            // Get OTP button chupao aur OTP dalne wala dabba dikhao
-            document.getElementById('send-otp-btn').style.display = 'none';
-            document.getElementById('otp-section').style.display = 'block';
-            
-            // reCAPTCHA container ko chupa do
-            document.getElementById('recaptcha-container').style.display = 'none';
-        }).catch((error) => {
-            console.error("OTP Error:", error);
-            alert("OTP bhejne mein error aayi: " + error.message);
-            
-            // Agar error aaye toh button ko wapas normal kar do
-            sendBtn.innerText = "Get OTP";
-            sendBtn.disabled = false;
-            
-            // reCAPTCHA reset karo taaki user wapas try kar sake
-            if(window.recaptchaVerifier) {
-                window.recaptchaVerifier.clear();
-            }
-        });
+    modal.style.display = 'flex';
 }
 
-// 2. OTP Check karne ka function
-function verifyOTP() {
-    const otpInput = document.getElementById('login-otp').value.trim();
-    
-    if (otpInput.length !== 6) {
-        alert("Please enter the 6-digit OTP.");
-        return;
-    }
+// 2. Popup Band Karne Ka Function
+function closeAccountSwitcher() {
+    document.getElementById('account-switcher-modal').style.display = 'none';
+}
 
-    // Firebase se OTP match karo
-    window.confirmationResult.confirm(otpInput).then((result) => {
-        const user = result.user;
+// 3. Saved Account par Switch Karne Ka Function
+function selectSavedAccount(email) {
+    firebase.auth().signOut().then(() => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account',
+            login_hint: email
+        });
         
-        // Database mein check karo ki user naya hai ya purana
-        const userRef = firebase.firestore().collection("users").doc(user.uid);
-        userRef.get().then((doc) => {
-            if (!doc.exists) {
-                // Naya Aspirant hai, database mein save karo
-                userRef.set({
-                    phone: user.phoneNumber,
-                    role: "aspirant",
-                    createdAt: new Date().toISOString()
-                });
-            }
-            
-            // LocalStorage update
-            localStorage.setItem('warRoomUserPhone', user.phoneNumber);
-            localStorage.setItem('warRoomUserRole', "aspirant");
-                        // 💾 SAVED ACCOUNTS LOGIC (One-Click Login ke liye)
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                alert("Switched account successfully to " + result.user.email);
+                closeAccountSwitcher();
+                location.reload();
+            }).catch((error) => {
+                console.error("Switch error:", error);
+                alert("Account switch nahi ho paya: " + error.message);
+            });
+    });
+}
+
+// 4. Naya Account Add Karne ke liye Google Prompt
+function switchAccountGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
             let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
             
-            // Check karo ki yeh number pehle se list mein hai ya nahi
-            const existingAccount = savedAccounts.find(acc => acc.phone === user.phoneNumber);
-            
-            if (!existingAccount) {
-                // Naya number hai, toh list mein add kar do
+            const exists = savedAccounts.find(acc => acc.email === user.email);
+            if (!exists) {
                 savedAccounts.push({
-                    uid: user.uid,
-                    phone: user.phoneNumber,
-                    lastLogin: new Date().getTime()
+                    email: user.email,
+                    name: user.displayName || user.email,
+                    uid: user.uid
                 });
                 localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
             }
-            
-            alert("Login Successful! Welcome to WarRoom.");
-            
-            // Form band karne ka function (agar aapke code mein closeAuthModal hai toh)
-            if(typeof closeAuthModal === 'function') {
-                closeAuthModal();
-            }
+
+            alert("Account added / switched successfully!");
+            closeAccountSwitcher();
+            location.reload(); 
+        }).catch((error) => {
+            console.error("Google Auth Error:", error);
+            alert("Could not add account: " + error.message);
         });
-        
-    }).catch((error) => {
-        alert("❌ Invalid OTP! Please check and try again.");
-        console.error(error);
-    });
 }
 
+// 5. List se kisi saved account ko hatane (Delete) ka function
+function removeSavedAccount(index) {
+    let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
+    
+    if (index >= 0 && index < savedAccounts.length) {
+        const removed = savedAccounts.splice(index, 1)[0];
+        localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
+        
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser && currentUser.email === removed.email) {
+            firebase.auth().signOut().then(() => {
+                location.reload();
+            });
+        } else {
+            openAccountSwitcher();
+        }
+    }
+}
+
+// 6. Asli Logout Function
+function realLogout() {
+    firebase.auth().signOut().then(() => {
+        localStorage.removeItem('warRoomUserRole');
+        localStorage.removeItem('warRoomUserEmail');
+        location.reload(); 
+    });
+}
 </script>
+
 <!-- VIP Users Dashboard Modal -->
 <div id="vipModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999;"></div>
 
