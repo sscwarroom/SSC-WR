@@ -1987,24 +1987,18 @@
     margin-left: 4px;
 }
 
-Bouncing/* Arrow Animation */
-@@keyframes swipeBounceForce {
-    0%, 100% { transform: translateX(0); opacity: 0.5; }
-    50% { transform: translateX(10px); opacity: 1; }
+/* Bouncing Arrow Animation */
+@keyframes swipeBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
 }
 
-.force-animate-arrow {
-    animation: swipeBounceForce 1.2s infinite ease-in-out !important;
-}
-
-
-/* Sirf mobile portrait par show karo, landscape ya desktop par nahi */
-@media (max-width: 900px) and (orientation: portrait) {
+/* Sirf mobile screen (900px se kam) par show karo */
+@media (max-width: 900px) {
     .scroll-hint-arrow {
         display: flex;
     }
 }
-
 /* FINAL BULLETPROOF DESKTOP FIX FOR STUDY HUB */
 @media (min-width: 901px) {
     .study-hub-subjects {
@@ -3100,19 +3094,16 @@ Bouncing/* Arrow Animation */
                 </div>
 <!-- Royal VIP Category Tabs with Swipe Hint -->
 <div style="position: relative; margin-bottom: 20px;">
-    <!-- Categories Container -->
     <div id="vip-category-tabs" class="royal-cat-wrapper" style="margin-bottom: 0;" onscroll="hideVipScrollHint()">
         <button class="royal-cat-pill active-royal" onclick="setVipCategory('all', this)">🌟 All VIP Intel</button>
         <button class="royal-cat-pill" onclick="setVipCategory('material', this)">📚 Study Material</button>
         <button class="royal-cat-pill" onclick="setVipCategory('mock', this)">📝 Premium Mocks</button>
     </div>
     
-    <!-- Swipe Arrow Hint -->
+    <!-- Sirf mobile par dikhne wala Swipe Arrow -->
     <div id="vip-mobile-scroll-hint" class="scroll-hint-arrow">
         <span>Swipe</span>
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </div>
 </div>
 
@@ -8038,37 +8029,17 @@ function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
         .then((result) => {
-            const user = result.user;
-            const db = firebase.firestore();
-            
-            // Check karo ki is email se pehle koi account bana hai ya nahi
-            db.collection("users").where("email", "==", user.email).get().then((querySnapshot) => {
-                if (!querySnapshot.empty) {
-                    // Agar purana account mil gaya, toh naye wale ko ignore karke purane data ko link/use karo
-                    console.log("Existing user found, syncing profile...");
-                } else {
-                    // Agar bilkul naya user hai, toh naya document banao
-                    db.collection("users").doc(user.uid).set({
-                        name: user.displayName || "Aspirant",
-                        email: user.email,
-                        role: user.email === "shivasaroj8750@gmail.com" ? "admin" : "aspirant",
-                        points: 0,
-                        createdAt: new Date().toISOString()
-                    }, { merge: true });
-                }
-                
-                alert("Google Login Successful! Welcome " + (user.displayName || "Aspirant"));
-                closeAuthModal();
-            });
+            alert("Google Login Successful! Welcome " + result.user.displayName);
+            closeAuthModal();
         })
         .catch((error) => {
             console.error("Google Login Error:", error);
+            // Agar popup open ho raha hai, toh environment warning ko ignore karo
             if (!error.message.includes("not supported in the environment")) {
                 alert("Google Login Failed: " + error.message);
             }
         });
 }
-
 function loadResourcesFromFirestore() {
     if (typeof firebase === 'undefined') return;
     
@@ -8511,30 +8482,15 @@ function hideVipScrollHint() {
     const hint = document.getElementById('vip-mobile-scroll-hint');
     const container = document.getElementById('vip-category-tabs');
     
+    // Agar user ne thoda sa bhi scroll kiya (> 10px), arrow fade out kar do
     if (hint && container) {
-        // Agar content scroll karne laayak hai hi nahi (width fit hai), toh turant hata do
-        if (container.scrollWidth <= container.clientWidth || container.scrollLeft > 10) {
+        if (container.scrollLeft > 10) {
             hint.style.opacity = '0';
-            setTimeout(() => { hint.style.display = 'none'; }, 400);
+            // 400ms CSS transition ke baad element ko screen se hata do
+            setTimeout(() => { hint.style.display = 'none'; }, 400); 
         }
     }
 }
-
-// Page load hote hi check karne ke liye ki scroll ki zaroorat hai ya nahi
-window.addEventListener('DOMContentLoaded', () => {
-    const hint = document.getElementById('vip-mobile-scroll-hint');
-    const container = document.getElementById('vip-category-tabs');
-    if (hint && container && container.scrollWidth <= container.clientWidth) {
-        hint.style.display = 'none';
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const hintArrow = document.querySelector('#vip-mobile-scroll-hint svg');
-    if (hintArrow) {
-        hintArrow.classList.add('force-animate-arrow');
-    }
-});
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
@@ -8738,7 +8694,6 @@ document.addEventListener('DOMContentLoaded', function() {
         viewVipBtn.addEventListener('click', () => {
             vipModal.style.display = 'block';
             vipOverlay.style.display = 'block';
-            loadVipSubscribersTable(); // 👈 Modal khulte hi data fetch karne ke liye ye line zaroori hai!
         });
     }
 
@@ -8765,52 +8720,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// 👇 Yeh function bhi iske just niche ya script mein add kar dein
-function loadVipSubscribersTable() {
-    const tableBody = document.getElementById('vipUsersTableBody');
-    if (!tableBody) return;
-
-    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px;">Loading VIP logs from Cloud... 📡</td></tr>`;
-
-    if (typeof firebase === 'undefined') {
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Firebase not detected!</td></tr>`;
-        return;
-    }
-
-    let rowsHTML = '';
-    let foundCount = 0;
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('vip_access_')) {
-            const parts = key.split('_');
-            const identifier = parts[parts.length - 1]; 
-            const expiryTime = parseInt(localStorage.getItem(key) || '0');
-            
-            if (Date.now() < expiryTime) {
-                foundCount++;
-                let validTillDate = new Date(expiryTime).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
-                
-                rowsHTML += `
-                    <tr style="border-bottom: 1px solid #e5e7eb;">
-                        <td style="padding: 12px; font-weight: 600;">${identifier}</td>
-                        <td style="padding: 12px;"><span style="background: rgba(234, 179, 8, 0.15); color: #ca8a04; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 800;">VIP Access</span></td>
-                        <td style="padding: 12px; font-size: 0.85rem; color: #475569;">${validTillDate}</td>
-                        <td style="padding: 12px;"><span style="color: #16a34a; font-weight: bold;">Active ✅</span></td>
-                    </tr>
-                `;
-            }
-        }
-    }
-
-    if (foundCount === 0) {
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">No active VIP subscribers found in logs.</td></tr>`;
-    } else {
-        tableBody.innerHTML = rowsHTML;
-    }
-}
-
 </script>
 
 </body>
