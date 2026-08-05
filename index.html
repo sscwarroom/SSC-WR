@@ -8893,6 +8893,82 @@ function realLogout() {
         location.reload(); 
     });
 }
+// 👑 VIP Access Logs ko Firestore se Load karne ka Function
+function loadVipUsersTable() {
+    const tableBody = document.getElementById('vipUsersTableBody');
+    if (!tableBody) return;
+
+    // Loading state dikhao
+    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">Fetching VIP logs from cloud... 📡</td></tr>`;
+
+    if (typeof firebase === 'undefined') {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Firebase is not initialized!</td></tr>`;
+        return;
+    }
+
+    const db = firebase.firestore();
+
+    // Hum 'users' collection se data fetch kar rahe hain jinke paas points ya vip access hai
+    db.collection("users").get().then((querySnapshot) => {
+        let rowsHtml = "";
+        let count = 0;
+
+        querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            let email = data.email || data.phone || "Unknown User";
+            
+            // Check karo ki is user ke paas koi VIP access/plan hai ya nahi
+            // Aapke system mein localStorage ya Firestore mein vip keys save hoti hain
+            let planType = "Standard / Free";
+            let statusBadge = `<span style="background: rgba(100,116,139,0.1); color: #64748b; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Inactive</span>`;
+            let validTill = "N/A";
+
+            // Agar user admin hai ya points/vip flags hain toh uske mutabiq status dikhao
+            if (data.role === 'admin') {
+                planType = "👑 Admin Commander";
+                statusBadge = `<span style="background: rgba(234,179,8,0.15); color: #eab308; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Lifetime Active</span>`;
+                validTill = "Never Expires";
+                count++;
+            } else {
+                // Check karo ki local ya cloud par koi VIP access key active hai kya
+                // Aap chaho toh Firestore mein 'vipExpiry' field bhi store kar sakte ho
+                let expiryTimestamp = data.vipExpiry || 0;
+                if (expiryTimestamp > Date.now()) {
+                    planType = "⭐ Pro VIP Pass";
+                    statusBadge = `<span style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Active</span>`;
+                    validTill = new Date(expiryTimestamp).toLocaleDateString();
+                    count++;
+                } else {
+                    // Agar saare users ki list dikhani hai toh yeh else chalega
+                    validTill = "Expired / None";
+                }
+            }
+
+            // Agar sirf active VIPs dikhane hain ya sabhi ko, aap filter kar sakte hain. 
+            // Filhal hum sabhi registered users ko table mein show kar rahe hain:
+            rowsHtml += `
+                <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s;">
+                    <td style="padding: 12px; font-weight: 600;">${email}</td>
+                    <td style="padding: 12px;">${planType}</td>
+                    <td style="padding: 12px; font-size: 0.85rem; color: var(--text-secondary);">${validTill}</td>
+                    <td style="padding: 12px;">${statusBadge}</td>
+                </tr>
+            `;
+            count++;
+        });
+
+        if (count === 0) {
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">No user logs found in database.</td></tr>`;
+        } else {
+            tableBody.innerHTML = rowsHtml;
+        }
+
+    }).catch((error) => {
+        console.error("Error fetching VIP users: ", error);
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Failed to load data from Firestore. Check console.</td></tr>`;
+    });
+}
+
 </script>
 
 <!-- VIP Users Dashboard Modal -->
@@ -8939,6 +9015,9 @@ document.addEventListener('DOMContentLoaded', function() {
         viewVipBtn.addEventListener('click', () => {
             vipModal.style.display = 'block';
             vipOverlay.style.display = 'block';
+            
+            // 🔥 YAHAN FUNCTION CALL KAR DIYA HAI 🔥
+            loadVipUsersTable();
         });
     }
 
@@ -8965,6 +9044,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 </script>
 
 </body>
