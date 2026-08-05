@@ -2900,7 +2900,8 @@
                             <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Aspirant</div>
                             <div id="welcome-user-name" style="color: var(--accent-primary); font-weight: 700; font-size: 1rem;"></div>
                         </div>
-                        <button onclick="handleLogout()" class="theme-toggle" title="Logout" style="width: 35px; height: 35px;">
+                        <button onclick="openAccountSwitcher()" class="theme-toggle" title="Logout" style="width: 35px; height: 35px;">
+
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
                         </button>
                     </div>
@@ -7530,6 +7531,35 @@ function downloadPracticePDF() {
                 ${questionsHTML}
             </div>
       
+<!-- 🔄 ACCOUNT SWITCHER MODAL -->
+<div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="glass-card fade-in" style="width: 90%; max-width: 380px; padding: 25px; border-radius: 16px; background: var(--bg-primary); border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <h3 style="text-align: center; margin-bottom: 20px; font-size: 1.3rem;">Manage Account</h3>
+        
+        <!-- Current Active User -->
+        <div style="display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 10px; margin-bottom: 20px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #22c55e; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem;">✓</div>
+            <div>
+                <div id="active-user-name" style="font-weight: 600; font-size: 1rem;">Active User</div>
+                <div style="font-size: 0.8rem; color: #22c55e;">Currently Logged In</div>
+            </div>
+        </div>
+
+        <!-- Switch Account Button (Google Chooser) -->
+        <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px dashed var(--glass-border); border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            🔄 Switch / Add Account
+        </button>
+        
+        <!-- Real Logout Button -->
+        <button onclick="realLogout()" style="width: 100%; padding: 14px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            🚪 Log Out Safely
+        </button>
+        
+        <!-- Cancel -->
+        <button onclick="closeAccountSwitcher()" style="width: 100%; padding: 12px; margin-top: 10px; background: transparent; color: var(--text-secondary); border: none; cursor: pointer; text-decoration: underline;">Cancel</button>
+    </div>
+</div>
 
 
         </body>
@@ -8475,6 +8505,49 @@ function hideVipScrollHint() {
             setTimeout(() => { hint.style.display = 'none'; }, 400); 
         }
     }
+}
+// 1. Popup Dikhane Ka Function
+function openAccountSwitcher() {
+    // Current user ka naam/email nikalo
+    const user = firebase.auth().currentUser;
+    if (user) {
+        document.getElementById('active-user-name').innerText = user.displayName || user.phoneNumber || user.email || "WarRoom Aspirant";
+    }
+    document.getElementById('account-switcher-modal').style.display = 'flex';
+}
+
+// 2. Popup Band Karne Ka Function
+function closeAccountSwitcher() {
+    document.getElementById('account-switcher-modal').style.display = 'none';
+}
+
+// 3. Google Account Switcher (One-Click)
+function switchAccountGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    // Yeh line Google Account Chooser screen ko force karti hai
+    provider.setCustomParameters({
+        prompt: 'select_account'
+    });
+    
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            // Naya account successfully switch ho gaya
+            alert("Account Switched Successfully!");
+            closeAccountSwitcher();
+            location.reload(); // Dashboard update karne ke liye
+        }).catch((error) => {
+            console.error("Switch Error:", error);
+            alert("Could not switch account.");
+        });
+}
+
+// 4. Asli Logout Function
+function realLogout() {
+    firebase.auth().signOut().then(() => {
+        // Dashboard se bahar phek do aur local storage saaf kar do
+        localStorage.removeItem('warRoomUserRole');
+        location.reload(); 
+    });
 }
 
 </script>
