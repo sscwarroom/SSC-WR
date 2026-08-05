@@ -8738,6 +8738,7 @@ document.addEventListener('DOMContentLoaded', function() {
         viewVipBtn.addEventListener('click', () => {
             vipModal.style.display = 'block';
             vipOverlay.style.display = 'block';
+            loadVipSubscribersTable(); // 👈 Modal khulte hi data fetch karne ke liye ye line zaroori hai!
         });
     }
 
@@ -8764,6 +8765,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// 👇 Yeh function bhi iske just niche ya script mein add kar dein
+function loadVipSubscribersTable() {
+    const tableBody = document.getElementById('vipUsersTableBody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px;">Loading VIP logs from Cloud... 📡</td></tr>`;
+
+    if (typeof firebase === 'undefined') {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: #ef4444;">Firebase not detected!</td></tr>`;
+        return;
+    }
+
+    let rowsHTML = '';
+    let foundCount = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('vip_access_')) {
+            const parts = key.split('_');
+            const identifier = parts[parts.length - 1]; 
+            const expiryTime = parseInt(localStorage.getItem(key) || '0');
+            
+            if (Date.now() < expiryTime) {
+                foundCount++;
+                let validTillDate = new Date(expiryTime).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+                
+                rowsHTML += `
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px; font-weight: 600;">${identifier}</td>
+                        <td style="padding: 12px;"><span style="background: rgba(234, 179, 8, 0.15); color: #ca8a04; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 800;">VIP Access</span></td>
+                        <td style="padding: 12px; font-size: 0.85rem; color: #475569;">${validTillDate}</td>
+                        <td style="padding: 12px;"><span style="color: #16a34a; font-weight: bold;">Active ✅</span></td>
+                    </tr>
+                `;
+            }
+        }
+    }
+
+    if (foundCount === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 15px; color: var(--text-secondary);">No active VIP subscribers found in logs.</td></tr>`;
+    } else {
+        tableBody.innerHTML = rowsHTML;
+    }
+}
+
 </script>
 
 </body>
