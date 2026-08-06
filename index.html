@@ -6863,7 +6863,7 @@ function openAdminGrantModal() {
 }
 
 async function grantVipAccess() {
-    const identifier = document.getElementById('admin-grant-id').value.trim();
+    const identifier = document.getElementById('admin-grant-id').value.trim().toLowerCase();
     const contentId = document.getElementById('admin-grant-content-id').value; 
     
     const daysInput = parseInt(document.getElementById('admin-grant-days').value) || 0;
@@ -6883,42 +6883,48 @@ async function grantVipAccess() {
 
     const expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
     
-    // 1. Save in Local Storage
+    // Local storage for fast access
     localStorage.setItem(`vip_access_${contentId}_${identifier}`, expiryTime);
 
-    // 2. 🔥 FIREBASE CLOUD DATABASE UPDATE 🔥
+    // 🔥 BULLETPROOF FIREBASE UPDATE LOGIC 🔥
     if (typeof firebase !== 'undefined') {
         try {
             const db = firebase.firestore();
             const snapshot = await db.collection("users").where("email", "==", identifier).get();
             
             if (!snapshot.empty) {
-                const promises = [];
+                // Batch use kiya taaki purane user ka data ekdam force update ho
+                const batch = db.batch();
                 snapshot.forEach(doc => {
-                    promises.push(db.collection("users").doc(doc.id).update({
+                    const docRef = db.collection("users").doc(doc.id);
+                    batch.set(docRef, {
                         isVIP: true,
                         vipExpiry: expiryTime,
-                        access_type: "Admin Entry" // 🔥 NAYA FIELD
-                    }));
+                        access_type: "Admin Entry"
+                    }, { merge: true });
                 });
-                await Promise.all(promises);
+                await batch.commit();
             } else {
+                // Naya user create karna
                 await db.collection("users").add({
                     email: identifier,
                     name: "VIP Recruit",
                     role: "aspirant",
                     isVIP: true,
                     vipExpiry: expiryTime,
-                    access_type: "Admin Entry", // 🔥 NAYA FIELD
+                    access_type: "Admin Entry",
+                    points: 0,
                     createdAt: new Date().toISOString()
                 });
             }
         } catch (err) {
-            console.log("Firebase VIP update error: ", err);
+            console.error("Firebase VIP update error: ", err);
+            alert("Database Error: " + err.message);
+            return;
         }
     }
 
-    // Reset inputs
+    // Modal Inputs clear karna
     document.getElementById('admin-grant-id').value = ''; 
     document.getElementById('admin-grant-content-id').value = ''; 
     document.getElementById('admin-grant-days').value = ''; 
@@ -6987,46 +6993,45 @@ function initiatePayment() {
     let days = parseInt(document.getElementById('req-days-input').value);
     if (!days || days <= 0) return;
     
-    let price = days * 9; // Price in INR
+    let price = days * 9; 
     let docTitle = document.getElementById('req-doc-title').innerText;
-    let currentEmail = localStorage.getItem('warRoomUserEmail');
+    let rawEmail = localStorage.getItem('warRoomUserEmail');
 
-    if (!currentEmail) {
+    if (!rawEmail) {
         alert("Please login first to purchase VIP access.");
         closePricingModal();
         openAuthModal();
         return;
     }
+    
+    // 🔥 Ensure lowercase matching for database
+    let currentEmail = rawEmail.toLowerCase();
 
-    // 1. File ki ID dhoondhna (Taaki sirf wahi file unlock ho)
     let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
-    let currentItem = items.find(i => i.title === currentRequestTitle);
+    let currentItem = items.find(i => i.title === docTitle);
     
     if (!currentItem) {
         alert("Error finding the file. Please try again.");
         return;
     }
 
-    // 2. Razorpay Popup Settings
     var options = {
-        "key": "rzp_live_TLl4cQ2FJnrsx6", // ⚠️ APNI rzp_live_... WALI KEY YAHAN DAALO
-        "amount": price * 100, // Razorpay amount paise mein leta hai (so * 100)
+        "key": "rzp_live_TLl4cQ2FJnrsx6",
+        "amount": price * 100, 
         "currency": "INR",
         "name": "SSCWarRoom",
         "description": "VIP Access: " + docTitle,
-        "image": "SSCWARROOM.PNG", // Tumhara logo popup me dikhega
+        "image": "SSCWARROOM.PNG", 
         
-             // 3. AUTO UNLOCK LOGIC (Jab payment successful ho jaye)
         "handler": function (response) {
             console.log("Payment Success ID:", response.razorpay_payment_id);
             
             let totalHours = days * 24;
             let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
             
-            // LocalStorage update
-            localStorage.setItem(`vip_access_${currentItem.id}_${currentEmail}`, expiryTime);
+            localStorage.setItem(`vip_access_${currentItem.id}_${rawEmail}`, expiryTime);
             
-            // 🔥 NAYA CODE: Database ko batana ki payment ho gayi hai 🔥
+            // 🔥 Bulletproof Database Update
             if (typeof firebase !== 'undefined') {
                 const db = firebase.firestore();
                 db.collection("users").where("email", "==", currentEmail).get()
@@ -7039,8 +7044,19 @@ function initiatePayment() {
                                 access_type: "Razorpay Payment"
                             });
                         });
+                    } else {
+                        // Creates document if it was missing to ensure they show up in the list
+                        db.collection("users").add({
+                            email: currentEmail,
+                            name: localStorage.getItem('warRoomUserName') || "VIP Aspirant",
+                            role: "aspirant",
+                            isVIP: true,
+                            vipExpiry: expiryTime,
+                            access_type: "Razorpay Payment",
+                            createdAt: new Date().toISOString()
+                        });
                     }
-                }).catch(err => console.log("Payment DB Update Error: ", err));
+                }).catch(err => console.error("Payment DB Update Error: ", err));
             }
             
             closePricingModal();
@@ -7049,23 +7065,22 @@ function initiatePayment() {
         },
 
         "prefill": {
-            "email": currentEmail, // Student ka email pehle se bhara aayega
+            "email": rawEmail,
         },
         "theme": {
-            "color": "#16a34a" // Tumhari theme ka green color
+            "color": "#16a34a" 
         }
     };
 
-    // Razorpay Popup Kholna
     var rzp1 = new Razorpay(options);
     
-    // Agar user popup band kar de bina pay kiye
     rzp1.on('payment.failed', function (response){
         alert("Payment Failed or Cancelled. Reason: " + response.error.description);
     });
 
     rzp1.open();
 }
+
 
 
 // Ensure event listeners are added ONLY after the elements are fully loaded
@@ -8674,10 +8689,7 @@ window.viewVIPSubscribers = async function() {
     const modal = document.getElementById('vip-subscribers-modal');
     const listContainer = document.getElementById('vip-list-container');
     
-    if (!modal || !listContainer) {
-        alert("Modal HTML missing hai!");
-        return;
-    }
+    if (!modal || !listContainer) return;
 
     modal.style.display = 'flex';
     setTimeout(() => { modal.style.opacity = '1'; }, 10);
@@ -8690,7 +8702,7 @@ window.viewVIPSubscribers = async function() {
     `;
 
     try {
-        // Sirf isVIP true wale users utha rahe hain
+        // 🔥 Server cache hata diya taaki instantly naye aur updated users list mein dikhein
         const snapshot = await firebase.firestore().collection('users')
             .where('isVIP', '==', true) 
             .get();
@@ -8701,40 +8713,45 @@ window.viewVIPSubscribers = async function() {
         }
 
         let htmlString = '';
-        const currentTime = Date.now(); // Current time plan check karne ke liye
+        const currentTime = Date.now();
+        let usersList = [];
 
-        snapshot.forEach(doc => {
-            const data = doc.data();
+        // Users ko ek array mein daal rahe hain taaki sort kar sakein
+        snapshot.forEach(doc => usersList.push(doc.data()));
+        
+        // 🌟 Auto-Sorting: Active users upar aayenge, Expired neeche jayenge
+        usersList.sort((a, b) => (b.vipExpiry || 0) - (a.vipExpiry || 0));
+
+        usersList.forEach(data => {
             const name = data.name || data.displayName || 'VIP Recruit';
             const email = data.email || 'No email provided';
-            
             const accessText = data.access_type || "Admin Entry";
             
-            // 🔥 Plan Active / Expired Check Logic 🔥
             let validityText = "Lifetime";
-            let isActive = true; // Default true maante hain
+            let isActive = true;
 
             if (data.vipExpiry) {
                 const dateObj = new Date(data.vipExpiry);
                 if (!isNaN(dateObj)) {
-                     validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-                     
-                     // Agar aaj ka time expiry time se zyada ho gaya toh INACTIVE
-                     if (currentTime > data.vipExpiry) {
-                         isActive = false;
-                     }
+                    validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Time expire check
+                    if (currentTime > data.vipExpiry) isActive = false;
                 }
             }
 
-            // 🎨 Dynamic Badge Styles (Active = Green, Expired = Red)
+            // Colors based on Active / Expired
             const badgeBg = isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
             const badgeColor = isActive ? '#10b981' : '#ef4444';
             const badgeBorder = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
             const badgeText = isActive ? 'ACTIVE VIP' : 'EXPIRED';
             const dateColor = isActive ? '#cbd5e1' : '#ef4444';
+            
+            // 🎨 Expired card thoda transparent dikhega
+            const cardOpacity = isActive ? '1' : '0.5';
 
             htmlString += `
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; opacity: ${cardOpacity}; transition: opacity 0.3s;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
                         <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
@@ -8745,7 +8762,6 @@ window.viewVIPSubscribers = async function() {
                             <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
                         </div>
                     </div>
-                    <!-- 🔥 Active / Inactive Badge 🔥 -->
                     <div style="background: ${badgeBg}; color: ${badgeColor}; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid ${badgeBorder};">${badgeText}</div>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
@@ -8844,23 +8860,22 @@ window.closeVIPModal = function() {
     </div>
 </div>
 
-    <!-- 🧭 ONBOARDING TOUR MODAL -->
-    <div id="tour-overlay"></div>
-    <div id="tour-panel" class="glass-card fade-in">
-        <h3 id="tour-title" style="color: var(--accent-primary); margin-bottom: 8px; font-size: 1.3rem;">Welcome!</h3>
-        <p id="tour-desc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5;">Let's take a quick tour.</p>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button class="btn btn-outline" style="padding: 8px 14px; font-size: 0.8rem; color: #94a3b8; border-color: #475569;" onclick="endOnboardingTour()">Skip Tour</button>
-            <div style="display: flex; gap: 8px;">
-                <button id="tour-prev" class="btn btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="prevTourStep()">Prev</button>
-                <button id="tour-next" class="btn" style="background: var(--accent-primary); color: white; padding: 8px 18px; font-size: 0.85rem;" onclick="nextTourStep()">Next</button>
-            </div>
+<!-- 🧭 ONBOARDING TOUR MODAL -->
+<div id="tour-overlay"></div>
+<div id="tour-panel" class="glass-card fade-in">
+    <h3 id="tour-title" style="color: var(--accent-primary); margin-bottom: 8px; font-size: 1.3rem;">Welcome!</h3>
+    <p id="tour-desc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5;">Let's take a quick tour.</p>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn btn-outline" style="padding: 8px 14px; font-size: 0.8rem; color: #94a3b8; border-color: #475569;" onclick="endOnboardingTour()">Skip Tour</button>
+        <div style="display: flex; gap: 8px;">
+            <button id="tour-prev" class="btn btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="prevTourStep()">Prev</button>
+            <button id="tour-next" class="btn" style="background: var(--accent-primary); color: white; padding: 8px 18px; font-size: 0.85rem;" onclick="nextTourStep()">Next</button>
         </div>
     </div>
-    
+</div>
 
-<!-- 🚀 VIP Pricing Modal for Students (Is modal ko ab sahi jagah par place kiya gaya hai) -->
+<!-- 🚀 VIP Pricing Modal for Students -->
 <div id="pricing-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100000; justify-content: center; align-items: center;">
     <div class="glass-card" style="background: #1e293b; padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
         <h3 style="margin-top: 0; color: #f8fafc; font-size: 1.3rem;">🚀 VIP Clearance Required</h3>
@@ -8875,20 +8890,17 @@ window.closeVIPModal = function() {
         </div>
 
         <div style="display: flex; gap: 10px;">
-    <button class="btn" style="flex: 1; background: #334155; color: white; padding: 12px; border-radius: 8px; font-weight: bold;" onclick="closePricingModal()">Cancel</button>
-    
-    <!-- Updated Payment Button -->
-    <button class="btn" id="req-proceed-btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; cursor: not-allowed; display: flex; justify-content: center; align-items: center; gap: 8px;" disabled onclick="initiatePayment()">
-        <span id="pay-btn-text">Pay Securely</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-    </button>
-</div>
-
+            <button class="btn" style="flex: 1; background: #334155; color: white; padding: 12px; border-radius: 8px; font-weight: bold;" onclick="closePricingModal()">Cancel</button>
+            <button class="btn" id="req-proceed-btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; cursor: not-allowed; display: flex; justify-content: center; align-items: center; gap: 8px;" disabled onclick="initiatePayment()">
+                <span id="pay-btn-text">Pay Securely</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            </button>
+        </div>
     </div>
 </div>
+
 <!-- 🔄 100% Working Account Switcher Engine & UI -->
 <div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
-    
     <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; overflow: hidden;">
         
         <!-- Top Ambient Glow Effect -->
@@ -8902,11 +8914,9 @@ window.closeVIPModal = function() {
         <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; font-weight: 500; position: relative; z-index: 2;">Switch seamlessly between your tactical combat IDs.</p>
         
         <!-- Saved Accounts List Container -->
-        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none; position: relative; z-index: 2;">
-            <!-- JavaScript dynamically renders items here -->
-        </div>
+        <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none; position: relative; z-index: 2;"></div>
 
-        <!-- Add Another Account Button with Premium Glow -->
+        <!-- Add Another Account Button -->
         <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.08); color: #60a5fa; border: 1px dashed rgba(59, 130, 246, 0.4); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(59, 130, 246, 0.18)'; this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59,130,246,0.25)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.08)'; this.style.borderColor='rgba(59, 130, 246, 0.4)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             <span style="font-size: 1.1rem; line-height: 0;">+</span> Add Another Account
         </button>
@@ -8915,21 +8925,35 @@ window.closeVIPModal = function() {
         <button onclick="realLogout()" style="width: 100%; padding: 13px; background: rgba(239, 68, 68, 0.06); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.06)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             🚪 Log Out Safely
         </button>
-        
+    </div>
+</div>
+
+<!-- 💎 PREMIUM VIP SUBSCRIBERS MODAL -->
+<div id="vip-subscribers-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.3s ease;">
+    <div style="width: 90%; max-width: 420px; padding: 24px; border-radius: 20px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(59, 130, 246, 0.3); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(59, 130, 246, 0.15); font-family: 'Plus Jakarta Sans', sans-serif;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+                <span>💎</span> VIP Subscribers
+            </h3>
+            <button onclick="closeVIPModal()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">&times;</button>
+        </div>
+        <!-- List Container -->
+        <div id="vip-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; scrollbar-width: none;"></div>
     </div>
 </div>
 
 <script>
-// 1. Popup Dikhane aur Saved Accounts Render Karne Ka Function
+// --- Single Unified Script Block for Trailing Modals ---
+
+// 1. Account Switcher Logics
 function openAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     const listContainer = document.getElementById('saved-accounts-list');
-    
     if (!modal || !listContainer) return;
 
     let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
     let currentUser = null;
-    
     try {
         if (typeof firebase !== 'undefined' && firebase.auth()) {
             currentUser = firebase.auth().currentUser;
@@ -8942,7 +8966,6 @@ function openAccountSwitcher() {
         const email = currentUser.email || currentUser.phoneNumber;
         const name = currentUser.displayName || email;
         const exists = savedAccounts.find(acc => acc.email === email);
-        
         if (!exists && email) {
             savedAccounts.push({ email: email, name: name, uid: currentUser.uid });
             localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
@@ -8956,7 +8979,6 @@ function openAccountSwitcher() {
             const isCurrent = currentUser && (currentUser.email === acc.email || currentUser.phoneNumber === acc.email);
             return `
                 <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: ${isCurrent ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.02)'}; border: 1px solid ${isCurrent ? 'rgba(34, 197, 94, 0.35)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 14px; transition: all 0.25s ease;">
-                    
                     <div style="display: flex; align-items: center; gap: 12px; overflow: hidden; min-width: 0;">
                         <div style="width: 40px; height: 40px; border-radius: 50%; background: ${isCurrent ? 'linear-gradient(135deg, #22c55e, #15803d)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)'}; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px ${isCurrent ? 'rgba(34, 197, 94, 0.4)' : 'rgba(37, 99, 235, 0.4)'};">
                             ${acc.name ? acc.name.charAt(0).toUpperCase() : '👤'}
@@ -8969,22 +8991,18 @@ function openAccountSwitcher() {
                             <div style="font-size: 0.75rem; color: #94a3b8; text-overflow: ellipsis; overflow: hidden; margin-top: 2px;">${acc.email}</div>
                         </div>
                     </div>
-
                     <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
                         ${!isCurrent ? `<button type="button" onclick="selectSavedAccount('${acc.email}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 7px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4);">Switch</button>` : ''}
                         <button type="button" onclick="removeSavedAccount(${index})" style="background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.06); padding: 7px 10px; border-radius: 10px; font-size: 0.8rem; cursor: pointer;" title="Remove ID">🗑️</button>
                     </div>
-
                 </div>
             `;
         }).join('');
     }
-
     modal.style.display = 'flex';
     setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
-// 2. Popup Band Karne Ka Function
 function closeAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     if (modal) {
@@ -8993,30 +9011,22 @@ function closeAccountSwitcher() {
     }
 }
 
-// 3. Saved Account par Switch Karne Ka Async Function
 window.selectSavedAccount = async function(email) {
     try {
         if (typeof firebase === 'undefined') {
             alert("Firebase not initialized!");
             return;
         }
-
         if (firebase.auth().currentUser) {
             await firebase.auth().signOut();
         }
-
         const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({
-            prompt: 'select_account',
-            login_hint: email
-        });
+        provider.setCustomParameters({ prompt: 'select_account', login_hint: email });
 
         const result = await firebase.auth().signInWithPopup(provider);
-        
         if (result && result.user) {
             let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
             const exists = savedAccounts.find(acc => acc.email === result.user.email);
-            
             if (!exists) {
                 savedAccounts.push({
                     email: result.user.email,
@@ -9025,7 +9035,6 @@ window.selectSavedAccount = async function(email) {
                 });
                 localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
             }
-
             alert("Switched account successfully to " + result.user.email);
             closeAccountSwitcher();
             location.reload();
@@ -9036,7 +9045,6 @@ window.selectSavedAccount = async function(email) {
     }
 };
 
-// 4. Naya Account Add Karne ke liye Google Prompt
 window.switchAccountGoogle = async function() {
     try {
         if (typeof firebase === 'undefined') return;
@@ -9044,11 +9052,9 @@ window.switchAccountGoogle = async function() {
         provider.setCustomParameters({ prompt: 'select_account' });
         
         const result = await firebase.auth().signInWithPopup(provider);
-        
         if (result && result.user) {
             const user = result.user;
             let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
-            
             const exists = savedAccounts.find(acc => acc.email === user.email);
             if (!exists) {
                 savedAccounts.push({
@@ -9058,7 +9064,6 @@ window.switchAccountGoogle = async function() {
                 });
                 localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
             }
-
             alert("Account added successfully!");
             closeAccountSwitcher();
             location.reload();
@@ -9069,26 +9074,21 @@ window.switchAccountGoogle = async function() {
     }
 };
 
-// 5. List se kisi saved account ko hatane (Delete) ka function
 window.removeSavedAccount = function(index) {
     let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
-    
     if (index >= 0 && index < savedAccounts.length) {
         const removed = savedAccounts.splice(index, 1)[0];
         localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
         
         const currentUser = firebase.auth().currentUser;
         if (currentUser && currentUser.email === removed.email) {
-            firebase.auth().signOut().then(() => {
-                location.reload();
-            });
+            firebase.auth().signOut().then(() => { location.reload(); });
         } else {
             openAccountSwitcher();
         }
     }
 };
 
-// 6. Asli Logout Function
 window.realLogout = function() {
     if (typeof firebase === 'undefined') return;
     firebase.auth().signOut().then(() => {
@@ -9097,30 +9097,98 @@ window.realLogout = function() {
         location.reload(); 
     });
 };
-</script>
 
+// 2. VIP Subscribers Engine
+window.viewVIPSubscribers = async function() {
+    const modal = document.getElementById('vip-subscribers-modal');
+    const listContainer = document.getElementById('vip-list-container');
+    if (!modal || !listContainer) return;
 
-<!-- 💎 PREMIUM VIP SUBSCRIBERS MODAL -->
-<div id="vip-subscribers-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.3s ease;">
+    modal.style.display = 'flex';
+    setTimeout(() => { modal.style.opacity = '1'; }, 10);
     
-    <div style="width: 90%; max-width: 420px; padding: 24px; border-radius: 20px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(59, 130, 246, 0.3); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(59, 130, 246, 0.15); font-family: 'Plus Jakarta Sans', sans-serif;">
-        
-        <!-- Header -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                <span>💎</span> VIP Subscribers
-            </h3>
-            <button onclick="closeVIPModal()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">&times;</button>
+    listContainer.innerHTML = `
+        <div style="text-align: center; padding: 20px; color: #60a5fa;">
+            <span style="font-size: 1.5rem; display: block; animation: spin 1s linear infinite;">⏳</span>
+            <p style="margin-top: 10px; font-weight: 600;">Fetching Elite Roster...</p>
         </div>
-        
-        <!-- List Container -->
-        <div id="vip-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; scrollbar-width: none;">
-            <!-- Javascript will inject data here -->
-        </div>
+    `;
 
-    </div>
-</div>
+    try {
+        const snapshot = await firebase.firestore().collection('users')
+            .where('isVIP', '==', true) 
+            .get();
 
+        if (snapshot.empty) {
+            listContainer.innerHTML = `<p style="text-align: center; color: #94a3b8; font-weight: 500;">No VIP subscribers found yet.</p>`;
+            return;
+        }
 
+        let htmlString = '';
+        const currentTime = Date.now();
+        let usersList = [];
+
+        snapshot.forEach(doc => usersList.push(doc.data()));
+        usersList.sort((a, b) => (b.vipExpiry || 0) - (a.vipExpiry || 0));
+
+        usersList.forEach(data => {
+            const name = data.name || data.displayName || 'VIP Recruit';
+            const email = data.email || 'No email provided';
+            const accessText = data.access_type || "Admin Entry";
+            
+            let validityText = "Lifetime";
+            let isActive = true;
+
+            if (data.vipExpiry) {
+                const dateObj = new Date(data.vipExpiry);
+                if (!isNaN(dateObj)) {
+                    validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                    if (currentTime > data.vipExpiry) isActive = false;
+                }
+            }
+
+            const badgeBg = isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+            const badgeColor = isActive ? '#10b981' : '#ef4444';
+            const badgeBorder = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+            const badgeText = isActive ? 'ACTIVE VIP' : 'EXPIRED';
+            const dateColor = isActive ? '#cbd5e1' : '#ef4444';
+            const cardOpacity = isActive ? '1' : '0.5';
+
+            htmlString += `
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; opacity: ${cardOpacity}; transition: opacity 0.3s;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
+                            ${name.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="display: flex; flex-direction: column; overflow: hidden;">
+                            <span style="color: #e2e8f0; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</span>
+                            <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
+                        </div>
+                    </div>
+                    <div style="background: ${badgeBg}; color: ${badgeColor}; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid ${badgeBorder};">${badgeText}</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
+                    <span>Source: <span style="color: #cbd5e1; font-weight: 500;">${accessText}</span></span>
+                    <span>Valid Till: <span style="color: ${dateColor}; font-weight: 500;">${validityText}</span></span>
+                </div>
+            </div>
+            `;
+        });
+        listContainer.innerHTML = htmlString;
+    } catch (error) {
+        console.error("Firebase Fetch Error:", error);
+        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail: ${error.message}</p>`;
+    }
+};
+
+window.closeVIPModal = function() {
+    const modal = document.getElementById('vip-subscribers-modal');
+    if (modal) {
+        modal.style.opacity = '0';
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+};
+</script>
 </body>
 </html>
