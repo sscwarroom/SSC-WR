@@ -6928,6 +6928,7 @@ async function grantVipAccess() {
     alert(`Mission Success! VIP Access granted to ${identifier} for ${daysInput} Days & ${hoursInput} Hours.`);
 }
 
+
 function hasVipAccess(identifier, contentId) {
     if (!identifier || !contentId) return false;
     
@@ -8704,15 +8705,13 @@ window.viewVIPSubscribers = async function() {
             const name = data.name || data.displayName || 'VIP Recruit';
             const email = data.email || 'No email provided';
             
-            // Source fetch karna
             const accessText = data.access_type || "Admin Entry";
             
-            // 🔥 NAYA CODE: Time milliseconds ko Date aur Time me convert karna 🔥
+            // 🔥 Time ko real Date me convert karna 🔥
             let validityText = "Lifetime";
             if (data.vipExpiry) {
                 const dateObj = new Date(data.vipExpiry);
                 if (!isNaN(dateObj)) {
-                     // Jaise: 12 Aug 2026, 05:30 PM
                      validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
                 }
             }
@@ -8746,6 +8745,7 @@ window.viewVIPSubscribers = async function() {
         listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail: ${error.message}</p>`;
     }
 };
+
 
 window.closeVIPModal = function() {
     const modal = document.getElementById('vip-subscribers-modal');
