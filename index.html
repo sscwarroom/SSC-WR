@@ -8682,25 +8682,42 @@ window.viewVIPSubscribers = async function() {
 
         let htmlString = '';
         snapshot.forEach(doc => {
-            const data = doc.data();
-            const name = data.name || data.displayName || 'VIP Recruit';
-            const email = data.email || 'No email provided';
-            
-            htmlString += `
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
-                    <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
-                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
-                            ${name.charAt(0).toUpperCase()}
-                        </div>
-                        <div style="overflow: hidden;">
-                            <div style="color: #f8fafc; font-weight: 700; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${name}</div>
-                            <div style="color: #94a3b8; font-size: 0.8rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${email}</div>
-                        </div>
-                    </div>
-                    <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 10px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;">VIP</span>
+    const data = doc.data();
+    const name = data.name || data.displayName || 'VIP Recruit';
+    const email = data.email || 'No email provided';
+    
+    // Naya data fetch ho raha hai yahan se
+    const accessText = data.access_type || "Admin Entry";
+    const validityText = data.valid_till || "Lifetime";
+
+    // Premium card ke sath naye details ka HTML
+    htmlString += `
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+        
+        <!-- Uppar wala hissa (Name, Email, VIP Badge) -->
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
+                    ${name.charAt(0).toUpperCase()}
                 </div>
-            `;
-        });
+                <div style="display: flex; flex-direction: column; overflow: hidden;">
+                    <span style="color: #e2e8f0; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</span>
+                    <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
+                </div>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">VIP</div>
+        </div>
+
+        <!-- Niche wala naya hissa (Source & Validity) -->
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
+            <span>Source: <span style="color: #cbd5e1; font-weight: 500;">${accessText}</span></span>
+            <span>Valid: <span style="color: #cbd5e1; font-weight: 500;">${validityText}</span></span>
+        </div>
+        
+    </div>
+    `;
+});
+
         
         listContainer.innerHTML = htmlString;
 
