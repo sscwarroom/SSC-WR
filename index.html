@@ -8903,25 +8903,19 @@ window.closeVIPModal = function() {
 <div id="account-switcher-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
     <div class="fade-in" style="width: 90%; max-width: 420px; padding: 28px; border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; overflow: hidden;">
         
-        <!-- Top Ambient Glow Effect -->
         <div style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 150px; height: 150px; background: #3b82f6; filter: blur(60px); opacity: 0.25; pointer-events: none;"></div>
-
-        <!-- Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; position: relative; z-index: 2;">
             <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.5px;">Manage Accounts</h3>
             <button onclick="closeAccountSwitcher()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'; this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#94a3b8'">&times;</button>
         </div>
         <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 22px; font-weight: 500; position: relative; z-index: 2;">Switch seamlessly between your tactical combat IDs.</p>
         
-        <!-- Saved Accounts List Container -->
         <div id="saved-accounts-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 240px; overflow-y: auto; margin-bottom: 20px; padding-right: 2px; scrollbar-width: none; position: relative; z-index: 2;"></div>
 
-        <!-- Add Another Account Button -->
         <button onclick="switchAccountGoogle()" style="width: 100%; padding: 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.08); color: #60a5fa; border: 1px dashed rgba(59, 130, 246, 0.4); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(59, 130, 246, 0.18)'; this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59,130,246,0.25)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.08)'; this.style.borderColor='rgba(59, 130, 246, 0.4)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             <span style="font-size: 1.1rem; line-height: 0;">+</span> Add Another Account
         </button>
         
-        <!-- Real Logout Button -->
         <button onclick="realLogout()" style="width: 100%; padding: 13px; background: rgba(239, 68, 68, 0.06); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; position: relative; z-index: 2;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.06)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             🚪 Log Out Safely
         </button>
@@ -8931,22 +8925,235 @@ window.closeVIPModal = function() {
 <!-- 💎 PREMIUM VIP SUBSCRIBERS MODAL -->
 <div id="vip-subscribers-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 99999; justify-content: center; align-items: center; opacity: 0; transition: all 0.3s ease;">
     <div style="width: 90%; max-width: 420px; padding: 24px; border-radius: 20px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(59, 130, 246, 0.3); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(59, 130, 246, 0.15); font-family: 'Plus Jakarta Sans', sans-serif;">
-        <!-- Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
                 <span>💎</span> VIP Subscribers
             </h3>
             <button onclick="closeVIPModal()" style="background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">&times;</button>
         </div>
-        <!-- List Container -->
         <div id="vip-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; scrollbar-width: none;"></div>
     </div>
 </div>
 
 <script>
-// --- Single Unified Script Block for Trailing Modals ---
+// =================================================================
+// 🚀 UNIFIED & NON-BLOCKING PAYMENT & VIP LOGIC
+// =================================================================
 
-// 1. Account Switcher Logics
+// 1. 🛡️ INSTANT PAYMENT AUTO-UNLOCK ENGINE (Zero Wait Time)
+window.initiatePayment = function() {
+    let days = parseInt(document.getElementById('req-days-input').value);
+    if (!days || days <= 0) return;
+    
+    let price = days * 9; 
+    let docTitle = document.getElementById('req-doc-title').innerText;
+    let rawEmail = localStorage.getItem('warRoomUserEmail');
+
+    if (!rawEmail) {
+        alert("Please login first to purchase VIP access.");
+        if(typeof closePricingModal === 'function') closePricingModal();
+        if(typeof openAuthModal === 'function') openAuthModal();
+        return;
+    }
+    
+    let currentEmail = rawEmail.toLowerCase();
+    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    let currentItem = items.find(i => i.title === docTitle);
+    
+    if (!currentItem) {
+        alert("Error finding the file. Please try again.");
+        return;
+    }
+
+    var options = {
+        "key": "rzp_live_TLl4cQ2FJnrsx6",
+        "amount": price * 100, 
+        "currency": "INR",
+        "name": "SSCWarRoom",
+        "description": "VIP Access: " + docTitle,
+        "image": "SSCWARROOM.PNG", 
+        
+        "handler": function (response) {
+            let totalHours = days * 24;
+            let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
+            
+            // 🔥 STEP 1: INSTANT LOCAL UNLOCK (Zero Delays)
+            localStorage.setItem(`vip_access_${currentItem.id}_${rawEmail}`, expiryTime);
+            localStorage.setItem(`global_vip_${rawEmail}`, expiryTime);
+            
+            // 🔥 STEP 2: INSTANT UI REFRESH
+            if(typeof closePricingModal === 'function') closePricingModal();
+            if(typeof renderPremiumHubContent === 'function') renderPremiumHubContent();
+            
+            alert(`🎉 Payment Successful! VIP Access for ${days} days has been auto-unlocked.`);
+            
+            // 🔥 STEP 3: BACKGROUND DATABASE SYNC (Silent, Non-blocking)
+            if (typeof firebase !== 'undefined') {
+                const db = firebase.firestore();
+                db.collection("users").where("email", "==", currentEmail).get({ source: 'server' })
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        const batch = db.batch();
+                        snapshot.forEach(doc => {
+                            batch.update(db.collection("users").doc(doc.id), {
+                                isVIP: true,
+                                vipExpiry: expiryTime,
+                                access_type: "Razorpay Payment"
+                            });
+                        });
+                        batch.commit();
+                    } else {
+                        db.collection("users").add({
+                            email: currentEmail,
+                            name: localStorage.getItem('warRoomUserName') || "VIP Aspirant",
+                            role: "aspirant",
+                            isVIP: true,
+                            vipExpiry: expiryTime,
+                            access_type: "Razorpay Payment",
+                            points: 0,
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                }).catch(err => console.error("Background DB Sync Error: ", err));
+            }
+        },
+        "prefill": { "email": rawEmail },
+        "theme": { "color": "#16a34a" }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+        alert("Payment Failed or Cancelled. Reason: " + response.error.description);
+    });
+    rzp1.open();
+};
+
+// 2. 🛡️ FLAWLESS VIP RENDER ENGINE (Fixes NaN bug and guarantees Unlocking)
+window.renderPremiumHubContent = function() {
+    const container = document.getElementById('premium-content-list');
+    if(!container) return;
+    
+    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    if (typeof currentVipCategory !== 'undefined' && currentVipCategory !== 'all') {
+        items = items.filter(item => (item.category || 'material') === currentVipCategory);
+    }
+
+    const userRole = localStorage.getItem('warRoomUserRole');
+    const currentEmail = localStorage.getItem('warRoomUserEmail');
+    const currentPhone = localStorage.getItem(`user_phone_${currentEmail}`);
+
+    if(items.length === 0) {
+        container.innerHTML = `<div class="glass-card" style="text-align: center; color: var(--text-secondary); border: 1px dashed var(--glass-border);">📭 No VIP content deployed yet. Commander Shiva will upload soon.</div>`;
+        return;
+    }
+
+    container.innerHTML = items.map((item, idx) => {
+        const isAdmin = (userRole === 'admin');
+        const isVipApproved = hasVipAccess(currentEmail, item.id) || hasVipAccess(currentPhone, item.id);
+
+        let expiryText = "";
+        if (isVipApproved && !isAdmin) {
+            // 🔥 Flawless Timer Logic
+            let specificExpiry = localStorage.getItem(`vip_access_${item.id}_${currentEmail}`) || (currentPhone ? localStorage.getItem(`vip_access_${item.id}_${currentPhone}`) : null);
+            let globalExpiry = localStorage.getItem(`global_vip_${currentEmail}`);
+            let expiry = specificExpiry || globalExpiry;
+            
+            if (expiry && !isNaN(parseInt(expiry))) {
+                let timeLeft = parseInt(expiry) - Date.now();
+                if (timeLeft > 0) {
+                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    if (hours >= 24) {
+                        let days = Math.floor(hours / 24);
+                        let remainingHours = hours % 24;
+                        expiryText = `⏳ ${days}d ${remainingHours}h left`;
+                    } else if (hours > 0) {
+                        expiryText = `⏳ ${hours}h ${minutes}m left`;
+                    } else {
+                        expiryText = `⏳ ${minutes}m left`;
+                    }
+                } else {
+                    expiryText = "⏳ Expiring shortly...";
+                }
+            }
+        }
+
+        let thumbHTML = item.thumbnail 
+            ? `<img src="${item.thumbnail}" style="width: 85px; height: 85px; border-radius: 16px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.1);">` 
+            : `<div style="width: 85px; height: 85px; border-radius: 16px; background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.6);">💎</div>`;
+
+        if (isAdmin) {
+            return `
+                <div class="vip-card-ultra vip-card-admin" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #eab308; text-transform: uppercase;">Admin</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #fef08a; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">${item.title}</h3>
+                            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: black; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); border: none;" onclick='accessPremiumResource(${JSON.stringify(item)})'>🚀 Launch VIP File</button>
+                        <button class="btn" style="background: #7f1d1d; color: #fca5a5; padding: 14px; border: 1px solid #b91c1c;" onclick="deletePremiumContent(${idx})">🗑️</button>
+                    </div>
+                </div>
+            `;
+        } else if (isVipApproved) {
+            return `
+                <div class="vip-card-ultra vip-card-unlocked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #16a34a; text-transform: uppercase;">Unlocked</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #86efac; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(34, 197, 94, 0.4);">${item.title}</h3>
+                            <p style="margin: 6px 0 10px 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                            <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">${expiryText}</span>
+                        </div>
+                    </div>
+                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(22, 163, 74, 0.4); border: none;" onclick='openApprovedVipFile(${JSON.stringify(item)})'>🚀 Access Secure File</button>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="vip-card-ultra vip-card-locked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 18px; align-items: center;">
+                        <div style="position: relative; flex-shrink: 0; filter: grayscale(100%) brightness(0.7);">
+                            ${thumbHTML}
+                            <div style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.8rem; padding: 3px 6px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 10px #ef4444;">🔒</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h3 style="margin: 0; color: #cbd5e1; font-size: 1.25rem; font-weight: 900; letter-spacing: -0.5px;">${item.title}</h3>
+                            <p style="margin: 6px 0 10px 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; font-weight: 500;">${item.desc}</p>
+                            <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">🚫 Top Secret - Classified</span>
+                        </div>
+                    </div>
+                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid #60a5fa;" onclick="requestVipAccess('${item.title}')">🚀 GET INSTANT ACCESS</button>
+                </div>
+            `;
+        }
+    }).join('');
+};
+
+// 3. 🛡️ VIP CHECKER ENGINE
+window.hasVipAccess = function(identifier, contentId) {
+    if (!identifier) return false;
+    let expiry = localStorage.getItem(`vip_access_${contentId}_${identifier}`);
+    if (!expiry) {
+        expiry = localStorage.getItem(`global_vip_${identifier}`);
+    }
+    if (!expiry) return false;
+    if (Date.now() > parseInt(expiry)) {
+        return false; 
+    }
+    return true;
+};
+
+// 4. 🛡️ ACCOUNT SWITCHER FUNCTIONS
 function openAccountSwitcher() {
     const modal = document.getElementById('account-switcher-modal');
     const listContainer = document.getElementById('saved-accounts-list');
@@ -8954,13 +9161,7 @@ function openAccountSwitcher() {
 
     let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
     let currentUser = null;
-    try {
-        if (typeof firebase !== 'undefined' && firebase.auth()) {
-            currentUser = firebase.auth().currentUser;
-        }
-    } catch (e) {
-        console.log("Firebase auth error:", e);
-    }
+    try { if (typeof firebase !== 'undefined' && firebase.auth()) currentUser = firebase.auth().currentUser; } catch (e) {}
 
     if (currentUser) {
         const email = currentUser.email || currentUser.phoneNumber;
@@ -9013,13 +9214,9 @@ function closeAccountSwitcher() {
 
 window.selectSavedAccount = async function(email) {
     try {
-        if (typeof firebase === 'undefined') {
-            alert("Firebase not initialized!");
-            return;
-        }
-        if (firebase.auth().currentUser) {
-            await firebase.auth().signOut();
-        }
+        if (typeof firebase === 'undefined') { alert("Firebase not initialized!"); return; }
+        if (firebase.auth().currentUser) await firebase.auth().signOut();
+        
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account', login_hint: email });
 
@@ -9028,21 +9225,13 @@ window.selectSavedAccount = async function(email) {
             let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
             const exists = savedAccounts.find(acc => acc.email === result.user.email);
             if (!exists) {
-                savedAccounts.push({
-                    email: result.user.email,
-                    name: result.user.displayName || result.user.email,
-                    uid: result.user.uid
-                });
+                savedAccounts.push({ email: result.user.email, name: result.user.displayName || result.user.email, uid: result.user.uid });
                 localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
             }
-            alert("Switched account successfully to " + result.user.email);
             closeAccountSwitcher();
             location.reload();
         }
-    } catch (error) {
-        console.error("Account switch error:", error);
-        alert("Switch nahi ho paya: " + (error.message || error));
-    }
+    } catch (error) { alert("Switch nahi ho paya: " + (error.message || error)); }
 };
 
 window.switchAccountGoogle = async function() {
@@ -9057,21 +9246,13 @@ window.switchAccountGoogle = async function() {
             let savedAccounts = JSON.parse(localStorage.getItem('warRoomSavedAccounts')) || [];
             const exists = savedAccounts.find(acc => acc.email === user.email);
             if (!exists) {
-                savedAccounts.push({
-                    email: user.email,
-                    name: user.displayName || user.email,
-                    uid: user.uid
-                });
+                savedAccounts.push({ email: user.email, name: user.displayName || user.email, uid: user.uid });
                 localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
             }
-            alert("Account added successfully!");
             closeAccountSwitcher();
             location.reload();
         }
-    } catch (error) {
-        console.error("Google Auth Error:", error);
-        alert("Could not add account: " + error.message);
-    }
+    } catch (error) { alert("Could not add account: " + error.message); }
 };
 
 window.removeSavedAccount = function(index) {
@@ -9079,7 +9260,6 @@ window.removeSavedAccount = function(index) {
     if (index >= 0 && index < savedAccounts.length) {
         const removed = savedAccounts.splice(index, 1)[0];
         localStorage.setItem('warRoomSavedAccounts', JSON.stringify(savedAccounts));
-        
         const currentUser = firebase.auth().currentUser;
         if (currentUser && currentUser.email === removed.email) {
             firebase.auth().signOut().then(() => { location.reload(); });
@@ -9098,7 +9278,7 @@ window.realLogout = function() {
     });
 };
 
-// 2. VIP Subscribers Engine
+// 5. 🛡️ VIP SUBSCRIBERS LIST ENGINE
 window.viewVIPSubscribers = async function() {
     const modal = document.getElementById('vip-subscribers-modal');
     const listContainer = document.getElementById('vip-list-container');
@@ -9115,9 +9295,7 @@ window.viewVIPSubscribers = async function() {
     `;
 
     try {
-        const snapshot = await firebase.firestore().collection('users')
-            .where('isVIP', '==', true) 
-            .get();
+        const snapshot = await firebase.firestore().collection('users').where('isVIP', '==', true).get({ source: 'server' });
 
         if (snapshot.empty) {
             listContainer.innerHTML = `<p style="text-align: center; color: #94a3b8; font-weight: 500;">No VIP subscribers found yet.</p>`;
@@ -9177,8 +9355,7 @@ window.viewVIPSubscribers = async function() {
         });
         listContainer.innerHTML = htmlString;
     } catch (error) {
-        console.error("Firebase Fetch Error:", error);
-        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail: ${error.message}</p>`;
+        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail: Check network.</p>`;
     }
 };
 
@@ -9189,6 +9366,24 @@ window.closeVIPModal = function() {
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 };
+
+// 6. 🛡️ SYNC USER AT LOGIN
+if (typeof firebase !== 'undefined') {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            firebase.firestore().collection("users").doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.isVIP && data.vipExpiry) {
+                        localStorage.setItem(`global_vip_${user.email}`, data.vipExpiry);
+                    } else {
+                        localStorage.removeItem(`global_vip_${user.email}`);
+                    }
+                }
+            });
+        }
+    });
+}
 </script>
 </body>
 </html>
