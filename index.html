@@ -6864,7 +6864,7 @@ function openAdminGrantModal() {
 
 function grantVipAccess() {
     const identifier = document.getElementById('admin-grant-id').value.trim();
-    const contentId = document.getElementById('admin-grant-content-id').value; // NEW
+    const contentId = document.getElementById('admin-grant-content-id').value; 
     
     const daysInput = parseInt(document.getElementById('admin-grant-days').value) || 0;
     const hoursInput = parseInt(document.getElementById('admin-grant-hours').value) || 0;
@@ -6883,8 +6883,33 @@ function grantVipAccess() {
 
     const expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
     
-    // NEW: Save with specific content ID attached to the key
+    // 1. Save in Local Storage
     localStorage.setItem(`vip_access_${contentId}_${identifier}`, expiryTime);
+
+    // 2. 🔥 FIREBASE CLOUD DATABASE UPDATE 🔥
+    if (typeof firebase !== 'undefined') {
+        const db = firebase.firestore();
+        db.collection("users").where("email", "==", identifier).get()
+        .then(snapshot => {
+            if (!snapshot.empty) {
+                snapshot.forEach(doc => {
+                    db.collection("users").doc(doc.id).update({
+                        isVIP: true,
+                        vipExpiry: expiryTime
+                    });
+                });
+            } else {
+                db.collection("users").add({
+                    email: identifier,
+                    name: "VIP Recruit",
+                    role: "aspirant",
+                    isVIP: true,
+                    vipExpiry: expiryTime,
+                    createdAt: new Date().toISOString()
+                });
+            }
+        }).catch(err => console.log("Firebase VIP update error: ", err));
+    }
 
     // Reset inputs
     document.getElementById('admin-grant-id').value = ''; 
@@ -6893,13 +6918,9 @@ function grantVipAccess() {
     document.getElementById('admin-grant-hours').value = ''; 
     
     closeAdminGrantModal();
-    alert(`Mission Success! Specific VIP Access granted to ${identifier} for ${daysInput} Days and ${hoursInput} Hours.`);
+    alert(`Mission Success! VIP Access granted to ${identifier} for ${daysInput} Days & ${hoursInput} Hours.`);
 }
 
-
-
-
-// NEW: Now requires contentId to check specific access
 function hasVipAccess(identifier, contentId) {
     if (!identifier || !contentId) return false;
     
@@ -6913,7 +6934,6 @@ function hasVipAccess(identifier, contentId) {
     }
     return true;
 }
-
 
 // --- MODIFY EXISTING renderPremiumHubContent FUNCTION ---
 // Apne purane renderPremiumHubContent() function ko isse replace kar do
@@ -8650,9 +8670,9 @@ window.viewVIPSubscribers = async function() {
     `;
 
     try {
-        // 🔥 Database se data la rahe hain (Yahan apna sahi collection/field name check kar lena)
+        // 🔥 NAYA FIREBASE QUERY 🔥
         const snapshot = await firebase.firestore().collection('users')
-            .where('role', '==', 'vip') // Ya agar boolean hai toh: .where('isVIP', '==', true)
+            .where('isVIP', '==', true) 
             .get();
 
         if (snapshot.empty) {
@@ -8663,18 +8683,21 @@ window.viewVIPSubscribers = async function() {
         let htmlString = '';
         snapshot.forEach(doc => {
             const data = doc.data();
-            const name = data.name || data.displayName || 'Anonymous VIP';
+            const name = data.name || data.displayName || 'VIP Recruit';
             const email = data.email || 'No email provided';
             
             htmlString += `
-                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
-                        ${name.charAt(0).toUpperCase()}
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
+                            ${name.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="overflow: hidden;">
+                            <div style="color: #f8fafc; font-weight: 700; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${name}</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${email}</div>
+                        </div>
                     </div>
-                    <div style="overflow: hidden;">
-                        <div style="color: #f8fafc; font-weight: 700; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${name}</div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${email}</div>
-                    </div>
+                    <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 10px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;">VIP</span>
                 </div>
             `;
         });
