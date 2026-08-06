@@ -8690,6 +8690,7 @@ window.viewVIPSubscribers = async function() {
     `;
 
     try {
+        // Sirf isVIP true wale users utha rahe hain
         const snapshot = await firebase.firestore().collection('users')
             .where('isVIP', '==', true) 
             .get();
@@ -8700,6 +8701,8 @@ window.viewVIPSubscribers = async function() {
         }
 
         let htmlString = '';
+        const currentTime = Date.now(); // Current time plan check karne ke liye
+
         snapshot.forEach(doc => {
             const data = doc.data();
             const name = data.name || data.displayName || 'VIP Recruit';
@@ -8707,14 +8710,28 @@ window.viewVIPSubscribers = async function() {
             
             const accessText = data.access_type || "Admin Entry";
             
-            // 🔥 Time ko real Date me convert karna 🔥
+            // 🔥 Plan Active / Expired Check Logic 🔥
             let validityText = "Lifetime";
+            let isActive = true; // Default true maante hain
+
             if (data.vipExpiry) {
                 const dateObj = new Date(data.vipExpiry);
                 if (!isNaN(dateObj)) {
                      validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                     
+                     // Agar aaj ka time expiry time se zyada ho gaya toh INACTIVE
+                     if (currentTime > data.vipExpiry) {
+                         isActive = false;
+                     }
                 }
             }
+
+            // 🎨 Dynamic Badge Styles (Active = Green, Expired = Red)
+            const badgeBg = isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+            const badgeColor = isActive ? '#10b981' : '#ef4444';
+            const badgeBorder = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+            const badgeText = isActive ? 'ACTIVE VIP' : 'EXPIRED';
+            const dateColor = isActive ? '#cbd5e1' : '#ef4444';
 
             htmlString += `
             <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
@@ -8728,11 +8745,12 @@ window.viewVIPSubscribers = async function() {
                             <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
                         </div>
                     </div>
-                    <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">VIP</div>
+                    <!-- 🔥 Active / Inactive Badge 🔥 -->
+                    <div style="background: ${badgeBg}; color: ${badgeColor}; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid ${badgeBorder};">${badgeText}</div>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
                     <span>Source: <span style="color: #cbd5e1; font-weight: 500;">${accessText}</span></span>
-                    <span>Valid Till: <span style="color: #cbd5e1; font-weight: 500;">${validityText}</span></span>
+                    <span>Valid Till: <span style="color: ${dateColor}; font-weight: 500;">${validityText}</span></span>
                 </div>
             </div>
             `;
