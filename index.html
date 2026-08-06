@@ -6862,7 +6862,7 @@ function openAdminGrantModal() {
     document.getElementById('admin-grant-modal').style.display = 'flex';
 }
 
-function grantVipAccess() {
+async function grantVipAccess() {
     const identifier = document.getElementById('admin-grant-id').value.trim();
     const contentId = document.getElementById('admin-grant-content-id').value; 
     
@@ -6888,27 +6888,34 @@ function grantVipAccess() {
 
     // 2. 🔥 FIREBASE CLOUD DATABASE UPDATE 🔥
     if (typeof firebase !== 'undefined') {
-        const db = firebase.firestore();
-        db.collection("users").where("email", "==", identifier).get()
-        .then(snapshot => {
+        try {
+            const db = firebase.firestore();
+            const snapshot = await db.collection("users").where("email", "==", identifier).get();
+            
             if (!snapshot.empty) {
+                const promises = [];
                 snapshot.forEach(doc => {
-                    db.collection("users").doc(doc.id).update({
+                    promises.push(db.collection("users").doc(doc.id).update({
                         isVIP: true,
-                        vipExpiry: expiryTime
-                    });
+                        vipExpiry: expiryTime,
+                        access_type: "Admin Entry" // 🔥 NAYA FIELD
+                    }));
                 });
+                await Promise.all(promises);
             } else {
-                db.collection("users").add({
+                await db.collection("users").add({
                     email: identifier,
                     name: "VIP Recruit",
                     role: "aspirant",
                     isVIP: true,
                     vipExpiry: expiryTime,
+                    access_type: "Admin Entry", // 🔥 NAYA FIELD
                     createdAt: new Date().toISOString()
                 });
             }
-        }).catch(err => console.log("Firebase VIP update error: ", err));
+        } catch (err) {
+            console.log("Firebase VIP update error: ", err);
+        }
     }
 
     // Reset inputs
@@ -7008,24 +7015,38 @@ function initiatePayment() {
         "description": "VIP Access: " + docTitle,
         "image": "SSCWARROOM.PNG", // Tumhara logo popup me dikhega
         
-        // 3. AUTO UNLOCK LOGIC (Jab payment successful ho jaye)
+             // 3. AUTO UNLOCK LOGIC (Jab payment successful ho jaye)
         "handler": function (response) {
-            // response.razorpay_payment_id mein payment ID aati hai
             console.log("Payment Success ID:", response.razorpay_payment_id);
             
-            // Expiry time calculate karna
             let totalHours = days * 24;
             let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
             
-            // System mein access grant karna (Exactly waisa hi jaise admin karta hai)
+            // LocalStorage update
             localStorage.setItem(`vip_access_${currentItem.id}_${currentEmail}`, expiryTime);
             
-            // UI ko update karna
-            closePricingModal();
-            renderPremiumHubContent(); // Isse lock icon turant Green "Unlocked" ban jayega
+            // 🔥 NAYA CODE: Database ko batana ki payment ho gayi hai 🔥
+            if (typeof firebase !== 'undefined') {
+                const db = firebase.firestore();
+                db.collection("users").where("email", "==", currentEmail).get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        snapshot.forEach(doc => {
+                            db.collection("users").doc(doc.id).update({
+                                isVIP: true,
+                                vipExpiry: expiryTime,
+                                access_type: "Razorpay Payment"
+                            });
+                        });
+                    }
+                }).catch(err => console.log("Payment DB Update Error: ", err));
+            }
             
+            closePricingModal();
+            renderPremiumHubContent();
             alert(`🎉 Payment Successful! VIP Access for ${days} days has been auto-unlocked.`);
         },
+
         "prefill": {
             "email": currentEmail, // Student ka email pehle se bhara aayega
         },
@@ -8657,11 +8678,9 @@ window.viewVIPSubscribers = async function() {
         return;
     }
 
-    // Modal UI Open karo
     modal.style.display = 'flex';
     setTimeout(() => { modal.style.opacity = '1'; }, 10);
     
-    // Loading State
     listContainer.innerHTML = `
         <div style="text-align: center; padding: 20px; color: #60a5fa;">
             <span style="font-size: 1.5rem; display: block; animation: spin 1s linear infinite;">⏳</span>
@@ -8670,7 +8689,6 @@ window.viewVIPSubscribers = async function() {
     `;
 
     try {
-        // 🔥 NAYA FIREBASE QUERY 🔥
         const snapshot = await firebase.firestore().collection('users')
             .where('isVIP', '==', true) 
             .get();
@@ -8682,48 +8700,50 @@ window.viewVIPSubscribers = async function() {
 
         let htmlString = '';
         snapshot.forEach(doc => {
-    const data = doc.data();
-    const name = data.name || data.displayName || 'VIP Recruit';
-    const email = data.email || 'No email provided';
-    
-    // Naya data fetch ho raha hai yahan se
-    const accessText = data.access_type || "Admin Entry";
-    const validityText = data.valid_till || "Lifetime";
+            const data = doc.data();
+            const name = data.name || data.displayName || 'VIP Recruit';
+            const email = data.email || 'No email provided';
+            
+            // Source fetch karna
+            const accessText = data.access_type || "Admin Entry";
+            
+            // 🔥 NAYA CODE: Time milliseconds ko Date aur Time me convert karna 🔥
+            let validityText = "Lifetime";
+            if (data.vipExpiry) {
+                const dateObj = new Date(data.vipExpiry);
+                if (!isNaN(dateObj)) {
+                     // Jaise: 12 Aug 2026, 05:30 PM
+                     validityText = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                }
+            }
 
-    // Premium card ke sath naye details ka HTML
-    htmlString += `
-    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
-        
-        <!-- Uppar wala hissa (Name, Email, VIP Badge) -->
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
-                    ${name.charAt(0).toUpperCase()}
+            htmlString += `
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0;">
+                            ${name.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="display: flex; flex-direction: column; overflow: hidden;">
+                            <span style="color: #e2e8f0; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</span>
+                            <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
+                        </div>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">VIP</div>
                 </div>
-                <div style="display: flex; flex-direction: column; overflow: hidden;">
-                    <span style="color: #e2e8f0; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</span>
-                    <span style="color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${email}</span>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
+                    <span>Source: <span style="color: #cbd5e1; font-weight: 500;">${accessText}</span></span>
+                    <span>Valid Till: <span style="color: #cbd5e1; font-weight: 500;">${validityText}</span></span>
                 </div>
             </div>
-            <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">VIP</div>
-        </div>
-
-        <!-- Niche wala naya hissa (Source & Validity) -->
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;">
-            <span>Source: <span style="color: #cbd5e1; font-weight: 500;">${accessText}</span></span>
-            <span>Valid: <span style="color: #cbd5e1; font-weight: 500;">${validityText}</span></span>
-        </div>
-        
-    </div>
-    `;
-});
-
+            `;
+        });
         
         listContainer.innerHTML = htmlString;
 
     } catch (error) {
         console.error("Firebase Fetch Error:", error);
-        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail ho gaya: ${error.message}</p>`;
+        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">Data fetch fail: ${error.message}</p>`;
     }
 };
 
