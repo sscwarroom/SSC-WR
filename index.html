@@ -12,6 +12,24 @@
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
 
     <style>
+     /* 🚀 1. Native Momentum Scrolling (Sabse Upar) */
+html, body, .main-content, .sidebar, .noti-list, #typing-history-list-container, #vip-list-container {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+}
+
+/* 🚀 2. Instant Tap Response (No Delay) */
+button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important; 
+}
+
+/* 🚀 3. Force GPU Acceleration & Premium Font Rendering */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
         /* Loader Overlay Styling */
 .loader-overlay {
     position: fixed;
@@ -256,7 +274,17 @@
             overflow: hidden;
         }
         
-        .glass-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        /* 🌟 4. Ultra-Premium Hover Physics */
+.glass-card {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.glass-card:hover { 
+    transform: translateY(-6px) !important; /* Halka sa float */
+    box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15), 0 0 20px rgba(255, 255, 255, 0.05) !important; /* Soft premium glow */
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -2166,19 +2194,89 @@
     border-color: #fef08a; box-shadow: 0 8px 20px rgba(202, 138, 4, 0.4);
     transform: translateY(-4px);
 }
+/* 🌟 1. Premium Cinematic Entry (Zero Lag, No Blur, No Scale) */
 @keyframes warRoomEnterAnim {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
+    0% { 
+        opacity: 0; 
+        transform: translateY(30px); /* Niche se smoothly upar aayega */
     }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
+    100% { 
+        opacity: 1; 
+        transform: translateY(0); 
     }
 }
 
 .war-room-entering {
-    animation: warRoomEnterAnim 0.5s ease-out forwards;
+    /* cubic-bezier(0.16, 1, 0.3, 1) Apple ki websites ka secret smooth curve hai */
+    animation: warRoomEnterAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes smoothSlideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { 
+    animation: smoothSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+    opacity: 0; 
+}
+
+
+/* 🚀 2. Force GPU Acceleration & Premium Font Rendering */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Har heavy element ko GPU par shift karo taaki CPU par load na pade */
+.glass-card, .btn, .ultra-mock-card, .vip-card-ultra, .view-section {
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/* Mobile par heavy blur band karo taaki frame drop na ho */
+@media (max-width: 900px) {
+    .glass-card {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: var(--bg-secondary) !important;
+    }
+}
+
+    
+    .vip-card-ultra::after {
+        animation: none !important; /* Mobile par background moving shine band kar do */
+    }
+}
+/* 🚀 3. Mobile Hover Lag Fix & Premium Tap Effect */
+@media (hover: none) and (pointer: coarse) {
+    /* Hover effects sirf Computer (mouse) ke liye rakhein */
+    .glass-card:hover, .btn:hover, .study-sub-card:hover, .vip-card-ultra:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Mobile par tap karte hi ekdum smooth halke se dabne (shrink) ka effect */
+    .glass-card:active, .btn:active, .study-sub-card:active, .ultra-start-btn:active {
+        transform: scale(0.98) !important;
+        transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+}
+/* 🚀 4. Stop CPU Overload by Targeting Specific Transitions */
+.nav-item, .btn, .study-cat-pill, .fire-tab-btn, .search-input {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease, 
+                box-shadow 0.3s ease !important;
+    will-change: transform, opacity;
+}
+
+/* Sidebar aur Modals ko alag se GPU memory me rakhne ke liye */
+.sidebar, #auth-modal, #target-setup-modal, #distraction-modal, #typing-test-modal, #vip-subscribers-modal {
+    will-change: transform, opacity;
 }
 
 
@@ -6527,10 +6625,9 @@ function enterWarRoom() {
     checkStreakAndLogin(true);
     const landing = document.getElementById('landing-page');
     
-    // 🌟 Premium Slide Up & Fade Out
-    landing.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+    // 🌟 Sleek Fade-out without cheap zooming
+    landing.style.transition = 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
     landing.style.opacity = '0';
-    landing.style.transform = 'translateY(-20px)'; // Halka sa upar slide hoke fade hoga
     
     setTimeout(() => {
         landing.style.display = 'none';
@@ -6538,7 +6635,7 @@ function enterWarRoom() {
         const appContainer = document.getElementById('app');
         appContainer.classList.remove('hidden');
         
-        // 🔥 Naya lag-free entering animation trigger karna
+        // Trigger the cinematic slide-up animation
         appContainer.classList.add('war-room-entering');
         
         renderDashboardExams();
@@ -6555,9 +6652,10 @@ function enterWarRoom() {
 
         setTimeout(() => {
             startOnboardingTour();
-        }, 800); // Thoda jaldi tour start hoga
-    }, 400);
+        }, 600); // Tour thoda smooth start hoga
+    }, 450); // Exact fade-out timing match
 }
+
 
         function navigate(viewId, navElement) {
             if(navElement) {
