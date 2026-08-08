@@ -2169,19 +2169,18 @@
 @keyframes warRoomEnterAnim {
     0% {
         opacity: 0;
-        transform: translateY(40px) scale(0.95);
-        filter: blur(8px);
+        transform: translateY(20px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0px);
+        transform: translateY(0);
     }
 }
 
 .war-room-entering {
-    animation: warRoomEnterAnim 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: warRoomEnterAnim 0.5s ease-out forwards;
 }
+
 
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -3038,19 +3037,23 @@
         </button>
     </div>
 
-    <!-- 2. Typing Practice Card -->
-    <div class="glass-card">
-        <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
-            ⌨️ Typing Practice
-        </h3>
-        <p style="font-size: 0.85rem; margin-bottom: 1rem;">Test and improve your WPM and accuracy for Tier-2 DEST.</p>
-        <button class="btn btn-outline" style="width: 100%; padding: 12px; font-size: 0.9rem;" onclick="openTypingModal()">
-            🚀 START TYPING TEST
-        </button>
-    </div>
-    <button class="btn" style="width: 100%; padding: 12px; font-size: 0.9rem; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); margin-top: 10px;" onclick="window.open('dest.html', '_blank')">
-    👑 OPEN DEST PRO PREMIUM
-</button>
+ <!-- 2. Typing Practice Card -->
+<div class="glass-card">
+    <h3 style="font-size: 1.2rem; color: var(--accent-secondary); display: flex; align-items: center; gap: 8px;">
+        ⌨️ Typing Practice
+    </h3>
+    <p style="font-size: 0.85rem; margin-bottom: 1rem;">Test and improve your WPM and accuracy for Tier-2 DEST.</p>
+    
+    <!-- Normal Test Button -->
+    <button class="btn btn-outline" style="width: 100%; padding: 12px; font-size: 0.9rem; margin-bottom: 12px;" onclick="openTypingModal()">
+        🚀 START TYPING TEST
+    </button>
+    
+    <!-- Premium Test Button (Ab ye box ke andar hai) -->
+    <button class="btn" style="width: 100%; padding: 12px; font-size: 0.9rem; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);" onclick="window.open('dest.html', '_blank')">
+        Get Dest Pro Premium — Free 
+    </button>
+</div>
 
 
     <!-- 3. Distraction Blocker Card (Ab ye grid ke ANDAR hai) -->
@@ -6520,13 +6523,14 @@ function renderDedicatedMockTests() {
             }
             if(!e.target.closest('.search-container')) { document.getElementById('search-results').style.display = 'none'; }
         });
-
-                                function enterWarRoom() {
+function enterWarRoom() {
     checkStreakAndLogin(true);
     const landing = document.getElementById('landing-page');
-    landing.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    
+    // 🌟 Premium Slide Up & Fade Out
+    landing.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
     landing.style.opacity = '0';
-    landing.style.transform = 'scale(1.05)';
+    landing.style.transform = 'translateY(-20px)'; // Halka sa upar slide hoke fade hoga
     
     setTimeout(() => {
         landing.style.display = 'none';
@@ -6534,7 +6538,7 @@ function renderDedicatedMockTests() {
         const appContainer = document.getElementById('app');
         appContainer.classList.remove('hidden');
         
-        // 🔥 Naya tagda entering animation trigger karna
+        // 🔥 Naya lag-free entering animation trigger karna
         appContainer.classList.add('war-room-entering');
         
         renderDashboardExams();
@@ -6551,10 +6555,9 @@ function renderDedicatedMockTests() {
 
         setTimeout(() => {
             startOnboardingTour();
-        }, 1000);
-    }, 500);
+        }, 800); // Thoda jaldi tour start hoga
+    }, 400);
 }
-
 
         function navigate(viewId, navElement) {
             if(navElement) {
@@ -8495,19 +8498,17 @@ function closeGateway() {
 function launchGatewayMission(missionType) {
     const gw = document.getElementById('gateway-screen');
     
-    // 🌟 Ultra-Smooth Cinematic Premium Zoom & Blur Transition
-    gw.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    // 🌟 Ultra-Smooth Lag-Free Transition
+    gw.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
     gw.style.opacity = '0';
-    gw.style.transform = 'scale(1.15)';
-    gw.style.filter = 'blur(12px)';
+    gw.style.transform = 'scale(0.98)'; // Bada zoom hone ke bajaye halka sa piche jayega
     
     setTimeout(() => {
         gw.style.display = 'none';
         
-        // Reset styles for future use if needed
+        // Reset styles for future use
         gw.style.opacity = '1';
         gw.style.transform = 'scale(1)';
-        gw.style.filter = 'none';
         
         // Landing page ko chupana aur main app dikhana
         const landing = document.getElementById('landing-page');
@@ -8541,7 +8542,7 @@ function launchGatewayMission(missionType) {
         } else if (missionType === 'war' || missionType === 'base') {
             navigate('dashboard', document.querySelectorAll('.nav-item')[0]);
         }
-    }, 550); // Exact timing match ke liye 0.55 seconds
+    }, 400); // 400ms tak wait karega ekdum crisp exit ke liye
 }
 
 let currentVipCategory = 'all';
