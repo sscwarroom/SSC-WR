@@ -9084,11 +9084,22 @@ window.closeVIPModal = function() {
     }
 };
 // ==========================================
-// 🤖 1v1 DEATHMATCH BOT ENGINE (ULTRA PRO 3-ROUND EDITION)
+// 🤖 1v1 DEATHMATCH BOT ENGINE (SPEED & ACCURACY EDITION)
 // ==========================================
-const botNames = ["Aspirant_Rahul", "Sniper_007", "CGL_Fighter", "Priya_Ranker", "Vikas_99", "Inspector_Raj", "DelhiPolice_Don"];
+const botNames = [
+    // Serious Aspirants
+    "Aspirant Rahul", "Priya Ranker", "Vikas 99", "Neha SSC", "Rohan T2", "Pooja Gupta", "Amit Fighter", "Kajal Kumari",
+    // Dream Posts / Departments
+    "Inspector Raj", "DelhiPolice Don", "Future Excise", "CBI Agent X", "IncomeTax Babu", "Customs_Boss", "MEA_Officer", "AAO_Target",
+    // Gamers & Cool Tags
+    "Sniper 007", "CGL Fighter", "Speed Demon", "Accuracy King", "Ghost Aspirant", "Ninja Typist", "Warrior 01",
+    // Study Freaks
+    "Maths Hacker", "Vocab Ninja", "Logic Breaker", "Night Owl 99", "Target AIR1", "MockTest Pro", "Syllabus Killer", "PYQ Master", "Daily Grinder"
+];
+
 let battleQuestions = [];
 let currentBattleQ = 0; 
+let questionsInCurrentRound = 0; 
 let myBattleScore = 0;  
 let botBattleScore = 0; 
 let myRoundWins = 0;    
@@ -9096,14 +9107,18 @@ let botRoundWins = 0;
 let currentRound = 1;   
 let currentBotName = "";
 let battleTimerInterval;
-let botAnswerTimeout;
 let roundTransitionTimeout;
 let isMyTurnActive = false;
-let isMatchmakingActive = false; // 🔥 Anti-Spam Lock
+let isMatchmakingActive = false; 
+
+// Timing Logic Variables
+let questionStartTime = 0;
+let botScheduledTime = 0;
+let botWillBeCorrect = false;
 
 // 1. Start Matchmaking
 function findMatch1v1() {
-    if (isMatchmakingActive) return; // Prevent double clicks
+    if (isMatchmakingActive) return; 
     
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     if (!currentEmail) {
@@ -9130,9 +9145,7 @@ function findMatch1v1() {
 function startLiveBattle() {
     isMatchmakingActive = false;
     
-    // Clear ALL old timers to prevent bugs
     clearInterval(battleTimerInterval);
-    clearTimeout(botAnswerTimeout);
     clearTimeout(roundTransitionTimeout);
 
     document.getElementById('matchmaking-screen').classList.add('hidden');
@@ -9145,6 +9158,7 @@ function startLiveBattle() {
     myBattleScore = 0;
     botBattleScore = 0;
     currentBattleQ = 0;
+    questionsInCurrentRound = 0;
     
     updateBattleScoreboard();
     document.getElementById('battle-bot-name').innerText = currentBotName;
@@ -9162,8 +9176,6 @@ function startLiveBattle() {
 
     battleQuestions = [];
     let pool = availableQuizzes.length >= 9 ? availableQuizzes : allQuizzes;
-    
-    // Deep copy to ensure questions load perfectly
     let poolCopy = JSON.parse(JSON.stringify(pool));
     
     while(battleQuestions.length < 9) {
@@ -9179,15 +9191,13 @@ function startLiveBattle() {
 // 3. Load Individual Question
 function loadBattleQuestion() {
     isMyTurnActive = true;
-    
-    // Stop bot from answering previous question
-    clearTimeout(botAnswerTimeout);
+    clearTimeout(roundTransitionTimeout);
     clearInterval(battleTimerInterval);
 
     const qData = battleQuestions[currentBattleQ];
+    questionsInCurrentRound++;
     
-    let qNumInRound = (currentBattleQ % 3) + 1; // 1, 2, 3
-    document.getElementById('battle-q-num').innerText = `Q ${qNumInRound}/3`;
+    document.getElementById('battle-q-num').innerText = `Q ${questionsInCurrentRound}/3`;
     document.getElementById('battle-question-text').innerText = qData.q;
     document.getElementById('battle-feedback').innerText = "";
     
@@ -9198,8 +9208,13 @@ function loadBattleQuestion() {
         </button>
     `).join('');
 
+    // Pre-calculate Bot's Timing and Accuracy for this question
+    questionStartTime = Date.now();
+    let botDelay = Math.floor(Math.random() * 5000) + 2000; // Bot takes 2s to 7s
+    botScheduledTime = questionStartTime + botDelay;
+    botWillBeCorrect = (Math.random() < 0.70); // 70% chance bot is right
+
     startBattleTimer(10); 
-    simulateBotAnswer(qData.correct); 
 }
 
 // 4. Timer Logic
@@ -9210,54 +9225,101 @@ function startBattleTimer(seconds) {
     battleTimerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}s`;
+        
         if (timeLeft <= 0) {
             clearInterval(battleTimerInterval);
             if(isMyTurnActive) {
-                document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>⏱️ Time Up! You missed it.</span>";
                 isMyTurnActive = false;
                 disableBattleOptions();
-                roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2000);
+                
+                let feedbackHtml = "";
+                // Agar tumne click nahi kiya, aur bot answer karne wala tha toh bot ko point mil jayega
+                if (Date.now() > botScheduledTime && botWillBeCorrect) {
+                    botBattleScore += 1;
+                    feedbackHtml = "<span style='color:#ef4444;'>⏱️ Time Up! Opponent answered correctly. (Bot +1)</span>";
+                } else {
+                    feedbackHtml = "<span style='color:#ef4444;'>⏱️ Time Up! Nobody scored.</span>";
+                }
+                
+                document.getElementById('battle-feedback').innerHTML = feedbackHtml;
+                updateBattleScoreboard();
+                
+                currentBattleQ++;
+                roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2500);
             }
         }
     }, 1000);
 }
 
-// 5. Bot Intelligence
-function simulateBotAnswer(correctIdx) {
-    const botDelay = Math.floor(Math.random() * 5000) + 2000; 
-    botAnswerTimeout = setTimeout(() => {
-        const botIsCorrect = Math.random() < 0.70; // 70% accuracy for bot
-        if (botIsCorrect) {
-            botBattleScore += 1; 
-        }
-        updateBattleScoreboard();
-        let fb = document.getElementById('battle-feedback');
-        if(fb) fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
-    }, botDelay);
-}
-
-// 6. User Answers
+// 5. User Answers (Speed Comparison Engine)
 function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     if (!isMyTurnActive) return;
-    isMyTurnActive = false;
+    isMyTurnActive = false; // Lock UI
     clearInterval(battleTimerInterval);
     disableBattleOptions();
+
+    let userAnswerTime = Date.now();
+    let userCorrect = (selectedIdx === correctIdx);
+    let timeDiff = userAnswerTime - botScheduledTime; // Negative matlab user was faster
+    let feedbackHtml = "";
 
     const selectedBtn = document.getElementById(`battle-opt-${selectedIdx}`);
     const correctBtn = document.getElementById(`battle-opt-${correctIdx}`);
     
-    if (selectedIdx === correctIdx) {
-        selectedBtn.style.background = "#22c55e"; 
-        selectedBtn.style.color = "white";
-        myBattleScore += 1; 
-        document.getElementById('battle-feedback').innerHTML = "<span style='color:#22c55e;'>🔥 Boom! Correct (+1)</span>";
+    // Set UI Colors for selected options
+    if (userCorrect) {
+        selectedBtn.style.background = "#22c55e"; selectedBtn.style.color = "white";
     } else {
-        selectedBtn.style.background = "#ef4444"; 
-        selectedBtn.style.color = "white";
+        selectedBtn.style.background = "#ef4444"; selectedBtn.style.color = "white";
         correctBtn.style.border = "2px solid #22c55e"; 
-        document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>❌ Incorrect!</span>";
+    }
+
+    // 🏆 FASTEST FINGER FIRST & DRAW LOGIC 🏆
+    if (Math.abs(timeDiff) <= 800) { 
+        // SIMULTANEOUS CLASH (Under 0.8 seconds difference)
+        if (userCorrect && botWillBeCorrect) {
+            myBattleScore += 0.5; 
+            botBattleScore += 0.5;
+            feedbackHtml = "<span style='color:#3b82f6;'>🤝 Clash! Both answered correctly together! (+0.5 each)</span>";
+        } else if (userCorrect) {
+            myBattleScore += 1;
+            feedbackHtml = "<span style='color:#22c55e;'>🔥 You were correct, opponent missed! (+1)</span>";
+        } else if (botWillBeCorrect) {
+            botBattleScore += 1;
+            feedbackHtml = "<span style='color:#ef4444;'>💀 You missed, but opponent got it! (Bot +1)</span>";
+        } else {
+            feedbackHtml = "<span style='color:#ef4444;'>❌ Both answered wrong together!</span>";
+        }
+    } 
+    else if (timeDiff < 0) {
+        // USER WAS STRICTLY FASTER
+        if (userCorrect) {
+            myBattleScore += 1;
+            feedbackHtml = "<span style='color:#22c55e;'>⚡ Lightning Fast & Correct! (+1)</span>";
+        } else if (botWillBeCorrect) {
+            botBattleScore += 1;
+            feedbackHtml = "<span style='color:#ef4444;'>❌ You were fast but wrong! Opponent got it right. (Bot +1)</span>";
+        } else {
+            feedbackHtml = "<span style='color:#ef4444;'>❌ You were fast but wrong! Opponent also missed.</span>";
+        }
+    } 
+    else {
+        // BOT WAS STRICTLY FASTER
+        if (botWillBeCorrect) {
+            botBattleScore += 1;
+            feedbackHtml = `<span style='color:#ef4444;'>💀 ${currentBotName} answered first & correctly! (Bot +1)</span>`;
+        } else if (userCorrect) {
+            myBattleScore += 1;
+            feedbackHtml = `<span style='color:#22c55e;'>😂 ${currentBotName} was fast but wrong! You got it right! (+1)</span>`;
+        } else {
+            feedbackHtml = `<span style='color:#ef4444;'>❌ ${currentBotName} answered first but wrong. You also missed!</span>`;
+        }
     }
     
+    document.getElementById('battle-feedback').innerHTML = feedbackHtml;
+    updateBattleScoreboard();
+    
+    // Save quiz to memory
     if (quizId) {
         let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
         if (!answeredIds.includes(quizId)) {
@@ -9266,31 +9328,22 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
         }
     }
     
-    updateBattleScoreboard();
-    roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2000); 
+    currentBattleQ++;
+    roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 3000); 
 }
 
-// 7. Route Next Question or End Round
+// 6. Route Next Question or End Round
 function loadNextBattleQuestion() {
-    currentBattleQ++; 
-    
-    // If 3, 6 questions are done -> Evaluate Round
-    if (currentBattleQ === 3 || currentBattleQ === 6) {
-        evaluateRoundEnd();
-    } 
-    // If 9 questions are done -> Evaluate Final Match Result
-    else if (currentBattleQ === 9) {
-        evaluateRoundEnd(true); 
-    } 
-    else {
+    if (questionsInCurrentRound === 3) {
+        // 3 questions purae ho gaye is round ke
+        evaluateRoundEnd(currentRound === 3); // Agar 3rd round tha, toh match over
+    } else {
         loadBattleQuestion();
     }
 }
 
-// 8. Evaluate Round End
+// 7. Evaluate Round End
 function evaluateRoundEnd(isFinal = false) {
-    clearInterval(battleTimerInterval);
-    clearTimeout(botAnswerTimeout);
     isMyTurnActive = false;
     
     let roundWinnerMsg = "";
@@ -9319,16 +9372,17 @@ function evaluateRoundEnd(isFinal = false) {
             endBattle();
         } else {
             currentRound++;
+            questionsInCurrentRound = 0;
             myBattleScore = 0;
             botBattleScore = 0;
             document.getElementById('battle-round-display').innerText = `ROUND ${currentRound} / 3`;
             updateBattleScoreboard();
             loadBattleQuestion();
         }
-    }, 3000);
+    }, 3500);
 }
 
-// 9. Match Over (Premium Screen)
+// 8. Match Over (Premium Screen)
 function endBattle() {
     let resultMsg = "";
     let isWin = myRoundWins > botRoundWins;
@@ -9388,7 +9442,7 @@ function endBattle() {
     `;
 }
 
-// 10. Helper UI functions
+// 9. Helper UI functions
 function updateBattleScoreboard() {
     const myScoreEl = document.getElementById('battle-my-score');
     const botScoreEl = document.getElementById('battle-bot-score');
@@ -9421,12 +9475,12 @@ function rematch1v1() {
 
 function backToArenaMenu(isSurrender = false) {
     if (isSurrender) {
-        if(!confirm("Are you sure you want to surrender? You will lose 5 points!")) return; 
+        if(!confirm("⚠️ Are you sure you want to surrender? You will lose 5 points to the opponent!")) return; 
         if(typeof updateGlobalPoints === 'function') updateGlobalPoints(-5); 
+        alert(`🏳️ You surrendered! ${currentBotName} took 5 of your points.`);
     }
-    // Hard clear ALL timers on exit
+    
     clearInterval(battleTimerInterval);
-    clearTimeout(botAnswerTimeout);
     clearTimeout(roundTransitionTimeout);
     isMatchmakingActive = false;
 
