@@ -3389,11 +3389,12 @@ button[onclick="openDistractionModal()"] {
         <p style="color: var(--text-secondary); font-size: 0.9rem;">Connecting to SSCWarRoom Live Servers 📡</p>
     </div>
 
-    <!-- 🌟 LIVE BATTLE SCREEN (Hidden by default) 🌟 -->
+        <!-- 🌟 LIVE BATTLE SCREEN (Hidden by default) 🌟 -->
     <div id="live-battle-screen" class="hidden">
         
         <!-- 🔥 1v1 BATTLE SURRENDER/BACK BUTTON 🔥 -->
-        <div style="text-align: right; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span id="battle-round-display" style="background: #eab308; color: #020617; font-weight: 900; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; letter-spacing: 1px; box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);">ROUND 1 / 3</span>
             <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color: #ef4444; color: #ef4444;" onclick="backToArenaMenu(true)">🏳️ Surrender & Exit</button>
         </div>
 
@@ -3402,11 +3403,13 @@ button[onclick="openDistractionModal()"] {
             <div style="text-align: center; flex: 1;">
                 <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">You</div>
                 <div id="battle-my-score" style="font-size: 1.8rem; font-weight: 900; color: #22c55e;">0</div>
+                <div style="font-size: 0.65rem; color: #eab308; font-weight: 800; margin-top: 4px;">Rounds Won: <span id="my-round-wins">0</span></div>
             </div>
             <div style="font-size: 1.5rem; font-weight: 900; color: #ef4444; padding: 0 15px;">VS</div>
             <div style="text-align: center; flex: 1;">
-                <div id="battle-bot-name" style="font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">Opponent</div>
+                <div id="battle-bot-name" style="font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; margin: 0 auto;">Opponent</div>
                 <div id="battle-bot-score" style="font-size: 1.8rem; font-weight: 900; color: #ef4444;">0</div>
+                <div style="font-size: 0.65rem; color: #eab308; font-weight: 800; margin-top: 4px;">Rounds Won: <span id="bot-round-wins">0</span></div>
             </div>
         </div>
 
@@ -3421,6 +3424,10 @@ button[onclick="openDistractionModal()"] {
             <div id="battle-feedback" style="margin-top: 15px; font-weight: 800; text-align: center; min-height: 24px;"></div>
         </div>
     </div>
+
+    <!-- 🌟 BATTLE RESULT SCREEN (PREMIUM) 🌟 -->
+    <div id="battle-result-screen" class="hidden"></div>
+
 
     <!-- PURANA SOLO DRILL CONTAINER -->
     <div class="glass-card content-section hidden" id="solo-quiz-container" style="max-width: 750px; margin: 0 auto;">
@@ -9078,91 +9085,95 @@ window.closeVIPModal = function() {
 };
 
 // ==========================================
-// 🤖 1v1 DEATHMATCH BOT ENGINE
+// 🤖 1v1 DEATHMATCH BOT ENGINE (3 ROUNDS EDITION)
 // ==========================================
 const botNames = ["Aspirant_Rahul", "Sniper_007", "CGL_Fighter", "Priya_Ranker", "Vikas_99", "Inspector_Raj", "DelhiPolice_Don"];
 let battleQuestions = [];
-let currentBattleQ = 0;
-let myBattleScore = 0;
-let botBattleScore = 0;
+let currentBattleQ = 0; // Goes from 0 to 8 (Total 9 questions)
+let myBattleScore = 0;  // Resets every round
+let botBattleScore = 0; // Resets every round
+let myRoundWins = 0;    // Matches won (out of 3)
+let botRoundWins = 0;   // Matches won (out of 3)
+let currentRound = 1;   // 1 to 3
 let currentBotName = "";
 let battleTimerInterval;
 let botAnswerTimeout;
 let isMyTurnActive = false;
 
-// 1. Start Matchmaking (Fake Delay)
+// 1. Start Matchmaking
 function findMatch1v1() {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     if (!currentEmail) {
         alert("Commander, you must log in to enter the Deathmatch Arena!");
-        openAuthModal();
+        if(typeof openAuthModal === 'function') openAuthModal();
         return;
     }
 
     document.getElementById('arena-mode-selector').classList.add('hidden');
     document.getElementById('matchmaking-screen').classList.remove('hidden');
     
-    // 3 Second ka fake loading...
     setTimeout(() => {
         currentBotName = botNames[Math.floor(Math.random() * botNames.length)];
         document.getElementById('matchmaking-text').innerHTML = `Opponent Found:<br><span style="color:#ef4444;">${currentBotName}</span> ☠️`;
         
-        // 2 Second baad battle start
         setTimeout(() => {
             startLiveBattle();
         }, 2000);
     }, 3000);
 }
 
-// 2. Initialize Battle (With Anti-Repeat Logic)
+// 2. Initialize Battle (3 Rounds x 3 Questions = 9 Questions)
 function startLiveBattle() {
     document.getElementById('matchmaking-screen').classList.add('hidden');
     document.getElementById('live-battle-screen').classList.remove('hidden');
 
+    // Reset all match stats
+    myRoundWins = 0;
+    botRoundWins = 0;
+    currentRound = 1;
     myBattleScore = 0;
     botBattleScore = 0;
     currentBattleQ = 0;
+    
     updateBattleScoreboard();
     document.getElementById('battle-bot-name').innerText = currentBotName;
+    document.getElementById('battle-round-display').innerText = `ROUND 1 / 3`;
 
     const allQuizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
-    if(allQuizzes.length < 3) {
-        alert("Admin needs to add at least 3 questions in the database to start a match.");
+    if(allQuizzes.length === 0) {
+        alert("Admin needs to add questions in the database to start a match.");
         location.reload();
         return;
     }
     
-    // 🌟 NAYA LOGIC: Filter out questions the user has already answered 🌟
     const answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
     let availableQuizzes = allQuizzes.filter(q => !answeredIds.includes(q.id));
 
-    // Fallback: Agar naye questions 3 se kam bache hain, toh purane mix kar do taaki game na ruke
-    if (availableQuizzes.length < 3) {
-        availableQuizzes = allQuizzes; 
+    // We need 9 questions for 3 rounds. If not enough, reuse older ones.
+    battleQuestions = [];
+    let pool = availableQuizzes.length >= 9 ? availableQuizzes : allQuizzes;
+    
+    while(battleQuestions.length < 9) {
+        let shuffled = pool.sort(() => 0.5 - Math.random());
+        for(let q of shuffled) {
+            if(battleQuestions.length < 9) battleQuestions.push(q);
+        }
     }
-
-    // Shuffle and pick 3
-    battleQuestions = availableQuizzes.sort(() => 0.5 - Math.random()).slice(0, 3);
     
     loadBattleQuestion();
 }
 
-// 3. Load Individual Question (Tracking ID)
+// 3. Load Individual Question
 function loadBattleQuestion() {
-    if (currentBattleQ >= battleQuestions.length) {
-        endBattle();
-        return;
-    }
-
     isMyTurnActive = true;
     const qData = battleQuestions[currentBattleQ];
     
-    document.getElementById('battle-q-num').innerText = `Q ${currentBattleQ + 1}/${battleQuestions.length}`;
+    let qNumInRound = (currentBattleQ % 3) + 1; // 1, 2, 3
+    document.getElementById('battle-q-num').innerText = `Q ${qNumInRound}/3`;
     document.getElementById('battle-question-text').innerText = qData.q;
     document.getElementById('battle-feedback').innerText = "";
     
     const optionsBox = document.getElementById('battle-options-box');
-    // 🌟 NAYA LOGIC: submitBattleAnswer me 'qData.id' pass kar rahe hain 🌟
     optionsBox.innerHTML = qData.options.map((opt, idx) => `
         <button class="btn btn-outline" id="battle-opt-${idx}" style="justify-content: flex-start; padding: 12px 18px; font-size: 0.95rem; transition: 0.2s;" onclick="submitBattleAnswer(${idx}, ${qData.correct}, '${qData.id}')">
             ${String.fromCharCode(65 + idx)}. ${opt}
@@ -9193,21 +9204,23 @@ function startBattleTimer(seconds) {
         }
     }, 1000);
 }
-// 5. Bot Intelligence (Match score calculation)
+
+// 5. Bot Intelligence
 function simulateBotAnswer(correctIdx) {
     clearTimeout(botAnswerTimeout);
     const botDelay = Math.floor(Math.random() * 5000) + 2000; 
     botAnswerTimeout = setTimeout(() => {
-        const botIsCorrect = Math.random() < 0.75; 
+        const botIsCorrect = Math.random() < 0.70; // 70% accuracy for bot
         if (botIsCorrect) {
-            botBattleScore += 1; // 👈 10 ki jagah 1 kiya
+            botBattleScore += 1; 
         }
         updateBattleScoreboard();
         let fb = document.getElementById('battle-feedback');
         fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
     }, botDelay);
 }
-// 6. User Answers (Saving ID to memory)
+
+// 6. User Answers
 function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     if (!isMyTurnActive) return;
     isMyTurnActive = false;
@@ -9229,7 +9242,7 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
         document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>❌ Incorrect!</span>";
     }
     
-    // 🌟 NAYA LOGIC: Save this question ID so it doesn't repeat 🌟
+    // Save ID
     if (quizId) {
         let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
         if (!answeredIds.includes(quizId)) {
@@ -9242,32 +9255,169 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     setTimeout(loadNextBattleQuestion, 2000); 
 }
 
-// 7. End of Battle (Asli 10 point Pool aur 5 point Deduct ka magic)
-function endBattle() {
-    let resultMsg = "";
-    if (myBattleScore > botBattleScore) {
-        // User jeeta: Apna 5 wapas + Bot ka 5 = Total 10 points mile (Net +5)
-        resultMsg = `🎉 YOU WON! You take the 10 Point Pool! (Net +5 Points added to your profile)`;
-        updateGlobalPoints(5);
-    } else if (myBattleScore < botBattleScore) {
-        // User hara: Apna 5 point haar gaya (Net -5)
-        resultMsg = `💀 YOU DIED! ${currentBotName} stole your 5 points. (-5 Points)`;
-        updateGlobalPoints(-5);
-    } else {
-        // Draw: Entry fee (5 points) wapas (Net 0)
-        resultMsg = `🤝 DRAW! It was a tough fight. (Entry fee of 5 points refunded)`;
-        updateGlobalPoints(0);
+// 7. Route Next Question or End Round
+function loadNextBattleQuestion() {
+    currentBattleQ++;
+    
+    // If 3, 6 questions are done -> Evaluate Round
+    if (currentBattleQ === 3 || currentBattleQ === 6) {
+        evaluateRoundEnd();
+    } 
+    // If 9 questions are done -> Evaluate Final Round
+    else if (currentBattleQ === 9) {
+        evaluateRoundEnd(true); 
+    } 
+    else {
+        loadBattleQuestion();
     }
+}
 
-    document.getElementById('live-battle-screen').innerHTML = `
-        <div style="text-align:center; padding: 2rem;">
-            <div style="font-size:4rem; margin-bottom:10px;">${myBattleScore > botBattleScore ? '🏆' : '☠️'}</div>
-            <h2 style="color: ${myBattleScore > botBattleScore ? '#22c55e' : '#ef4444'}; margin-bottom: 20px;">MATCH OVER</h2>
-            <div style="font-size: 1.2rem; font-weight:800; margin-bottom:20px;">Final Score<br>You: ${myBattleScore} | ${currentBotName}: ${botBattleScore}</div>
-            <p style="color:var(--text-secondary); margin-bottom: 30px;">${resultMsg}</p>
-            <button class="btn-fiery-fight" onclick="location.reload()">Return to Base ➔</button>
+// 8. Evaluate Round End
+function evaluateRoundEnd(isFinal = false) {
+    clearInterval(battleTimerInterval);
+    clearTimeout(botAnswerTimeout);
+    isMyTurnActive = false;
+    
+    let roundWinnerMsg = "";
+    if (myBattleScore > botBattleScore) {
+        myRoundWins++;
+        roundWinnerMsg = `<span style="color:#22c55e;">🎉 YOU WON ROUND ${currentRound}!</span>`;
+    } else if (botBattleScore > myBattleScore) {
+        botRoundWins++;
+        roundWinnerMsg = `<span style="color:#ef4444;">💀 ${currentBotName} WON ROUND ${currentRound}!</span>`;
+    } else {
+        roundWinnerMsg = `<span style="color:#3b82f6;">🤝 ROUND ${currentRound} DRAW!</span>`;
+    }
+    
+    updateBattleScoreboard();
+    
+    document.getElementById('battle-feedback').innerHTML = `
+        <div style="background: rgba(0,0,0,0.8); padding: 15px; border-radius: 12px; margin-top: 10px; border: 1px solid #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.3); animation: pulse 1.5s infinite;">
+            <h3 style="margin:0 0 10px 0; color:#eab308;">ROUND ${currentRound} OVER</h3>
+            <div style="font-size:1.1rem; font-weight:900;">${roundWinnerMsg}</div>
+            <div style="font-size:0.85rem; color:#94a3b8; margin-top:5px;">${isFinal ? 'Calculating Final Match Results...' : 'Starting next round in 3 seconds...'}</div>
         </div>
     `;
+    
+    setTimeout(() => {
+        if (isFinal) {
+            endBattle();
+        } else {
+            currentRound++;
+            myBattleScore = 0;
+            botBattleScore = 0;
+            document.getElementById('battle-round-display').innerText = `ROUND ${currentRound} / 3`;
+            updateBattleScoreboard();
+            loadBattleQuestion();
+        }
+    }, 3000);
+}
+
+// 9. Match Over (Premium Screen)
+function endBattle() {
+    let resultMsg = "";
+    let isWin = myRoundWins > botRoundWins;
+    let isDraw = myRoundWins === botRoundWins;
+    let isLoss = myRoundWins < botRoundWins;
+
+    if (isWin) {
+        resultMsg = `🎉 YOU WON THE MATCH! You take the 10 Point Pool! (Net +5 Points added)`;
+        if(typeof updateGlobalPoints === 'function') updateGlobalPoints(5);
+    } else if (isLoss) {
+        resultMsg = `💀 YOU DIED! ${currentBotName} stole your 5 points. (-5 Points)`;
+        if(typeof updateGlobalPoints === 'function') updateGlobalPoints(-5);
+    } else {
+        resultMsg = `🤝 STALEMATE! It was a tough fight. (Entry fee refunded)`;
+        if(typeof updateGlobalPoints === 'function') updateGlobalPoints(0);
+    }
+
+    document.getElementById('live-battle-screen').classList.add('hidden');
+    const resultScreen = document.getElementById('battle-result-screen');
+    if(!resultScreen) return;
+    resultScreen.classList.remove('hidden');
+
+    let themeColor = isWin ? '#22c55e' : (isLoss ? '#ef4444' : '#3b82f6');
+    let bgGradient = isWin ? 'linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(2, 6, 23, 0.95))' :
+                     (isLoss ? 'linear-gradient(145deg, rgba(239, 68, 68, 0.1), rgba(2, 6, 23, 0.95))' :
+                               'linear-gradient(145deg, rgba(59, 130, 246, 0.1), rgba(2, 6, 23, 0.95))');
+    let titleText = isWin ? 'VICTORY SECURED' : (isLoss ? 'MISSION FAILED' : 'STANDOFF (DRAW)');
+    let iconHtml = isWin ? '🏆' : (isLoss ? '☠️' : '🛡️');
+    let btnTextColor = isWin ? '#022c22' : '#ffffff';
+
+    resultScreen.innerHTML = `
+        <div class="glass-card fade-in" style="background: ${bgGradient}; border: 2px solid ${themeColor}; box-shadow: 0 0 40px ${themeColor}30; text-align: center; padding: 3rem 1.5rem; max-width: 500px; margin: 0 auto; border-radius: 24px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 120px; height: 120px; background: ${themeColor}; filter: blur(60px); opacity: 0.4;"></div>
+            <div style="font-size: 5rem; filter: drop-shadow(0 0 20px ${themeColor}80); margin-bottom: 10px;">${iconHtml}</div>
+            <h2 style="color: ${themeColor}; font-size: 2.2rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; text-shadow: 0 0 15px ${themeColor}50;">${titleText}</h2>
+            <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 30px; line-height: 1.6; font-weight: 500;">${resultMsg}</p>
+
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; background: rgba(0,0,0,0.5); padding: 20px 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 30px;">
+                <div style="flex: 1;">
+                    <div style="font-size: 0.8rem; color: #eab308; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Rounds Won</div>
+                    <div style="font-size: 2.5rem; font-weight: 900; color: ${isWin ? '#22c55e' : (isDraw ? '#3b82f6' : '#f8fafc')}; text-shadow: 0 0 15px ${isWin ? '#22c55e80' : 'transparent'};">${myRoundWins}</div>
+                </div>
+                <div style="font-size: 1.4rem; color: #475569; font-weight: 900;">VS</div>
+                <div style="flex: 1; overflow: hidden;">
+                    <div style="font-size: 0.8rem; color: #eab308; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; white-space: nowrap; text-overflow: ellipsis;">${currentBotName} Wins</div>
+                    <div style="font-size: 2.5rem; font-weight: 900; color: ${isLoss ? '#ef4444' : (isDraw ? '#3b82f6' : '#f8fafc')}; text-shadow: 0 0 15px ${isLoss ? '#ef444480' : 'transparent'};">${botRoundWins}</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn" style="flex: 1; padding: 14px; font-size: 0.95rem; background: rgba(0,0,0,0.3); color: ${themeColor}; border: 1px solid ${themeColor}; font-weight: 800; border-radius: 12px; min-width: 100px;" onclick="exitBattleResult()">⬅️ Base</button>
+                <button class="btn" style="flex: 2; padding: 14px; font-size: 1rem; background: ${themeColor}; color: ${btnTextColor}; font-weight: 900; border: none; border-radius: 12px; box-shadow: 0 4px 20px ${themeColor}60; min-width: 150px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="rematch1v1()">
+                    <span>Rematch</span> ⚔️
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Helper UI functions
+function updateBattleScoreboard() {
+    const myScoreEl = document.getElementById('battle-my-score');
+    const botScoreEl = document.getElementById('battle-bot-score');
+    const myRoundWinsEl = document.getElementById('my-round-wins');
+    const botRoundWinsEl = document.getElementById('bot-round-wins');
+    
+    if (myScoreEl) myScoreEl.innerText = myBattleScore;
+    if (botScoreEl) botScoreEl.innerText = botBattleScore;
+    if (myRoundWinsEl) myRoundWinsEl.innerText = myRoundWins;
+    if (botRoundWinsEl) botRoundWinsEl.innerText = botRoundWins;
+}
+
+function disableBattleOptions() {
+    const optionsBox = document.getElementById('battle-options-box');
+    if (optionsBox) {
+        const buttons = optionsBox.querySelectorAll('button');
+        buttons.forEach(btn => btn.disabled = true);
+    }
+}
+
+function exitBattleResult() {
+    document.getElementById('battle-result-screen').classList.add('hidden');
+    document.getElementById('arena-mode-selector').classList.remove('hidden');
+}
+
+function rematch1v1() {
+    document.getElementById('battle-result-screen').classList.add('hidden');
+    findMatch1v1(); 
+}
+
+function backToArenaMenu(isSurrender = false) {
+    if (isSurrender) {
+        if(!confirm("Are you sure you want to surrender? You will lose 5 points!")) return; 
+        if(typeof updateGlobalPoints === 'function') updateGlobalPoints(-5); 
+        clearInterval(battleTimerInterval);
+        clearTimeout(botAnswerTimeout);
+    }
+    document.getElementById('solo-quiz-container').classList.add('hidden');
+    document.getElementById('matchmaking-screen').classList.add('hidden');
+    document.getElementById('live-battle-screen').classList.add('hidden');
+    const resultScreen = document.getElementById('battle-result-screen');
+    if(resultScreen) resultScreen.classList.add('hidden');
+    
+    document.getElementById('arena-mode-selector').classList.remove('hidden');
 }
 
 function updateGlobalPoints(change) {
