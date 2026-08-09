@@ -859,22 +859,36 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
 
 .t-word { display: inline-block; margin-right: 6px; margin-bottom: 6px; }
 
+/* 🌟 NAYA GLIDING CURSOR CSS 🌟 */
+
+/* 1. Text ko cursor ke upar rakhne ke liye z-index diya */
 .t-char {
     display: inline-block;
     position: relative;
     border-radius: 4px;
     transition: background-color 0.1s, color 0.1s;
+    z-index: 2; 
 }
 
-.t-space { white-space: pre; }
-
-/* Cursor Glow */
+/* 2. Ab .active class sirf text color change karegi, box nahi banayegi */
 .t-char.active {
-    background-color: var(--type-active);
     color: var(--type-text);
-    border-left: 3px solid var(--type-primary);
-    animation: cursorBlink 0.7s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* 3. Yeh hai hamara naya Gliding Cursor! */
+#smooth-cursor {
+    position: absolute;
+    background-color: var(--type-active);
+    border-left: 3px solid var(--type-primary);
+    border-radius: 4px;
+    /* Yahi transition use smooth gliding effect deti hai 👇 */
+    transition: left 0.12s cubic-bezier(0.2, 0, 0, 1), top 0.12s cubic-bezier(0.2, 0, 0, 1), width 0.12s ease;
+    z-index: 1; /* Text ke piche background bankar rahega */
+    animation: cursorBlink 0.7s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; /* Taki tap block na ho */
+    display: none; 
+}
+
 
 @keyframes cursorBlink {
     0% { border-left-color: var(--type-primary); }
@@ -2438,6 +2452,23 @@ button[onclick="openDistractionModal()"] {
     color: var(--text-primary) !important; /* Ye text ko Light mode me black aur Dark me white rakhega */
     font-weight: 800 !important;
 }
+/* 🌟 FOCUS MODE CSS 🌟 */
+.typing-box.focus-mode {
+    height: 65vh !important; /* Box ko lamba kar dega */
+    overflow-y: auto !important; /* Saara text dikhega, aur scroll hoga */
+    padding-bottom: 40px !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.15) !important; /* Premium Glow */
+}
+
+/* Monkeytype jaisa clean look laane ke liye hide extra things in focus mode */
+.typing-box.focus-mode::-webkit-scrollbar {
+    width: 4px;
+}
+.typing-box.focus-mode::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 10px;
+}
 
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -2801,6 +2832,7 @@ button[onclick="openDistractionModal()"] {
                         <option value="midnight">Midnight (Blue)</option>
                     </select>
                     <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="toggleTypingFullscreen()">⛶ Full Screen</button>
+                    <button id="focus-mode-btn" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; border-color: var(--accent-primary); color: var(--accent-primary);" onclick="toggleFocusMode()">🎯 Focus Mode</button>
                 </div>
                 <div style="font-weight: 800; color: var(--accent-secondary); font-size: 1.1rem; background: var(--bg-primary); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--glass-border);" id="typing-timer-display">00:00</div>
             </div>
@@ -4997,7 +5029,10 @@ function initializeTypingTest() {
 
 function buildProTypingUI(text) {
     const typingBox = document.getElementById('typing-passage-box');
-    typingBox.innerHTML = '';
+    
+    // 🔥 NAYI LINE: Typing box ke andar sabse pehle gliding cursor add kiya
+    typingBox.innerHTML = '<div id="smooth-cursor"></div>'; 
+    
     const words = text.split(' ');
     
     words.forEach((word, index) => {
@@ -5020,8 +5055,24 @@ function buildProTypingUI(text) {
         typingBox.appendChild(wordDiv);
     });
 
-    if (charactersInfo.length > 0) charactersInfo[0].el.classList.add('active');
+    if (charactersInfo.length > 0) {
+        charactersInfo[0].el.classList.add('active');
+        
+        // 🔥 NAYA CODE: Test start hone par cursor ko pehle letter par smoothly set karna
+        setTimeout(() => {
+            const cursor = document.getElementById('smooth-cursor');
+            const firstChar = charactersInfo[0].el;
+            if (cursor && firstChar) {
+                cursor.style.display = 'block';
+                cursor.style.left = firstChar.offsetLeft + 'px';
+                cursor.style.top = firstChar.offsetTop + 'px';
+                cursor.style.width = firstChar.offsetWidth + 'px';
+                cursor.style.height = firstChar.offsetHeight + 'px';
+            }
+        }, 50);
+    }
 }
+
 
 function handleMobileFriendlyInput(e) {
     if (!typingTestActive) return;
@@ -5066,14 +5117,23 @@ function handleMobileFriendlyInput(e) {
         playCorrectSound(); // Backspace sound
     }
     previousInputLength = charIndex;
-
-      // Active Cursor & Auto-Scroll (100% PERFECT SCROLL FIX)
+    // Active Cursor & Auto-Scroll (100% PERFECT SCROLL FIX)
     if (charIndex < charactersInfo.length) {
         charactersInfo[charIndex].el.classList.add('active');
         
         const box = document.getElementById('typing-passage-box');
         const activeSpan = charactersInfo[charIndex].el;
         
+        // 🔥 NAYI LINE: Smooth Cursor ko aage slide karne ka logic 👇
+        const cursor = document.getElementById('smooth-cursor');
+        if (cursor && activeSpan) {
+            cursor.style.left = activeSpan.offsetLeft + 'px';
+            cursor.style.top = activeSpan.offsetTop + 'px';
+            cursor.style.width = activeSpan.offsetWidth + 'px';
+            cursor.style.height = activeSpan.offsetHeight + 'px';
+        }
+        // 🔥 NAYI LINE KHATAM 👆
+
         // Exact screen position calculate karega
         const boxRect = box.getBoundingClientRect();
         const spanRect = activeSpan.getBoundingClientRect();
@@ -5085,6 +5145,7 @@ function handleMobileFriendlyInput(e) {
     } else {
         finishTypingTest();
     }
+
 } // Yahan par handleMobileFriendlyInput function khatam hota hai
 
 
@@ -9596,6 +9657,35 @@ function backToArenaMenu(isSurrender = false) {
     
     // Main Combat Mode Selector wapas show karo
     document.getElementById('arena-mode-selector').classList.remove('hidden');
+}
+// 🌟 FOCUS MODE TOGGLE FUNCTION 🌟
+function toggleFocusMode() {
+    const typingBox = document.getElementById('typing-passage-box');
+    const focusBtn = document.getElementById('focus-mode-btn');
+    
+    // Class toggle karega (Add/Remove)
+    typingBox.classList.toggle('focus-mode');
+    
+    if (typingBox.classList.contains('focus-mode')) {
+        // Mode ON: Button ko bhara hua (Solid) dikhayega
+        focusBtn.innerHTML = '❌ Exit Focus';
+        focusBtn.style.background = 'var(--accent-primary)';
+        focusBtn.style.color = 'white';
+        
+        // Active word ko center me focus karne ke liye smoothly scroll karega
+        const activeChar = document.querySelector('.t-char.active');
+        if(activeChar) {
+            activeChar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    } else {
+        // Mode OFF: Wapas normal Outline button ban jayega
+        focusBtn.innerHTML = '🎯 Focus Mode';
+        focusBtn.style.background = 'transparent';
+        focusBtn.style.color = 'var(--accent-primary)';
+        
+        // Wapas upar scroll kar dega
+        typingBox.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 
