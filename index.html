@@ -2349,7 +2349,62 @@ button[onclick="openDistractionModal()"] {
     height: 2px !important;
     opacity: 0.6;
 }
+/* ==========================================
+   📱 GATEWAY SCREEN MOBILE FIX (Scroll & Layout)
+   ========================================== */
+@media (max-width: 900px) {
+    /* 1. Scroll & Cut-off Fix: Center hatakar flex-start kiya taaki upar ka hissa na kate */
+    #gateway-screen {
+        align-items: flex-start !important; 
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+        -webkit-overflow-scrolling: touch !important; /* Smooth momentum scrolling for mobile */
+    }
 
+    /* 2. Text ko thoda compact karna */
+    #gateway-screen h1 {
+        font-size: 2rem !important;
+        margin-bottom: 5px !important;
+    }
+    .gateway-content p {
+        font-size: 0.95rem !important;
+        margin-bottom: 25px !important;
+    }
+
+    /* 3. Cards ke layout aur gap ko mobile friendly banana */
+    .gateway-cards-container {
+        gap: 15px !important;
+        flex-direction: column !important; /* Ek ke neeche ek aayenge */
+        align-items: center !important;
+    }
+
+    /* 4. Giant cards ko chhota aur sleek karna */
+    .gateway-card {
+        width: 100% !important;
+        max-width: 360px !important; /* Jyada chauda hone se rokna */
+        padding: 22px 20px !important; /* Padding kam ki */
+        min-width: unset !important;
+    }
+
+    /* 5. Icons aur button ki spacing theek karna */
+    .gw-icon {
+        font-size: 2.8rem !important; /* Icon size chhota kiya */
+        margin-bottom: 12px !important;
+    }
+    .gw-title {
+        font-size: 1.15rem !important;
+        margin-bottom: 6px !important;
+    }
+    .gw-hook {
+        font-size: 0.85rem !important;
+        margin-bottom: 18px !important;
+    }
+    .gw-btn {
+        padding: 12px 20px !important;
+        font-size: 0.85rem !important;
+    }
+        }
+    
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
