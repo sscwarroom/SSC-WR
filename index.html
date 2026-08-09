@@ -3352,7 +3352,7 @@ button[onclick="openDistractionModal()"] {
             </section>
 
                        <section id="view-daily-quiz-view" class="view-section hidden">
-     <div class="page-header" style="background: linear-gradient(135deg, #7f1d1d, #dc2626, #ea580c);">
+    <div class="page-header" style="background: linear-gradient(135deg, #7f1d1d, #dc2626, #ea580c);">
         <h1>⚔️ Combat Arena</h1>
         <p>Attempt solo drills or challenge live opponents to steal their points!</p>
         
@@ -3360,20 +3360,10 @@ button[onclick="openDistractionModal()"] {
         <button id="admin-add-quiz-btn-page" class="btn hidden" style="background: #eab308; color: black; font-weight: 800; border: 1px solid #fef08a; margin-top: 10px;" onclick="openAdminQuizModal()">➕ Add New Questions (Admin)</button>
     </div>
 
-
-
     <!-- 🌟 MODE SELECTOR (Solo vs 1v1) 🌟 -->
     <div id="arena-mode-selector" style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
-        <!-- PURANA SOLO DRILL CONTAINER -->
-    <div class="glass-card content-section hidden" id="solo-quiz-container" style="max-width: 750px; margin: 0 auto;">
-        
-        <!-- 🔥 SOLO DRILL BACK BUTTON 🔥 -->
-        <button class="btn btn-outline" style="margin-bottom: 15px; padding: 6px 12px; font-size: 0.85rem;" onclick="backToArenaMenu()">⬅️ Back to Arena</button>
-        
-        <div id="page-quiz-box-wrapper">
-
-         <div id="page-quiz-subtitle-text" style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 700; color: var(--accent-secondary);"></div>
-
+        <!-- Daily Solo -->
+        <div class="glass-card" style="flex: 1; min-width: 280px; border: 2px solid var(--glass-border); text-align: center;">
             <div style="font-size: 3rem; margin-bottom: 10px;">🎯</div>
             <h3 style="color: var(--text-primary); margin-bottom: 5px;">Daily Solo Drill</h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Answer today's handpicked questions to maintain your streak.</p>
@@ -3385,9 +3375,7 @@ button[onclick="openDistractionModal()"] {
             <div style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; animation: pulse 2s infinite;">Live</div>
             <div style="font-size: 3rem; margin-bottom: 10px;">☠️</div>
             <h3 style="color: #ef4444; margin-bottom: 5px;">1v1 Deathmatch</h3>
-            
-<p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Entry Fee: 5 Points. Match with a random aspirant. Winner takes the 10 Point pool!</p>
-
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Entry Fee: 5 Points. Match with a random aspirant. Winner takes the 10 Point pool!</p>
             <button class="btn-fiery-fight" style="width: 100%; margin: 0; padding: 12px; font-size: 0.9rem;" onclick="findMatch1v1()">
                 🔍 FIND MATCH
             </button>
@@ -3434,9 +3422,12 @@ button[onclick="openDistractionModal()"] {
         </div>
     </div>
 
-
     <!-- PURANA SOLO DRILL CONTAINER -->
     <div class="glass-card content-section hidden" id="solo-quiz-container" style="max-width: 750px; margin: 0 auto;">
+        
+        <!-- 🔥 SOLO DRILL BACK BUTTON 🔥 -->
+        <button class="btn btn-outline" style="margin-bottom: 15px; padding: 6px 12px; font-size: 0.85rem;" onclick="backToArenaMenu()">⬅️ Back to Arena</button>
+        
         <div id="page-quiz-box-wrapper">
              <div id="page-quiz-subtitle-text" style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 700; color: var(--accent-secondary);"></div>
              <div id="page-quiz-question-box" style="font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; color: var(--text-primary);"></div>
@@ -3447,13 +3438,14 @@ button[onclick="openDistractionModal()"] {
              </div>
         </div>
     </div>
-        <!-- 🏆 LEADERBOARD JO GAYAB HO GAYA THA 🏆 -->
+    
+    <!-- 🏆 LEADERBOARD 🏆 -->
     <div class="glass-card content-section" style="max-width: 750px; margin: 0 auto; margin-top: 25px;">
         <div id="page-user-army-rank-banner" style="background: var(--bg-primary); padding: 15px; border-radius: 14px; border: 2px solid var(--accent-primary); margin-bottom: 20px; text-align: center;"></div>
         <h3 style="color: var(--accent-secondary); margin-bottom: 15px; font-size: 1.3rem;">🏆 Top 10 Army Leaderboard</h3>
         <div id="page-leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
-</section> 
+</section>
 
 
 
@@ -9387,27 +9379,51 @@ function loadNextBattleQuestion() {
 }
 
 // ==========================================
-// ⬅️ BACK TO ARENA MENU LOGIC
+// 🛠️ 1v1 BATTLE SCORE & NEXT QUESTION FIX 🛠️
+// ==========================================
+function updateBattleScoreboard() {
+    const myScoreEl = document.getElementById('battle-my-score');
+    const botScoreEl = document.getElementById('battle-bot-score');
+    if (myScoreEl) myScoreEl.innerText = myBattleScore;
+    if (botScoreEl) botScoreEl.innerText = botBattleScore;
+}
+
+function disableBattleOptions() {
+    const optionsBox = document.getElementById('battle-options-box');
+    if (optionsBox) {
+        const buttons = optionsBox.querySelectorAll('button');
+        buttons.forEach(btn => btn.disabled = true);
+    }
+}
+
+function loadNextBattleQuestion() {
+    currentBattleQ++;
+    loadBattleQuestion();
+}
+
+// ==========================================
+// ⬅️ BACK TO ARENA MENU LOGIC (NEW)
 // ==========================================
 function backToArenaMenu(isSurrender = false) {
-    // Agar live battle chal rahi hai aur tumne back/surrender click kiya
+    // Agar live battle chal rahi hai aur tumne surrender click kiya
     if (isSurrender) {
         if(!confirm("Are you sure you want to surrender? You will lose 5 points!")) {
-            return; 
+            return; // Surrender cancel kar diya toh wapas wahi rahega
         }
-        updateGlobalPoints(-5); // Surrender penalty
+        updateGlobalPoints(-5); // Surrender penalty (-5 points)
         clearInterval(battleTimerInterval);
         clearTimeout(botAnswerTimeout);
     }
     
-    // Saare active screens chhupa do
+    // Saare active screens (Solo aur 1v1 dono) ko hide kar do
     document.getElementById('solo-quiz-container').classList.add('hidden');
     document.getElementById('matchmaking-screen').classList.add('hidden');
     document.getElementById('live-battle-screen').classList.add('hidden');
     
-    // Main Combat Mode Selector wapas dikhao
+    // Main Combat Mode Selector wapas show karo
     document.getElementById('arena-mode-selector').classList.remove('hidden');
 }
+
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
