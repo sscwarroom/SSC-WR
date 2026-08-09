@@ -9099,7 +9099,6 @@ const botNames = [
 
 let battleQuestions = [];
 let currentBattleQ = 0; 
-let questionsInCurrentRound = 0; 
 let myBattleScore = 0;  
 let botBattleScore = 0; 
 let myRoundWins = 0;    
@@ -9133,7 +9132,7 @@ function findMatch1v1() {
     
     setTimeout(() => {
         currentBotName = botNames[Math.floor(Math.random() * botNames.length)];
-        document.getElementById('matchmaking-text').innerHTML = `Opponent Found:<br><span style="color:#ef4444;">${currentBotName}</span> ☠️`;
+        document.getElementById('matchmaking-text').innerHTML = `Challenger Found:<br><span style="color:#ef4444;">${currentBotName}</span> ⚔️`;
         
         setTimeout(() => {
             startLiveBattle();
@@ -9144,7 +9143,6 @@ function findMatch1v1() {
 // 2. Initialize Battle (3 Rounds x 3 Questions = 9 Questions)
 function startLiveBattle() {
     isMatchmakingActive = false;
-    
     clearInterval(battleTimerInterval);
     clearTimeout(roundTransitionTimeout);
 
@@ -9157,8 +9155,7 @@ function startLiveBattle() {
     currentRound = 1;
     myBattleScore = 0;
     botBattleScore = 0;
-    currentBattleQ = 0;
-    questionsInCurrentRound = 0;
+    currentBattleQ = 0; 
     
     updateBattleScoreboard();
     document.getElementById('battle-bot-name').innerText = currentBotName;
@@ -9195,9 +9192,11 @@ function loadBattleQuestion() {
     clearInterval(battleTimerInterval);
 
     const qData = battleQuestions[currentBattleQ];
-    questionsInCurrentRound++;
     
-    document.getElementById('battle-q-num').innerText = `Q ${questionsInCurrentRound}/3`;
+    let qNumInRound = (currentBattleQ % 3) + 1; 
+    document.getElementById('battle-q-num').innerText = `Q ${qNumInRound}/3`;
+    document.getElementById('battle-round-display').innerText = `ROUND ${currentRound} / 3`;
+    
     document.getElementById('battle-question-text').innerText = qData.q;
     document.getElementById('battle-feedback').innerText = "";
     
@@ -9208,11 +9207,11 @@ function loadBattleQuestion() {
         </button>
     `).join('');
 
-    // Pre-calculate Bot's Timing and Accuracy for this question
+    // Pre-calculate Opponent's Timing and Accuracy for this question
     questionStartTime = Date.now();
-    let botDelay = Math.floor(Math.random() * 5000) + 2000; // Bot takes 2s to 7s
+    let botDelay = Math.floor(Math.random() * 5000) + 2000; 
     botScheduledTime = questionStartTime + botDelay;
-    botWillBeCorrect = (Math.random() < 0.70); // 70% chance bot is right
+    botWillBeCorrect = (Math.random() < 0.70); 
 
     startBattleTimer(10); 
 }
@@ -9233,18 +9232,17 @@ function startBattleTimer(seconds) {
                 disableBattleOptions();
                 
                 let feedbackHtml = "";
-                // Agar tumne click nahi kiya, aur bot answer karne wala tha toh bot ko point mil jayega
                 if (Date.now() > botScheduledTime && botWillBeCorrect) {
                     botBattleScore += 1;
-                    feedbackHtml = "<span style='color:#ef4444;'>⏱️ Time Up! Opponent answered correctly. (Bot +1)</span>";
+                    feedbackHtml = `<span style='color:#ef4444;'>⏱️ Time Up! ${currentBotName} answered correctly. (${currentBotName} +1)</span>`;
                 } else {
-                    feedbackHtml = "<span style='color:#ef4444;'>⏱️ Time Up! Nobody scored.</span>";
+                    feedbackHtml = `<span style='color:#ef4444;'>⏱️ Time Up! Nobody scored.</span>`;
                 }
                 
                 document.getElementById('battle-feedback').innerHTML = feedbackHtml;
                 updateBattleScoreboard();
                 
-                currentBattleQ++;
+                currentBattleQ++; 
                 roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2500);
             }
         }
@@ -9254,19 +9252,19 @@ function startBattleTimer(seconds) {
 // 5. User Answers (Speed Comparison Engine)
 function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     if (!isMyTurnActive) return;
-    isMyTurnActive = false; // Lock UI
+    isMyTurnActive = false; 
     clearInterval(battleTimerInterval);
     disableBattleOptions();
 
     let userAnswerTime = Date.now();
     let userCorrect = (selectedIdx === correctIdx);
-    let timeDiff = userAnswerTime - botScheduledTime; // Negative matlab user was faster
+    let timeDiff = userAnswerTime - botScheduledTime; 
     let feedbackHtml = "";
 
     const selectedBtn = document.getElementById(`battle-opt-${selectedIdx}`);
     const correctBtn = document.getElementById(`battle-opt-${correctIdx}`);
     
-    // Set UI Colors for selected options
+    // UI Colors
     if (userCorrect) {
         selectedBtn.style.background = "#22c55e"; selectedBtn.style.color = "white";
     } else {
@@ -9276,38 +9274,34 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
 
     // 🏆 FASTEST FINGER FIRST & DRAW LOGIC 🏆
     if (Math.abs(timeDiff) <= 800) { 
-        // SIMULTANEOUS CLASH (Under 0.8 seconds difference)
         if (userCorrect && botWillBeCorrect) {
-            myBattleScore += 0.5; 
-            botBattleScore += 0.5;
-            feedbackHtml = "<span style='color:#3b82f6;'>🤝 Clash! Both answered correctly together! (+0.5 each)</span>";
+            myBattleScore += 0.5; botBattleScore += 0.5;
+            feedbackHtml = `<span style='color:#3b82f6;'>🤝 Clash! Both answered correctly together! (+0.5 each)</span>`;
         } else if (userCorrect) {
             myBattleScore += 1;
-            feedbackHtml = "<span style='color:#22c55e;'>🔥 You were correct, opponent missed! (+1)</span>";
+            feedbackHtml = `<span style='color:#22c55e;'>🔥 You were correct, ${currentBotName} missed! (+1)</span>`;
         } else if (botWillBeCorrect) {
             botBattleScore += 1;
-            feedbackHtml = "<span style='color:#ef4444;'>💀 You missed, but opponent got it! (Bot +1)</span>";
+            feedbackHtml = `<span style='color:#ef4444;'>💀 You missed, but ${currentBotName} got it! (${currentBotName} +1)</span>`;
         } else {
-            feedbackHtml = "<span style='color:#ef4444;'>❌ Both answered wrong together!</span>";
+            feedbackHtml = `<span style='color:#ef4444;'>❌ Both answered wrong together!</span>`;
         }
     } 
     else if (timeDiff < 0) {
-        // USER WAS STRICTLY FASTER
         if (userCorrect) {
             myBattleScore += 1;
-            feedbackHtml = "<span style='color:#22c55e;'>⚡ Lightning Fast & Correct! (+1)</span>";
+            feedbackHtml = `<span style='color:#22c55e;'>⚡ Lightning Fast & Correct! (+1)</span>`;
         } else if (botWillBeCorrect) {
             botBattleScore += 1;
-            feedbackHtml = "<span style='color:#ef4444;'>❌ You were fast but wrong! Opponent got it right. (Bot +1)</span>";
+            feedbackHtml = `<span style='color:#ef4444;'>❌ You were fast but wrong! ${currentBotName} got it right. (${currentBotName} +1)</span>`;
         } else {
-            feedbackHtml = "<span style='color:#ef4444;'>❌ You were fast but wrong! Opponent also missed.</span>";
+            feedbackHtml = `<span style='color:#ef4444;'>❌ You were fast but wrong! ${currentBotName} also missed.</span>`;
         }
     } 
     else {
-        // BOT WAS STRICTLY FASTER
         if (botWillBeCorrect) {
             botBattleScore += 1;
-            feedbackHtml = `<span style='color:#ef4444;'>💀 ${currentBotName} answered first & correctly! (Bot +1)</span>`;
+            feedbackHtml = `<span style='color:#ef4444;'>💀 ${currentBotName} answered first & correctly! (${currentBotName} +1)</span>`;
         } else if (userCorrect) {
             myBattleScore += 1;
             feedbackHtml = `<span style='color:#22c55e;'>😂 ${currentBotName} was fast but wrong! You got it right! (+1)</span>`;
@@ -9319,7 +9313,6 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     document.getElementById('battle-feedback').innerHTML = feedbackHtml;
     updateBattleScoreboard();
     
-    // Save quiz to memory
     if (quizId) {
         let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
         if (!answeredIds.includes(quizId)) {
@@ -9328,15 +9321,18 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
         }
     }
     
-    currentBattleQ++;
+    currentBattleQ++; 
     roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 3000); 
 }
 
 // 6. Route Next Question or End Round
 function loadNextBattleQuestion() {
-    if (questionsInCurrentRound === 3) {
-        // 3 questions purae ho gaye is round ke
-        evaluateRoundEnd(currentRound === 3); // Agar 3rd round tha, toh match over
+    if (currentBattleQ === 3) {
+        evaluateRoundEnd(false);
+    } else if (currentBattleQ === 6) {
+        evaluateRoundEnd(false);
+    } else if (currentBattleQ >= 9) {
+        evaluateRoundEnd(true);
     } else {
         loadBattleQuestion();
     }
@@ -9344,7 +9340,7 @@ function loadNextBattleQuestion() {
 
 // 7. Evaluate Round End
 function evaluateRoundEnd(isFinal = false) {
-    isMyTurnActive = false;
+    isMyTurnActive = false; 
     
     let roundWinnerMsg = "";
     if (myBattleScore > botBattleScore) {
@@ -9372,10 +9368,8 @@ function evaluateRoundEnd(isFinal = false) {
             endBattle();
         } else {
             currentRound++;
-            questionsInCurrentRound = 0;
-            myBattleScore = 0;
+            myBattleScore = 0; 
             botBattleScore = 0;
-            document.getElementById('battle-round-display').innerText = `ROUND ${currentRound} / 3`;
             updateBattleScoreboard();
             loadBattleQuestion();
         }
@@ -9475,7 +9469,7 @@ function rematch1v1() {
 
 function backToArenaMenu(isSurrender = false) {
     if (isSurrender) {
-        if(!confirm("⚠️ Are you sure you want to surrender? You will lose 5 points to the opponent!")) return; 
+        if(!confirm(`⚠️ Are you sure you want to surrender? You will lose 5 points to ${currentBotName}!`)) return; 
         if(typeof updateGlobalPoints === 'function') updateGlobalPoints(-5); 
         alert(`🏳️ You surrendered! ${currentBotName} took 5 of your points.`);
     }
