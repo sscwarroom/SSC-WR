@@ -857,7 +857,15 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
     }
 }
 
-.t-word { display: inline-block; margin-right: 6px; margin-bottom: 6px; }
+.t-word { display: inline-block; margin-bottom: 6px; }
+
+/* Nayi class space ko collapse hone se rokne ke liye */
+.t-space {
+    display: inline-block;
+    white-space: pre; /* Ye space ko render karne ke liye force karega */
+    width: 14px; /* Cursor jab space par aayega toh itni width lega */
+}
+
 
 /* 🌟 NAYA GLIDING CURSOR CSS 🌟 */
 
@@ -2452,20 +2460,48 @@ button[onclick="openDistractionModal()"] {
     color: var(--text-primary) !important; /* Ye text ko Light mode me black aur Dark me white rakhega */
     font-weight: 800 !important;
 }
-/* 🌟 FOCUS MODE CSS 🌟 */
-.typing-box.focus-mode {
-    height: 65vh !important; /* Box ko lamba kar dega */
-    overflow-y: auto !important; /* Saara text dikhega, aur scroll hoga */
-    padding-bottom: 40px !important;
-    border-color: var(--accent-primary) !important;
-    box-shadow: 0 0 30px rgba(37, 99, 235, 0.15) !important; /* Premium Glow */
+/* ==========================================
+   🌟 ULTRA PREMIUM FOCUS MODE (MONKEYTYPE STYLE)
+   ========================================== */
+/* Jab Focus Mode active ho tab parent container ki layout */
+#typing-active-screen.focus-active .typing-box {
+    height: 75vh !important;
+    border: none !important; /* Border hata diya clean look ke liye */
+    background: transparent !important; /* Background screen ke sath merge ho jayega */
+    box-shadow: none !important;
+    font-size: 1.55rem !important; /* Text thoda bada aur aaramdayak */
+    line-height: 2.2 !important;
 }
 
-/* Monkeytype jaisa clean look laane ke liye hide extra things in focus mode */
-.typing-box.focus-mode::-webkit-scrollbar {
+/* Faltu cheezein hide kar do (Instruction text, Submit early button) */
+#typing-active-screen.focus-active > p,
+#typing-active-screen.focus-active > button.btn-outline {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Upar wale controls (Theme, Full screen) hide karo, sirf Focus aur Timer dikhega */
+#typing-active-screen.focus-active #typing-theme-selector,
+#typing-active-screen.focus-active button[onclick="toggleTypingFullscreen()"] {
+    display: none !important;
+}
+
+/* 🌟 MAGIC TRICK: Jo type ho gaya hai (sahi ya galat), usko dim (halka) kar do taaki focus next word par rahe */
+#typing-active-screen.focus-active .t-char.correct,
+#typing-active-screen.focus-active .t-char.incorrect {
+    opacity: 0.35 !important;
+    transition: opacity 0.3s ease;
+}
+
+/* Custom Scrollbar for Focus Mode (Clean Look) */
+#typing-active-screen.focus-active .typing-box::-webkit-scrollbar {
     width: 4px;
 }
-.typing-box.focus-mode::-webkit-scrollbar-thumb {
+#typing-active-screen.focus-active .typing-box::-webkit-scrollbar-thumb {
     background: var(--accent-primary);
     border-radius: 10px;
 }
@@ -5124,13 +5160,20 @@ function handleMobileFriendlyInput(e) {
         const box = document.getElementById('typing-passage-box');
         const activeSpan = charactersInfo[charIndex].el;
         
-        // 🔥 NAYI LINE: Smooth Cursor ko aage slide karne ka logic 👇
+               // 🔥 NAYI LINE: Smooth Cursor ko aage slide karne ka logic 👇
         const cursor = document.getElementById('smooth-cursor');
         if (cursor && activeSpan) {
+            let spanWidth = activeSpan.offsetWidth;
+            let spanHeight = activeSpan.offsetHeight;
+            
+            // Agar space span ki wajah se width 0 hai, toh default width set karo
+            if (spanWidth === 0) spanWidth = 14; 
+            if (spanHeight === 0) spanHeight = 28; // Default cursor height
+
             cursor.style.left = activeSpan.offsetLeft + 'px';
             cursor.style.top = activeSpan.offsetTop + 'px';
-            cursor.style.width = activeSpan.offsetWidth + 'px';
-            cursor.style.height = activeSpan.offsetHeight + 'px';
+            cursor.style.width = spanWidth + 'px';
+            cursor.style.height = spanHeight + 'px';
         }
         // 🔥 NAYI LINE KHATAM 👆
 
@@ -9658,34 +9701,38 @@ function backToArenaMenu(isSurrender = false) {
     // Main Combat Mode Selector wapas show karo
     document.getElementById('arena-mode-selector').classList.remove('hidden');
 }
-// 🌟 FOCUS MODE TOGGLE FUNCTION 🌟
+// 🌟 ADVANCED FOCUS MODE TOGGLE FUNCTION 🌟
 function toggleFocusMode() {
+    const activeScreen = document.getElementById('typing-active-screen');
     const typingBox = document.getElementById('typing-passage-box');
     const focusBtn = document.getElementById('focus-mode-btn');
     
-    // Class toggle karega (Add/Remove)
-    typingBox.classList.toggle('focus-mode');
+    // Parent container par class toggle karenge taaki CSS baaki sab khud hide kar de
+    activeScreen.classList.toggle('focus-active');
     
-    if (typingBox.classList.contains('focus-mode')) {
-        // Mode ON: Button ko bhara hua (Solid) dikhayega
+    if (activeScreen.classList.contains('focus-active')) {
+        // Mode ON: Button UI update
         focusBtn.innerHTML = '❌ Exit Focus';
         focusBtn.style.background = 'var(--accent-primary)';
         focusBtn.style.color = 'white';
         
-        // Active word ko center me focus karne ke liye smoothly scroll karega
+        // Active word ko smooth center mein laana
         const activeChar = document.querySelector('.t-char.active');
         if(activeChar) {
             activeChar.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     } else {
-        // Mode OFF: Wapas normal Outline button ban jayega
+        // Mode OFF: Wapas normal mode
         focusBtn.innerHTML = '🎯 Focus Mode';
         focusBtn.style.background = 'transparent';
         focusBtn.style.color = 'var(--accent-primary)';
         
-        // Wapas upar scroll kar dega
+        // Typing box ko wapas upar scroll kar dena
         typingBox.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    
+    // 🚀 IMP: Button click karne ke baad typing input se focus na hate!
+    document.getElementById('hidden-focus-input').focus();
 }
 
 
