@@ -9598,51 +9598,7 @@ function syncQuizzesFromCloud() {
         })
         .catch(err => console.log("Failed to sync quizzes from cloud: ", err));
 }
-// ==========================================
-// 🛠️ 1v1 BATTLE MISSING FUNCTIONS FIX 🛠️
-// ==========================================
-function updateBattleScoreboard() {
-    const myScoreEl = document.getElementById('battle-my-score');
-    const botScoreEl = document.getElementById('battle-bot-score');
-    if (myScoreEl) myScoreEl.innerText = myBattleScore;
-    if (botScoreEl) botScoreEl.innerText = botBattleScore;
-}
 
-function disableBattleOptions() {
-    const optionsBox = document.getElementById('battle-options-box');
-    if (optionsBox) {
-        const buttons = optionsBox.querySelectorAll('button');
-        buttons.forEach(btn => btn.disabled = true);
-    }
-}
-
-function loadNextBattleQuestion() {
-    currentBattleQ++;
-    loadBattleQuestion();
-}
-
-// ==========================================
-// 🛠️ 1v1 BATTLE SCORE & NEXT QUESTION FIX 🛠️
-// ==========================================
-function updateBattleScoreboard() {
-    const myScoreEl = document.getElementById('battle-my-score');
-    const botScoreEl = document.getElementById('battle-bot-score');
-    if (myScoreEl) myScoreEl.innerText = myBattleScore;
-    if (botScoreEl) botScoreEl.innerText = botBattleScore;
-}
-
-function disableBattleOptions() {
-    const optionsBox = document.getElementById('battle-options-box');
-    if (optionsBox) {
-        const buttons = optionsBox.querySelectorAll('button');
-        buttons.forEach(btn => btn.disabled = true);
-    }
-}
-
-function loadNextBattleQuestion() {
-    currentBattleQ++;
-    loadBattleQuestion();
-}
 
 // ==========================================
 // ⬅️ BACK TO ARENA MENU LOGIC (NEW)
