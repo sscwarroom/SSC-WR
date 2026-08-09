@@ -9083,25 +9083,28 @@ window.closeVIPModal = function() {
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 };
-
 // ==========================================
-// 🤖 1v1 DEATHMATCH BOT ENGINE (3 ROUNDS EDITION)
+// 🤖 1v1 DEATHMATCH BOT ENGINE (ULTRA PRO 3-ROUND EDITION)
 // ==========================================
 const botNames = ["Aspirant_Rahul", "Sniper_007", "CGL_Fighter", "Priya_Ranker", "Vikas_99", "Inspector_Raj", "DelhiPolice_Don"];
 let battleQuestions = [];
-let currentBattleQ = 0; // Goes from 0 to 8 (Total 9 questions)
-let myBattleScore = 0;  // Resets every round
-let botBattleScore = 0; // Resets every round
-let myRoundWins = 0;    // Matches won (out of 3)
-let botRoundWins = 0;   // Matches won (out of 3)
-let currentRound = 1;   // 1 to 3
+let currentBattleQ = 0; 
+let myBattleScore = 0;  
+let botBattleScore = 0; 
+let myRoundWins = 0;    
+let botRoundWins = 0;   
+let currentRound = 1;   
 let currentBotName = "";
 let battleTimerInterval;
 let botAnswerTimeout;
+let roundTransitionTimeout;
 let isMyTurnActive = false;
+let isMatchmakingActive = false; // 🔥 Anti-Spam Lock
 
 // 1. Start Matchmaking
 function findMatch1v1() {
+    if (isMatchmakingActive) return; // Prevent double clicks
+    
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     if (!currentEmail) {
         alert("Commander, you must log in to enter the Deathmatch Arena!");
@@ -9109,6 +9112,7 @@ function findMatch1v1() {
         return;
     }
 
+    isMatchmakingActive = true;
     document.getElementById('arena-mode-selector').classList.add('hidden');
     document.getElementById('matchmaking-screen').classList.remove('hidden');
     
@@ -9119,15 +9123,22 @@ function findMatch1v1() {
         setTimeout(() => {
             startLiveBattle();
         }, 2000);
-    }, 3000);
+    }, 2500);
 }
 
 // 2. Initialize Battle (3 Rounds x 3 Questions = 9 Questions)
 function startLiveBattle() {
+    isMatchmakingActive = false;
+    
+    // Clear ALL old timers to prevent bugs
+    clearInterval(battleTimerInterval);
+    clearTimeout(botAnswerTimeout);
+    clearTimeout(roundTransitionTimeout);
+
     document.getElementById('matchmaking-screen').classList.add('hidden');
     document.getElementById('live-battle-screen').classList.remove('hidden');
 
-    // Reset all match stats
+    // Hard reset ALL stats
     myRoundWins = 0;
     botRoundWins = 0;
     currentRound = 1;
@@ -9142,19 +9153,21 @@ function startLiveBattle() {
     const allQuizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
     if(allQuizzes.length === 0) {
         alert("Admin needs to add questions in the database to start a match.");
-        location.reload();
+        backToArenaMenu(false);
         return;
     }
     
     const answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
     let availableQuizzes = allQuizzes.filter(q => !answeredIds.includes(q.id));
 
-    // We need 9 questions for 3 rounds. If not enough, reuse older ones.
     battleQuestions = [];
     let pool = availableQuizzes.length >= 9 ? availableQuizzes : allQuizzes;
     
+    // Deep copy to ensure questions load perfectly
+    let poolCopy = JSON.parse(JSON.stringify(pool));
+    
     while(battleQuestions.length < 9) {
-        let shuffled = pool.sort(() => 0.5 - Math.random());
+        let shuffled = poolCopy.sort(() => 0.5 - Math.random());
         for(let q of shuffled) {
             if(battleQuestions.length < 9) battleQuestions.push(q);
         }
@@ -9166,6 +9179,11 @@ function startLiveBattle() {
 // 3. Load Individual Question
 function loadBattleQuestion() {
     isMyTurnActive = true;
+    
+    // Stop bot from answering previous question
+    clearTimeout(botAnswerTimeout);
+    clearInterval(battleTimerInterval);
+
     const qData = battleQuestions[currentBattleQ];
     
     let qNumInRound = (currentBattleQ % 3) + 1; // 1, 2, 3
@@ -9186,7 +9204,6 @@ function loadBattleQuestion() {
 
 // 4. Timer Logic
 function startBattleTimer(seconds) {
-    clearInterval(battleTimerInterval);
     let timeLeft = seconds;
     document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}s`;
 
@@ -9199,7 +9216,7 @@ function startBattleTimer(seconds) {
                 document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>⏱️ Time Up! You missed it.</span>";
                 isMyTurnActive = false;
                 disableBattleOptions();
-                setTimeout(loadNextBattleQuestion, 2000);
+                roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2000);
             }
         }
     }, 1000);
@@ -9207,7 +9224,6 @@ function startBattleTimer(seconds) {
 
 // 5. Bot Intelligence
 function simulateBotAnswer(correctIdx) {
-    clearTimeout(botAnswerTimeout);
     const botDelay = Math.floor(Math.random() * 5000) + 2000; 
     botAnswerTimeout = setTimeout(() => {
         const botIsCorrect = Math.random() < 0.70; // 70% accuracy for bot
@@ -9216,7 +9232,7 @@ function simulateBotAnswer(correctIdx) {
         }
         updateBattleScoreboard();
         let fb = document.getElementById('battle-feedback');
-        fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
+        if(fb) fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
     }, botDelay);
 }
 
@@ -9242,7 +9258,6 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
         document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>❌ Incorrect!</span>";
     }
     
-    // Save ID
     if (quizId) {
         let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
         if (!answeredIds.includes(quizId)) {
@@ -9252,18 +9267,18 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     }
     
     updateBattleScoreboard();
-    setTimeout(loadNextBattleQuestion, 2000); 
+    roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 2000); 
 }
 
 // 7. Route Next Question or End Round
 function loadNextBattleQuestion() {
-    currentBattleQ++;
+    currentBattleQ++; 
     
     // If 3, 6 questions are done -> Evaluate Round
     if (currentBattleQ === 3 || currentBattleQ === 6) {
         evaluateRoundEnd();
     } 
-    // If 9 questions are done -> Evaluate Final Round
+    // If 9 questions are done -> Evaluate Final Match Result
     else if (currentBattleQ === 9) {
         evaluateRoundEnd(true); 
     } 
@@ -9299,7 +9314,7 @@ function evaluateRoundEnd(isFinal = false) {
         </div>
     `;
     
-    setTimeout(() => {
+    roundTransitionTimeout = setTimeout(() => {
         if (isFinal) {
             endBattle();
         } else {
@@ -9373,7 +9388,7 @@ function endBattle() {
     `;
 }
 
-// Helper UI functions
+// 10. Helper UI functions
 function updateBattleScoreboard() {
     const myScoreEl = document.getElementById('battle-my-score');
     const botScoreEl = document.getElementById('battle-bot-score');
@@ -9408,9 +9423,13 @@ function backToArenaMenu(isSurrender = false) {
     if (isSurrender) {
         if(!confirm("Are you sure you want to surrender? You will lose 5 points!")) return; 
         if(typeof updateGlobalPoints === 'function') updateGlobalPoints(-5); 
-        clearInterval(battleTimerInterval);
-        clearTimeout(botAnswerTimeout);
     }
+    // Hard clear ALL timers on exit
+    clearInterval(battleTimerInterval);
+    clearTimeout(botAnswerTimeout);
+    clearTimeout(roundTransitionTimeout);
+    isMatchmakingActive = false;
+
     document.getElementById('solo-quiz-container').classList.add('hidden');
     document.getElementById('matchmaking-screen').classList.add('hidden');
     document.getElementById('live-battle-screen').classList.add('hidden');
