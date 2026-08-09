@@ -5280,36 +5280,63 @@ function loadPageQuiz() {
         return;
     }
 
+    if(typeof renderPageLeaderboard === 'function') renderPageLeaderboard();
+
+    // 🌟 10 QUESTIONS DAILY LIMIT LOGIC 🌟
+    const todayStr = new Date().toDateString();
+    const dailyDateKey = getUserKey('warRoomDailyQuizDate');
+    const dailyCountKey = getUserKey('warRoomDailyQuizCount');
+    
+    let lastQuizDate = localStorage.getItem(dailyDateKey);
+    let dailyCount = parseInt(localStorage.getItem(dailyCountKey) || '0');
+
+    // Agar naya din shuru hua hai, toh count 0 kar do
+    if (lastQuizDate !== todayStr) {
+        dailyCount = 0;
+        localStorage.setItem(dailyDateKey, todayStr);
+        localStorage.setItem(dailyCountKey, '0');
+    }
+
+    const pointsKey = getUserKey('warRoomUserPoints');
+    const userScore = localStorage.getItem(pointsKey) || '0';
+
+    // Agar aaj ke 10 questions pure ho gaye hain
+    if (dailyCount >= 10) {
+        qBox.innerHTML = `✅ <span style="color:var(--accent-tertiary);">Today's 10 Solo Drills Completed! Amazing work, Warrior.</span>`;
+        optionsContainer.innerHTML = '';
+        feedback.innerHTML = `Status: <strong style="color:var(--accent-tertiary);">Daily Quota Done ✅</strong><br>Your Current Score: <strong>${userScore} Points</strong>`;
+        if(subtitleEl) subtitleEl.innerHTML = `Come back tomorrow for 10 new tactical questions!`;
+        nextBtn.classList.add('hidden');
+        return;
+    }
+
     const quizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
     let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
 
-    if(typeof renderPageLeaderboard === 'function') renderPageLeaderboard();
-
     if (quizzes.length === 0) {
-        qBox.innerText = "No daily quizzes available right now.";
+        qBox.innerText = "No daily quizzes available right now. Admin will upload soon.";
         optionsContainer.innerHTML = '';
         if(subtitleEl) subtitleEl.innerHTML = "";
         return;
     }
 
-    // 🔥 FIX 5: Sort properly, newest first
+    // Sort properly, newest first
     quizzes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
     // Find the first unattempted question
     let unattemptedQuiz = quizzes.find(q => !answeredIds.includes(q.id));
 
     if (!unattemptedQuiz) {
-        const pointsKey = getUserKey('warRoomUserPoints');
-        const userScore = localStorage.getItem(pointsKey) || '0';
-        qBox.innerHTML = `✅ <span style="color:var(--accent-tertiary);">All Saved Quizzes Completed! Amazing work, Warrior.</span>`;
+        qBox.innerHTML = `⚠️ <span style="color:#eab308;">All Saved Quizzes Attempted!</span>`;
         optionsContainer.innerHTML = '';
-        feedback.innerHTML = `Status: <strong style="color:var(--accent-tertiary);">All Complete ✅</strong><br>Your Current Score: <strong>${userScore} Points</strong>`;
-        if(subtitleEl) subtitleEl.innerHTML = `Admin will deploy new tactical questions soon. Check the leaderboard below!`;
+        feedback.innerHTML = `Status: <strong style="color:#eab308;">Waiting for Admin ⏳</strong><br>Your Current Score: <strong>${userScore} Points</strong>`;
+        if(subtitleEl) subtitleEl.innerHTML = `Admin will deploy new tactical questions soon. Try 1v1 Battle Arena!`;
         nextBtn.classList.add('hidden');
         return;
     }
 
-    if(subtitleEl) subtitleEl.innerHTML = `Correct: <strong>+2 points</strong> | Wrong: <strong>-0.5 points</strong> (Active Challenges: ${quizzes.length - answeredIds.length})`;
+    let remainingToday = 10 - dailyCount;
+    if(subtitleEl) subtitleEl.innerHTML = `Correct: <strong>+2 pts</strong> | Wrong: <strong>-0.5 pts</strong> (Quota Left Today: ${remainingToday}/10)`;
     nextBtn.classList.add('hidden');
     feedback.innerHTML = '';
 
@@ -5319,6 +5346,7 @@ function loadPageQuiz() {
         <button class="btn btn-outline" style="justify-content: flex-start; padding: 12px 18px; font-size: 0.95rem;" onclick="checkPageQuizAnswer(${idx}, ${unattemptedQuiz.correct}, '${unattemptedQuiz.id}')">${String.fromCharCode(65 + idx)}. ${opt}</button>
     `).join('');
 }
+
 function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     if (!currentEmail) return;
@@ -5334,35 +5362,40 @@ function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     let points = parseFloat(localStorage.getItem(pointsKey) || '0');
 
     if (selectedIdx === correctIdx) {
-        points += 2; // ✅ NAYA UPDATE: Sahi hone par 2 points
+        points += 2;
         feedback.style.color = 'var(--accent-tertiary)';
         feedback.innerHTML = `🎉 <strong>Correct! +2 Points earned.</strong><br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     } else {
-        points -= 0.5; // ❌ NAYA UPDATE: Galat hone par -0.5 points
+        points -= 0.5;
         feedback.style.color = '#ef4444';
         feedback.innerHTML = `❌ Incorrect (-0.5 Points). Correct answer was <strong>${String.fromCharCode(65 + correctIdx)}</strong>.<br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     }
     
-    // Local storage update for fast UI
     localStorage.setItem(pointsKey, points);
 
-    // Cloud Database (Firebase) mein Global Leaderboard ke liye score bhejo
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-        firebase.firestore().collection("users").doc(currentUser.uid).set({
-            points: points,
-            name: localStorage.getItem('warRoomUserName') || "Aspirant"
-        }, { merge: true }).catch(err => console.log("Score save error: ", err));
+    if (typeof firebase !== 'undefined') {
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser) {
+            firebase.firestore().collection("users").doc(currentUser.uid).set({
+                points: points,
+                name: localStorage.getItem('warRoomUserName') || "Aspirant"
+            }, { merge: true }).catch(err => console.log("Score save error: ", err));
+        }
     }
 
-    // Question lock karo taaki repeat na ho
     let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
     if (!answeredIds.includes(quizId)) {
         answeredIds.push(quizId);
         localStorage.setItem(getUserKey('warRoomAnsweredQuizIdsList'), JSON.stringify(answeredIds));
     }
 
-    updateStreakBanner();
+    // 🌟 INCREMENT DAILY COUNT 🌟
+    const dailyCountKey = getUserKey('warRoomDailyQuizCount');
+    let dailyCount = parseInt(localStorage.getItem(dailyCountKey) || '0');
+    dailyCount++;
+    localStorage.setItem(dailyCountKey, dailyCount.toString());
+
+    if(typeof updateStreakBanner === 'function') updateStreakBanner();
     document.getElementById('page-quiz-next-btn').classList.remove('hidden');
 }
 
