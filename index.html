@@ -5265,62 +5265,6 @@ function clearTypingHistory() {
         }
 
         let pageQuizIndex = 0;
-
-        function loadPageQuiz() {
-            const currentEmail = localStorage.getItem('warRoomUserEmail');
-            const subtitleEl = document.getElementById('page-quiz-subtitle-text');
-            const qBox = document.getElementById('page-quiz-question-box');
-            const optionsContainer = document.getElementById('page-quiz-options-box');
-            const feedback = document.getElementById('page-quiz-result-feedback');
-            const nextBtn = document.getElementById('page-quiz-next-btn');
-
-            if (!currentEmail) {
-                qBox.innerText = "Please log in to attempt daily quizzes and view your Army rank.";
-                optionsContainer.innerHTML = `<button class="btn btn-launch" onclick="openAuthModal()" style="margin-top: 10px;">Log In Now</button>`;
-                subtitleEl.innerHTML = "Access Restricted";
-                return;
-            }
-
-            const quizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
-            
-            if (quizzes.length > 0) {
-                const activeQIndex = quizzes.length - 1; 
-                const activeQuizId = quizzes[activeQIndex].id;
-                
-                let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
-                const isCurrentCompleted = answeredIds.includes(activeQuizId);
-
-                renderPageLeaderboard();
-
-                if (isCurrentCompleted) {
-                    const pointsKey = getUserKey('warRoomUserPoints');
-                    const userScore = localStorage.getItem(pointsKey) || '0';
-                    qBox.innerHTML = `✅ <span style="color:var(--accent-tertiary);">Latest Quiz Already Attempted & Completed! Admin will deploy new ones soon.</span>`;
-                    optionsContainer.innerHTML = '';
-                    feedback.innerHTML = `Status: <strong style="color:var(--accent-tertiary);">Complete ✅</strong><br>Your Current Score: <strong>${userScore} Points</strong>`;
-                    subtitleEl.innerHTML = `New tactical questions will replace older ones when posted. Check the leaderboard below!`;
-                    nextBtn.classList.add('hidden');
-                    return;
-                }
-
-                subtitleEl.innerHTML = `Correct: <strong>+2 points</strong> | Wrong: <strong>-0.5 points</strong> (Latest Active Challenge)`;
-                nextBtn.classList.add('hidden');
-                feedback.innerHTML = '';
-
-                const qObj = quizzes[activeQIndex];
-                qBox.innerText = `Q. ${qObj.q}`;
-
-                optionsContainer.innerHTML = qObj.options.map((opt, idx) => `
-                    <button class="btn btn-outline" style="justify-content: flex-start; padding: 12px 18px; font-size: 0.95rem;" onclick="checkPageQuizAnswer(${idx}, ${qObj.correct}, '${qObj.id}')">${String.fromCharCode(65 + idx)}. ${opt}</button>
-                `).join('');
-            } else {
-                qBox.innerText = "No daily quizzes available right now.";
-                optionsContainer.innerHTML = '';
-            }
-        }
-
-        let currentQuizIndex = 0; // Track karne ke liye ki abhi kaunsa question chal raha hai
-
 function loadPageQuiz() {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     const subtitleEl = document.getElementById('page-quiz-subtitle-text');
@@ -5332,42 +5276,43 @@ function loadPageQuiz() {
     if (!currentEmail) {
         qBox.innerText = "Please log in to attempt daily quizzes and view your Army rank.";
         optionsContainer.innerHTML = `<button class="btn btn-launch" onclick="openAuthModal()" style="margin-top: 10px;">Log In Now</button>`;
-        subtitleEl.innerHTML = "Access Restricted";
+        if(subtitleEl) subtitleEl.innerHTML = "Access Restricted";
         return;
     }
 
     const quizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
     let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
 
-    renderPageLeaderboard();
+    if(typeof renderPageLeaderboard === 'function') renderPageLeaderboard();
 
     if (quizzes.length === 0) {
         qBox.innerText = "No daily quizzes available right now.";
         optionsContainer.innerHTML = '';
-        subtitleEl.innerHTML = "";
+        if(subtitleEl) subtitleEl.innerHTML = "";
         return;
     }
 
-    // Aise questions dhoondo jo user ne abhi tak attempt nahi kiye hain
+    // 🔥 FIX 5: Sort properly, newest first
+    quizzes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    // Find the first unattempted question
     let unattemptedQuiz = quizzes.find(q => !answeredIds.includes(q.id));
 
     if (!unattemptedQuiz) {
-        // Agar saare questions attempt ho chuke hain tab yeh message dikhega
         const pointsKey = getUserKey('warRoomUserPoints');
         const userScore = localStorage.getItem(pointsKey) || '0';
         qBox.innerHTML = `✅ <span style="color:var(--accent-tertiary);">All Saved Quizzes Completed! Amazing work, Warrior.</span>`;
         optionsContainer.innerHTML = '';
         feedback.innerHTML = `Status: <strong style="color:var(--accent-tertiary);">All Complete ✅</strong><br>Your Current Score: <strong>${userScore} Points</strong>`;
-        subtitleEl.innerHTML = `Admin will deploy new tactical questions soon. Check the leaderboard below!`;
+        if(subtitleEl) subtitleEl.innerHTML = `Admin will deploy new tactical questions soon. Check the leaderboard below!`;
         nextBtn.classList.add('hidden');
         return;
     }
 
-    subtitleEl.innerHTML = `Correct: <strong>+2 points</strong> | Wrong: <strong>-0.5 points</strong> (Active Challenges: ${quizzes.length})`;
+    if(subtitleEl) subtitleEl.innerHTML = `Correct: <strong>+2 points</strong> | Wrong: <strong>-0.5 points</strong> (Active Challenges: ${quizzes.length - answeredIds.length})`;
     nextBtn.classList.add('hidden');
     feedback.innerHTML = '';
 
-    // Jo pehla unattempted question mila, usko display karo
     qBox.innerText = `Q. ${unattemptedQuiz.q}`;
 
     optionsContainer.innerHTML = unattemptedQuiz.options.map((opt, idx) => `
@@ -7680,52 +7625,27 @@ function saveAndNextQuizQuestion() {
         alert("Please fill all fields for the quiz question.");
         return;
     }
+
+    // 🔥 FIX 1: Generate ONE unique ID and Timestamp
+    const qId = 'qz_' + Date.now();
+    const qTimestamp = new Date().getTime();
+
     const newQuestion = { 
-        id: 'qz_' + Date.now(), 
+        id: qId, 
         q: qText, 
         options: [o0, o1, o2, o3], 
         correct: correctIdx,
-        timestamp: new Date().getTime()
+        timestamp: qTimestamp
     };
 
-    // 🔥 PUSH TO FIREBASE CLOUD 🔥
-    firebase.firestore().collection("combat_arena_quizzes").doc(newQuestion.id).set(newQuestion)
-    .then(() => {
-        // Clear inputs for next question
-        document.getElementById('admin-q-text').value = '';
-        document.getElementById('admin-opt-0').value = '';
-        document.getElementById('admin-opt-1').value = '';
-        document.getElementById('admin-opt-2').value = '';
-        document.getElementById('admin-opt-3').value = '';
-        document.getElementById('admin-q-text').focus();
-        
-        syncQuizzesFromCloud(); // Refresh list from cloud
-        alert("✅ Question deployed to Firebase Cloud!");
-    })
-    .catch(err => {
-        alert("Error saving to cloud: " + err.message);
-    }); // ❌ Yahan par ek extra '}' tha jisne function close kar diya tha, wo maine hata diya hai.
-
-    // 1. Purane saare quizzes nikal lo
+    // 🔥 FIX 2: Add to Local Storage FIRST (Instant UI Update)
     let quizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
+    quizzes.unshift(newQuestion); // Unshift ensures the new question is always at the TOP
     
-    // 2. Naya question list ke aage ya peeche jod do
-    quizzes.push({ 
-        id: 'qz_' + Date.now(), 
-        q: qText, 
-        options: [o0, o1, o2, o3], 
-        correct: correctIdx 
-    });
-
-    // 3. Limit check: Agar 10 se zyada ho gaye, toh sabse purana wala (aakhir ya shuru ka) hata do
-    if (quizzes.length > 10) {
-        quizzes.shift(); // Yeh sabse pehla/purana question delete kar dega
-    }
-    
-    // 4. Updated list wapas save karo (Purane delete nahi honge, ek sath store rahenge)
+    if (quizzes.length > 300) { quizzes.pop(); } // Keep memory clean
     localStorage.setItem('warRoomDailyQuizzes', JSON.stringify(quizzes));
 
-    // 5. Inputs clear karo taaki agla question daal sako (Modal band nahi hoga)
+    // Clear Inputs
     document.getElementById('admin-q-text').value = '';
     document.getElementById('admin-opt-0').value = '';
     document.getElementById('admin-opt-1').value = '';
@@ -7733,9 +7653,22 @@ function saveAndNextQuizQuestion() {
     document.getElementById('admin-opt-3').value = '';
     document.getElementById('admin-q-text').focus();
 
+    // Refresh UI immediately
     loadPageQuiz();
-    alert(`Question saved successfully! Total questions stored: ${quizzes.length}/10`);
-} // ✅ Asli function yahan close hona chahiye
+
+    // 🔥 FIX 3: Push to Cloud quietly in the background
+    if (typeof firebase !== 'undefined') {
+        firebase.firestore().collection("combat_arena_quizzes").doc(qId).set(newQuestion)
+        .then(() => {
+            console.log("Deployed to Cloud Successfully!");
+            // No need to blindly overwrite local cache here anymore
+        })
+        .catch(err => console.error("Cloud Error: ", err.message));
+    }
+    
+    alert("Question saved & added successfully! 🚀");
+}
+
 
 function openDistractionModal() {
     document.getElementById('distraction-modal').style.display = 'flex';
@@ -9579,25 +9512,34 @@ function syncQuizzesFromCloud() {
     if (typeof firebase === 'undefined') return;
 
     firebase.firestore().collection("combat_arena_quizzes")
-        .orderBy("timestamp", "desc") // Naye questions pehle aayenge
-        .limit(300) // Ek baar me max 300 questions download honge taaki app fast rahe
+        .orderBy("timestamp", "desc") 
+        .limit(300) 
         .get()
         .then((snapshot) => {
             let cloudQuizzes = [];
-            snapshot.forEach(doc => {
-                cloudQuizzes.push(doc.data());
-            });
+            snapshot.forEach(doc => { cloudQuizzes.push(doc.data()); });
 
             if (cloudQuizzes.length > 0) {
-                // Phone ki memory update karo
-                localStorage.setItem('warRoomDailyQuizzes', JSON.stringify(cloudQuizzes));
+                // 🔥 FIX 4: MERGE Cloud & Local data safely
+                let localQuizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
+                let mergedQuizzes = [...cloudQuizzes];
                 
-                // UI refresh karo
+                localQuizzes.forEach(lq => {
+                    if (!mergedQuizzes.find(cq => cq.id === lq.id)) {
+                        mergedQuizzes.push(lq);
+                    }
+                });
+
+                // Sort so newest is always first
+                mergedQuizzes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                localStorage.setItem('warRoomDailyQuizzes', JSON.stringify(mergedQuizzes));
                 if (typeof loadPageQuiz === 'function') loadPageQuiz();
             }
         })
-        .catch(err => console.log("Failed to sync quizzes from cloud: ", err));
+        .catch(err => console.log("Cloud Sync Failed: ", err));
 }
+
 
 
 // ==========================================
