@@ -2403,8 +2403,42 @@ button[onclick="openDistractionModal()"] {
         padding: 12px 20px !important;
         font-size: 0.85rem !important;
     }
-        }
-    
+}
+/* ==========================================
+   🤖 COMBAT ARENA CSS (Radar & Pulse)
+   ========================================== */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.radar-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid var(--accent-primary);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+/* ==========================================
+   🛠️ UI BUG FIXES: LOADER & LEADERBOARD
+   ========================================== */
+
+/* 1. Loading Icon ko Center mein lane ke liye */
+.radar-spinner {
+    margin: 0 auto 15px auto !important;
+    display: block !important;
+}
+
+/* 2. Leaderboard mein Rank 1 ka yellow naam theek karne ke liye (Hamesha readable banayega) */
+#page-leaderboard-list-container h4,
+#typing-leaderboard-list h4 {
+    color: var(--text-primary) !important; /* Ye text ko Light mode me black aur Dark me white rakhega */
+    font-weight: 800 !important;
+}
+
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -3002,6 +3036,9 @@ button[onclick="openDistractionModal()"] {
     <li class="nav-item premium-nav-item" onclick="navigate('premium', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg> 👑 Premium Hub
     </li>
+     <li class="nav-item" onclick="navigate('daily-quiz-view', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4H-2V7h2v6z"/></svg> Combat Arena
+    </li>
 <li class="nav-item" onclick="navigate('mock-tests', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Study Materials & Mock Tests
     </li>
@@ -3013,9 +3050,7 @@ button[onclick="openDistractionModal()"] {
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Practice Generator
     </li>
 
-    <li class="nav-item" onclick="navigate('daily-quiz-view', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4H-2V7h2v6z"/></svg> Daily Quizzes
-    </li>
+   
 
     <li class="nav-item" onclick="navigate('social-feed', this)">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Latest Updates
@@ -3316,73 +3351,91 @@ button[onclick="openDistractionModal()"] {
                 <div id="premium-content-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
             </section>
 
-                        <section id="view-daily-quiz-view" class="view-section hidden">
-                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                    <div>
-                        <h1>🎯 Daily Quizzes & Leaderboard</h1>
-                        <p>Attempt daily tactical challenges, earn <strong>+10 points</strong> (or -5 for mistakes), and climb the Army Ranks!</p>
-                    </div>
-                    <button id="admin-add-quiz-btn-page" class="btn btn-outline hidden" style="border-color: white; color: white;" onclick="openAdminQuizModal()">➕ Add Question (Admin)</button>
-                </div>
+                       <section id="view-daily-quiz-view" class="view-section hidden">
+    <div class="page-header" style="background: linear-gradient(135deg, #7f1d1d, #dc2626, #ea580c);">
+        <h1>⚔️ Combat Arena</h1>
+        <p>Attempt solo drills or challenge live opponents to steal their points!</p>
+    </div>
 
-                <!-- Admin Modal yahan properly set hai -->
-                <div id="admin-quiz-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 25000; display: none; justify-content: center; align-items: center;">
-                    <div class="glass-card" style="width: 100%; max-width: 450px; background: var(--bg-secondary); margin: 15px; position: relative;">
-                        <button onclick="closeAdminQuizModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
-                        <h3 style="color: var(--accent-secondary); margin-bottom: 10px; padding-right: 25px;">Admin: Add Daily Quiz</h3>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                            <textarea id="admin-q-text" class="search-input" placeholder="Question text..." style="height: 70px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none;"></textarea>
-                            <input type="text" id="admin-opt-0" class="search-input" placeholder="Option A" style="padding: 8px 12px; font-size: 0.9rem;">
-                            <input type="text" id="admin-opt-1" class="search-input" placeholder="Option B" style="padding: 8px 12px; font-size: 0.9rem;">
-                            <input type="text" id="admin-opt-2" class="search-input" placeholder="Option C" style="padding: 8px 12px; font-size: 0.9rem;">
-                            <input type="text" id="admin-opt-3" class="search-input" placeholder="Option D" style="padding: 8px 12px; font-size: 0.9rem;">
-                            <select id="admin-correct-idx" class="search-input" style="padding: 8px 12px; font-size: 0.9rem;">
-                                <option value="0">Correct Option: A</option>
-                                <option value="1">Correct Option: B</option>
-                                <option value="2">Correct Option: C</option>
-                                <option value="3">Correct Option: D</option>
-                            </select>
-                            
-                            <!-- Save & Next aur Save & Close dono buttons -->
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn" style="flex: 1; background: var(--accent-primary); color: white; padding: 10px; font-size: 0.85rem;" onclick="saveAndNextQuizQuestion()">Save & Next ➕</button>
-                                <button class="btn" style="flex: 1; background: var(--accent-secondary); color: white; padding: 10px; font-size: 0.85rem;" onclick="saveNewQuizQuestion()">Save & Close 🚀</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- 🌟 MODE SELECTOR (Solo vs 1v1) 🌟 -->
+    <div id="arena-mode-selector" style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+        <!-- Daily Solo -->
+        <div class="glass-card" style="flex: 1; min-width: 280px; border: 2px solid var(--glass-border); text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🎯</div>
+            <h3 style="color: var(--text-primary); margin-bottom: 5px;">Daily Solo Drill</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Answer today's handpicked questions to maintain your streak.</p>
+            <button class="btn btn-outline" style="width: 100%;" onclick="startSoloDrill()">Start Solo Drill</button>
+        </div>
+
+        <!-- 1v1 Deathmatch -->
+        <div class="glass-card" style="flex: 1; min-width: 280px; border: 2px solid #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), transparent); text-align: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; animation: pulse 2s infinite;">Live</div>
+            <div style="font-size: 3rem; margin-bottom: 10px;">☠️</div>
+            <h3 style="color: #ef4444; margin-bottom: 5px;">1v1 Deathmatch</h3>
+            
+<p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Entry Fee: 5 Points. Match with a random aspirant. Winner takes the 10 Point pool!</p>
+
+            <button class="btn-fiery-fight" style="width: 100%; margin: 0; padding: 12px; font-size: 0.9rem;" onclick="findMatch1v1()">
+                🔍 FIND MATCH
+            </button>
+        </div>
+    </div>
+
+    <!-- 🌟 MATCHMAKING RADAR (Hidden by default) 🌟 -->
+    <div id="matchmaking-screen" class="glass-card hidden" style="text-align: center; padding: 3rem 1rem; border: 2px dashed #3b82f6;">
+        <div class="radar-spinner" style="margin: 0 auto 20px auto; border-color: #3b82f6; border-right-color: transparent;"></div>
+        <h3 style="color: #3b82f6; font-size: 1.5rem; margin-bottom: 10px;" id="matchmaking-text">Scanning for Opponent...</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Connecting to SSCWarRoom Live Servers 📡</p>
+    </div>
+
+    <!-- 🌟 LIVE BATTLE SCREEN (Hidden by default) 🌟 -->
+    <div id="live-battle-screen" class="hidden">
+        <!-- VS Scoreboard -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 15px; border-radius: 16px; border: 2px solid #ef4444; margin-bottom: 20px;">
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">You</div>
+                <div id="battle-my-score" style="font-size: 1.8rem; font-weight: 900; color: #22c55e;">0</div>
+            </div>
+            <div style="font-size: 1.5rem; font-weight: 900; color: #ef4444; padding: 0 15px;">VS</div>
+            <div style="text-align: center; flex: 1;">
+                <div id="battle-bot-name" style="font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">Opponent</div>
+                <div id="battle-bot-score" style="font-size: 1.8rem; font-weight: 900; color: #ef4444;">0</div>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="glass-card" style="border: 2px solid var(--accent-primary);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <span id="battle-q-num" style="background: rgba(37,99,235,0.1); color: var(--accent-primary); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem;">Q 1/3</span>
+                <span id="battle-timer" style="color: #ef4444; font-weight: 900; font-size: 1.1rem;">⏱️ 10s</span>
+            </div>
+            <h3 id="battle-question-text" style="margin-bottom: 20px; font-size: 1.2rem; color: var(--text-primary);">Question loading...</h3>
+            <div id="battle-options-box" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            <div id="battle-feedback" style="margin-top: 15px; font-weight: 800; text-align: center; min-height: 24px;"></div>
+        </div>
+    </div>
+
+    <!-- PURANA SOLO DRILL CONTAINER -->
+    <div class="glass-card content-section hidden" id="solo-quiz-container" style="max-width: 750px; margin: 0 auto;">
+        <div id="page-quiz-box-wrapper">
+             <div id="page-quiz-subtitle-text" style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 700; color: var(--accent-secondary);"></div>
+             <div id="page-quiz-question-box" style="font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; color: var(--text-primary);"></div>
+             <div id="page-quiz-options-box" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
+             <div id="page-quiz-result-feedback" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.6;"></div>
+             <div id="page-quiz-action-container" style="display: flex; gap: 10px;">
+                 <button id="page-quiz-next-btn" class="btn hidden" style="flex: 1; background: var(--accent-primary); color: white; padding: 14px;" onclick="pageNextQuizQuestion()">Next Challenge ➔</button>
+             </div>
+        </div>
+    </div>
+        <!-- 🏆 LEADERBOARD JO GAYAB HO GAYA THA 🏆 -->
+    <div class="glass-card content-section" style="max-width: 750px; margin: 0 auto; margin-top: 25px;">
+        <div id="page-user-army-rank-banner" style="background: var(--bg-primary); padding: 15px; border-radius: 14px; border: 2px solid var(--accent-primary); margin-bottom: 20px; text-align: center;"></div>
+        <h3 style="color: var(--accent-secondary); margin-bottom: 15px; font-size: 1.3rem;">🏆 Top 10 Army Leaderboard</h3>
+        <div id="page-leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </div>
+</section> 
 
 
-                <div class="glass-card content-section" style="max-width: 750px; margin: 0 auto; border: 2px dashed var(--accent-secondary); background: var(--bg-secondary);">
-                    <h3 style="color: var(--accent-secondary); margin-bottom: 0.5rem; font-size: 1.1rem;">📢 Tactical Disclaimer & Rank System Criteria</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
-                        <strong>1. Monthly Rank Update:</strong> Leaderboards and army ranks reset / update automatically on the 1st of every month, reducing total accumulated points by <strong>40%</strong> to test ongoing consistency.<br>
-                        <strong>2. Point Criteria:</strong> Correct answer = <strong>+10 Points</strong> | Incorrect answer = <strong>-5 Points</strong>.<br>
-                        <strong>3. Rank Progression:</strong> < 50 Pts (Sepoy) | 50–99 Pts (Lance Naik) | 100+ Pts (25-point gap increments scaling up to Field Marshal). Top 3 ranks feature distinct dynamic glowing effects.
-                    </p>
-                </div>
-
-                <div class="glass-card content-section" style="max-width: 750px; margin: 0 auto;">
-                    <div id="page-user-army-rank-banner" style="background: var(--bg-primary); padding: 15px; border-radius: 14px; border: 2px solid var(--accent-primary); margin-bottom: 20px; text-align: center;"></div>
-
-                    <div id="page-quiz-box-wrapper">
-                        <div id="page-quiz-subtitle-text" style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 700; color: var(--accent-secondary);"></div>
-                        <div id="page-quiz-question-box" style="font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; color: var(--text-primary); line-height: 1.5;"></div>
-                        <div id="page-quiz-options-box" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
-                        <div id="page-quiz-result-feedback" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.6;"></div>
-                        
-                        <div id="page-quiz-action-container" style="display: flex; gap: 10px;">
-                            <button id="page-quiz-next-btn" class="btn hidden" style="flex: 1; background: var(--accent-primary); color: white; padding: 14px;" onclick="pageNextQuizQuestion()">Next Challenge ➔</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card content-section" style="max-width: 750px; margin: 0 auto;">
-                    <h3 style="color: var(--accent-secondary); margin-bottom: 15px; font-size: 1.3rem;">🏆 Top 10 Army Leaderboard</h3>
-                    <div id="page-leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
-                </div>
-            </section>
 
             <section id="view-social-feed" class="view-section hidden">
                 <div class="page-header">
@@ -4019,6 +4072,8 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             initDefaultQuiz();
             initDefaultPremiumContent();
             renderDashboardExams();
+            syncQuizzesFromCloud();
+
             
             renderDedicatedMockTests();
             renderSocialFeed();
@@ -5300,7 +5355,6 @@ function loadPageQuiz() {
         <button class="btn btn-outline" style="justify-content: flex-start; padding: 12px 18px; font-size: 0.95rem;" onclick="checkPageQuizAnswer(${idx}, ${unattemptedQuiz.correct}, '${unattemptedQuiz.id}')">${String.fromCharCode(65 + idx)}. ${opt}</button>
     `).join('');
 }
-
 function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     if (!currentEmail) return;
@@ -5316,13 +5370,13 @@ function checkPageQuizAnswer(selectedIdx, correctIdx, quizId) {
     let points = parseFloat(localStorage.getItem(pointsKey) || '0');
 
     if (selectedIdx === correctIdx) {
-        points += 10; // ✅ Sahi hone par 10 points
+        points += 2; // ✅ NAYA UPDATE: Sahi hone par 2 points
         feedback.style.color = 'var(--accent-tertiary)';
-        feedback.innerHTML = `🎉 <strong>Correct! +10 Points earned.</strong><br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
+        feedback.innerHTML = `🎉 <strong>Correct! +2 Points earned.</strong><br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     } else {
-        points -= 5; // ❌ Galat hone par -5 points
+        points -= 0.5; // ❌ NAYA UPDATE: Galat hone par -0.5 points
         feedback.style.color = '#ef4444';
-        feedback.innerHTML = `❌ Incorrect (-5 Points). Correct answer was <strong>${String.fromCharCode(65 + correctIdx)}</strong>.<br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
+        feedback.innerHTML = `❌ Incorrect (-0.5 Points). Correct answer was <strong>${String.fromCharCode(65 + correctIdx)}</strong>.<br><span style="font-style: italic; color: var(--text-primary); font-weight: 600; font-size: 0.85rem;">${randomQuote}</span>`;
     }
     
     // Local storage update for fast UI
@@ -7607,6 +7661,31 @@ function saveAndNextQuizQuestion() {
         alert("Please fill all fields for the quiz question.");
         return;
     }
+    const newQuestion = { 
+        id: 'qz_' + Date.now(), 
+        q: qText, 
+        options: [o0, o1, o2, o3], 
+        correct: correctIdx,
+        timestamp: new Date().getTime()
+    };
+
+    // 🔥 PUSH TO FIREBASE CLOUD 🔥
+    firebase.firestore().collection("combat_arena_quizzes").doc(newQuestion.id).set(newQuestion)
+    .then(() => {
+        // Clear inputs for next question
+        document.getElementById('admin-q-text').value = '';
+        document.getElementById('admin-opt-0').value = '';
+        document.getElementById('admin-opt-1').value = '';
+        document.getElementById('admin-opt-2').value = '';
+        document.getElementById('admin-opt-3').value = '';
+        document.getElementById('admin-q-text').focus();
+        
+        syncQuizzesFromCloud(); // Refresh list from cloud
+        alert("✅ Question deployed to Firebase Cloud!");
+    })
+    .catch(err => {
+        alert("Error saving to cloud: " + err.message);
+    }); // ❌ Yahan par ek extra '}' tha jisne function close kar diya tha, wo maine hata diya hai.
 
     // 1. Purane saare quizzes nikal lo
     let quizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
@@ -7637,7 +7716,8 @@ function saveAndNextQuizQuestion() {
 
     loadPageQuiz();
     alert(`Question saved successfully! Total questions stored: ${quizzes.length}/10`);
-}
+} // ✅ Asli function yahan close hona chahiye
+
 function openDistractionModal() {
     document.getElementById('distraction-modal').style.display = 'flex';
     renderBlocklist();
@@ -8985,6 +9065,284 @@ window.closeVIPModal = function() {
     }
 };
 
+// ==========================================
+// 🤖 1v1 DEATHMATCH BOT ENGINE
+// ==========================================
+const botNames = ["Aspirant_Rahul", "Sniper_007", "CGL_Fighter", "Priya_Ranker", "Vikas_99", "Inspector_Raj", "DelhiPolice_Don"];
+let battleQuestions = [];
+let currentBattleQ = 0;
+let myBattleScore = 0;
+let botBattleScore = 0;
+let currentBotName = "";
+let battleTimerInterval;
+let botAnswerTimeout;
+let isMyTurnActive = false;
+
+// 1. Start Matchmaking (Fake Delay)
+function findMatch1v1() {
+    const currentEmail = localStorage.getItem('warRoomUserEmail');
+    if (!currentEmail) {
+        alert("Commander, you must log in to enter the Deathmatch Arena!");
+        openAuthModal();
+        return;
+    }
+
+    document.getElementById('arena-mode-selector').classList.add('hidden');
+    document.getElementById('matchmaking-screen').classList.remove('hidden');
+    
+    // 3 Second ka fake loading...
+    setTimeout(() => {
+        currentBotName = botNames[Math.floor(Math.random() * botNames.length)];
+        document.getElementById('matchmaking-text').innerHTML = `Opponent Found:<br><span style="color:#ef4444;">${currentBotName}</span> ☠️`;
+        
+        // 2 Second baad battle start
+        setTimeout(() => {
+            startLiveBattle();
+        }, 2000);
+    }, 3000);
+}
+
+// 2. Initialize Battle (With Anti-Repeat Logic)
+function startLiveBattle() {
+    document.getElementById('matchmaking-screen').classList.add('hidden');
+    document.getElementById('live-battle-screen').classList.remove('hidden');
+
+    myBattleScore = 0;
+    botBattleScore = 0;
+    currentBattleQ = 0;
+    updateBattleScoreboard();
+    document.getElementById('battle-bot-name').innerText = currentBotName;
+
+    const allQuizzes = JSON.parse(localStorage.getItem('warRoomDailyQuizzes') || '[]');
+    if(allQuizzes.length < 3) {
+        alert("Admin needs to add at least 3 questions in the database to start a match.");
+        location.reload();
+        return;
+    }
+    
+    // 🌟 NAYA LOGIC: Filter out questions the user has already answered 🌟
+    const answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
+    let availableQuizzes = allQuizzes.filter(q => !answeredIds.includes(q.id));
+
+    // Fallback: Agar naye questions 3 se kam bache hain, toh purane mix kar do taaki game na ruke
+    if (availableQuizzes.length < 3) {
+        availableQuizzes = allQuizzes; 
+    }
+
+    // Shuffle and pick 3
+    battleQuestions = availableQuizzes.sort(() => 0.5 - Math.random()).slice(0, 3);
+    
+    loadBattleQuestion();
+}
+
+// 3. Load Individual Question (Tracking ID)
+function loadBattleQuestion() {
+    if (currentBattleQ >= battleQuestions.length) {
+        endBattle();
+        return;
+    }
+
+    isMyTurnActive = true;
+    const qData = battleQuestions[currentBattleQ];
+    
+    document.getElementById('battle-q-num').innerText = `Q ${currentBattleQ + 1}/${battleQuestions.length}`;
+    document.getElementById('battle-question-text').innerText = qData.q;
+    document.getElementById('battle-feedback').innerText = "";
+    
+    const optionsBox = document.getElementById('battle-options-box');
+    // 🌟 NAYA LOGIC: submitBattleAnswer me 'qData.id' pass kar rahe hain 🌟
+    optionsBox.innerHTML = qData.options.map((opt, idx) => `
+        <button class="btn btn-outline" id="battle-opt-${idx}" style="justify-content: flex-start; padding: 12px 18px; font-size: 0.95rem; transition: 0.2s;" onclick="submitBattleAnswer(${idx}, ${qData.correct}, '${qData.id}')">
+            ${String.fromCharCode(65 + idx)}. ${opt}
+        </button>
+    `).join('');
+
+    startBattleTimer(10); 
+    simulateBotAnswer(qData.correct); 
+}
+
+// 4. Timer Logic
+function startBattleTimer(seconds) {
+    clearInterval(battleTimerInterval);
+    let timeLeft = seconds;
+    document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}s`;
+
+    battleTimerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('battle-timer').innerText = `⏱️ ${timeLeft}s`;
+        if (timeLeft <= 0) {
+            clearInterval(battleTimerInterval);
+            if(isMyTurnActive) {
+                document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>⏱️ Time Up! You missed it.</span>";
+                isMyTurnActive = false;
+                disableBattleOptions();
+                setTimeout(loadNextBattleQuestion, 2000);
+            }
+        }
+    }, 1000);
+}
+// 5. Bot Intelligence (Match score calculation)
+function simulateBotAnswer(correctIdx) {
+    clearTimeout(botAnswerTimeout);
+    const botDelay = Math.floor(Math.random() * 5000) + 2000; 
+    botAnswerTimeout = setTimeout(() => {
+        const botIsCorrect = Math.random() < 0.75; 
+        if (botIsCorrect) {
+            botBattleScore += 1; // 👈 10 ki jagah 1 kiya
+        }
+        updateBattleScoreboard();
+        let fb = document.getElementById('battle-feedback');
+        fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
+    }, botDelay);
+}
+// 6. User Answers (Saving ID to memory)
+function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
+    if (!isMyTurnActive) return;
+    isMyTurnActive = false;
+    clearInterval(battleTimerInterval);
+    disableBattleOptions();
+
+    const selectedBtn = document.getElementById(`battle-opt-${selectedIdx}`);
+    const correctBtn = document.getElementById(`battle-opt-${correctIdx}`);
+    
+    if (selectedIdx === correctIdx) {
+        selectedBtn.style.background = "#22c55e"; 
+        selectedBtn.style.color = "white";
+        myBattleScore += 1; 
+        document.getElementById('battle-feedback').innerHTML = "<span style='color:#22c55e;'>🔥 Boom! Correct (+1)</span>";
+    } else {
+        selectedBtn.style.background = "#ef4444"; 
+        selectedBtn.style.color = "white";
+        correctBtn.style.border = "2px solid #22c55e"; 
+        document.getElementById('battle-feedback').innerHTML = "<span style='color:#ef4444;'>❌ Incorrect!</span>";
+    }
+    
+    // 🌟 NAYA LOGIC: Save this question ID so it doesn't repeat 🌟
+    if (quizId) {
+        let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
+        if (!answeredIds.includes(quizId)) {
+            answeredIds.push(quizId);
+            localStorage.setItem(getUserKey('warRoomAnsweredQuizIdsList'), JSON.stringify(answeredIds));
+        }
+    }
+    
+    updateBattleScoreboard();
+    setTimeout(loadNextBattleQuestion, 2000); 
+}
+
+// 7. End of Battle (Asli 10 point Pool aur 5 point Deduct ka magic)
+function endBattle() {
+    let resultMsg = "";
+    if (myBattleScore > botBattleScore) {
+        // User jeeta: Apna 5 wapas + Bot ka 5 = Total 10 points mile (Net +5)
+        resultMsg = `🎉 YOU WON! You take the 10 Point Pool! (Net +5 Points added to your profile)`;
+        updateGlobalPoints(5);
+    } else if (myBattleScore < botBattleScore) {
+        // User hara: Apna 5 point haar gaya (Net -5)
+        resultMsg = `💀 YOU DIED! ${currentBotName} stole your 5 points. (-5 Points)`;
+        updateGlobalPoints(-5);
+    } else {
+        // Draw: Entry fee (5 points) wapas (Net 0)
+        resultMsg = `🤝 DRAW! It was a tough fight. (Entry fee of 5 points refunded)`;
+        updateGlobalPoints(0);
+    }
+
+    document.getElementById('live-battle-screen').innerHTML = `
+        <div style="text-align:center; padding: 2rem;">
+            <div style="font-size:4rem; margin-bottom:10px;">${myBattleScore > botBattleScore ? '🏆' : '☠️'}</div>
+            <h2 style="color: ${myBattleScore > botBattleScore ? '#22c55e' : '#ef4444'}; margin-bottom: 20px;">MATCH OVER</h2>
+            <div style="font-size: 1.2rem; font-weight:800; margin-bottom:20px;">Final Score<br>You: ${myBattleScore} | ${currentBotName}: ${botBattleScore}</div>
+            <p style="color:var(--text-secondary); margin-bottom: 30px;">${resultMsg}</p>
+            <button class="btn-fiery-fight" onclick="location.reload()">Return to Base ➔</button>
+        </div>
+    `;
+}
+
+function updateGlobalPoints(change) {
+    const pointsKey = getUserKey('warRoomUserPoints');
+    let currentPts = parseFloat(localStorage.getItem(pointsKey) || '0');
+    currentPts += change;
+    if(currentPts < 0) currentPts = 0;
+    
+    localStorage.setItem(pointsKey, currentPts);
+    updateStreakBanner(); // Update dashboard score
+
+    // Sync to Cloud
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+        firebase.firestore().collection("users").doc(currentUser.uid).set({
+            points: currentPts
+        }, { merge: true });
+    }
+}
+
+// 8. Solo Drill Loader (Jo pehle se tha)
+function startSoloDrill() {
+    document.getElementById('arena-mode-selector').classList.add('hidden');
+    document.getElementById('solo-quiz-container').classList.remove('hidden');
+    loadPageQuiz(); // Ye function aapke paas pehle se likha hua hai
+}
+// ==========================================
+// ⚡ ADMIN BULK UPLOAD (FIREBASE CLOUD BATCH)
+// ==========================================
+function bulkUploadQuizzes() {
+    const jsonText = document.getElementById('admin-bulk-json').value.trim();
+    if (!jsonText) { alert("Please paste the JSON data."); return; }
+
+    try {
+        const newQuestions = JSON.parse(jsonText);
+        if (!Array.isArray(newQuestions)) { alert("Format Error! Must be an array []"); return; }
+
+        const db = firebase.firestore();
+        const batch = db.batch(); // Firebase batch write (fastest way to upload multiple)
+
+        newQuestions.forEach((q, idx) => {
+            q.id = 'qz_bulk_' + Date.now() + '_' + idx;
+            q.timestamp = new Date().getTime();
+            const docRef = db.collection("combat_arena_quizzes").doc(q.id);
+            batch.set(docRef, q);
+        });
+
+        // 🔥 COMMIT BATCH TO CLOUD 🔥
+        batch.commit().then(() => {
+            document.getElementById('admin-bulk-json').value = '';
+            closeAdminQuizModal();
+            syncQuizzesFromCloud(); // Refresh list
+            alert(`✅ BOOM! ${newQuestions.length} questions deployed to Firebase Cloud globally!`);
+        }).catch(err => {
+            alert("Cloud Upload Failed: " + err.message);
+        });
+
+    } catch (e) {
+        alert("JSON Parsing Error! Check your format.\nError detail: " + e.message);
+    }
+}
+// ==========================================
+// 📡 FETCH LIVE QUIZZES FROM FIREBASE
+// ==========================================
+function syncQuizzesFromCloud() {
+    if (typeof firebase === 'undefined') return;
+
+    firebase.firestore().collection("combat_arena_quizzes")
+        .orderBy("timestamp", "desc") // Naye questions pehle aayenge
+        .limit(300) // Ek baar me max 300 questions download honge taaki app fast rahe
+        .get()
+        .then((snapshot) => {
+            let cloudQuizzes = [];
+            snapshot.forEach(doc => {
+                cloudQuizzes.push(doc.data());
+            });
+
+            if (cloudQuizzes.length > 0) {
+                // Phone ki memory update karo
+                localStorage.setItem('warRoomDailyQuizzes', JSON.stringify(cloudQuizzes));
+                
+                // UI refresh karo
+                if (typeof loadPageQuiz === 'function') loadPageQuiz();
+            }
+        })
+        .catch(err => console.log("Failed to sync quizzes from cloud: ", err));
+}
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
@@ -9055,6 +9413,45 @@ window.closeVIPModal = function() {
         <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ca8a04, #854d0e); color: white; padding: 16px; font-weight: 800; font-size: 1.05rem; border: 1px solid #facc15; box-shadow: 0 4px 20px rgba(202, 138, 4, 0.4); text-transform: uppercase; letter-spacing: 1.5px; transition: transform 0.2s;" onclick="closeVipWelcomeModal()" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Enter VIP Hub 🚀</button>
     </div>
 </div>
+<!-- 🛠️ ADMIN QUIZ MODAL (MANUAL + BULK UPLOAD) -->
+<div id="admin-quiz-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 25000; display: none; justify-content: center; align-items: center;">
+    <div class="glass-card" style="width: 100%; max-width: 480px; background: var(--bg-secondary); margin: 15px; position: relative; max-height: 90vh; overflow-y: auto;">
+        <button onclick="closeAdminQuizModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
+        <h3 style="color: var(--accent-secondary); margin-bottom: 15px; padding-right: 25px;">🛠️ Admin: Question Armory</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- OPTION 1: MANUAL ENTRY -->
+            <div style="background: var(--bg-primary); padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                <h4 style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-primary);">Option 1: Manual Entry</h4>
+                <textarea id="admin-q-text" class="search-input" placeholder="Question text..." style="height: 60px; border-radius: 10px; padding: 10px; font-size: 0.9rem; resize: none; margin-bottom: 8px; width: 100%; box-sizing: border-box;"></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                    <input type="text" id="admin-opt-0" class="search-input" placeholder="A" style="padding: 8px; font-size: 0.85rem;">
+                    <input type="text" id="admin-opt-1" class="search-input" placeholder="B" style="padding: 8px; font-size: 0.85rem;">
+                    <input type="text" id="admin-opt-2" class="search-input" placeholder="C" style="padding: 8px; font-size: 0.85rem;">
+                    <input type="text" id="admin-opt-3" class="search-input" placeholder="D" style="padding: 8px; font-size: 0.85rem;">
+                </div>
+                <select id="admin-correct-idx" class="search-input" style="padding: 8px 12px; font-size: 0.9rem; width: 100%; margin-bottom: 8px; box-sizing: border-box;">
+                    <option value="0">Correct: A</option>
+                    <option value="1">Correct: B</option>
+                    <option value="2">Correct: C</option>
+                    <option value="3">Correct: D</option>
+                </select>
+                <button class="btn" style="width: 100%; background: var(--accent-secondary); color: white; padding: 8px; font-size: 0.85rem;" onclick="saveAndNextQuizQuestion()">Save & Add Another ➕</button>
+            </div>
+
+            <div style="text-align: center; color: var(--text-secondary); font-weight: 800; font-size: 0.85rem;">OR</div>
+
+            <!-- OPTION 2: BULK UPLOAD (AI JSON) -->
+            <div style="background: rgba(37, 99, 235, 0.05); padding: 12px; border-radius: 12px; border: 1px dashed var(--accent-primary);">
+                <h4 style="font-size: 0.9rem; margin-bottom: 5px; color: var(--accent-primary);">Option 2: AI Bulk Upload ⚡</h4>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 10px;">Paste the JSON array generated by ChatGPT/Gemini.</p>
+                <textarea id="admin-bulk-json" class="search-input" placeholder='[{"q":"Question", "options":["A","B","C","D"], "correct":0}]' style="height: 120px; border-radius: 10px; padding: 10px; font-size: 0.8rem; resize: vertical; font-family: monospace; width: 100%; box-sizing: border-box;"></textarea>
+                <button class="btn" style="width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 10px; font-size: 0.9rem; margin-top: 10px; font-weight: 800;" onclick="bulkUploadQuizzes()">🚀 Deploy Bulk Questions</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- 🧭 ONBOARDING TOUR MODAL -->
 <div id="tour-overlay"></div>
