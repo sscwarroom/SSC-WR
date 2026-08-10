@@ -62,7 +62,11 @@ body.light-mode {
   --type-error-bg: rgba(220, 38, 38, 0.1) !important;
 }
 
-body.light-mode[data-theme="none"] { --accent-primary: #3b82f6 !important; --accent-glow: rgba(59,130,246,0.2) !important; }
+body.light-mode[data-theme="none"] { 
+  --accent-primary: #3b82f6 !important; 
+  --accent-glow: rgba(59,130,246,0.2) !important; 
+  --type-primary: #3b82f6 !important; 
+}
 
 /* Light Mode UI Adaptations */
 body.light-mode #dynamic-bg-container { background-color: #f8fafc !important; }
@@ -81,8 +85,9 @@ body.light-mode .live-chip { background: rgba(0,0,0,0.05) !important; border-col
 body.light-mode .timer-display { background: #ffffff !important; border-color: rgba(0,0,0,0.1) !important; color: var(--accent-primary) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important; text-shadow: none; }
 body.light-mode .v-palm { fill: #ffffff; stroke: rgba(0,0,0,0.2); }
 body.light-mode .typing-flash-overlay { background: rgba(255,255,255,0.6) !important; }
-body.light-mode .t-char.correct { text-shadow: none; font-weight: 600; }
-body.light-mode .t-char.incorrect { text-shadow: none; font-weight: 600; }
+/* FIX: Force regular weight in light mode to prevent horizontal layout shift/blinking */
+body.light-mode .t-char.correct { text-shadow: none; font-weight: inherit; }
+body.light-mode .t-char.incorrect { text-shadow: none; font-weight: inherit; }
 body.light-mode .typing-box { font-weight: 500; }
 body.light-mode .stat-value { text-shadow: none; }
 body.light-mode .live-chip span { text-shadow: none; }
@@ -95,75 +100,31 @@ body.light-mode .solar-sun { box-shadow: 0 0 80px rgba(234, 88, 12, 0.4); }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:var(--ui-font);}
 body{background-color:var(--bg-base);color:var(--text-primary);padding:20px;display:flex;flex-direction:column;align-items:center;min-height:100dvh;overflow-x:hidden;position:relative; transition: background-color 0.4s ease;}
-body.no-effects #dynamic-bg-container { display: none !important; }
-body.focus-mode-active #kb-visual,
-body.focus-mode-active .hands-wrapper { display: none !important; opacity: 0; pointer-events: none; }
-body.focus-mode-active .typing-box { height: 60vh !important; }
-@media (max-width: 768px) { body.focus-mode-active .typing-box { height: 65vh !important; } }
+body.modal-open { overflow: hidden; }
 
 /* ==============================================================
    🚀 PREMIUM ANIMATED HERO LOADING SCREEN 
 ============================================================== */
-#loading-hero { 
-    position: fixed; inset: 0; z-index: 999999; 
-    background: #050508; 
-    display: flex; flex-direction: column; justify-content: center; align-items: center; 
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s; 
-    padding: 20px; overflow: hidden;
-}
-#loading-hero::before {
-    content: ''; position: absolute; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
-    top: -10%; left: -10%; border-radius: 50%; animation: hero-float 6s infinite alternate ease-in-out;
-}
-#loading-hero::after {
-    content: ''; position: absolute; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, transparent 70%);
-    bottom: -20%; right: -10%; border-radius: 50%; animation: hero-float 8s infinite alternate-reverse ease-in-out;
-}
+#loading-hero { position: fixed; inset: 0; z-index: 999999; background: #050508; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s; padding: 20px; overflow: hidden; }
+#loading-hero::before { content: ''; position: absolute; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); top: -10%; left: -10%; border-radius: 50%; animation: hero-float 6s infinite alternate ease-in-out; }
+#loading-hero::after { content: ''; position: absolute; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(176,38,255,0.1) 0%, transparent 70%); bottom: -20%; right: -10%; border-radius: 50%; animation: hero-float 8s infinite alternate-reverse ease-in-out; }
 #loading-hero.hidden-hero { opacity: 0; visibility: hidden; pointer-events: none; }
-
 .hero-content { text-align: center; width: 100%; max-width: 600px; position: relative; z-index: 2; }
-.hero-title { 
-    font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; color: #ffffff; margin-bottom: 12px; letter-spacing: -1px; line-height: 1.2; 
-    opacity: 0; transform: translateY(20px); animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-}
-.hero-premium { 
-    background: linear-gradient(90deg, #3b82f6, #b026ff, #00ffcc, #3b82f6); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    display: inline-block; position: relative; animation: hero-shimmerText 3s linear infinite;
-}
-.hero-premium::after {
-    content: 'Premium'; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-    background: inherit; -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: blur(15px); opacity: 0.6; z-index: -1;
-}
-.hero-subtitle { 
-    font-family: 'JetBrains Mono', monospace; font-size: clamp(0.75rem, 3vw, 0.9rem); color: #94a3b8; font-weight: 500; 
-    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; 
-    opacity: 0; transform: translateY(20px); animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-}
-.hero-loader-wrapper { 
-    width: 100%; max-width: 320px; height: 3px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; 
-    margin: 0 auto; position: relative; opacity: 0; transform: translateY(20px);
-    animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-}
-.hero-loader-bar { 
-    height: 100%; width: 0%; background: linear-gradient(90deg, transparent, #3b82f6, #b026ff); 
-    box-shadow: 0 0 20px rgba(176, 38, 255, 0.8), 0 0 10px rgba(59, 130, 246, 0.8); border-radius: 4px; position: relative;
-    animation: hero-loading-fill 2.2s cubic-bezier(0.7, 0, 0.3, 1) forwards; 
-}
-.hero-loader-bar::after {
-    content: ''; position: absolute; right: 0; top: -2px; width: 7px; height: 7px;
-    background: #ffffff; border-radius: 50%; box-shadow: 0 0 15px 3px rgba(255,255,255,0.8);
-}
-
+.hero-title { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; color: #ffffff; margin-bottom: 12px; letter-spacing: -1px; line-height: 1.2; opacity: 0; transform: translateY(20px); animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+.hero-premium { background: linear-gradient(90deg, #3b82f6, #b026ff, #00ffcc, #3b82f6); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; position: relative; animation: hero-shimmerText 3s linear infinite; }
+.hero-premium::after { content: 'Premium'; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: inherit; -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: blur(15px); opacity: 0.6; z-index: -1; }
+.hero-subtitle { font-family: 'JetBrains Mono', monospace; font-size: clamp(0.75rem, 3vw, 0.9rem); color: #94a3b8; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; opacity: 0; transform: translateY(20px); animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+.hero-loader-wrapper { width: 100%; max-width: 320px; height: 3px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; margin: 0 auto; position: relative; opacity: 0; transform: translateY(20px); animation: hero-fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards; }
+.hero-loader-bar { height: 100%; width: 0%; background: linear-gradient(90deg, transparent, #3b82f6, #b026ff); box-shadow: 0 0 20px rgba(176, 38, 255, 0.8), 0 0 10px rgba(59, 130, 246, 0.8); border-radius: 4px; position: relative; animation: hero-loading-fill 2.2s cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+.hero-loader-bar::after { content: ''; position: absolute; right: 0; top: -2px; width: 7px; height: 7px; background: #ffffff; border-radius: 50%; box-shadow: 0 0 15px 3px rgba(255,255,255,0.8); }
 @keyframes hero-fadeUp { 100% { opacity: 1; transform: translateY(0); } }
 @keyframes hero-shimmerText { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
 @keyframes hero-loading-fill { 0% { width: 0%; } 40% { width: 60%; } 100% { width: 100%; } }
 @keyframes hero-float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, 30px); } }
-/* ============================================================== */
 
-#dynamic-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background-color: var(--bg-base); pointer-events: none; transition: background-color 0.4s ease; }
+/* DYNAMIC BG */
+#dynamic-bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background-color: var(--bg-base); pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s; }
 #dynamic-bg-container::after { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.05; z-index: 10; }
-
-/* Background Shapes & Particles */
 .moon { position: absolute; width: 65px; height: 65px; top: 8%; right: 12%; border-radius: 50%; background: #fdfdfd; box-shadow: 0 0 20px #ffffff, 0 0 50px rgba(255,255,255,0.3), inset -10px -10px 15px rgba(0,0,0,0.2); transform: translateZ(0); }
 .twinkle-star { position: absolute; background: #94a3b8; border-radius: 50%; transform: translateZ(0); animation: twinkle alternate infinite ease-in-out; }
 @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8) translateZ(0); } 100% { opacity: 1; transform: scale(1.3) translateZ(0); } }
@@ -192,6 +153,7 @@ body.focus-mode-active .typing-box { height: 60vh !important; }
 @keyframes asteroid-drift { 0% { transform: translate3d(100vw, -20vh, 0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translate3d(-20vw, 100vh, 0); opacity: 0; } }
 @keyframes float-up { 0% { transform: translate3d(0, 105vh, 0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translate3d(30px, -10vh, 0); opacity: 0; } }
 
+/* UTILS */
 .hidden{display:none!important;}
 .flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .flex-col{display:flex;flex-direction:column;gap:15px;}
@@ -204,6 +166,7 @@ body.focus-mode-active .typing-box { height: 60vh !important; }
 .stagger-1{animation-delay:.1s;}.stagger-2{animation-delay:.15s;}
 @keyframes elegantSlideUp{0%{opacity:0;transform:translate3d(0, 20px, 0) scale(.98);}100%{opacity:1;transform:translate3d(0, 0, 0) scale(1);}}
 
+/* COMPONENTS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:12px;font-weight:700;cursor:pointer;border:none;text-align:center;font-size:.9rem;transition:all .2s cubic-bezier(.25,.8,.25,1);outline:none;position:relative;overflow:hidden;}
 .btn-primary{background:transparent;border:1px solid var(--accent-primary);color:var(--text-primary);box-shadow:inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow);}
 .btn-primary::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:var(--accent-primary);opacity:0.1;transition:opacity 0.2s ease;}
@@ -227,12 +190,30 @@ body.focus-mode-active .typing-box { height: 60vh !important; }
 input[type=range]{width:100%;accent-color:var(--accent-primary);}
 .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--glass-border);}
 
+
+/* FIX: SEPARATED AURA GLOW LAYER TO PREVENT TEXT BLINKING */
+#aura-glow-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    pointer-events: none;
+    z-index: 5;
+    border: 1px solid transparent;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: box-shadow, border-color; /* Hardware acceleration */
+}
+body.focus-mode-active #aura-glow-layer {
+    display: none !important;
+}
+
+/* ======== TYPING BOX (NORMAL MODE) ======== */
 .typing-box{
     background-color:var(--type-bg); border:1px solid var(--glass-border); border-radius:16px; padding:20px; 
     font-family:'JetBrains Mono','Courier New',monospace; font-size:1.35rem; color:var(--text-secondary); 
     line-height:1.9; height:180px; width:100%; box-sizing:border-box; overflow-y:auto; scroll-behavior:smooth; 
     font-weight:400; position:relative; cursor:text; transition:all .3s ease; box-shadow:inset 0 5px 20px rgba(0,0,0,0.5); 
-    -webkit-font-smoothing: antialiased; /* FIX: Smooth fonts globally to prevent jitter */
+    -webkit-font-smoothing: antialiased; 
+    scrollbar-width: thin; scrollbar-color: var(--type-primary) transparent;
 }
 .typing-box:focus-within,.typing-box:hover{border-color:var(--type-primary);box-shadow:0 0 20px var(--accent-glow),inset 0 5px 20px rgba(0,0,0,0.8);}
 .typing-box::-webkit-scrollbar { width: 8px; }
@@ -240,123 +221,208 @@ input[type=range]{width:100%;accent-color:var(--accent-primary);}
 .typing-box::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
 .typing-box::-webkit-scrollbar-thumb:hover { background: var(--type-primary); }
 
-/* ======== CLEAN, ZERO-LATENCY TYPING TEXT ELEMENTS ======== */
 .t-word { display:inline-block; margin-right:8px; margin-bottom:8px; vertical-align: baseline; }
 .t-char { 
     display:inline-block; position:relative; border-radius:4px; 
-    vertical-align: baseline; /* FIX: Prevents vertical layout shift / line bouncing */
+    vertical-align: baseline; 
     transition: background-color 0.1s ease, color 0.1s ease, text-shadow 0.1s ease;
-    /* FIX: Force hardware font anti-aliasing to stop blurring during active states */
     -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale;
 }
 .t-space{white-space:pre;}
-.t-char.active{background-color:var(--type-active);color:var(--type-text);}
-
-/* ==============================================================
-   🚀 ZERO-LATENCY CURSOR FIX (Solid Cursor While Typing)
-============================================================== */
-body.is-typing .t-char.active::before,
-body.is-typing .t-char.active::after {
-    animation: none !important;
-    opacity: 1 !important;
-}
-body.is-typing[data-cursor="pulse-block"] .t-char.active {
-    animation: none !important;
-    background: rgba(255,255,255,0.2) !important;
-}
-
-/* EXISTING CURSORS */
-body[data-cursor="glow"] .t-char.active::before{content:'';position:absolute;left:0;top:10%;height:80%;width:2px;background:var(--type-primary);border-radius:2px;box-shadow:0 0 10px var(--type-primary),0 0 20px var(--type-primary);animation:premiumBlink 1s cubic-bezier(.4,0,.6,1) infinite;z-index:2;}
-body[data-cursor="underline"] .t-char.active::before{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--type-primary);box-shadow:0 0 8px var(--type-primary);animation:premiumBlink 1s infinite;}
-body[data-cursor="block"] .t-char.active{background:var(--type-primary);color:var(--bg-base)!important;box-shadow:0 0 12px var(--type-primary);}
-body[data-cursor="minimal"] .t-char.active::before{content:'';position:absolute;left:0;top:0;height:100%;width:1px;background:var(--type-primary);}
-
-/* NEW CURSORS */
-body[data-cursor="pulse-block"] .t-char.active{background:var(--type-active); animation: pulseBlock 1s infinite alternate; border-radius:4px;}
-@keyframes pulseBlock { 0% { background: rgba(255,255,255,0.05); } 100% { background: rgba(255,255,255,0.25); } }
-body[data-cursor="bracket"] .t-char.active::before{content:'[';position:absolute;left:-4px;color:var(--type-primary);opacity:0.8;}
-body[data-cursor="bracket"] .t-char.active::after{content:']';position:absolute;right:-4px;color:var(--type-primary);opacity:0.8;}
-body[data-cursor="double-line"] .t-char.active::before{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--type-primary);}
-body[data-cursor="double-line"] .t-char.active::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:var(--type-primary);}
-body[data-cursor="outline"] .t-char.active{border:1px solid var(--type-primary); border-radius:4px; background:transparent!important; box-shadow:inset 0 0 5px var(--accent-glow);}
-body[data-cursor="crosshair"] .t-char.active::before{content:'+';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--type-primary);font-size:1.2em;opacity:0.5;pointer-events:none;}
-
-@keyframes premiumBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
-
-/* BASE CORRECT/INCORRECT */
-.t-char.correct{color:var(--type-correct);text-shadow:0 0 12px rgba(163,230,53,.4);}
-.t-char.incorrect{color:var(--type-error);background-color:var(--type-error-bg);text-shadow:0 0 10px rgba(255,51,51,.6);border-radius:4px;}
 
 /* =========================================================
-   🚀 SAFE TYPING ANIMATIONS (Strictly Visual, No Transform Scaling)
+   🚀 TYPING ANIMATIONS (NORMAL MODE)
 ========================================================= */
-
-/* Spacebar Specific Global Animation for visual feedback (Safe) */
 body:not([data-animation="none"]) .t-space.correct.animate-trigger { animation: spaceHit 0.25s ease-out; }
 @keyframes spaceHit { 0% { background-color: rgba(163,230,53,0.4); box-shadow: 0 0 10px rgba(163,230,53,0.4); } 100% { background-color: transparent; box-shadow: none; } }
 body:not([data-animation="none"]) .t-space.incorrect.animate-trigger { animation: spaceMiss 0.25s ease-out; }
 @keyframes spaceMiss { 0% { background-color: rgba(255,51,51,0.4); box-shadow: 0 0 10px rgba(255,51,51,0.4); } 100% { background-color: transparent; box-shadow: none; } }
 
-/* 1. Fade Up -> Now Just "Fade In" */
 body[data-animation="fade-up"] .t-char.correct.animate-trigger { animation: fadeSafe 0.2s ease-out; }
 body[data-animation="fade-up"] .t-char.incorrect.animate-trigger { animation: fadeSafeError 0.2s ease-out; }
 @keyframes fadeSafe { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes fadeSafeError { 0% { opacity: 0; } 100% { opacity: 1; } }
 
-/* 2. Pop In -> Now "Brightness Pop" */
 body[data-animation="pop-in"] .t-char.correct.animate-trigger { animation: popSafe 0.3s ease-out; }
 body[data-animation="pop-in"] .t-char.incorrect.animate-trigger { animation: popSafeError 0.3s ease-out; }
 @keyframes popSafe { 0% { filter: brightness(2); text-shadow: 0 0 20px #fff; } 100% { filter: brightness(1); text-shadow: 0 0 12px rgba(163,230,53,.4); } }
 @keyframes popSafeError { 0% { filter: brightness(2); text-shadow: 0 0 20px #fff; } 100% { filter: brightness(1); text-shadow: 0 0 10px rgba(255,51,51,.6); } }
 
-/* 3. Slide Right -> Now "Contrast Snap" */
 body[data-animation="slide-right"] .t-char.correct.animate-trigger { animation: contrastSafe 0.15s ease-out; }
 body[data-animation="slide-right"] .t-char.incorrect.animate-trigger { animation: contrastSafeError 0.15s ease-out; }
 @keyframes contrastSafe { 0% { filter: contrast(3); opacity: 0; } 100% { filter: contrast(1); opacity: 1; } }
 @keyframes contrastSafeError { 0% { filter: contrast(3); opacity: 0; } 100% { filter: contrast(1); opacity: 1; } }
 
-/* 4. Elastic Snap -> Now "Color Elastic" */
 body[data-animation="elastic"] .t-char.correct.animate-trigger { animation: colorElastic 0.4s ease-out; }
 body[data-animation="elastic"] .t-char.incorrect.animate-trigger { animation: colorElasticError 0.4s ease-out; }
 @keyframes colorElastic { 0% { color: #fff; } 50% { color: #a3e635; opacity: 0.5; } 100% { color: var(--type-correct); opacity: 1; } }
 @keyframes colorElasticError { 0% { color: #fff; } 50% { color: #ff3333; opacity: 0.5; } 100% { color: var(--type-error); opacity: 1; } }
 
-/* 5. 3D Flip -> Now "Opacity Flip" */
 body[data-animation="3d-flip"] .t-char.correct.animate-trigger { animation: flipSafe 0.3s ease-out; }
 body[data-animation="3d-flip"] .t-char.incorrect.animate-trigger { animation: flipSafeError 0.3s ease-out; }
 @keyframes flipSafe { 0% { opacity: 0.1; } 100% { opacity: 1; } }
 @keyframes flipSafeError { 0% { opacity: 0.1; } 100% { opacity: 1; } }
 
-/* 6. Digital Glitch -> Shadow Only */
 body[data-animation="glitch"] .t-char.correct.animate-trigger { animation: glitchSafe 0.25s linear; }
 body[data-animation="glitch"] .t-char.incorrect.animate-trigger { animation: glitchSafeError 0.25s linear; }
 @keyframes glitchSafe { 0% { text-shadow: 3px 0 #00ffcc, -3px 0 #b026ff; } 50% { text-shadow: -3px 0 #00ffcc, 3px 0 #b026ff; } 100% { text-shadow: 0 0 12px rgba(163,230,53,.4); } }
 @keyframes glitchSafeError { 0% { text-shadow: 3px 0 #ff3333, -3px 0 #ffff00; } 50% { text-shadow: -3px 0 #ff3333, 3px 0 #ffff00; } 100% { text-shadow: 0 0 10px rgba(255,51,51,.6); } }
 
-/* 7. Ink Bleed -> Blur (Safe) */
 body[data-animation="ink-bleed"] .t-char.correct.animate-trigger { animation: inkBleedSafe 0.35s ease-out; }
 body[data-animation="ink-bleed"] .t-char.incorrect.animate-trigger { animation: inkBleedSafeError 0.35s ease-out; }
 @keyframes inkBleedSafe { 0% { filter: blur(6px); opacity: 0; } 100% { filter: blur(0); opacity: 1; } }
 @keyframes inkBleedSafeError { 0% { filter: blur(6px); opacity: 0; } 100% { filter: blur(0); opacity: 1; } }
 
-/* 8. Neon Flash -> Shadow Flash (Safe) */
 body[data-animation="neon-flash"] .t-char.correct.animate-trigger { animation: neonFlashSafe 0.4s ease-out; }
 body[data-animation="neon-flash"] .t-char.incorrect.animate-trigger { animation: neonFlashSafeError 0.4s ease-out; }
 @keyframes neonFlashSafe { 0% { text-shadow: 0 0 20px #fff, 0 0 40px var(--type-correct); color: #fff; } 100% { text-shadow: 0 0 12px rgba(163,230,53,.4); color: var(--type-correct); } }
 @keyframes neonFlashSafeError { 0% { text-shadow: 0 0 20px #fff, 0 0 40px var(--type-error); color: #fff; } 100% { text-shadow: 0 0 10px rgba(255,51,51,.6); color: var(--type-error); } }
 
-/* 9. Typewriter Jolt -> Opacity Jolt */
 body[data-animation="typewriter-jolt"] .t-char.correct.animate-trigger { animation: joltSafe 0.15s ease-in-out; }
 body[data-animation="typewriter-jolt"] .t-char.incorrect.animate-trigger { animation: joltSafeError 0.15s ease-in-out; }
 @keyframes joltSafe { 0% { opacity: 1; } 50% { opacity: 0.3; text-shadow: none; } 100% { opacity: 1; } }
 @keyframes joltSafeError { 0% { opacity: 1; } 50% { opacity: 0.3; text-shadow: none; } 100% { opacity: 1; } }
 
-/* 10. Smooth Glide -> Smooth Fade (Safe) */
 body[data-animation="smooth-glide"] .t-char.correct.animate-trigger { animation: smoothFadeSafe 0.4s ease; }
 body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animation: smoothFadeSafeError 0.4s ease; }
 @keyframes smoothFadeSafe { 0% { opacity: 0; filter: blur(2px); } 100% { opacity: 1; filter: blur(0); } }
 @keyframes smoothFadeSafeError { 0% { opacity: 0; filter: blur(2px); } 100% { opacity: 1; filter: blur(0); } }
+
+/* ======== CURSORS & COLORS (NORMAL MODE) ======== */
+body:not(.focus-mode-active) .t-char.active{background-color:var(--type-active);color:var(--type-text);}
+body:not(.focus-mode-active) .is-typing .t-char.active::before, body:not(.focus-mode-active) .is-typing .t-char.active::after { animation: none !important; opacity: 1 !important; }
+body:not(.focus-mode-active)[data-cursor="glow"] .t-char.active::before{content:'';position:absolute;left:0;top:10%;height:80%;width:2px;background:var(--type-primary);border-radius:2px;box-shadow:0 0 10px var(--type-primary),0 0 20px var(--type-primary);animation:premiumBlink 1s cubic-bezier(.4,0,.6,1) infinite;z-index:2;}
+body:not(.focus-mode-active)[data-cursor="underline"] .t-char.active::before{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--type-primary);box-shadow:0 0 8px var(--type-primary);animation:premiumBlink 1s infinite;}
+body:not(.focus-mode-active)[data-cursor="block"] .t-char.active{background:var(--type-primary);color:var(--bg-base)!important;box-shadow:0 0 12px var(--type-primary);}
+body:not(.focus-mode-active)[data-cursor="minimal"] .t-char.active::before{content:'';position:absolute;left:0;top:0;height:100%;width:1px;background:var(--type-primary);}
+body:not(.focus-mode-active)[data-cursor="pulse-block"] .t-char.active{background:var(--type-active); animation: pulseBlock 1s infinite alternate; border-radius:4px;}
+body:not(.focus-mode-active)[data-cursor="bracket"] .t-char.active::before{content:'[';position:absolute;left:-4px;color:var(--type-primary);opacity:0.8;}
+body:not(.focus-mode-active)[data-cursor="bracket"] .t-char.active::after{content:']';position:absolute;right:-4px;color:var(--type-primary);opacity:0.8;}
+body:not(.focus-mode-active)[data-cursor="double-line"] .t-char.active::before{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--type-primary);}
+body:not(.focus-mode-active)[data-cursor="double-line"] .t-char.active::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:var(--type-primary);}
+body:not(.focus-mode-active)[data-cursor="outline"] .t-char.active{border:1px solid var(--type-primary); border-radius:4px; background:transparent!important; box-shadow:inset 0 0 5px var(--accent-glow);}
+body:not(.focus-mode-active)[data-cursor="crosshair"] .t-char.active::before{content:'+';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--type-primary);font-size:1.2em;opacity:0.5;pointer-events:none;}
+@keyframes pulseBlock { 0% { background: rgba(255,255,255,0.05); } 100% { background: rgba(255,255,255,0.25); } }
+@keyframes premiumBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+body:not(.focus-mode-active) .t-char.correct{color:var(--type-correct);text-shadow:0 0 12px rgba(163,230,53,.4);}
+body:not(.focus-mode-active) .t-char.incorrect{color:var(--type-error);background-color:var(--type-error-bg);text-shadow:0 0 10px rgba(255,51,51,.6);border-radius:4px;}
+
+
+/* ==============================================================
+   🎯 BUTTER SMOOTH FOCUS MODE (MONKEYTYPE KILLER)
+============================================================== */
+
+/* 1. Default Clean Background (Hide all effects and force true base color) */
+body.focus-mode-active #dynamic-bg-container { 
+    opacity: 0 !important; 
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s !important;
+}
+body.focus-mode-active {
+    background-color: var(--bg-base) !important; /* Pure clean background */
+}
+
+/* 2. Hide distraction elements globally in focus mode */
+body.focus-mode-active #kb-visual,
+body.focus-mode-active .hands-wrapper,
+body.focus-mode-active .shortcut-hint span:first-child,
+body.focus-mode-active .typing-flash-overlay { 
+    display: none !important; opacity: 0; pointer-events: none; 
+}
+
+/* 3. Focus Box Restyling - Clean & Distraction-free */
+body.focus-mode-active .typing-box { 
+    height: 60vh !important;
+    border: none !important; 
+    box-shadow: none !important; 
+    background: transparent !important;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 1.6rem !important; 
+    font-weight: 500 !important;
+    line-height: 1.5 !important; 
+    letter-spacing: -0.5px !important; 
+    padding: 0 10px;
+}
+@media (max-width: 768px) { body.focus-mode-active .typing-box { height: 65vh !important; font-size: 1.35rem !important; } }
+
+/* 4. True Zen Fading - Fade out everything else when typing starts */
+body.focus-mode-active #live-stats-row,
+body.focus-mode-active .flex-row,
+body.focus-mode-active .app-container > p,
+body.focus-mode-active .btn.w-full {
+    transition: opacity 0.5s ease;
+}
+body.focus-mode-active.is-typing #live-stats-row,
+body.focus-mode-active.is-typing .flex-row,
+body.focus-mode-active.is-typing .app-container > p,
+body.focus-mode-active.is-typing .btn.w-full,
+body.focus-mode-active.is-typing .shortcut-hint {
+    opacity: 0 !important; 
+    pointer-events: none;
+}
+
+/* 5. Typography Reset & Smooth Color Fading for Focus Mode */
+body.focus-mode-active .t-word { margin-bottom: 4px; margin-right: 6px; }
+
+/* Force standard normal animations OFF in focus mode to prevent flashy jumps */
+body.focus-mode-active .t-char.animate-trigger { animation: none !important; filter: none !important; }
+
+body.focus-mode-active .t-char { 
+    color: #64748b !important; /* Premium Muted Grey for untyped */
+    text-shadow: none !important; 
+    background: transparent !important;
+    /* Smooth color transition for letters */
+    transition: color 0.15s ease-out, border-color 0.15s ease-out !important;
+    /* Force letter to render ABOVE the cursor so it never gets hidden */
+    position: relative; 
+    z-index: 2; 
+}
+body.focus-mode-active .t-char.correct { color: #f8fafc !important; }
+body.light-mode.focus-mode-active .t-char.correct { color: #0f172a !important; }
+
+body.focus-mode-active .t-char.incorrect { 
+    color: #ef4444 !important; 
+    border-bottom: 2px solid #ef4444 !important; /* Clean red underline instead of glowing background */
+    border-radius: 0 !important;
+}
+body.focus-mode-active .t-char.active {
+    color: #64748b !important; /* Maintain grey while cursor is over it */
+}
+
+/* Hide all normal mode cursors in focus mode */
+body.focus-mode-active .t-char.active::before,
+body.focus-mode-active .t-char.active::after { display: none !important; }
+
+/* 🚀 6. THE SECRET SAUCE: EXCLUSIVE BUTTER SMOOTH GLIDING CARET */
+#smooth-caret {
+    position: absolute;
+    width: 3px;
+    background: var(--type-primary);
+    border-radius: 4px;
+    box-shadow: 0 0 10px var(--type-primary);
+    /* Ultra-smooth CSS transition for gliding */
+    transition: left 0.12s cubic-bezier(0.33, 1, 0.68, 1), top 0.15s ease-out;
+    pointer-events: none;
+    z-index: 1; /* Cursor BEHIND the text */
+    opacity: 0;
+    will-change: left, top; /* Hardware acceleration */
+}
+@keyframes smoothBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+body.focus-mode-active #smooth-caret {
+    opacity: 1;
+    animation: smoothBlink 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+body.focus-mode-active.is-typing #smooth-caret {
+    animation: none;
+    opacity: 1;
+}
+/* ============================================================== */
+
 
 .typing-flash-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:center;z-index:10;border-radius:16px;cursor:pointer;transition:opacity .3s ease,visibility .3s ease;}
 .typing-flash-overlay.hidden{opacity:0;visibility:hidden;}
@@ -400,7 +466,6 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
 #l-index.finger-press, #r-index.finger-press { filter: drop-shadow(0 0 15px var(--c-ind)); }
 #l-thumb.finger-press, #r-thumb.finger-press { filter: drop-shadow(0 0 15px var(--c-thm)); }
 
-/* Custom Premium Scrollbar for Settings Modal */
 .modal-box::-webkit-scrollbar { width: 6px; }
 .modal-box::-webkit-scrollbar-track { background: transparent; }
 .modal-box::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
@@ -410,6 +475,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
 .modal-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .modal-box{background:var(--bg-card);backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;max-width:480px;width:100%;box-shadow:var(--glass-shadow);max-height:85vh;overflow-y:auto; transform: translateY(0); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
 .modal-overlay.hidden .modal-box{transform:translateY(30px);}
+body.modal-open { overflow: hidden; }
 
 @media (max-width: 768px) {
   body { padding: 10px; }
@@ -525,7 +591,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
         <div class="live-chip">ERR <span id="live-err">0</span></div>
       </div>
       <div class="flex-row">
-        <button class="btn btn-outline btn-sm" onclick="toggleFocusMode()" id="focus-mode-btn">🎯 Focus</button>
+        <button class="btn btn-outline btn-sm" onclick="toggleFocusMode()" id="focus-mode-btn">🎯 Focus Mode</button>
         <button class="btn btn-outline btn-sm" onclick="toggleTypingFullscreen()">⛶ Full Screen</button>
         <div class="timer-display" id="typing-timer-display">00:00</div>
       </div>
@@ -533,11 +599,16 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
 
     <p style="font-size:.75rem;color:var(--text-secondary);margin-bottom:10px;font-weight:500;letter-spacing:0.5px;">🔊 Audio enabled. Tap the terminal box to start. Timer begins on first keystroke.</p>
 
+    <!-- Hidden input for pure smooth tracking -->
     <textarea id="hidden-focus-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position:absolute;opacity:0;left:-9999px;top:-9999px;"></textarea>
 
     <div class="p-relative w-full" onclick="focusTypingInput()">
+      <!-- Aura Glow Layer (Safely isolated to stop text blinking) -->
+      <div id="aura-glow-layer"></div>
       <div id="typing-flash-overlay" class="typing-flash-overlay"><div class="typing-flash-text">AWAITING INPUT...</div></div>
-      <div id="typing-passage-box" class="typing-box"></div>
+      <div id="typing-passage-box" class="typing-box">
+          <!-- The smooth caret will be injected here via JS -->
+      </div>
     </div>
 
     <!-- Interactive Color-Coded Keyboard -->
@@ -570,7 +641,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
     </div>
 
     <button class="btn btn-outline w-full" style="padding:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;" onclick="finishTypingTestEarly()">Submit Test Early</button>
-    <div class="shortcut-hint"><span>Restart Test: <span class="shortcut-key">Tab</span> + <span class="shortcut-key">Enter</span></span></div>
+    <div class="shortcut-hint"><span>Restart Test: <span class="shortcut-key">Shift</span> + <span class="shortcut-key">Enter</span></span></div>
   </div>
 
   <!-- 3. RESULT SCREEN -->
@@ -596,7 +667,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
       <button class="btn btn-outline" style="flex:1;padding:14px;" onclick="openTypingHistoryModal()">View History</button>
       <button class="btn btn-primary" style="flex:2;padding:14px;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;" onclick="resetAppToSetup()">Initialize New Test</button>
     </div>
-    <div class="shortcut-hint" style="margin-top: 15px;"><span>Restart Test: <span class="shortcut-key">Tab</span> + <span class="shortcut-key">Enter</span></span></div>
+    <div class="shortcut-hint" style="margin-top: 15px;"><span>Restart Test: <span class="shortcut-key">Shift</span> + <span class="shortcut-key">Enter</span></span></div>
   </div>
 
   <!-- 4. HISTORY SCREEN -->
@@ -656,7 +727,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
         </select>
       </div>
       <div class="input-group">
-        <label>Cursor Style</label>
+        <label>Cursor Style (Normal Mode)</label>
         <select id="set-cursor" class="search-input" onchange="applySettingsFromModal()">
           <option value="glow">Neon Glow</option>
           <option value="block">Solid Block</option>
@@ -688,7 +759,7 @@ body[data-animation="smooth-glide"] .t-char.incorrect.animate-trigger { animatio
         </select>
       </div>
       <div class="input-group">
-        <label style="color: var(--accent-primary);">Typing Animation ✨</label>
+        <label style="color: var(--accent-primary);">Typing Animation (Normal Mode)</label>
         <select id="set-animation" class="search-input" style="border-color: var(--glass-border);" onchange="applySettingsFromModal()">
           <option value="none">Disabled (Instant)</option>
           <option value="fade-up">Fade Up</option>
@@ -883,6 +954,7 @@ function applySettings(){
 function saveSettings(){ localStorage.setItem('TypingProSettings', JSON.stringify(settings)); }
 
 function openSettingsModal(){
+  document.body.classList.add('modal-open');
   document.getElementById('set-theme').value = settings.theme; 
   document.getElementById('set-font').value = settings.font;
   document.getElementById('set-cursor').value = settings.cursor; 
@@ -894,7 +966,7 @@ function openSettingsModal(){
   document.getElementById('settings-modal').classList.remove('hidden');
 }
 
-function closeSettingsModal(){ document.getElementById('settings-modal').classList.add('hidden'); }
+function closeSettingsModal(){ document.body.classList.remove('modal-open'); document.getElementById('settings-modal').classList.add('hidden'); }
 
 function applySettingsFromModal(){
   settings.theme = document.getElementById('set-theme').value; 
@@ -914,17 +986,49 @@ function toggleCustomTextarea() {
     else { document.getElementById('custom-text-group').classList.add('hidden'); }
 }
 
+/* 🚀 SMOOTH CARET POSITION CALCULATOR */
+function updateSmoothCaret() {
+    if(document.body.classList.contains('focus-mode-active') && charactersInfo.length > 0) {
+        const activeIndex = Math.min(charIndex, charactersInfo.length - 1);
+        const activeEl = charactersInfo[activeIndex]?.el;
+        const caret = document.getElementById('smooth-caret');
+        
+        if(activeEl && caret) {
+            if(charIndex >= charactersInfo.length) {
+               caret.style.left = (activeEl.offsetLeft + activeEl.offsetWidth) + 'px';
+            } else {
+               caret.style.left = (activeEl.offsetLeft - 2) + 'px';
+            }
+            caret.style.top = (activeEl.offsetTop + activeEl.offsetHeight * 0.1) + 'px';
+            caret.style.height = (activeEl.offsetHeight * 0.8) + 'px';
+        }
+    }
+}
+
 function toggleFocusMode() {
     document.body.classList.toggle('focus-mode-active');
     const btn = document.getElementById('focus-mode-btn');
     if (document.body.classList.contains('focus-mode-active')) {
-        btn.innerHTML = '🎯 Exit Focus'; btn.classList.add('btn-primary'); btn.classList.remove('btn-outline');
+        btn.innerHTML = '🔴 Exit Focus'; btn.classList.add('btn-primary'); btn.classList.remove('btn-outline');
+        
+        updateSmoothCaret();
+        setTimeout(updateSmoothCaret, 50);
+        setTimeout(updateSmoothCaret, 150);
+        setTimeout(updateSmoothCaret, 300);
+        
+        if (charIndex < charactersInfo.length) {
+            const activeEl = charactersInfo[charIndex].el;
+            const box = document.getElementById('typing-passage-box');
+            box.scrollTo({ top: activeEl.offsetTop - (box.clientHeight / 2), behavior: 'smooth' });
+        }
     } else {
-        btn.innerHTML = '🎯 Focus'; btn.classList.remove('btn-primary'); btn.classList.add('btn-outline');
+        btn.innerHTML = '🎯 Focus Mode'; btn.classList.remove('btn-primary'); btn.classList.add('btn-outline');
     }
+    
+    setTimeout(() => focusTypingInput(), 10);
 }
 
-/* ============ AUDIO ENGINE ============ */
+/* ============ AUDIO ENGINE (FIXED MEMORY LEAK) ============ */
 const AudioContextRef = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 function initAudio(){ if(!audioCtx) audioCtx = new AudioContextRef(); if(audioCtx.state==='suspended') audioCtx.resume(); }
@@ -942,7 +1046,7 @@ const SOUND_PACKS = {
 };
 
 function playTone(kind){
-  if(!audioCtx) return;
+  if(!audioCtx || settings.sound === 'silent') return;
   const pack = SOUND_PACKS[settings.sound] || SOUND_PACKS.mechanical;
   const cfg = pack[kind]; if(!cfg) return;
   const vol = (settings.volume/100) * 0.06;
@@ -955,6 +1059,8 @@ function playTone(kind){
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + cfg.dur);
   
   osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+  
+  osc.onended = () => { osc.disconnect(); gainNode.disconnect(); };
   osc.start(); osc.stop(audioCtx.currentTime + cfg.dur);
 }
 function playCorrectSound(){ playTone('correct'); }
@@ -999,22 +1105,28 @@ function flashKey(char, isCorrect){
   const k = (char||'').toLowerCase();
   const el = document.querySelector(`.kb-key[data-key="${k===' '?' ':k}"]`);
   if(el) {
-      el.classList.remove('hit-correct','hit-wrong'); void el.offsetWidth;
+      el.classList.remove('hit-correct','hit-wrong'); 
       const flashClass = isCorrect ? 'hit-correct' : 'hit-wrong';
-      el.classList.add(flashClass); setTimeout(() => el.classList.remove(flashClass), 150);
+      setTimeout(() => {
+          el.classList.add(flashClass);
+          setTimeout(() => el.classList.remove(flashClass), 150);
+      }, 10);
   }
   const fingerId = fingerMap[k];
   if (fingerId) {
     let fId = fingerId; if (fingerId === 'space-thumb') { fId = Math.random() > 0.5 ? 'r-thumb' : 'l-thumb'; }
     const fingerEl = document.getElementById(fId);
     if (fingerEl) {
-      fingerEl.classList.remove('finger-press'); void fingerEl.offsetWidth; 
-      fingerEl.classList.add('finger-press'); setTimeout(() => fingerEl.classList.remove('finger-press'), 150);
+      fingerEl.classList.remove('finger-press'); 
+      setTimeout(() => {
+          fingerEl.classList.add('finger-press');
+          setTimeout(() => fingerEl.classList.remove('finger-press'), 150);
+      }, 10);
     }
   }
 }
 
-/* ============ CORE ENGINE STATE & ZERO-LATENCY VARIABLES ============ */
+/* ============ CORE ENGINE STATE ============ */
 let typingTimer = null, typingSecondsLeft = 0, typingTestActive = false, typingStarted = false, exactStartTime = null;
 let charactersInfo = [], charIndex = 0, typingMistakes = 0, previousInputLength = 0;
 let wpmSamples = [], secondsTicked = 0;
@@ -1025,6 +1137,8 @@ let lastActiveOffsetTop = -1;
 let lastAuraProgress = -1; 
 let statsUpdatePending = false;
 let typingPauseTimer = null; 
+
+window.addEventListener('resize', updateSmoothCaret);
 
 window.onload = () => { 
   loadSettings(); buildKeyboard(); resetAppToSetup(); 
@@ -1059,6 +1173,11 @@ function resetAppToSetup(){
   document.getElementById('typing-active-screen').classList.add('hidden');
   document.getElementById('typing-result-screen').classList.add('hidden');
   document.getElementById('typing-history-screen').classList.add('hidden');
+  
+  // FIX: Reset glow layer on restart
+  let glowLayer = document.getElementById('aura-glow-layer');
+  if(glowLayer) { glowLayer.style.boxShadow = ''; glowLayer.style.borderColor = 'transparent'; glowLayer.style.animation = 'none'; }
+  
   applySettings();
   if (document.body.classList.contains('focus-mode-active')) { toggleFocusMode(); }
   if(document.fullscreenElement) document.exitFullscreen();
@@ -1072,11 +1191,12 @@ function initializeTypingTest(){
   if (level === 'custom') {
       rawText = document.getElementById('custom-text-input').value.trim();
       if (!rawText) rawText = "Please paste or type some custom text in the setup screen to start typing. This is a default fallback sentence.";
-      rawText = rawText.replace(/\s+/g, ' '); 
   } else {
       const levelData = sscTypingTestsData[level] || sscTypingTestsData['average'];
       rawText = levelData[durationMins] || levelData[5] || Object.values(levelData)[0];
   }
+
+  rawText = rawText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
 
   const isNoLimit = (durationMins === 0);
   typingSecondsLeft = isNoLimit ? 0 : durationMins * 60;
@@ -1085,9 +1205,6 @@ function initializeTypingTest(){
   wpmSamples=[]; secondsTicked=0; consecutiveCorrectChars = 0; 
   lastProcessedValue = ""; lastActiveIndex = -1; lastActiveOffsetTop = -1; lastAuraProgress = -1; statsUpdatePending = false;
   
-  let tBox = document.getElementById('typing-passage-box');
-  if(tBox) { tBox.style.boxShadow = ''; tBox.style.borderColor = ''; tBox.style.animation = 'none'; }
-
   document.getElementById('typing-setup-screen').classList.add('hidden');
   document.getElementById('typing-active-screen').classList.remove('hidden');
   document.getElementById('typing-result-screen').classList.add('hidden');
@@ -1104,7 +1221,9 @@ function initializeTypingTest(){
 
 function buildProTypingUI(text){
   const typingBox = document.getElementById('typing-passage-box'); typingBox.innerHTML='';
+  const fragment = document.createDocumentFragment();
   const words = text.split(' ');
+  
   words.forEach((word,index)=>{
     const wordDiv = document.createElement('div'); wordDiv.classList.add('t-word');
     word.split('').forEach(char=>{
@@ -1115,8 +1234,14 @@ function buildProTypingUI(text){
       const spaceSpan = document.createElement('span'); spaceSpan.innerText=' '; spaceSpan.className = 't-char t-space';
       wordDiv.appendChild(spaceSpan); charactersInfo.push({el:spaceSpan, char:' ', state:'untyped'});
     }
-    typingBox.appendChild(wordDiv);
+    fragment.appendChild(wordDiv);
   });
+  
+  const smoothCaret = document.createElement('div');
+  smoothCaret.id = 'smooth-caret';
+  fragment.appendChild(smoothCaret);
+  
+  typingBox.appendChild(fragment);
   if(charactersInfo.length>0) {
       charactersInfo[0].el.classList.add('active');
       lastActiveIndex = 0;
@@ -1135,11 +1260,15 @@ function handleMobileFriendlyInput(e){
 
   if(!typingStarted && currentVal.length>0){ typingStarted=true; exactStartTime=Date.now(); startActiveTypingTimer(); }
 
+  hiddenInput.selectionStart = hiddenInput.selectionEnd = currentVal.length;
+
   document.body.classList.add('is-typing');
   clearTimeout(typingPauseTimer);
+  
+  let pauseDelay = document.body.classList.contains('focus-mode-active') ? 1200 : 400;
   typingPauseTimer = setTimeout(() => {
       document.body.classList.remove('is-typing');
-  }, 400);
+  }, pauseDelay);
 
   if (currentVal.length > charactersInfo.length) {
       currentVal = currentVal.substring(0, charactersInfo.length);
@@ -1194,31 +1323,34 @@ function handleMobileFriendlyInput(e){
       consecutiveCorrectChars += (charIndex - previousInputLength);
   }
   
-  requestAnimationFrame(() => {
-      let currentStreakWords = Math.floor(consecutiveCorrectChars / 5);
-      let auraProgress = currentStreakWords >= 10 ? Math.min((currentStreakWords - 10) / 40, 1) : 0;
-      
-      if (auraProgress !== lastAuraProgress) {
-          lastAuraProgress = auraProgress;
-          let typingBox = document.getElementById('typing-passage-box');
+  if (!document.body.classList.contains('focus-mode-active')) {
+      requestAnimationFrame(() => {
+          let currentStreakWords = Math.floor(consecutiveCorrectChars / 5);
+          let auraProgress = currentStreakWords >= 10 ? Math.min((currentStreakWords - 10) / 40, 1) : 0;
           
-          if (auraProgress > 0) {
-              let glowSpread = 20 + (80 * auraProgress);
-              let alpha1 = 40 + (60 * auraProgress);
-              let alpha2 = 30 + (70 * auraProgress);
+          if (auraProgress !== lastAuraProgress) {
+              lastAuraProgress = auraProgress;
+              // FIX: Apply aura glow to isolated layer instead of typing-box
+              let glowLayer = document.getElementById('aura-glow-layer');
               
-              if(auraProgress === 1) { 
-                  typingBox.style.animation = 'peakAuraPulse 1s infinite alternate';
+              if (auraProgress > 0) {
+                  let glowSpread = 20 + (80 * auraProgress);
+                  let alpha1 = 40 + (60 * auraProgress);
+                  let alpha2 = 30 + (70 * auraProgress);
+                  
+                  if(auraProgress === 1) { 
+                      glowLayer.style.animation = 'peakAuraPulse 1s infinite alternate';
+                  } else {
+                      glowLayer.style.animation = '';
+                      glowLayer.style.boxShadow = `0 0 ${glowSpread}px color-mix(in srgb, var(--type-primary) ${alpha1}%, transparent), inset 0 0 ${glowSpread/2}px color-mix(in srgb, var(--type-primary) ${alpha2}%, transparent)`;
+                      glowLayer.style.borderColor = 'var(--type-primary)';
+                  }
               } else {
-                  typingBox.style.animation = '';
-                  typingBox.style.boxShadow = `0 0 ${glowSpread}px color-mix(in srgb, var(--type-primary) ${alpha1}%, transparent), inset 0 0 ${glowSpread/2}px color-mix(in srgb, var(--type-primary) ${alpha2}%, transparent)`;
-                  typingBox.style.borderColor = 'var(--type-primary)';
+                  glowLayer.style.animation = ''; glowLayer.style.boxShadow = ''; glowLayer.style.borderColor = 'transparent';
               }
-          } else {
-              typingBox.style.animation = ''; typingBox.style.boxShadow = ''; typingBox.style.borderColor = '';
           }
-      }
-  });
+      });
+  }
 
   if (charIndex > previousInputLength) {
     let typedChar = currentVal[charIndex-1]; 
@@ -1233,6 +1365,7 @@ function handleMobileFriendlyInput(e){
   lastProcessedValue = currentVal;
   
   scheduleStatsUpdate();
+  updateSmoothCaret(); 
 
   if (charIndex < charactersInfo.length) {
       const activeEl = charactersInfo[charIndex].el;
@@ -1310,13 +1443,14 @@ function finishTypingTest(){
   let netWPM=0, accuracy=0, kdph=0;
   if(timeElapsedInMins>0 && charIndex>0){
     let totalStrokes = charIndex; let correctStrokes = totalStrokes - typingMistakes;
-    netWPM = Math.round((correctStrokes/5)/timeElapsedInMins);
+    const grossWPM = (totalStrokes/5)/timeElapsedInMins;
+    
+    netWPM = Math.round(grossWPM - (typingMistakes/timeElapsedInMins));
     accuracy = Math.round((correctStrokes/totalStrokes)*100);
     kdph = Math.round(correctStrokes * (60/timeElapsedInMins));
   }
   if(netWPM<0) netWPM=0;
   
-  // PREMIUM RANKING
   let rankName = "IRON"; let rankColor = "#a19d94";
   if (netWPM >= 60) { rankName = "MASTER"; rankColor = "#ff007f"; } 
   else if (netWPM >= 50) { rankName = "DIAMOND"; rankColor = "#00e5ff"; }
@@ -1339,8 +1473,10 @@ function finishTypingTest(){
   rankBox.style.borderColor = rankColor;
   rankBox.style.boxShadow = `0 0 40px color-mix(in srgb, ${rankColor} 30%, transparent), inset 0 0 20px color-mix(in srgb, ${rankColor} 20%, transparent)`;
   
-  rankBox.style.animation = 'none'; void rankBox.offsetWidth; 
-  rankBox.style.animation = 'rankPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.1s';
+  rankBox.style.animation = 'none'; 
+  setTimeout(() => {
+    rankBox.style.animation = 'rankPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.1s';
+  }, 10);
   
   document.getElementById('res-wpm').innerText = netWPM;
   document.getElementById('res-accuracy').innerText = accuracy + '%';
@@ -1355,9 +1491,11 @@ function finishTypingTest(){
     level: document.getElementById('typing-level-sel').value.toUpperCase()
   };
   
-  let history = JSON.parse(localStorage.getItem('StandaloneTypingHistory')||'[]');
-  history.unshift(record); if(history.length>15) history = history.slice(0,15);
-  localStorage.setItem('StandaloneTypingHistory', JSON.stringify(history));
+  try {
+      let history = JSON.parse(localStorage.getItem('StandaloneTypingHistory')||'[]');
+      history.unshift(record); if(history.length>15) history = history.slice(0,15);
+      localStorage.setItem('StandaloneTypingHistory', JSON.stringify(history));
+  } catch(e) { console.error("History saving error", e); }
 
   document.getElementById('typing-active-screen').classList.add('hidden');
   if(document.fullscreenElement) document.exitFullscreen();
@@ -1369,22 +1507,27 @@ function openTypingHistoryModal(){
   document.getElementById('typing-result-screen').classList.add('hidden');
   document.getElementById('typing-history-screen').classList.remove('hidden');
   const container = document.getElementById('typing-history-list-container');
-  let history = JSON.parse(localStorage.getItem('StandaloneTypingHistory')||'[]');
-  if(history.length===0){
-    container.innerHTML = `<p style="text-align:center;color:var(--text-secondary);padding:2rem;font-weight:500;">No diagnostic logs found.</p>`; return;
+  
+  try {
+      let history = JSON.parse(localStorage.getItem('StandaloneTypingHistory')||'[]');
+      if(history.length===0){
+        container.innerHTML = `<p style="text-align:center;color:var(--text-secondary);padding:2rem;font-weight:500;">No diagnostic logs found.</p>`; return;
+      }
+      container.innerHTML = history.map((h,i)=>`
+        <div class="history-item fade-in" style="animation-delay:${i*0.05}s; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding:10px 0;">
+          <div>
+            <div style="font-weight:600;font-size:1.05rem;color:var(--text-primary);letter-spacing:1px;">${h.level} (${h.duration})</div>
+            <div style="font-size:.8rem;color:var(--text-secondary);margin-top:6px;font-weight:500;">${h.date}</div>
+          </div>
+          <div style="display:flex;gap:30px;align-items:center;">
+            <div class="text-center"><strong style="color:var(--text-primary);font-size:1.5rem;display:block;text-shadow:0 0 15px var(--accent-glow);">${h.wpm}</strong><span style="font-size:.7rem;color:var(--text-secondary);font-weight:700;letter-spacing:2px;">WPM</span></div>
+            <div class="text-center"><strong style="color:var(--type-correct);font-size:1.5rem;display:block;text-shadow:0 0 15px rgba(163,230,53,0.3);">${h.accuracy}</strong><span style="font-size:.7rem;color:var(--text-secondary);font-weight:700;letter-spacing:2px;">ACC</span></div>
+          </div>
+        </div>
+      `).join('');
+  } catch (e) {
+      container.innerHTML = `<p style="text-align:center;color:var(--type-error);padding:2rem;font-weight:500;">History data corrupted.</p>`;
   }
-  container.innerHTML = history.map((h,i)=>`
-    <div class="history-item fade-in" style="animation-delay:${i*0.05}s;">
-      <div>
-        <div style="font-weight:600;font-size:1.05rem;color:var(--text-primary);letter-spacing:1px;">${h.level} (${h.duration})</div>
-        <div style="font-size:.8rem;color:var(--text-secondary);margin-top:6px;font-weight:500;">${h.date}</div>
-      </div>
-      <div style="display:flex;gap:30px;align-items:center;">
-        <div class="text-center"><strong style="color:var(--text-primary);font-size:1.5rem;display:block;text-shadow:0 0 15px var(--accent-glow);">${h.wpm}</strong><span style="font-size:.7rem;color:var(--text-secondary);font-weight:700;letter-spacing:2px;">WPM</span></div>
-        <div class="text-center"><strong style="color:var(--type-correct);font-size:1.5rem;display:block;text-shadow:0 0 15px rgba(163,230,53,0.3);">${h.accuracy}</strong><span style="font-size:.7rem;color:var(--text-secondary);font-weight:700;letter-spacing:2px;">ACC</span></div>
-      </div>
-    </div>
-  `).join('');
 }
 
 function backToTypingSetup(){ document.getElementById('typing-history-screen').classList.add('hidden'); document.getElementById('typing-setup-screen').classList.remove('hidden'); }
@@ -1403,14 +1546,12 @@ function toggleTypingFullscreen(){
   }
 }
 
-/* ============ TAB + ENTER SHORTCUT LOGIC ============ */
-let isTabPressed = false;
+let isShiftPressed = false;
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-        isTabPressed = true;
-        if (typingTestActive) e.preventDefault(); 
+    if (e.key === 'Shift') {
+        isShiftPressed = true;
     }
-    if (e.key === 'Enter' && isTabPressed) {
+    if (e.key === 'Enter' && isShiftPressed) {
         e.preventDefault();
         if (!document.getElementById('typing-active-screen').classList.contains('hidden') || 
             !document.getElementById('typing-result-screen').classList.contains('hidden')) {
@@ -1420,10 +1561,10 @@ window.addEventListener('keydown', (e) => {
     }
 });
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'Tab') isTabPressed = false;
+    if (e.key === 'Shift') isShiftPressed = false;
 });
 window.addEventListener('blur', () => {
-    isTabPressed = false; 
+    isShiftPressed = false; 
 });
 </script>
 </body>
