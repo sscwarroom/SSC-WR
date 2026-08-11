@@ -10441,19 +10441,32 @@ function renderVipHubContent() {
         </div>`;
     }).join('');
 }
-// 🔥 FORCE OVERRIDE: NAYA PREMIUM RENDER FUNCTION 🔥
+// 🔥 FULLY FIXED: VIP PREMIUM RENDER FUNCTION 🔥
 window.renderPremiumHubContent = function() {
+    console.log("VIP Render function started!"); // Debugging ke liye
+    
+    // 1. Chapters aur Container ko pakdo
     const chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     const container = document.getElementById('premium-chapter-list');
-    if(!container) return;
     
+    // Agar container abhi bhi nahi mila toh code yahin ruk jayega (HTML error)
+    if (!container) {
+        console.error("CRITICAL ERROR: 'premium-chapter-list' div not found in HTML!");
+        return;
+    }
+
     const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
 
+    // 2. Agar koi chapter nahi hai, toh empty message dikhao
     if(chapters.length === 0) {
+        console.log("No VIP chapters found in storage.");
         container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:3rem; color:#94a3b8; border: 1px dashed #ca8a04; border-radius: 20px;">📭 VIP Vault is empty. Admin will deploy chapters soon.</div>`;
         return;
     }
 
+    console.log("Found " + chapters.length + " VIP chapters. Rendering them now...");
+
+    // 3. Chapters ko Cards mein convert karke Container mein dalo
     container.innerHTML = chapters.map(chap => {
         let thumbHTML = chap.thumbnail ? `<img src="${chap.thumbnail}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid #ca8a04;">` : `👑`;
         let delBtn = isAdmin ? `<button style="position:absolute; top:15px; right:15px; background:rgba(239,68,68,0.2); border:none; color:#ef4444; border-radius:50%; width:32px; height:32px; cursor:pointer; z-index:10;" onclick="event.stopPropagation(); deleteVipChapter('${chap.id}')">🗑️</button>` : '';
