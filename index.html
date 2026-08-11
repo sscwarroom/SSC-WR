@@ -2187,10 +2187,12 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
 .vip-card-locked { background: linear-gradient(145deg, #1e1b4b, #0f172a); border: 1px dashed #475569; opacity: 0.95; }
 .vip-card-locked:hover { transform: translateY(-5px); border-color: #ef4444; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); opacity: 1; }
 
-/* 🌟 VIP ROYAL CATEGORY TABS 🌟 */
+/* 🌟 VIP ROYAL CATEGORY TABS (SCROLL FIX) 🌟 */
 .royal-cat-wrapper {
     display: flex; gap: 12px; margin-bottom: 20px; padding: 6px 4px 15px 4px;
     overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; /* Mobile me smooth momentum scrolling ke liye */
+    width: 100%; /* Fix for cut-off issue */
 }
 .royal-cat-wrapper::-webkit-scrollbar { display: none; }
 
@@ -2202,14 +2204,13 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
     cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.5px;
 }
-.royal-cat-pill:hover {
-    border-color: #facc15; color: #facc15; transform: translateY(-3px);
-}
+.royal-cat-pill:hover { border-color: #facc15; color: #facc15; transform: translateY(-3px); }
 .royal-cat-pill.active-royal {
     background: linear-gradient(135deg, #ca8a04, #854d0e); color: white;
     border-color: #fef08a; box-shadow: 0 8px 20px rgba(202, 138, 4, 0.4);
     transform: translateY(-4px);
 }
+
 /* 🌟 1. Premium Cinematic Entry (Zero Lag, No Blur, No Scale) */
 @keyframes warRoomEnterAnim {
     0% { 
@@ -3640,7 +3641,7 @@ button[onclick="openDistractionModal()"] {
                         <h1 style="display: flex; align-items: center; gap: 10px;">👑 VIP Premium Command Hub</h1>
                         <p>Exclusive high-level strategy documents, topper notes, and classified test materials.</p>
                     </div>
-                    <!-- 🔥 NAYA: Admin Controls for Premium Hub 🔥 -->
+                 <!-- 🔥 NAYA: Admin Controls for Premium Hub 🔥 -->
 <div id="admin-premium-controls" class="hidden" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 15px;">
     
     <!-- BUTTON 1: Naya VIP Chapter Banane Ke Liye -->
@@ -10295,6 +10296,149 @@ function launchHubItem(item) {
             document.getElementById('test-runner-modal').style.display = 'flex'; 
         }
     }, 300); // 300ms ka wait taaki closing animation smooth lage
+}
+// ==========================================
+// 👑 ULTRA PREMIUM VIP CHAPTER HUB LOGIC 👑
+// ==========================================
+
+let globalVipChapterThumb = "";
+let currentOpenVipChapterId = null;
+
+// 1. VIP System Initialize karna
+function initVipSystem() {
+    if (!localStorage.getItem('warRoomVipChapters')) localStorage.setItem('warRoomVipChapters', '[]');
+    if (!localStorage.getItem('warRoomVipContents')) localStorage.setItem('warRoomVipContents', '[]');
+}
+document.addEventListener('DOMContentLoaded', initVipSystem);
+
+// 2. Modals Kholne Aur Band Karne Ke Functions
+function openCreateVipChapterModal() { 
+    document.getElementById('admin-create-vip-chapter-modal').style.display = 'flex'; 
+}
+function closeCreateVipChapterModal() { 
+    document.getElementById('admin-create-vip-chapter-modal').style.display = 'none'; 
+}
+
+function openUploadVipContentModal() {
+    const chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
+    if (chapters.length === 0) return alert("Create a VIP Chapter First!");
+    document.getElementById('upload-vip-content-chap-sel').innerHTML = chapters.map(c => `<option value="${c.id}">👑 ${c.title}</option>`).join('');
+    document.getElementById('admin-upload-vip-content-modal').style.display = 'flex';
+}
+function closeUploadVipContentModal() { 
+    document.getElementById('admin-upload-vip-content-modal').style.display = 'none'; 
+}
+
+function toggleVipContentUploadFormat(val) {
+    document.getElementById('upload-vip-content-link').classList.toggle('hidden', val !== 'link');
+    document.getElementById('upload-vip-content-file').classList.toggle('hidden', val === 'link');
+}
+
+// 3. VIP Thumbnail aur Card Save Karna
+function compressVipChapterThumbnail(event) {
+    const file = event.target.files[0]; const preview = document.getElementById('new-vip-chapter-thumb-preview');
+    if (!file) { globalVipChapterThumb = ""; preview.style.display = 'none'; return; }
+    const reader = new FileReader(); reader.onload = e => {
+        const img = new Image(); img.onload = () => {
+            const canvas = document.createElement('canvas'); canvas.width = 150; canvas.height = 150;
+            canvas.getContext('2d').drawImage(img, 0, 0, 150, 150);
+            globalVipChapterThumb = canvas.toDataURL('image/jpeg', 0.6);
+            preview.src = globalVipChapterThumb; preview.style.display = 'block';
+        }; img.src = e.target.result;
+    }; reader.readAsDataURL(file);
+}
+
+function saveNewVipChapter() {
+    const title = document.getElementById('new-vip-chapter-title').value.trim();
+    if (!title) return alert("Enter VIP Chapter Name!");
+    let chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
+    chapters.unshift({ id: 'vipchap_' + Date.now(), title: title, subject: document.getElementById('new-vip-chapter-subject').value, thumbnail: globalVipChapterThumb });
+    localStorage.setItem('warRoomVipChapters', JSON.stringify(chapters));
+    document.getElementById('new-vip-chapter-title').value = ''; closeCreateVipChapterModal(); renderPremiumHubContent();
+}
+
+// 4. VIP Content Save Karna
+function saveVipContentToChapter() {
+    const title = document.getElementById('upload-vip-content-title').value.trim();
+    if (!title) return alert("Enter Secret File Title!");
+    let contents = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]');
+    const newCont = { id: 'vipcont_' + Date.now(), chapterId: document.getElementById('upload-vip-content-chap-sel').value, title: title, type: document.getElementById('upload-vip-content-type').value, format: document.getElementById('upload-vip-content-format').value };
+    
+    if (newCont.format === 'link') {
+        newCont.content = document.getElementById('upload-vip-content-link').value.trim();
+        contents.unshift(newCont); localStorage.setItem('warRoomVipContents', JSON.stringify(contents)); closeUploadVipContentModal(); alert("Added successfully!");
+    } else {
+        const file = document.getElementById('upload-vip-content-file').files[0];
+        if(!file) return alert("Select File!");
+        const reader = new FileReader(); reader.onload = e => {
+            newCont.content = e.target.result; contents.unshift(newCont); localStorage.setItem('warRoomVipContents', JSON.stringify(contents)); closeUploadVipContentModal(); alert("Added successfully!");
+        }; reader.readAsDataURL(file);
+    }
+}
+
+// 5. Delete Functions
+function deleteVipChapter(id) {
+    if(!confirm("Destroy this VIP Chapter and ALL its secret contents?")) return;
+    let chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]').filter(c => c.id !== id);
+    localStorage.setItem('warRoomVipChapters', JSON.stringify(chapters));
+    let contents = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]').filter(c => c.chapterId !== id);
+    localStorage.setItem('warRoomVipContents', JSON.stringify(contents));
+    renderPremiumHubContent();
+}
+
+function deleteVipContent(id) {
+    if(!confirm("Destroy this secret file?")) return;
+    let contents = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]').filter(c => c.id !== id);
+    localStorage.setItem('warRoomVipContents', JSON.stringify(contents));
+    renderVipHubContent();
+}
+
+// 6. Hub Modals open karna (User ke liye)
+function openVipChapterHub(id) {
+    currentOpenVipChapterId = id;
+    const chap = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]').find(c => c.id === id);
+    if(!chap) return;
+    document.getElementById('vip-hub-display-subject').innerText = chap.subject;
+    document.getElementById('vip-hub-display-title').innerText = chap.title;
+    renderVipHubContent();
+    const modal = document.getElementById('vip-chapter-hub-modal');
+    modal.style.display = 'flex'; setTimeout(() => modal.style.opacity = '1', 10);
+}
+
+function closeVipChapterHub() {
+    const modal = document.getElementById('vip-chapter-hub-modal');
+    modal.style.opacity = '0'; setTimeout(() => modal.style.display = 'none', 300);
+}
+
+function renderVipHubContent() {
+    const allContents = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]');
+    const listContainer = document.getElementById('vip-hub-content-list');
+    const filtered = allContents.filter(c => c.chapterId === currentOpenVipChapterId);
+
+    if (filtered.length === 0) { listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:2rem; color:#94a3b8;">Vault is empty.</div>`; return; }
+
+    const email = localStorage.getItem('warRoomUserEmail');
+    const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
+
+    listContainer.innerHTML = filtered.map(item => {
+        let hasAccess = isAdmin || (typeof hasVipAccess === 'function' && hasVipAccess(email, item.id));
+        let typeIcon = item.type === 'mock' ? '📝 Premium Mock' : '📚 Secret Notes';
+        
+        let actionBtn = hasAccess 
+            ? `<button class="btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick='launchHubItem(${JSON.stringify(item)}); closeVipChapterHub();'>Open 🔓</button>`
+            : `<button class="btn" style="flex:1; background:#ef4444; color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick="requestVipAccess('${item.title}')">Locked 🔒</button>`;
+        
+        let delBtn = isAdmin ? `<button class="btn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:none; padding:12px; border-radius:10px;" onclick="deleteVipContent('${item.id}')">🗑️</button>` : '';
+
+        return `
+        <div class="vip-hub-item">
+            <div>
+                <div style="font-size: 0.75rem; color: #facc15; font-weight: 800; text-transform: uppercase; margin-bottom: 5px;">${typeIcon}</div>
+                <div style="font-size: 1.15rem; color: white; font-weight: 900;">${item.title}</div>
+            </div>
+            <div style="display: flex; gap: 10px;">${actionBtn}${delBtn}</div>
+        </div>`;
+    }).join('');
 }
 
 </script>
