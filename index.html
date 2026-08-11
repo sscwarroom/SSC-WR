@@ -4592,9 +4592,15 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
     const profileDisplay = document.getElementById('user-profile-display');
     const nameDisplay = document.getElementById('welcome-user-name');
     const adminElements = [
-    'admin-post-creator-box', 'admin-add-book-btn', 
-    'admin-add-quiz-btn-page', 'admin-add-premium-btn', 'admin-grant-vip-btn', 'viewVipUsersBtn'
+    'admin-post-creator-box', 
+    'admin-add-book-btn', 
+    'admin-add-quiz-btn-page', 
+    'admin-add-premium-btn', 
+    'admin-grant-vip-btn', 
+    'viewVipUsersBtn',
+    'admin-premium-controls'
 ];
+
 
     if (user) {
         loginBtn.style.display = 'none';
