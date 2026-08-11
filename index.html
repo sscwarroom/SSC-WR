@@ -10736,11 +10736,9 @@ setTimeout(() => { if (typeof renderPremiumHubContent === 'function') renderPrem
     </div>
 </div>
 
-<script>
+<script>// =================================================================
+// 🚀 1. PAYMENT ENGINE (TRACKER KE SAATH)
 // =================================================================
-// 🚀 UNIFIED & NON-BLOCKING PAYMENT & VIP LOGIC
-// =================================================================
-// 3. PAYMENT ENGINE (CHAPTER-LEVEL UNLOCK)
 window.initiatePayment = function() {
     let days = parseInt(document.getElementById('req-days-input').value);
     if (!days || days <= 0) return;
@@ -10758,7 +10756,6 @@ window.initiatePayment = function() {
     
     let currentEmail = rawEmail.toLowerCase();
     
-    // 🔥 FIXED: Ab ye VIP Chapters me dhoondhega (Pehle Content me dhoondhta tha)
     let items = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     let currentItem = items.find(i => i.title === docTitle);
     
@@ -10766,6 +10763,10 @@ window.initiatePayment = function() {
         alert("Error finding the chapter. Please try again.");
         return;
     }
+
+    // 🌟 NINJA TRACKER: Agar page refresh ho gaya toh website yaad rakhegi
+    localStorage.setItem('warRoom_pending_payment_doc', docTitle);
+    localStorage.setItem('warRoom_pending_payment_days', days);
 
     var options = {
         "key": "rzp_live_TLl4cQ2FJnrsx6",
@@ -10776,10 +10777,13 @@ window.initiatePayment = function() {
         "image": "SSCWARROOM.PNG", 
         
         "handler": function (response) {
+            // 🌟 NORMAL SUCCESS (Agar page refresh nahi hua)
+            localStorage.removeItem('warRoom_pending_payment_doc');
+            localStorage.removeItem('warRoom_pending_payment_days');
+
             let totalHours = days * 24;
             let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
             
-            // Local Storage Unlock
             localStorage.setItem(`vip_access_${currentItem.id}_${rawEmail}`, expiryTime);
             localStorage.setItem(`global_vip_${rawEmail}`, expiryTime);
             
@@ -10824,10 +10828,85 @@ window.initiatePayment = function() {
 
     var rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response){
+        // PAYMENT FAIL HONE PAR TRACKER HATA DO
+        localStorage.removeItem('warRoom_pending_payment_doc');
+        localStorage.removeItem('warRoom_pending_payment_days');
         alert("Payment Failed. Reason: " + response.error.description);
     });
     rzp1.open();
 };
+
+// =================================================================
+// 🚀 2. INVISIBLE AUTO-RECOVERY ENGINE (INSTANT UNLOCK)
+// =================================================================
+window.autoRecoverPayment = function() {
+    let pendingDoc = localStorage.getItem('warRoom_pending_payment_doc');
+    let pendingDays = localStorage.getItem('warRoom_pending_payment_days');
+    let rawEmail = localStorage.getItem('warRoomUserEmail');
+
+    // Agar page refresh hua hai aur tracker active hai
+    if (pendingDoc && pendingDays && rawEmail) {
+        let currentEmail = rawEmail.toLowerCase();
+        let items = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
+        let currentItem = items.find(i => i.title === pendingDoc);
+
+        if (currentItem) {
+            let totalHours = parseInt(pendingDays) * 24;
+            let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
+
+            // 🔥 EKDUM TURANT UNLOCK (Bina kisi popup ke)
+            localStorage.setItem(`vip_access_${currentItem.id}_${rawEmail}`, expiryTime);
+            localStorage.setItem(`global_vip_${rawEmail}`, expiryTime);
+
+            // UI Refresh instantly
+            if (typeof renderPremiumHubContent === 'function') renderPremiumHubContent();
+
+            // Success message dikhao taaki user khush ho jaye
+            setTimeout(() => {
+                alert(`✅ Payment Auto-Detected! ${pendingDoc} is now UNLOCKED.`);
+            }, 600);
+
+            // Background mein Cloud sync kar do (Admin ke liye)
+            if (typeof firebase !== 'undefined') {
+                const db = firebase.firestore();
+                db.collection("users").where("email", "==", currentEmail).get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        const batch = db.batch();
+                        snapshot.forEach(doc => {
+                            batch.update(db.collection("users").doc(doc.id), {
+                                isVIP: true,
+                                vipExpiry: expiryTime,
+                                access_type: "Auto-Recovered (App Kill)"
+                            });
+                        });
+                        batch.commit();
+                    } else {
+                        db.collection("users").add({
+                            email: currentEmail,
+                            name: localStorage.getItem('warRoomUserName') || "VIP Aspirant",
+                            role: "aspirant",
+                            isVIP: true,
+                            vipExpiry: expiryTime,
+                            access_type: "Auto-Recovered (App Kill)",
+                            points: 0,
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                });
+            }
+        }
+
+        // Tracker safai (Taaki agli baar refresh par wapas free na mile)
+        localStorage.removeItem('warRoom_pending_payment_doc');
+        localStorage.removeItem('warRoom_pending_payment_days');
+    }
+};
+
+// Website load hone ke sirf aadhe second andar check karega
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(window.autoRecoverPayment, 500); 
+});
 
 // 3. 🛡️ VIP CHECKER ENGINE
 window.hasVipAccess = function(identifier, contentId) {
