@@ -3633,7 +3633,7 @@ button[onclick="openDistractionModal()"] {
 
             </section>
 
-            <!-- 👑 VIP Premium Command Hub Section -->
+          <!-- 👑 VIP Premium Command Hub Section -->
 <section id="view-premium" class="view-section hidden">
     <div class="page-header premium-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
         <div>
@@ -10327,7 +10327,20 @@ function saveNewVipChapter() {
     let chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     chapters.unshift({ id: 'vipchap_' + Date.now(), title: title, subject: document.getElementById('new-vip-chapter-subject').value, thumbnail: globalVipChapterThumb });
     localStorage.setItem('warRoomVipChapters', JSON.stringify(chapters));
-    document.getElementById('new-vip-chapter-title').value = ''; closeCreateVipChapterModal(); renderPremiumHubContent();
+    
+    document.getElementById('new-vip-chapter-title').value = ''; 
+    closeCreateVipChapterModal(); 
+    
+    // Yahan UI update hoga aur alert aayega
+    if (typeof renderPremiumHubContent === 'function') renderPremiumHubContent();
+    alert("✅ Premium Chapter Card Created Successfully!");
+}
+
+// Ensure Page Load hote hi data render ho jaye
+function initVipSystem() {
+    if (!localStorage.getItem('warRoomVipChapters')) localStorage.setItem('warRoomVipChapters', '[]');
+    if (!localStorage.getItem('warRoomVipContents')) localStorage.setItem('warRoomVipContents', '[]');
+    if (typeof renderPremiumHubContent === 'function') renderPremiumHubContent();
 }
 
 // 4. VIP Content Save Karna (FIXED: UI Refresh Added)
