@@ -7536,7 +7536,8 @@ function openAdminGrantModal() {
     
     // NEW: Load available premium content into the dropdown
     const contentSelect = document.getElementById('admin-grant-content-id');
-    const items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    const items = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]');
+
     
     if(items.length === 0) {
         contentSelect.innerHTML = `<option value="">No Content Available</option>`;
@@ -10688,6 +10689,7 @@ window.initiatePayment = function() {
     
     let currentEmail = rawEmail.toLowerCase();
     let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    
     let currentItem = items.find(i => i.title === docTitle);
     
     if (!currentItem) {
@@ -10756,117 +10758,6 @@ window.initiatePayment = function() {
         alert("Payment Failed or Cancelled. Reason: " + response.error.description);
     });
     rzp1.open();
-};
-
-// 2. 🛡️ FLAWLESS VIP RENDER ENGINE (Fixes NaN bug and guarantees Unlocking)
-window.renderPremiumHubContent = function() {
-    const container = document.getElementById('premium-content-list');
-    if(!container) return;
-    
-    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
-    if (typeof currentVipCategory !== 'undefined' && currentVipCategory !== 'all') {
-        items = items.filter(item => (item.category || 'material') === currentVipCategory);
-    }
-
-    const userRole = localStorage.getItem('warRoomUserRole');
-    const currentEmail = localStorage.getItem('warRoomUserEmail');
-    const currentPhone = localStorage.getItem(`user_phone_${currentEmail}`);
-
-    if(items.length === 0) {
-        container.innerHTML = `<div class="glass-card" style="text-align: center; color: var(--text-secondary); border: 1px dashed var(--glass-border);">📭 No VIP content deployed yet. Commander Shiva will upload soon.</div>`;
-        return;
-    }
-
-    container.innerHTML = items.map((item, idx) => {
-        const isAdmin = (userRole === 'admin');
-        const isVipApproved = hasVipAccess(currentEmail, item.id) || hasVipAccess(currentPhone, item.id);
-
-        let expiryText = "";
-        if (isVipApproved && !isAdmin) {
-            // 🔥 Flawless Timer Logic
-            let specificExpiry = localStorage.getItem(`vip_access_${item.id}_${currentEmail}`) || (currentPhone ? localStorage.getItem(`vip_access_${item.id}_${currentPhone}`) : null);
-            let globalExpiry = localStorage.getItem(`global_vip_${currentEmail}`);
-            let expiry = specificExpiry || globalExpiry;
-            
-            if (expiry && !isNaN(parseInt(expiry))) {
-                let timeLeft = parseInt(expiry) - Date.now();
-                if (timeLeft > 0) {
-                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                    let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    if (hours >= 24) {
-                        let days = Math.floor(hours / 24);
-                        let remainingHours = hours % 24;
-                        expiryText = `⏳ ${days}d ${remainingHours}h left`;
-                    } else if (hours > 0) {
-                        expiryText = `⏳ ${hours}h ${minutes}m left`;
-                    } else {
-                        expiryText = `⏳ ${minutes}m left`;
-                    }
-                } else {
-                    expiryText = "⏳ Expiring shortly...";
-                }
-            }
-        }
-
-        let thumbHTML = item.thumbnail 
-            ? `<img src="${item.thumbnail}" style="width: 85px; height: 85px; border-radius: 16px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.1);">` 
-            : `<div style="width: 85px; height: 85px; border-radius: 16px; background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.6);">💎</div>`;
-
-        if (isAdmin) {
-            return `
-                <div class="vip-card-ultra vip-card-admin" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
-                    <div style="display: flex; gap: 18px; align-items: center;">
-                        <div style="position: relative; flex-shrink: 0;">
-                            ${thumbHTML}
-                            <div style="position: absolute; top: -8px; right: -8px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #eab308; text-transform: uppercase;">Admin</div>
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h3 style="margin: 0; color: #fef08a; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);">${item.title}</h3>
-                            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: black; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); border: none;" onclick='accessPremiumResource(${JSON.stringify(item)})'>🚀 Launch VIP File</button>
-                        <button class="btn" style="background: #7f1d1d; color: #fca5a5; padding: 14px; border: 1px solid #b91c1c;" onclick="deletePremiumContent(${idx})">🗑️</button>
-                    </div>
-                </div>
-            `;
-        } else if (isVipApproved) {
-            return `
-                <div class="vip-card-ultra vip-card-unlocked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
-                    <div style="display: flex; gap: 18px; align-items: center;">
-                        <div style="position: relative; flex-shrink: 0;">
-                            ${thumbHTML}
-                            <div style="position: absolute; top: -8px; right: -8px; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 900; padding: 3px 8px; border-radius: 10px; border: 2px solid #000; box-shadow: 0 0 10px #16a34a; text-transform: uppercase;">Unlocked</div>
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h3 style="margin: 0; color: #86efac; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 0 15px rgba(34, 197, 94, 0.4);">${item.title}</h3>
-                            <p style="margin: 6px 0 10px 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; font-weight: 500;">${item.desc}</p>
-                            <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">${expiryText}</span>
-                        </div>
-                    </div>
-                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(22, 163, 74, 0.4); border: none;" onclick='openApprovedVipFile(${JSON.stringify(item)})'>🚀 Access Secure File</button>
-                </div>
-            `;
-        } else {
-            return `
-                <div class="vip-card-ultra vip-card-locked" style="padding: 22px; display: flex; flex-direction: column; gap: 18px;">
-                    <div style="display: flex; gap: 18px; align-items: center;">
-                        <div style="position: relative; flex-shrink: 0; filter: grayscale(100%) brightness(0.7);">
-                            ${thumbHTML}
-                            <div style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.8rem; padding: 3px 6px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 10px #ef4444;">🔒</div>
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h3 style="margin: 0; color: #cbd5e1; font-size: 1.25rem; font-weight: 900; letter-spacing: -0.5px;">${item.title}</h3>
-                            <p style="margin: 6px 0 10px 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; font-weight: 500;">${item.desc}</p>
-                            <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">🚫 Top Secret - Classified</span>
-                        </div>
-                    </div>
-                    <button class="btn" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 14px; font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid #60a5fa;" onclick="requestVipAccess('${item.title}')">🚀 GET INSTANT ACCESS</button>
-                </div>
-            `;
-        }
-    }).join('');
 };
 
 // 3. 🛡️ VIP CHECKER ENGINE
