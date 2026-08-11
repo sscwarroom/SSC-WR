@@ -10426,12 +10426,23 @@ window.renderVipHubContent = function() {
     }
 
     const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
+    const email = localStorage.getItem('warRoomUserEmail');
+    
+    // 🔥 NAYA: Check karo ki yeh chapter overall unlocked hai ya nahi
+    const currentChapter = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]').find(c => c.id === currentOpenVipChapterId);
+    let chapterUnlocked = isAdmin || (currentChapter && typeof hasVipAccess === 'function' && hasVipAccess(email, currentChapter.id));
 
     listContainer.innerHTML = filtered.map(item => {
         let typeIcon = item.type === 'mock' ? '📝 Premium Mock' : '📚 Secret Notes';
         
-        // 🔥 NAYA: Andar ka lock hata diya. Direct Open!
-        let actionBtn = `<button class="btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick='openApprovedVipFile(${JSON.stringify(item)}); closeVipChapterHub();'>Open 🔓</button>`;
+        let actionBtn = "";
+        if (chapterUnlocked) {
+            // Agar chapter kharid liya hai, toh open hone do
+            actionBtn = `<button class="btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick='openApprovedVipFile(${JSON.stringify(item)}); closeVipChapterHub();'>Open 🔓</button>`;
+        } else {
+            // Agar chapter locked hai, toh andar ki file par click karte hi payment modal khulna chahiye!
+            actionBtn = `<button class="btn" style="flex:1; background:#ef4444; color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick="closeVipChapterHub(); requestVipAccess('${currentChapter ? currentChapter.title : 'VIP Chapter'}')">Locked 🔒 (Unlock Chapter)</button>`;
+        }
         
         let delBtn = isAdmin ? `<button class="btn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:none; padding:12px; border-radius:10px;" onclick="deleteVipContent('${item.id}')">🗑️</button>` : '';
 
@@ -10471,7 +10482,7 @@ window.renderPremiumHubContent = function() {
         // 🔥 NAYA: Card Action & Visuals based on Access
         let cardAction = hasAccess ? `onclick="openVipChapterHub('${chap.id}')"` : `onclick="requestVipAccess('${chap.title}')"`;
         let lockOverlay = hasAccess ? '' : `<div style="position:absolute; top:-8px; right:-8px; background:#ef4444; color:white; font-size:0.8rem; padding:4px 8px; border-radius:50%; border:2px solid #000; box-shadow:0 0 10px #ef4444; z-index:5;">🔒</div>`;
-        let btnText = hasAccess ? 'OPEN VAULT 🔓' : 'UNLOCK VAULT 🔒';
+        let btnText = hasAccess ? 'OPEN VAULT' : 'UNLOCK VAULT 🔒';
         let btnBg = hasAccess ? 'linear-gradient(135deg, #16a34a, #15803d)' : 'linear-gradient(135deg, #ca8a04, #854d0e)';
         let btnShadow = hasAccess ? 'rgba(22, 163, 74, 0.4)' : 'rgba(202, 138, 4, 0.4)';
         let filterStyle = hasAccess ? '' : 'filter: grayscale(60%) brightness(0.8);';
