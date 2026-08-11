@@ -3640,14 +3640,28 @@ button[onclick="openDistractionModal()"] {
                         <h1 style="display: flex; align-items: center; gap: 10px;">👑 VIP Premium Command Hub</h1>
                         <p>Exclusive high-level strategy documents, topper notes, and classified test materials.</p>
                     </div>
-                      <!-- 🔥 NAYA: Admin Controls for Premium Hub 🔥 -->
-        <div id="admin-premium-controls" class="hidden" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">
-            <button id="admin-add-premium-btn" class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; font-weight: 800; border: 1px solid #fef08a;" onclick="openAdminPremiumModal()">➕ Upload VIP Content</button>
-            <button id="admin-grant-vip-btn" class="btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 800; border: 1px solid #bbf7d0;" onclick="openAdminGrantModal()">✅ Grant VIP Access</button>
-            <button id="viewVipUsersBtn" class="btn" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; font-weight: 800; border: 1px solid #bfdbfe;" onclick="viewVIPSubscribers()">🔍 View Subscribers</button>
-        </div>
-    </div>
-                   
+                    <!-- 🔥 NAYA: Admin Controls for Premium Hub 🔥 -->
+<div id="admin-premium-controls" class="hidden" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 15px;">
+    
+    <!-- BUTTON 1: Naya VIP Chapter Banane Ke Liye -->
+    <button class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: black; font-weight: 900; border: 1px solid #fef08a;" onclick="openCreateVipChapterModal()">
+        ➕ CREATE VIP CHAPTER
+    </button>
+    
+    <!-- BUTTON 2: Us Chapter Mein Content Dalne Ke Liye -->
+    <button class="btn" style="flex: 1; background: linear-gradient(135deg, #f97316, #ea580c); color: white; font-weight: 900; border: 1px solid #fdba74;" onclick="openUploadVipContentModal()">
+        📤 ADD VIP CONTENT
+    </button>
+    
+    <!-- BUTTON 3 & 4: Purane Wale -->
+    <button class="btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 900; border: 1px solid #bbf7d0;" onclick="openAdminGrantModal()">
+        ✅ GRANT VIP ACCESS
+    </button>
+    <button class="btn" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; font-weight: 900; border: 1px solid #bfdbfe;" onclick="viewVIPSubscribers()">
+        🔍 VIEW SUBSCRIBERS
+    </button>
+</div>
+
 
                 <div class="glass-card content-section" style="border: 2px solid rgba(234, 179, 8, 0.4); background: var(--bg-secondary);">
                     <h3 style="color: #eab308; margin-bottom: 0.5rem; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">🔒 Classified Command Clearance</h3>
