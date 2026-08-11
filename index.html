@@ -2576,6 +2576,60 @@ button[onclick="openDistractionModal()"] {
 /* Enhanced Chapter Card for Main Feed */
 .ultra-mock-card { transition: all 0.3s ease; }
 .ultra-mock-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(37,99,235,0.15) !important; border-color: #93c5fd !important; }
+/* 🌟 AESTHETIC PREMIUM CHAPTER CARDS 🌟 */
+.ultra-mock-card {
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-primary));
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 22px !important;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+}
+
+/* Shine Effect Animation */
+.ultra-mock-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-25deg);
+    animation: cardShine 4s infinite;
+    pointer-events: none;
+}
+
+@keyframes cardShine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+/* Hover par 3D Lift aur Glow */
+.ultra-mock-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 0 15px 35px rgba(37,99,235,0.2) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+/* Explore Button Styling */
+.ultra-start-btn {
+    background: linear-gradient(135deg, var(--accent-primary), #1d4ed8) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 14px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+    box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+}
+
+.ultra-start-btn:active {
+    transform: scale(0.95) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+}
 
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -2879,27 +2933,36 @@ button[onclick="openDistractionModal()"] {
     </div>
 </div>
 
-<!-- 2. Admin Upload Content to Chapter Modal -->
-<div id="admin-upload-content-modal">
+<!-- 2. Admin Upload Content to Chapter Modal (Premium Removed) -->
+<div id="admin-upload-content-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 60000; display: none; justify-content: center; align-items: center;">
     <div class="glass-card" style="width: 100%; max-width: 480px; background: var(--bg-secondary); margin: 15px; position: relative;">
         <button onclick="closeUploadContentModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
-        <h3 style="color: var(--accent-secondary); margin-bottom: 15px;">📤 Upload Content to Chapter</h3>
+        <h3 style="color: var(--accent-secondary); margin-bottom: 15px; padding-right: 25px;">📤 Upload Content to Chapter</h3>
         <div style="display: flex; flex-direction: column; gap: 12px;">
-            <select id="upload-content-card-sel" class="search-input"></select>
-            <input type="text" id="upload-content-title" class="search-input" placeholder="Content Title (e.g., Level 1 Mock)">
-            <select id="upload-content-type" class="search-input">
-                <option value="mock">📝 Mock Test</option><option value="notes">📚 Notes/PDF</option><option value="pyq">⚡ PYQ Set</option>
+            
+            <select id="upload-content-card-sel" class="search-input" style="padding: 10px 14px; font-size: 0.9rem;"></select>
+            
+            <input type="text" id="upload-content-title" class="search-input" placeholder="Content Title (e.g., Level 1 Mock)" style="padding: 10px 14px; font-size: 0.9rem;">
+            
+            <select id="upload-content-type" class="search-input" style="padding: 10px 14px; font-size: 0.9rem;">
+                <option value="mock">📝 Mock Test</option>
+                <option value="notes">📚 Notes/PDF</option>
+                <option value="pyq">⚡ PYQ Set</option>
             </select>
-            <!-- Premium option removed from here -->
-            <select id="upload-content-format" class="search-input" onchange="toggleContentUploadFormat(this.value)">
-                <option value="link">Web Link (URL)</option><option value="file">Upload HTML / PDF File</option>
+
+            <select id="upload-content-format" class="search-input" style="padding: 10px 14px; font-size: 0.9rem;" onchange="toggleContentUploadFormat(this.value)">
+                <option value="link">Web Link (URL)</option>
+                <option value="file">Upload HTML / PDF File</option>
             </select>
-            <input type="text" id="upload-content-link" class="search-input" placeholder="Paste URL (https://...)">
-            <input type="file" id="upload-content-file" class="search-input hidden" accept=".html,.htm,.pdf">
-            <button class="btn" style="background: var(--accent-secondary); color: white;" onclick="saveContentToChapter()">Deploy to Chapter 🚀</button>
+
+            <input type="text" id="upload-content-link" class="search-input" placeholder="Paste URL (https://...)" style="padding: 10px 14px; font-size: 0.9rem;">
+            <input type="file" id="upload-content-file" class="search-input hidden" accept=".html,.htm,.pdf" style="padding: 8px; font-size: 0.9rem;">
+
+            <button class="btn" style="background: var(--accent-secondary); color: white; padding: 12px; margin-top: 10px;" onclick="saveContentToChapter()">Deploy to Chapter 🚀</button>
         </div>
     </div>
 </div>
+
 
 <!-- 3. User View Chapter Hub Modal (Redesigned) -->
 <div id="chapter-hub-modal">
@@ -3529,19 +3592,14 @@ button[onclick="openDistractionModal()"] {
                         <h1 style="display: flex; align-items: center; gap: 10px;">👑 VIP Premium Command Hub</h1>
                         <p>Exclusive high-level strategy documents, topper notes, and classified test materials.</p>
                     </div>
-                    <button id="admin-add-premium-btn" class="btn hidden" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: white; font-weight: 800; border: 1px solid #fef08a;" onclick="openAdminPremiumModal()">➕ Upload VIP Content (Admin)</button><button id="admin-grant-vip-btn" class="btn hidden" style="background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 800; border: 1px solid #bbf7d0; margin-left: 10px;" onclick="openAdminGrantModal()">✅ Grant VIP Access</button>
-                   <!-- View VIP Subscribers Button -->
-<!-- View VIP Subscribers Button -->
-<button id="viewVipUsersBtn" class="btn hidden" onclick="viewVIPSubscribers()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; font-weight: 800; border: 1px solid #bfdbfe; width: 100%; margin-top: 12px; cursor: pointer;">
-    🔍 VIEW VIP SUBSCRIBERS
-</button>
-
-
-
-
-
-                    
-                </div>
+                      <!-- 🔥 NAYA: Admin Controls for Premium Hub 🔥 -->
+        <div id="admin-premium-controls" class="hidden" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">
+            <button id="admin-add-premium-btn" class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; font-weight: 800; border: 1px solid #fef08a;" onclick="openAdminPremiumModal()">➕ Upload VIP Content</button>
+            <button id="admin-grant-vip-btn" class="btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 800; border: 1px solid #bbf7d0;" onclick="openAdminGrantModal()">✅ Grant VIP Access</button>
+            <button id="viewVipUsersBtn" class="btn" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; font-weight: 800; border: 1px solid #bfdbfe;" onclick="viewVIPSubscribers()">🔍 View Subscribers</button>
+        </div>
+    </div>
+                   
 
                 <div class="glass-card content-section" style="border: 2px solid rgba(234, 179, 8, 0.4); background: var(--bg-secondary);">
                     <h3 style="color: #eab308; margin-bottom: 0.5rem; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">🔒 Classified Command Clearance</h3>
@@ -10156,9 +10214,19 @@ function renderHubContent(filterType) {
     }).join('');
 }
 
+// 🌟 NAYA: Automatically close modal when test starts
 function launchHubItem(item) {
-    if (item.format === 'link') window.open(item.content, '_blank');
-    else { document.getElementById('runner-title').innerText = item.title; document.getElementById('runner-iframe').src = item.content; document.getElementById('test-runner-modal').style.display = 'flex'; }
+    closeChapterHub(); // <--- YEH LINE ADD KI HAI TAAKI PEECHE WALA MODAL BAND HO JAYE
+    
+    setTimeout(() => {
+        if (item.format === 'link') {
+            window.open(item.content, '_blank');
+        } else { 
+            document.getElementById('runner-title').innerText = item.title; 
+            document.getElementById('runner-iframe').src = item.content; 
+            document.getElementById('test-runner-modal').style.display = 'flex'; 
+        }
+    }, 300); // 300ms ka wait taaki closing animation smooth lage
 }
 
 </script>
