@@ -3,22 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>SSCWarRoom - Free Mock Tests, Study Material,PYQs,Live 1v1 Gk/Gs Quizzes Competition & dedicated Typing software for SSC CGL & CHSL</title>
+    <title>SSCWarRoom - Free Mock Tests, Study Material & PYQs for SSC CGL & CHSL</title>
 
 <meta name="description" content="Boost your SSC CGL, CHSL, and MTS preparation with SSCWarRoom. Access free daily quizzes, Tier-2 typing tests, Pomodoro focus timers, and expert study material.">
 
     <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
-<script type="application/ld+json">
-{
-  "@context" : "https://schema.org",
-  "@type" : "WebSite",
-  "name" : "SSCWarRoom",
-  "url" : "https://sscwarroom.github.io/SSC-WR/"
-}
-</script>
-    
+
     <style>
      /* 🚀 1. Native Momentum Scrolling (Sabse Upar) */
 html, body, .main-content, .sidebar, .noti-list, #typing-history-list-container, #vip-list-container {
@@ -2471,48 +2463,109 @@ button[onclick="openDistractionModal()"] {
 /* ==========================================
    🌟 ULTRA PREMIUM FOCUS MODE (MONKEYTYPE STYLE)
    ========================================== */
-/* Jab Focus Mode active ho tab parent container ki layout */
+
+/* 1. Full Screen Immersive Layout & Premium Bada Font */
 #typing-active-screen.focus-active .typing-box {
     height: 75vh !important;
-    border: none !important; /* Border hata diya clean look ke liye */
-    background: transparent !important; /* Background screen ke sath merge ho jayega */
+    border: none !important; 
+    background: transparent !important; 
     box-shadow: none !important;
-    font-size: 1.55rem !important; /* Text thoda bada aur aaramdayak */
-    line-height: 2.2 !important;
+    font-family: 'Roboto Mono', 'Courier New', Courier, monospace !important; /* Best typing font */
+    font-size: 2.2rem !important; /* Font size bada kiya */
+    font-weight: 600 !important;
+    line-height: 1.8 !important; /* Lines ke beech perfect gap */
+    letter-spacing: 2px !important; /* Khula-khula text */
+    padding: 5% 5% !important;
 }
 
-/* Faltu cheezein hide kar do (Instruction text, Submit early button) */
+/* 2. Hide Faltu Controls Smoothly */
 #typing-active-screen.focus-active > p,
-#typing-active-screen.focus-active > button.btn-outline {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* Upar wale controls (Theme, Full screen) hide karo, sirf Focus aur Timer dikhega */
+#typing-active-screen.focus-active > button.btn-outline,
 #typing-active-screen.focus-active #typing-theme-selector,
 #typing-active-screen.focus-active button[onclick="toggleTypingFullscreen()"] {
     display: none !important;
 }
 
-/* 🌟 MAGIC TRICK: Jo type ho gaya hai (sahi ya galat), usko dim (halka) kar do taaki focus next word par rahe */
-#typing-active-screen.focus-active .t-char.correct,
-#typing-active-screen.focus-active .t-char.incorrect {
+/* Upcoming/Untyped Text: Dimmed out (Grey) */
+#typing-active-screen.focus-active .t-char {
+    color: var(--text-secondary) !important;
     opacity: 0.35 !important;
-    transition: opacity 0.3s ease;
+    transition: color 0.15s ease, opacity 0.15s ease;
 }
 
-/* Custom Scrollbar for Focus Mode (Clean Look) */
-#typing-active-screen.focus-active .typing-box::-webkit-scrollbar {
-    width: 4px;
+/* 🌟 NAYA: Typed Correct Text -> Tactical Yellow Color */
+#typing-active-screen.focus-active .t-char.correct {
+    color: #eab308 !important; /* Monkeytype jaisa yellow */
+    opacity: 1 !important;
+    text-shadow: 0 0 5px rgba(234, 179, 8, 0.3) !important; /* Halka premium glow */
 }
-#typing-active-screen.focus-active .typing-box::-webkit-scrollbar-thumb {
-    background: var(--accent-primary);
-    border-radius: 10px;
+
+/* Typed Incorrect Text: Sharp Red */
+#typing-active-screen.focus-active .t-char.incorrect {
+    color: #ff4d4d !important;
+    background: rgba(255, 77, 77, 0.15) !important;
+    opacity: 1 !important;
+    border-radius: 4px;
 }
+
+#typing-active-screen.focus-active .t-char.active {
+    color: #eab308 !important;
+    opacity: 1 !important;
+}
+
+/* =======================================================
+   🚀 4. THE BUTTER-SMOOTH GLIDING CARET (CURSOR)
+   ======================================================= */
+#typing-active-screen.focus-active #smooth-cursor {
+    background: transparent !important; 
+    border-left: 3px solid #eab308 !important; /* Cursor bhi yellow kiya */
+    box-shadow: -2px 0 10px rgba(234, 179, 8, 0.4) !important; 
+    border-radius: 2px !important;
+    
+    transform: scaleY(0.85); /* 🌟 Cursor ki height choti kar di text ke barabar */
+    margin-top: 2px; /* Center align */
+    
+    transition: left 0.1s cubic-bezier(0.2, 0, 0, 1), top 0.1s cubic-bezier(0.2, 0, 0, 1) !important;
+    animation: focusCursorBlink 1s infinite;
+}
+
+/* 🌟 Jab type kar rahe ho tab blink band karne ki class */
+#smooth-cursor.typing-paused-blink {
+    animation: none !important;
+    opacity: 1 !important;
+}
+
+/* Smooth Fading Blink */
+@keyframes focusCursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+#typing-active-screen.focus-active .t-char.active {
+    color: var(--text-primary) !important; /* Dark mode me White, Light me Black */
+    opacity: 1 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2) !important; /* Halka sa chamak */
+}
+
+/* 🌟 NAYA CSS: Chapter Hub Modal & Cards 🌟 */
+#chapter-hub-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 50000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+.chapter-hub-card { width: 100%; max-width: 600px; background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: 20px; padding: 25px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
+.hub-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; }
+.hub-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border); }
+.hub-title { color: var(--text-primary); font-size: 1.8rem; margin-bottom: 5px; }
+.hub-subject { color: var(--accent-primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
+.hub-content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+.hub-item { background: var(--bg-primary); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; }
+.hub-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.hub-item-info { flex-grow: 1; }
+.hub-item-type { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+.type-mock { color: #3b82f6; } .type-note { color: #16a34a; } .type-pyq { color: #ea580c; }
+.hub-item-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+.hub-item.premium { background: linear-gradient(145deg, #1e1b4b, #0f172a); border: 1px solid #facc15; box-shadow: 0 0 15px rgba(250, 204, 21, 0.1); }
+.hub-item.premium .hub-item-title { color: #fef08a; }
+.hub-item.premium .hub-item-type { color: #facc15; }
+.btn-hub-action { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; flex-shrink: 0; margin-left: 10px; }
+#admin-create-card-modal, #admin-upload-content-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 60000; display: none; justify-content: center; align-items: center; }
 
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -2794,7 +2847,71 @@ button[onclick="openDistractionModal()"] {
                 <div id="arena-content-list" style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 15px;"></div>
             </div>
         </div>
+    </div> 
+    <!-- 1. Admin Create Chapter Card Modal -->
+<div id="admin-create-card-modal">
+    <div class="glass-card" style="width: 100%; max-width: 450px; background: var(--bg-secondary); margin: 15px; position: relative;">
+        <button onclick="closeCreateCardModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
+        <h3 style="color: var(--accent-primary); margin-bottom: 15px;">➕ Create New Chapter Card</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <input type="text" id="new-card-title" class="search-input" placeholder="Chapter Name (e.g., Number System)">
+            <select id="new-card-subject" class="search-input">
+                <option value="Quantitative Aptitude (Maths)">Quantitative Aptitude (Maths)</option>
+                <option value="General Intelligence & Reasoning">General Intelligence & Reasoning</option>
+                <option value="English Language">English Language</option>
+                <option value="General Awareness / GS">General Awareness / GS</option>
+            </select>
+            <label style="font-size: 0.85rem; font-weight: 700;">Upload Thumbnail Image:</label>
+            <input type="file" id="new-card-thumb" class="search-input" accept="image/*" onchange="compressCardThumbnail(event)">
+            <img id="new-card-thumb-preview" src="" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover; display: none;">
+            <button class="btn" style="background: var(--accent-primary); color: white;" onclick="saveNewChapterCard()">Create Card 🚀</button>
+        </div>
     </div>
+</div>
+
+<!-- 2. Admin Upload Content to Chapter Modal -->
+<div id="admin-upload-content-modal">
+    <div class="glass-card" style="width: 100%; max-width: 480px; background: var(--bg-secondary); margin: 15px; position: relative;">
+        <button onclick="closeUploadContentModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
+        <h3 style="color: var(--accent-secondary); margin-bottom: 15px;">📤 Upload Content to Chapter</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <select id="upload-content-card-sel" class="search-input"></select>
+            <input type="text" id="upload-content-title" class="search-input" placeholder="Content Title (e.g., Level 1 Mock)">
+            <select id="upload-content-type" class="search-input">
+                <option value="mock">📝 Mock Test</option><option value="notes">📚 Notes/PDF</option><option value="pyq">⚡ PYQ Set</option>
+            </select>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="upload-content-premium" style="width: 18px; height: 18px;">
+                <label for="upload-content-premium" style="font-weight: 700; color: #eab308;">👑 Mark as Premium (VIP Only)</label>
+            </div>
+            <select id="upload-content-format" class="search-input" onchange="toggleContentUploadFormat(this.value)">
+                <option value="link">Web Link (URL)</option><option value="file">Upload HTML / PDF File</option>
+            </select>
+            <input type="text" id="upload-content-link" class="search-input" placeholder="Paste URL (https://...)">
+            <input type="file" id="upload-content-file" class="search-input hidden" accept=".html,.htm,.pdf">
+            <button class="btn" style="background: var(--accent-secondary); color: white;" onclick="saveContentToChapter()">Deploy to Chapter 🚀</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. User View Chapter Hub Modal -->
+<div id="chapter-hub-modal">
+    <div class="chapter-hub-card fade-in">
+        <button class="hub-close-btn" onclick="closeChapterHub()">&times;</button>
+        <div class="hub-header">
+            <div class="hub-subject" id="hub-display-subject">Reasoning</div>
+            <h2 class="hub-title" id="hub-display-title">Chapter Title</h2>
+        </div>
+        <div class="fire-tabs-container" style="margin-bottom: 20px;">
+            <button class="fire-tab-btn active-fire-tab" onclick="filterHubContent('all', this)" style="padding: 8px 16px;">All</button>
+            <button class="fire-tab-btn" onclick="filterHubContent('mock', this)" style="padding: 8px 16px;">Mocks</button>
+            <button class="fire-tab-btn" onclick="filterHubContent('notes', this)" style="padding: 8px 16px;">Notes</button>
+            <button class="fire-tab-btn" onclick="filterHubContent('pyq', this)" style="padding: 8px 16px;">PYQs</button>
+        </div>
+        <div id="hub-content-list" class="hub-content-grid"></div>
+    </div>
+</div>
+
 <div id="distraction-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 40000; display: none; justify-content: center; align-items: center;">
     <div class="glass-card" style="width: 100%; max-width: 450px; background: var(--bg-secondary); margin: 15px; position: relative;">
         <button onclick="closeDistractionModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
@@ -2845,23 +2962,34 @@ button[onclick="openDistractionModal()"] {
             <p style="font-size: 0.85rem; margin-bottom: 20px;">Configure your parameters before launching the test.</p>
             
             <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                <div>
-                    <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Duration:</label>
-                    <select id="typing-duration-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
-                        <option value="1">1 Minute</option>
-                        <option value="3">3 Minutes</option>
-                        <option value="5" selected>5 Minutes (Standard SSC)</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Difficulty Level:</label>
-                    <select id="typing-level-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
-                        <option value="basic">Basic (Simple Sentences)</option>
-                        <option value="average" selected>Average (Govt Notifications)</option>
-                        <option value="hard">Hard (Technical & Legal)</option>
-                    </select>
-                </div>
-            </div>
+    <div>
+        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Duration:</label>
+        <select id="typing-duration-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;">
+            <option value="1">1 Minute</option>
+            <option value="3">3 Minutes</option>
+            <option value="5" selected>5 Minutes (Standard SSC)</option>
+            <!-- NAYA OPTION: No Limit -->
+            <option value="0">No Limit (Stopwatch)</option> 
+        </select>
+    </div>
+    <div>
+        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">Select Difficulty Level:</label>
+        <select id="typing-level-sel" class="search-input" style="padding: 10px 15px; font-size: 0.9rem; appearance: auto;" onchange="toggleCustomTypingInput(this.value)">
+            <option value="basic">Basic (Simple Sentences)</option>
+            <option value="average" selected>Average (Govt Notifications)</option>
+            <option value="hard">Hard (Technical & Legal)</option>
+            <!-- NAYA OPTION: Custom Paragraph -->
+            <option value="custom">Custom Paragraph</option> 
+        </select>
+    </div>
+
+    <!-- NAYA TEXTAREA: Sirf tab dikhega jab 'Custom Paragraph' select hoga -->
+    <div id="custom-typing-box" class="hidden" style="margin-top: 5px;">
+        <label style="font-weight: 700; font-size: 0.85rem; display: block; margin-bottom: 4px; color: var(--accent-secondary);">Paste your paragraph here:</label>
+        <textarea id="custom-typing-text" class="search-input" placeholder="Paste your text here..." style="width: 100%; height: 90px; padding: 10px; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
+    </div>
+</div>
+
             <button class="btn" style="width: 100%; background: var(--accent-primary); color: white; padding: 14px;" onclick="initializeTypingTest()">🚀 Start Typing Assessment</button>
         </div>
 
@@ -4151,7 +4279,7 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             "“A champion is someone who gets up when they can't.” – Jack Dempsey"
         ];
 
-        document.addEventListener("DOMContentLoaded", () => {
+       initChapterSystem(); document.addEventListener("DOMContentLoaded", () => {
     
     
 
@@ -4953,6 +5081,8 @@ let typingSecondsLeft = 0;
 let typingTestActive = false;
 let typingStarted = false;
 let exactStartTime = null;
+let isNoLimitMode = false;
+let typingSecondsElapsed = 0;
 
 let charactersInfo = [];
 let charIndex = 0;
@@ -5041,10 +5171,32 @@ function focusTypingInput() {
 function initializeTypingTest() {
     const durationMins = parseInt(document.getElementById('typing-duration-sel').value);
     const level = document.getElementById('typing-level-sel').value;
-    const levelData = sscTypingTestsData[level] || sscTypingTestsData['average'];
-    let rawText = levelData[durationMins] || levelData[5] || Object.values(levelData)[0];
+    
+    let rawText = "";
+    
+    // Custom Text ya Default Text Logic
+    if (level === 'custom') {
+        rawText = document.getElementById('custom-typing-text').value.trim();
+        if (!rawText) {
+            alert("Please paste a paragraph to start the custom test.");
+            return;
+        }
+        rawText = rawText.replace(/\s+/g, ' '); // Extra spaces hatane ke liye
+    } else {
+        const levelData = sscTypingTestsData[level] || sscTypingTestsData['average'];
+        rawText = levelData[durationMins] || levelData[5] || Object.values(levelData)[0];
+    }
 
-    typingSecondsLeft = durationMins * 60;
+    // No Limit Timer Logic
+    if (durationMins === 0) {
+        isNoLimitMode = true;
+        typingSecondsElapsed = 0;
+        typingSecondsLeft = 0; // Just to be safe
+    } else {
+        isNoLimitMode = false;
+        typingSecondsLeft = durationMins * 60;
+    }
+
     typingMistakes = 0; charIndex = 0; previousInputLength = 0;
     typingStarted = false; exactStartTime = null; charactersInfo = [];
     
@@ -5052,7 +5204,6 @@ function initializeTypingTest() {
     document.getElementById('typing-active-screen').classList.remove('hidden');
     document.getElementById('typing-flash-overlay').classList.remove('hidden');
 
-    // Reset Theme to current selector
     changeTypingTheme(document.getElementById('typing-theme-selector').value);
 
     buildProTypingUI(rawText);
@@ -5069,6 +5220,7 @@ function initializeTypingTest() {
     // 📱 MOBILE BULLETPROOF INPUT LISTENER
     hiddenInput.oninput = handleMobileFriendlyInput;
 }
+
 
 
 function buildProTypingUI(text) {
@@ -5193,6 +5345,13 @@ function handleMobileFriendlyInput(e) {
         if (spanRect.bottom > boxRect.bottom - 20) {
             box.scrollTop += 60; // Thoda sa smoothly neeche scroll karega
         }
+            if (cursor) {
+            cursor.classList.add('typing-paused-blink');
+            clearTimeout(window.cursorBlinkTimer);
+            window.cursorBlinkTimer = setTimeout(() => {
+                cursor.classList.remove('typing-paused-blink');
+            }, 400); // 400ms tak type nahi kiya toh wapas blink shuru
+        }
     } else {
         finishTypingTest();
     }
@@ -5203,18 +5362,29 @@ function handleMobileFriendlyInput(e) {
 function startActiveTypingTimer() {
     clearInterval(typingTimer);
     typingTimer = setInterval(() => {
-        if (typingSecondsLeft > 0) {
-            typingSecondsLeft--;
+        if (isNoLimitMode) {
+            typingSecondsElapsed++;
             updateTypingTimerDisplay();
         } else {
-            finishTypingTest();
+            if (typingSecondsLeft > 0) {
+                typingSecondsLeft--;
+                updateTypingTimerDisplay();
+            } else {
+                finishTypingTest();
+            }
         }
     }, 1000);
 }
 
 function updateTypingTimerDisplay() {
-    const m = Math.floor(typingSecondsLeft / 60);
-    const s = typingSecondsLeft % 60;
+    let m, s;
+    if (isNoLimitMode) {
+        m = Math.floor(typingSecondsElapsed / 60);
+        s = typingSecondsElapsed % 60;
+    } else {
+        m = Math.floor(typingSecondsLeft / 60);
+        s = typingSecondsLeft % 60;
+    }
     document.getElementById('typing-timer-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 
@@ -5262,9 +5432,11 @@ function finishTypingTest() {
     document.getElementById('res-kdph').innerText = kdph;
 
     const selectedMins = document.getElementById('typing-duration-sel').value;
+    const durText = isNoLimitMode ? 'No Limit' : selectedMins + ' min';
+
     saveTypingHistory({
         date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
-        wpm: netWPM, accuracy: accuracy + '%', kdph: kdph, duration: selectedMins + ' min',
+        wpm: netWPM, accuracy: accuracy + '%', kdph: kdph, duration: durText,
         score: totalScore,
         level: document.getElementById('typing-level-sel').value.toUpperCase()
     });
@@ -9743,12 +9915,163 @@ function toggleFocusMode() {
     document.getElementById('hidden-focus-input').focus();
 }
 
-function clearBadQuizzes() {
-    if(confirm("Kya aap sach mein phone ki memory se saare quiz questions clear karna chahte hain?")) {
-        localStorage.removeItem('warRoomDailyQuizzes');
-        alert("✅ Local memory se questions clear ho gaye! Ab Firebase se nayi list load hogi.");
-        location.reload(); // Page refresh kar dega
+function toggleCustomTypingInput(val) {
+    const customBox = document.getElementById('custom-typing-box');
+    if (val === 'custom') {
+        customBox.classList.remove('hidden');
+    } else {
+        customBox.classList.add('hidden');
     }
+}
+// --- NEW CHAPTER HUB LOGIC ---
+let globalChapterCardThumbBase64 = "";
+let currentOpenChapterId = null;
+
+function initChapterSystem() {
+    if (!localStorage.getItem('warRoomChapters')) { localStorage.setItem('warRoomChapters', '[]'); }
+    if (!localStorage.getItem('warRoomChapterContents')) { localStorage.setItem('warRoomChapterContents', '[]'); }
+}
+
+function openCreateCardModal() { document.getElementById('admin-create-card-modal').style.display = 'flex'; }
+function closeCreateCardModal() { document.getElementById('admin-create-card-modal').style.display = 'none'; }
+
+function compressCardThumbnail(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('new-card-thumb-preview');
+    if (!file) { globalChapterCardThumbBase64 = ""; preview.style.display = 'none'; return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+        const img = new Image(); img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 150; canvas.height = 150; // Compressed to small size
+            canvas.getContext('2d').drawImage(img, 0, 0, 150, 150);
+            globalChapterCardThumbBase64 = canvas.toDataURL('image/jpeg', 0.6);
+            preview.src = globalChapterCardThumbBase64; preview.style.display = 'block';
+        }; img.src = e.target.result;
+    }; reader.readAsDataURL(file);
+}
+
+function saveNewChapterCard() {
+    const title = document.getElementById('new-card-title').value.trim();
+    if (!title) return alert("Enter chapter name.");
+    let chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
+    chapters.push({ id: 'chap_' + Date.now(), title: title, subject: document.getElementById('new-card-subject').value, thumbnail: globalChapterCardThumbBase64 });
+    localStorage.setItem('warRoomChapters', JSON.stringify(chapters));
+    document.getElementById('new-card-title').value = ''; closeCreateCardModal(); renderChapterCards(); alert("Chapter Card Created!");
+}
+
+function openUploadContentModal() {
+    const selectEl = document.getElementById('upload-content-card-sel');
+    const chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
+    if(chapters.length === 0) return alert("Please create a Chapter Card first!");
+    selectEl.innerHTML = chapters.map(c => `<option value="${c.id}">${c.title} (${c.subject})</option>`).join('');
+    document.getElementById('admin-upload-content-modal').style.display = 'flex';
+}
+
+function closeUploadContentModal() { document.getElementById('admin-upload-content-modal').style.display = 'none'; }
+
+function toggleContentUploadFormat(val) {
+    document.getElementById('upload-content-link').classList.toggle('hidden', val !== 'link');
+    document.getElementById('upload-content-file').classList.toggle('hidden', val === 'link');
+}
+
+function saveContentToChapter() {
+    const title = document.getElementById('upload-content-title').value.trim();
+    if(!title) return alert("Enter title");
+    let contents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
+    const newContent = { id: 'cont_' + Date.now(), chapterId: document.getElementById('upload-content-card-sel').value, title: title, type: document.getElementById('upload-content-type').value, format: document.getElementById('upload-content-format').value, isPremium: document.getElementById('upload-content-premium').checked };
+    
+    if(newContent.format === 'link') {
+        newContent.content = document.getElementById('upload-content-link').value.trim();
+        contents.push(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
+    } else {
+        const file = document.getElementById('upload-content-file').files[0];
+        if(!file) return alert("Select file");
+        const reader = new FileReader(); reader.onload = e => {
+            newContent.content = e.target.result; contents.push(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
+        }; reader.readAsDataURL(file);
+    }
+}
+
+function renderChapterCards() {
+    const chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
+    const container = document.getElementById('dedicated-mock-list');
+    if(!container) return;
+    const userRole = localStorage.getItem('warRoomUserRole');
+    const filtered = chapters.filter(c => c.subject === currentStudySubject);
+
+    let adminControls = userRole === 'admin' ? `<div style="display:flex; gap:10px; margin-bottom:15px;"><button class="btn" style="flex:1; background:var(--accent-primary); color:white;" onclick="openCreateCardModal()">➕ Create Card</button><button class="btn" style="flex:1; background:var(--accent-secondary); color:white;" onclick="openUploadContentModal()">📤 Upload Content</button></div>` : '';
+
+    if(filtered.length === 0) {
+        container.innerHTML = adminControls + `<div class="glass-card" style="text-align:center; padding:2rem; color:var(--text-secondary);">No Chapters Found for this subject.</div>`; return;
+    }
+
+    container.innerHTML = adminControls + filtered.map(chap => {
+        let thumbHTML = chap.thumbnail ? `<img src="${chap.thumbnail}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;">` : `📁`;
+        return `
+        <div class="ultra-mock-card fade-in" style="padding: 18px; display: flex; flex-direction: column; gap: 16px; cursor:pointer;" onclick="openChapterHub('${chap.id}')">
+            <div style="display: flex; gap: 14px; align-items: center;">
+                <div style="width: 60px; height: 60px; border-radius: 12px; display:flex; justify-content:center; align-items:center; font-size: 2rem; background: rgba(37,99,235,0.05); border: 1px solid rgba(37,99,235,0.1);">${thumbHTML}</div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 4px 0; font-size: 1.2rem; color: var(--text-primary);">${chap.title}</h4>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">${chap.subject}</div>
+                </div>
+            </div>
+            <button class="ultra-start-btn">View Materials ➔</button>
+        </div>`;
+    }).join('');
+}
+
+function openChapterHub(chapterId) {
+    currentOpenChapterId = chapterId;
+    const chap = JSON.parse(localStorage.getItem('warRoomChapters') || '[]').find(c => c.id === chapterId);
+    if(!chap) return;
+    document.getElementById('hub-display-subject').innerText = chap.subject;
+    document.getElementById('hub-display-title').innerText = chap.title;
+    filterHubContent('all', document.querySelector('#chapter-hub-modal .fire-tab-btn'));
+    document.getElementById('chapter-hub-modal').style.display = 'flex';
+    setTimeout(() => document.getElementById('chapter-hub-modal').style.opacity = '1', 10);
+}
+
+function closeChapterHub() {
+    document.getElementById('chapter-hub-modal').style.opacity = '0';
+    setTimeout(() => document.getElementById('chapter-hub-modal').style.display = 'none', 300);
+}
+
+function filterHubContent(type, btnElement) {
+    document.querySelectorAll('#chapter-hub-modal .fire-tab-btn').forEach(b => b.classList.remove('active-fire-tab'));
+    if(btnElement) btnElement.classList.add('active-fire-tab');
+    
+    const allContents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
+    const listContainer = document.getElementById('hub-content-list');
+    const filtered = allContents.filter(c => c.chapterId === currentOpenChapterId && (type === 'all' || c.type === type));
+
+    if (filtered.length === 0) { listContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-secondary); width:100%;">No content here yet.</div>`; return; }
+
+    const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
+    const email = localStorage.getItem('warRoomUserEmail');
+
+    listContainer.innerHTML = filtered.map(item => {
+        let typeLabel = item.type === 'mock' ? '📝 Mock Test' : (item.type === 'notes' ? '📚 Notes' : '⚡ PYQ');
+        let hasAccess = !item.isPremium || isAdmin || (typeof hasVipAccess === 'function' && hasVipAccess(email, item.id));
+        let actionBtn = hasAccess 
+            ? `<button class="btn btn-outline btn-hub-action" style="color:${item.isPremium?'#facc15':'var(--accent-primary)'}; border-color:${item.isPremium?'#facc15':'var(--accent-primary)'};" onclick='launchHubItem(${JSON.stringify(item)})'>Open</button>`
+            : `<button class="btn btn-hub-action" style="background:#ef4444; color:white; border:none;" onclick="requestVipAccess('${item.title}')">Unlock</button>`;
+
+        return `
+        <div class="hub-item ${item.isPremium ? 'premium' : ''}">
+            <div class="hub-item-info">
+                <div class="hub-item-type type-${item.type}">${typeLabel} ${item.isPremium ? (hasAccess ? '🔓' : '🔒') : ''}</div>
+                <div class="hub-item-title">${item.title}</div>
+            </div>
+            ${actionBtn}
+        </div>`;
+    }).join('');
+}
+
+function launchHubItem(item) {
+    if (item.format === 'link') window.open(item.content, '_blank');
+    else { document.getElementById('runner-title').innerText = item.title; document.getElementById('runner-iframe').src = item.content; document.getElementById('test-runner-modal').style.display = 'flex'; }
 }
 
 </script>
@@ -9854,8 +10177,6 @@ function clearBadQuizzes() {
                 <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 10px;">Paste the JSON array generated by ChatGPT/Gemini.</p>
                 <textarea id="admin-bulk-json" class="search-input" placeholder='[{"q":"Question", "options":["A","B","C","D"], "correct":0}]' style="height: 120px; border-radius: 10px; padding: 10px; font-size: 0.8rem; resize: vertical; font-family: monospace; width: 100%; box-sizing: border-box;"></textarea>
                 <button class="btn" style="width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 10px; font-size: 0.9rem; margin-top: 10px; font-weight: 800;" onclick="bulkUploadQuizzes()">🚀 Deploy Bulk Questions</button>
-                <button class="btn" style="width: 100%; background: #ef4444; color: white; padding: 10px; font-size: 0.9rem; margin-top: 15px; font-weight: 800;" onclick="clearBadQuizzes()">🗑️ Clear Local Quizzes</button>
-                
             </div>
         </div>
     </div>
