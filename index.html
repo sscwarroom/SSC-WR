@@ -7530,24 +7530,26 @@ function closeAdminGrantModal() {
     document.getElementById('admin-grant-modal').style.display = 'none';
 }
 
+// 4. ADMIN GRANT ACCESS (CHAPTER SELECTION)
 function openAdminGrantModal() {
     const userRole = localStorage.getItem('warRoomUserRole');
     if(userRole !== 'admin') { alert("Unauthorized action."); return; }
     
-    // NEW: Load available premium content into the dropdown
     const contentSelect = document.getElementById('admin-grant-content-id');
-    const items = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]');
-
+    
+    // 🔥 FIXED: Admin ab Chapters ka dropdown dekhega
+    const items = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     
     if(items.length === 0) {
-        contentSelect.innerHTML = `<option value="">No Content Available</option>`;
+        contentSelect.innerHTML = `<option value="">No VIP Chapters Available</option>`;
     } else {
-        contentSelect.innerHTML = '<option value="">Select VIP Content...</option>' + 
-            items.map(item => `<option value="${item.id}">${item.title}</option>`).join('');
+        contentSelect.innerHTML = '<option value="">Select VIP Chapter...</option>' + 
+            items.map(item => `<option value="${item.id}">👑 ${item.title}</option>`).join('');
     }
 
     document.getElementById('admin-grant-modal').style.display = 'flex';
 }
+
 
 async function grantVipAccess() {
     const identifier = document.getElementById('admin-grant-id').value.trim().toLowerCase();
@@ -10412,7 +10414,7 @@ window.closeVipChapterHub = function() {
     modal.style.opacity = '0'; setTimeout(() => modal.style.display = 'none', 300);
 };
 
-// 7. Render Modal Content
+// 2. INNER MODAL CONTENT (NO LOCKS INSIDE)
 window.renderVipHubContent = function() {
     const allContents = JSON.parse(localStorage.getItem('warRoomVipContents') || '[]');
     const listContainer = document.getElementById('vip-hub-content-list');
@@ -10423,16 +10425,13 @@ window.renderVipHubContent = function() {
         return; 
     }
 
-    const email = localStorage.getItem('warRoomUserEmail');
     const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
 
     listContainer.innerHTML = filtered.map(item => {
-        let hasAccess = isAdmin || (typeof hasVipAccess === 'function' && hasVipAccess(email, item.id));
         let typeIcon = item.type === 'mock' ? '📝 Premium Mock' : '📚 Secret Notes';
         
-        let actionBtn = hasAccess 
-            ? `<button class="btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick='openApprovedVipFile(${JSON.stringify(item)}); closeVipChapterHub();'>Open 🔓</button>`
-            : `<button class="btn" style="flex:1; background:#ef4444; color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick="requestVipAccess('${item.title}')">Locked 🔒</button>`;
+        // 🔥 NAYA: Andar ka lock hata diya. Direct Open!
+        let actionBtn = `<button class="btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:12px; font-weight:800; border-radius:10px;" onclick='openApprovedVipFile(${JSON.stringify(item)}); closeVipChapterHub();'>Open 🔓</button>`;
         
         let delBtn = isAdmin ? `<button class="btn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:none; padding:12px; border-radius:10px;" onclick="deleteVipContent('${item.id}')">🗑️</button>` : '';
 
@@ -10447,13 +10446,15 @@ window.renderVipHubContent = function() {
     }).join('');
 };
 
-// 8. FINAL MAIN RENDER (Bulletproof)
+
+// 1. OUTSIDE CARD RENDER ENGINE (LOCK & PAYMENT REDIRECT)
 window.renderPremiumHubContent = function() {
     const chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     const container = document.getElementById('premium-chapter-list');
     if(!container) return;
     
     const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
+    const email = localStorage.getItem('warRoomUserEmail'); // Email for access check
 
     if(chapters.length === 0) {
         container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:3rem; color:#94a3b8; border: 1px dashed #ca8a04; border-radius: 20px;">📭 VIP Vault is empty. Admin will deploy chapters soon.</div>`;
@@ -10461,20 +10462,32 @@ window.renderPremiumHubContent = function() {
     }
 
     container.innerHTML = chapters.map(chap => {
+        // 🔥 NAYA: Chapter-Level Par Access Check Hoga
+        let hasAccess = isAdmin || (typeof hasVipAccess === 'function' && hasVipAccess(email, chap.id));
+
         let thumbHTML = chap.thumbnail ? `<img src="${chap.thumbnail}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid #ca8a04;">` : `👑`;
         let delBtn = isAdmin ? `<button style="position:absolute; top:15px; right:15px; background:rgba(239,68,68,0.2); border:none; color:#ef4444; border-radius:50%; width:32px; height:32px; cursor:pointer; z-index:10;" onclick="event.stopPropagation(); deleteVipChapter('${chap.id}')">🗑️</button>` : '';
 
+        // 🔥 NAYA: Card Action & Visuals based on Access
+        let cardAction = hasAccess ? `onclick="openVipChapterHub('${chap.id}')"` : `onclick="requestVipAccess('${chap.title}')"`;
+        let lockOverlay = hasAccess ? '' : `<div style="position:absolute; top:-8px; right:-8px; background:#ef4444; color:white; font-size:0.8rem; padding:4px 8px; border-radius:50%; border:2px solid #000; box-shadow:0 0 10px #ef4444; z-index:5;">🔒</div>`;
+        let btnText = hasAccess ? 'OPEN VAULT 🔓' : 'UNLOCK VAULT 🔒';
+        let btnBg = hasAccess ? 'linear-gradient(135deg, #16a34a, #15803d)' : 'linear-gradient(135deg, #ca8a04, #854d0e)';
+        let btnShadow = hasAccess ? 'rgba(22, 163, 74, 0.4)' : 'rgba(202, 138, 4, 0.4)';
+        let filterStyle = hasAccess ? '' : 'filter: grayscale(60%) brightness(0.8);';
+
         return `
-        <div class="vip-chapter-card" onclick="openVipChapterHub('${chap.id}')">
+        <div class="vip-chapter-card" style="position:relative; cursor:pointer;" ${cardAction}>
             ${delBtn}
-            <div style="display: flex; gap: 15px; align-items: center; padding-right: 30px;">
+            ${lockOverlay}
+            <div style="display: flex; gap: 15px; align-items: center; padding-right: 30px; ${filterStyle}">
                 <div style="width: 65px; height: 65px; border-radius: 12px; display:flex; justify-content:center; align-items:center; font-size: 2rem; background: #0f172a;">${thumbHTML}</div>
                 <div style="flex: 1; min-width: 0;">
                     <h4 style="margin: 0 0 5px 0; font-size: 1.3rem; font-weight: 900; color: #facc15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${chap.title}</h4>
                     <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">🛡️ ${chap.subject}</div>
                 </div>
             </div>
-            <button style="width: 100%; margin-top: 20px; background: linear-gradient(135deg, #ca8a04, #854d0e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px rgba(202, 138, 4, 0.4);">Unlock Vault ➔</button>
+            <button style="width: 100%; margin-top: 20px; background: ${btnBg}; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px ${btnShadow}; pointer-events: none;">${btnText}</button>
         </div>`;
     }).join('');
 };
@@ -10670,8 +10683,7 @@ setTimeout(() => { if (typeof renderPremiumHubContent === 'function') renderPrem
 // =================================================================
 // 🚀 UNIFIED & NON-BLOCKING PAYMENT & VIP LOGIC
 // =================================================================
-
-// 1. 🛡️ INSTANT PAYMENT AUTO-UNLOCK ENGINE (Zero Wait Time)
+// 3. PAYMENT ENGINE (CHAPTER-LEVEL UNLOCK)
 window.initiatePayment = function() {
     let days = parseInt(document.getElementById('req-days-input').value);
     if (!days || days <= 0) return;
@@ -10688,12 +10700,13 @@ window.initiatePayment = function() {
     }
     
     let currentEmail = rawEmail.toLowerCase();
-    let items = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
     
+    // 🔥 FIXED: Ab ye VIP Chapters me dhoondhega (Pehle Content me dhoondhta tha)
+    let items = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     let currentItem = items.find(i => i.title === docTitle);
     
     if (!currentItem) {
-        alert("Error finding the file. Please try again.");
+        alert("Error finding the chapter. Please try again.");
         return;
     }
 
@@ -10709,17 +10722,16 @@ window.initiatePayment = function() {
             let totalHours = days * 24;
             let expiryTime = Date.now() + (totalHours * 60 * 60 * 1000);
             
-            // 🔥 STEP 1: INSTANT LOCAL UNLOCK (Zero Delays)
+            // Local Storage Unlock
             localStorage.setItem(`vip_access_${currentItem.id}_${rawEmail}`, expiryTime);
             localStorage.setItem(`global_vip_${rawEmail}`, expiryTime);
             
-            // 🔥 STEP 2: INSTANT UI REFRESH
             if(typeof closePricingModal === 'function') closePricingModal();
             if(typeof renderPremiumHubContent === 'function') renderPremiumHubContent();
             
-            alert(`🎉 Payment Successful! VIP Access for ${days} days has been auto-unlocked.`);
+            alert(`🎉 Payment Successful! VIP Chapter unlocked for ${days} days.`);
             
-            // 🔥 STEP 3: BACKGROUND DATABASE SYNC (Silent, Non-blocking)
+            // Cloud Sync
             if (typeof firebase !== 'undefined') {
                 const db = firebase.firestore();
                 db.collection("users").where("email", "==", currentEmail).get({ source: 'server' })
@@ -10755,7 +10767,7 @@ window.initiatePayment = function() {
 
     var rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response){
-        alert("Payment Failed or Cancelled. Reason: " + response.error.description);
+        alert("Payment Failed. Reason: " + response.error.description);
     });
     rzp1.open();
 };
