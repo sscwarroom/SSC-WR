@@ -2547,25 +2547,35 @@ button[onclick="openDistractionModal()"] {
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.2) !important; /* Halka sa chamak */
 }
 
-/* 🌟 NAYA CSS: Chapter Hub Modal & Cards 🌟 */
+/* 🌟 NAYA CSS: Chapter Hub Modal & Cards (Aesthetic & Full Screen) 🌟 */
 #chapter-hub-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 50000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-.chapter-hub-card { width: 100%; max-width: 600px; background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: 20px; padding: 25px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
-.hub-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer; }
-.hub-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border); }
-.hub-title { color: var(--text-primary); font-size: 1.8rem; margin-bottom: 5px; }
-.hub-subject { color: var(--accent-primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
-.hub-content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-.hub-item { background: var(--bg-primary); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; }
-.hub-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.hub-item-info { flex-grow: 1; }
-.hub-item-type { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+/* Modal ko aur bada aur responsive banaya hai */
+.chapter-hub-card { width: 95%; max-width: 800px; height: 90vh; background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: 20px; padding: 0; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; }
+.hub-close-btn { position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.1); border: none; font-size: 1.5rem; color: var(--text-primary); cursor: pointer; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10;}
+.hub-close-btn:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.hub-header { padding: 25px 25px 15px 25px; border-bottom: 1px solid var(--glass-border); background: var(--bg-primary); }
+.hub-title { color: var(--text-primary); font-size: 1.8rem; margin-bottom: 5px; font-weight: 800;}
+.hub-subject { color: var(--accent-primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+/* Scrollable content area */
+.hub-body { padding: 20px 25px; flex-grow: 1; overflow-y: auto; }
+.hub-content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+
+/* Aesthetic Item Cards */
+.hub-item { background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
+.hub-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.3);}
+.hub-item-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+.hub-item-type { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;}
 .type-mock { color: #3b82f6; } .type-note { color: #16a34a; } .type-pyq { color: #ea580c; }
-.hub-item-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
-.hub-item.premium { background: linear-gradient(145deg, #1e1b4b, #0f172a); border: 1px solid #facc15; box-shadow: 0 0 15px rgba(250, 204, 21, 0.1); }
-.hub-item.premium .hub-item-title { color: #fef08a; }
-.hub-item.premium .hub-item-type { color: #facc15; }
-.btn-hub-action { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; flex-shrink: 0; margin-left: 10px; }
+.hub-item-title { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); line-height: 1.4;}
+.hub-item-actions { display: flex; gap: 10px; width: 100%; }
+.btn-hub-action { padding: 10px 15px; font-size: 0.85rem; border-radius: 10px; flex: 1; text-align: center; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+
+/* Admin Modals */
 #admin-create-card-modal, #admin-upload-content-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 60000; display: none; justify-content: center; align-items: center; }
+
+/* Enhanced Chapter Card for Main Feed */
+.ultra-mock-card { transition: all 0.3s ease; }
+.ultra-mock-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(37,99,235,0.15) !important; border-color: #93c5fd !important; }
 
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -2848,7 +2858,7 @@ button[onclick="openDistractionModal()"] {
             </div>
         </div>
     </div> 
-    <!-- 1. Admin Create Chapter Card Modal -->
+<!-- 1. Admin Create Chapter Card Modal -->
 <div id="admin-create-card-modal">
     <div class="glass-card" style="width: 100%; max-width: 450px; background: var(--bg-secondary); margin: 15px; position: relative;">
         <button onclick="closeCreateCardModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
@@ -2880,10 +2890,7 @@ button[onclick="openDistractionModal()"] {
             <select id="upload-content-type" class="search-input">
                 <option value="mock">📝 Mock Test</option><option value="notes">📚 Notes/PDF</option><option value="pyq">⚡ PYQ Set</option>
             </select>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" id="upload-content-premium" style="width: 18px; height: 18px;">
-                <label for="upload-content-premium" style="font-weight: 700; color: #eab308;">👑 Mark as Premium (VIP Only)</label>
-            </div>
+            <!-- Premium option removed from here -->
             <select id="upload-content-format" class="search-input" onchange="toggleContentUploadFormat(this.value)">
                 <option value="link">Web Link (URL)</option><option value="file">Upload HTML / PDF File</option>
             </select>
@@ -2894,21 +2901,26 @@ button[onclick="openDistractionModal()"] {
     </div>
 </div>
 
-<!-- 3. User View Chapter Hub Modal -->
+<!-- 3. User View Chapter Hub Modal (Redesigned) -->
 <div id="chapter-hub-modal">
     <div class="chapter-hub-card fade-in">
         <button class="hub-close-btn" onclick="closeChapterHub()">&times;</button>
+        
         <div class="hub-header">
             <div class="hub-subject" id="hub-display-subject">Reasoning</div>
             <h2 class="hub-title" id="hub-display-title">Chapter Title</h2>
+            
+            <div class="fire-tabs-container" style="margin-top: 15px; margin-bottom: 0;">
+                <button class="fire-tab-btn active-fire-tab" onclick="filterHubContent('all', this)" style="padding: 8px 16px;">All</button>
+                <button class="fire-tab-btn" onclick="filterHubContent('mock', this)" style="padding: 8px 16px;">Mocks</button>
+                <button class="fire-tab-btn" onclick="filterHubContent('notes', this)" style="padding: 8px 16px;">Notes</button>
+                <button class="fire-tab-btn" onclick="filterHubContent('pyq', this)" style="padding: 8px 16px;">PYQs</button>
+            </div>
         </div>
-        <div class="fire-tabs-container" style="margin-bottom: 20px;">
-            <button class="fire-tab-btn active-fire-tab" onclick="filterHubContent('all', this)" style="padding: 8px 16px;">All</button>
-            <button class="fire-tab-btn" onclick="filterHubContent('mock', this)" style="padding: 8px 16px;">Mocks</button>
-            <button class="fire-tab-btn" onclick="filterHubContent('notes', this)" style="padding: 8px 16px;">Notes</button>
-            <button class="fire-tab-btn" onclick="filterHubContent('pyq', this)" style="padding: 8px 16px;">PYQs</button>
+
+        <div class="hub-body">
+            <div id="hub-content-list" class="hub-content-grid"></div>
         </div>
-        <div id="hub-content-list" class="hub-content-grid"></div>
     </div>
 </div>
 
@@ -3710,8 +3722,7 @@ button[onclick="openDistractionModal()"] {
         </div>
         
         <!-- Category Options -->
-        <div id="study-category-tabs" class="study-cat-wrapper"></div>
-        
+                 
         <!-- Yahan par Filtered Content Dikhayi Dega -->
         <div id="dedicated-mock-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
     </div>
@@ -9921,7 +9932,7 @@ function toggleCustomTypingInput(val) {
         customBox.classList.add('hidden');
     }
 }
-// --- NEW CHAPTER HUB LOGIC ---
+// --- NEW CHAPTER HUB LOGIC (UPDATED WITH DELETE OPTIONS) ---
 let globalChapterCardThumbBase64 = "";
 let currentOpenChapterId = null;
 
@@ -9953,9 +9964,29 @@ function saveNewChapterCard() {
     const title = document.getElementById('new-card-title').value.trim();
     if (!title) return alert("Enter chapter name.");
     let chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
-    chapters.push({ id: 'chap_' + Date.now(), title: title, subject: document.getElementById('new-card-subject').value, thumbnail: globalChapterCardThumbBase64 });
+    chapters.unshift({ id: 'chap_' + Date.now(), title: title, subject: document.getElementById('new-card-subject').value, thumbnail: globalChapterCardThumbBase64 });
     localStorage.setItem('warRoomChapters', JSON.stringify(chapters));
-    document.getElementById('new-card-title').value = ''; closeCreateCardModal(); renderChapterCards(); alert("Chapter Card Created!");
+    document.getElementById('new-card-title').value = ''; closeCreateCardModal(); renderDedicatedMockTests(); alert("Chapter Card Created!");
+}
+
+// 🔥 NAYA: Delete Chapter Card
+function deleteChapterCard(chapterId) {
+    const userRole = localStorage.getItem('warRoomUserRole');
+    if (userRole !== 'admin') return;
+    
+    if(confirm("Are you sure you want to delete this Chapter? This will also delete ALL its content (Mocks, Notes, PYQs).")) {
+        // Delete the chapter
+        let chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
+        chapters = chapters.filter(c => c.id !== chapterId);
+        localStorage.setItem('warRoomChapters', JSON.stringify(chapters));
+
+        // Delete all contents inside this chapter
+        let contents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
+        contents = contents.filter(c => c.chapterId !== chapterId);
+        localStorage.setItem('warRoomChapterContents', JSON.stringify(contents));
+
+        renderDedicatedMockTests();
+    }
 }
 
 function openUploadContentModal() {
@@ -9977,46 +10008,97 @@ function saveContentToChapter() {
     const title = document.getElementById('upload-content-title').value.trim();
     if(!title) return alert("Enter title");
     let contents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
-    const newContent = { id: 'cont_' + Date.now(), chapterId: document.getElementById('upload-content-card-sel').value, title: title, type: document.getElementById('upload-content-type').value, format: document.getElementById('upload-content-format').value, isPremium: document.getElementById('upload-content-premium').checked };
+    // isPremium removed
+    const newContent = { id: 'cont_' + Date.now(), chapterId: document.getElementById('upload-content-card-sel').value, title: title, type: document.getElementById('upload-content-type').value, format: document.getElementById('upload-content-format').value };
     
     if(newContent.format === 'link') {
         newContent.content = document.getElementById('upload-content-link').value.trim();
-        contents.push(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
+        contents.unshift(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
     } else {
         const file = document.getElementById('upload-content-file').files[0];
         if(!file) return alert("Select file");
         const reader = new FileReader(); reader.onload = e => {
-            newContent.content = e.target.result; contents.push(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
+            newContent.content = e.target.result; contents.unshift(newContent); localStorage.setItem('warRoomChapterContents', JSON.stringify(contents)); closeUploadContentModal(); alert("Added!");
         }; reader.readAsDataURL(file);
     }
 }
 
-function renderChapterCards() {
+// 🔥 NAYA: Delete Content from Hub
+function deleteHubContent(contentId) {
+    const userRole = localStorage.getItem('warRoomUserRole');
+    if (userRole !== 'admin') return;
+
+    if(confirm("Delete this material?")) {
+        let contents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
+        contents = contents.filter(c => c.id !== contentId);
+        localStorage.setItem('warRoomChapterContents', JSON.stringify(contents));
+        
+        // Refresh the hub list
+        const activeTab = document.querySelector('#chapter-hub-modal .active-fire-tab');
+        if(activeTab) {
+            let filterType = 'all';
+            if(activeTab.innerText.toLowerCase().includes('mock')) filterType = 'mock';
+            else if(activeTab.innerText.toLowerCase().includes('note')) filterType = 'notes';
+            else if(activeTab.innerText.toLowerCase().includes('pyq')) filterType = 'pyq';
+            renderHubContent(filterType);
+        }
+    }
+}
+
+// 🌟 UPDATED renderDedicatedMockTests (Added Delete Button)
+function renderDedicatedMockTests() {
     const chapters = JSON.parse(localStorage.getItem('warRoomChapters') || '[]');
     const container = document.getElementById('dedicated-mock-list');
     if(!container) return;
+
     const userRole = localStorage.getItem('warRoomUserRole');
     const filtered = chapters.filter(c => c.subject === currentStudySubject);
 
-    let adminControls = userRole === 'admin' ? `<div style="display:flex; gap:10px; margin-bottom:15px;"><button class="btn" style="flex:1; background:var(--accent-primary); color:white;" onclick="openCreateCardModal()">➕ Create Card</button><button class="btn" style="flex:1; background:var(--accent-secondary); color:white;" onclick="openUploadContentModal()">📤 Upload Content</button></div>` : '';
+    let adminControls = '';
+    if (userRole === 'admin') {
+        adminControls = `
+        <div style="display:flex; gap:10px; margin-bottom:15px; width: 100%;">
+            <button class="btn" style="flex:1; background:var(--accent-primary); color:white; font-size:0.85rem;" onclick="openCreateCardModal()">➕ Create Chapter</button>
+            <button class="btn" style="flex:1; background:var(--accent-secondary); color:white; font-size:0.85rem;" onclick="openUploadContentModal()">📤 Add Content</button>
+        </div>`;
+    }
 
     if(filtered.length === 0) {
-        container.innerHTML = adminControls + `<div class="glass-card" style="text-align:center; padding:2rem; color:var(--text-secondary);">No Chapters Found for this subject.</div>`; return;
+        container.innerHTML = adminControls + `
+        <div class="glass-card fade-in" style="text-align: center; padding: 3rem 1rem; border: 1px dashed var(--glass-border); opacity: 0.8; width: 100%;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">📭</div>
+            <h3 style="color: var(--text-primary); margin-bottom: 5px;">No Chapters Found</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Admin has not created any chapter cards for this subject yet.</p>
+        </div>`;
+        return;
     }
 
     container.innerHTML = adminControls + filtered.map(chap => {
-        let thumbHTML = chap.thumbnail ? `<img src="${chap.thumbnail}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;">` : `📁`;
+        let thumbHTML = chap.thumbnail 
+            ? `<img src="${chap.thumbnail}" style="width: 55px; height: 55px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--glass-border);">` 
+            : `<div style="width: 55px; height: 55px; border-radius: 12px; background: rgba(37,99,235,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; border: 1px solid rgba(37,99,235,0.1);">📂</div>`;
+
+        let deleteBtn = userRole === 'admin' ? `<button style="position:absolute; top:15px; right:15px; background:rgba(239,68,68,0.1); border:none; color:#ef4444; border-radius:50%; width:30px; height:30px; cursor:pointer;" onclick="event.stopPropagation(); deleteChapterCard('${chap.id}')" title="Delete Chapter">🗑️</button>` : '';
+
         return `
-        <div class="ultra-mock-card fade-in" style="padding: 18px; display: flex; flex-direction: column; gap: 16px; cursor:pointer;" onclick="openChapterHub('${chap.id}')">
-            <div style="display: flex; gap: 14px; align-items: center;">
-                <div style="width: 60px; height: 60px; border-radius: 12px; display:flex; justify-content:center; align-items:center; font-size: 2rem; background: rgba(37,99,235,0.05); border: 1px solid rgba(37,99,235,0.1);">${thumbHTML}</div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 4px 0; font-size: 1.2rem; color: var(--text-primary);">${chap.title}</h4>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">${chap.subject}</div>
+        <div class="ultra-mock-card fade-in" style="padding: 20px; display: flex; flex-direction: column; gap: 16px; cursor:pointer; position:relative;" onclick="openChapterHub('${chap.id}')">
+            ${deleteBtn}
+            <div style="display: flex; gap: 15px; align-items: center; padding-right: 25px;">
+                ${thumbHTML}
+                <div style="flex: 1; min-width: 0;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800; color: var(--text-primary); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${chap.title}
+                    </h4>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                        <span style="color: var(--accent-primary);">📂</span> ${chap.subject}
+                    </div>
                 </div>
             </div>
-            <button class="ultra-start-btn">View Materials ➔</button>
-        </div>`;
+            <button class="ultra-start-btn" style="width: 100%; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;">
+                Explore Materials ➔
+            </button>
+        </div>
+        `;
     }).join('');
 }
 
@@ -10039,30 +10121,37 @@ function closeChapterHub() {
 function filterHubContent(type, btnElement) {
     document.querySelectorAll('#chapter-hub-modal .fire-tab-btn').forEach(b => b.classList.remove('active-fire-tab'));
     if(btnElement) btnElement.classList.add('active-fire-tab');
-    
+    renderHubContent(type);
+}
+
+function renderHubContent(filterType) {
     const allContents = JSON.parse(localStorage.getItem('warRoomChapterContents') || '[]');
     const listContainer = document.getElementById('hub-content-list');
-    const filtered = allContents.filter(c => c.chapterId === currentOpenChapterId && (type === 'all' || c.type === type));
+    const filtered = allContents.filter(c => c.chapterId === currentOpenChapterId && (filterType === 'all' || c.type === filterType));
 
-    if (filtered.length === 0) { listContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-secondary); width:100%;">No content here yet.</div>`; return; }
+    if (filtered.length === 0) { 
+        listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">No materials uploaded yet.</div>`; 
+        return; 
+    }
 
     const isAdmin = localStorage.getItem('warRoomUserRole') === 'admin';
-    const email = localStorage.getItem('warRoomUserEmail');
 
     listContainer.innerHTML = filtered.map(item => {
-        let typeLabel = item.type === 'mock' ? '📝 Mock Test' : (item.type === 'notes' ? '📚 Notes' : '⚡ PYQ');
-        let hasAccess = !item.isPremium || isAdmin || (typeof hasVipAccess === 'function' && hasVipAccess(email, item.id));
-        let actionBtn = hasAccess 
-            ? `<button class="btn btn-outline btn-hub-action" style="color:${item.isPremium?'#facc15':'var(--accent-primary)'}; border-color:${item.isPremium?'#facc15':'var(--accent-primary)'};" onclick='launchHubItem(${JSON.stringify(item)})'>Open</button>`
-            : `<button class="btn btn-hub-action" style="background:#ef4444; color:white; border:none;" onclick="requestVipAccess('${item.title}')">Unlock</button>`;
+        let typeLabel = item.type === 'mock' ? '📝 Mock Test' : (item.type === 'notes' ? '📚 Notes / PDF' : '⚡ PYQ Set');
+        let typeClass = `type-${item.type}`;
+        
+        let delBtn = isAdmin ? `<button class="btn btn-outline btn-hub-action" style="border-color:#ef4444; color:#ef4444; flex: 0.3;" onclick="deleteHubContent('${item.id}')" title="Delete">🗑️</button>` : '';
 
         return `
-        <div class="hub-item ${item.isPremium ? 'premium' : ''}">
+        <div class="hub-item">
             <div class="hub-item-info">
-                <div class="hub-item-type type-${item.type}">${typeLabel} ${item.isPremium ? (hasAccess ? '🔓' : '🔒') : ''}</div>
+                <div class="hub-item-type ${typeClass}">${typeLabel}</div>
                 <div class="hub-item-title">${item.title}</div>
             </div>
-            ${actionBtn}
+            <div class="hub-item-actions">
+                <button class="btn btn-hub-action" style="background:var(--accent-primary); color:white; border:none;" onclick='launchHubItem(${JSON.stringify(item)})'>Start ➔</button>
+                ${delBtn}
+            </div>
         </div>`;
     }).join('');
 }
