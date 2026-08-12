@@ -2733,14 +2733,15 @@ button[onclick="openDistractionModal()"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    border: 2px solid var(--accent-primary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 .vocab-front {
-    background: linear-gradient(145deg, #1e1b4b, #0f172a);
+    background: var(--bg-secondary); /* Theme ke hisaab se light/dark hoga */
+    border: 2px solid var(--accent-primary);
 }
 .vocab-back {
-    background: linear-gradient(145deg, #020617, #172554);
+    background: var(--bg-primary); /* Theme ke hisaab se match karega */
+    border: 2px solid var(--accent-secondary);
     transform: rotateY(180deg);
     overflow-y: auto;
 }
@@ -3608,9 +3609,10 @@ button[onclick="openDistractionModal()"] {
                         <div class="time-block"><div class="time-value" id="t-secs">00</div><div class="time-label">Secs</div></div>
                     </div>
                     
-                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, #4c1d95, #1e3a8a); border-color: #8b5cf6; box-shadow: 0 0 25px rgba(76, 29, 149, 0.6);" onclick="openVocabArsenal()">
+                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-color: var(--accent-secondary); box-shadow: 0 0 20px rgba(0,0,0,0.3);" onclick="openVocabArsenal()">
     💣 OPEN VOCAB ARSENAL
 </button>
+
 
 
                     <button class="btn btn-outline" style="position: relative; z-index: 10; margin-top: 15px; font-size: 0.75rem; padding: 6px 12px; border-color: #475569; color: #94a3b8;" onclick="resetTarget()">Reset Target</button>
@@ -10961,37 +10963,32 @@ function openVocabArsenal() {
     const savedDate = localStorage.getItem(`vocab_date_${email}`);
     let savedDailyList = JSON.parse(localStorage.getItem(`vocab_daily_list_${email}`) || '[]');
 
-    // Agar naya din hai, toh 5 naye words chuno
     if (savedDate !== todayStr || savedDailyList.length === 0) {
         let allVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
         
-        // Fallback default vocab if DB is empty
+        // 🌟 NAYA HINGLISH DATABASE (Agar DB khali ho)
         if (allVocab.length === 0) {
             allVocab = [
-                {word: "Abate", meaning: "To become less active or intense", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated."},
-                {word: "Candid", meaning: "Truthful and straightforward", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer."},
-                {word: "Diligent", meaning: "Having or showing care in one's work", syn: "Hardworking, Earnest", ant: "Lazy, Careless", ex: "She was a diligent student."},
-                {word: "Lucid", meaning: "Expressed clearly; easy to understand", syn: "Clear, Comprehensible", ant: "Confusing, Unclear", ex: "The teacher gave a lucid explanation."},
-                {word: "Obsolete", meaning: "No longer produced or used", syn: "Outdated, Old-fashioned", ant: "Current, Modern", ex: "Typewriters are now obsolete."}
+                {word: "Abate", meaning: "To become less active or intense", hinglish: "Zor kam hona ya ghatna", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated.", hinglishEx: "Toofan achanak se shant ho gaya (abate ho gaya)."},
+                {word: "Candid", meaning: "Truthful and straightforward", hinglish: "Ekdum sacha aur khara", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer.", hinglishEx: "Uske khare (candid) jawabon ne interviewer ko impress kar diya."},
+                {word: "Diligent", meaning: "Having or showing care in one's work", hinglish: "Mehnati aur lagansheel", syn: "Hardworking, Earnest", ant: "Lazy, Careless", ex: "She was a diligent student.", hinglishEx: "Wo ek bahut mehnati (diligent) student thi."},
+                {word: "Lucid", meaning: "Expressed clearly; easy to understand", hinglish: "Saaf aur asani se samajh aane wala", syn: "Clear, Comprehensible", ant: "Confusing, Unclear", ex: "The teacher gave a lucid explanation.", hinglishEx: "Teacher ne ekdum saaf (lucid) explanation diya."},
+                {word: "Obsolete", meaning: "No longer produced or used", hinglish: "Purana ya jo ab use mein nahi hai", syn: "Outdated, Old-fashioned", ant: "Current, Modern", ex: "Typewriters are now obsolete.", hinglishEx: "Typewriters ab purane (obsolete) ho chuke hain."}
             ];
             localStorage.setItem('warRoomVocabDB', JSON.stringify(allVocab));
         }
 
         const learnedWords = JSON.parse(localStorage.getItem(`vocab_learned_${email}`) || '[]');
-        
-        // 🌟 THE SMART FILTER (0% Repetition)
         let freshWords = allVocab.filter(v => !learnedWords.includes(v.word.toLowerCase()));
 
         if (freshWords.length < 5) {
-            alert("🏆 Incredible! You have learned almost all words in the database. Admin needs to upload more!");
-            freshWords = allVocab; // Loop back for practice
+            alert("🏆 Incredible! You have learned almost all words. Keep revising!");
+            freshWords = allVocab; 
         }
 
-        // Shuffle and pick top 5
         freshWords.sort(() => 0.5 - Math.random());
         savedDailyList = freshWords.slice(0, 5);
         
-        // Save for the day
         localStorage.setItem(`vocab_daily_list_${email}`, JSON.stringify(savedDailyList));
         localStorage.setItem(`vocab_date_${email}`, todayStr);
     }
@@ -10999,17 +10996,20 @@ function openVocabArsenal() {
     dailyVocabList = savedDailyList;
     currentVocabIndex = 0;
     
+    // 🔥 ADMIN BUTTON LOGIC: Agar admin hai toh Upload button show karo
+    const userRole = localStorage.getItem('warRoomUserRole');
+    const modalHeader = document.querySelector('#vocab-arsenal-modal h3');
+    if (userRole === 'admin') {
+        modalHeader.innerHTML = `💣 Vocab Arsenal <button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; margin-left:10px; border-color:var(--accent-secondary); color:var(--accent-secondary);" onclick="openAdminVocab()">➕ Add New Vocab</button>`;
+    } else {
+        modalHeader.innerHTML = `💣 Vocab Arsenal`;
+    }
+
     renderVocabCard();
     document.getElementById('vocab-arsenal-modal').style.display = 'flex';
     setTimeout(() => { document.getElementById('vocab-arsenal-modal').style.opacity = '1'; }, 10);
 }
 
-function closeVocabArsenal() {
-    document.getElementById('vocab-arsenal-modal').style.opacity = '0';
-    setTimeout(() => { document.getElementById('vocab-arsenal-modal').style.display = 'none'; }, 300);
-}
-
-// 3. FLASHCARD RENDERING LOGIC
 function renderVocabCard() {
     const area = document.getElementById('vocab-card-render-area');
     const wordData = dailyVocabList[currentVocabIndex];
@@ -11022,27 +11022,34 @@ function renderVocabCard() {
                 
                 <!-- FRONT OF CARD -->
                 <div class="vocab-front">
-                    <div style="font-size: 0.8rem; color: #a78bfa; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Tap to Flip</div>
-                    <h2 style="font-size: 2.5rem; color: white; margin: 0; font-weight: 900; letter-spacing: 1px;">${wordData.word}</h2>
+                    <div style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Tap to Flip</div>
+                    <h2 style="font-size: 2.5rem; color: var(--text-primary); margin: 0; font-weight: 900; letter-spacing: 1px;">${wordData.word}</h2>
                 </div>
 
                 <!-- BACK OF CARD -->
                 <div class="vocab-back">
-                    <h3 style="color: #a78bfa; font-size: 1.5rem; margin-top: 0; margin-bottom: 10px;">${wordData.word}</h3>
-                    <p style="color: white; font-size: 1rem; font-weight: 600; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Meaning: <span style="color: #cbd5e1; font-weight: normal;">${wordData.meaning}</span></p>
+                    <h3 style="color: var(--accent-primary); font-size: 1.5rem; margin-top: 0; margin-bottom: 5px;">${wordData.word}</h3>
+                    
+                    <p style="color: var(--text-primary); font-size: 0.95rem; font-weight: 700; margin-bottom: 5px;">${wordData.meaning}</p>
+                    <!-- 🌟 HINGLISH MEANING ADDED HERE -->
+                    <p style="color: var(--accent-secondary); font-size: 0.9rem; font-weight: 600; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">अर्थ: ${wordData.hinglish || 'N/A'}</p>
                     
                     <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 0.85rem; width: 100%;">
-                        <div style="flex: 1; background: rgba(34, 197, 94, 0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3);">
-                            <strong style="color: #4ade80;">Synonyms:</strong><br><span style="color: #cbd5e1;">${wordData.syn}</span>
+                        <div style="flex: 1; background: rgba(34, 197, 94, 0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                            <strong style="color: #16a34a;">Synonyms:</strong><br><span style="color: var(--text-secondary);">${wordData.syn}</span>
                         </div>
-                        <div style="flex: 1; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);">
-                            <strong style="color: #f87171;">Antonyms:</strong><br><span style="color: #cbd5e1;">${wordData.ant}</span>
+                        <div style="flex: 1; background: rgba(239, 68, 68, 0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            <strong style="color: #ef4444;">Antonyms:</strong><br><span style="color: var(--text-secondary);">${wordData.ant}</span>
                         </div>
                     </div>
                     
-                    <p style="color: #94a3b8; font-size: 0.85rem; font-style: italic; margin-bottom: 15px;">" ${wordData.ex} "</p>
+                    <!-- 🌟 ENGLISH & HINGLISH SENTENCES -->
+                    <div style="margin-bottom: 15px; text-align: center;">
+                        <p style="color: var(--text-secondary); font-size: 0.8rem; font-style: italic; margin-bottom: 4px;">" ${wordData.ex} "</p>
+                        <p style="color: var(--text-primary); font-size: 0.85rem; font-weight: 600; margin: 0;">" ${wordData.hinglishEx || ''} "</p>
+                    </div>
                     
-                    <button class="btn" style="background: #16a34a; color: white; width: 100%; font-weight: 800; padding: 10px;" onclick="event.stopPropagation(); markVocabAsLearned('${wordData.word}')">✅ Mark as Learned</button>
+                    <button class="btn" style="background: var(--accent-primary); color: white; width: 100%; font-weight: 800; padding: 10px;" onclick="event.stopPropagation(); markVocabAsLearned('${wordData.word}')">✅ Mark as Learned</button>
                 </div>
 
             </div>
