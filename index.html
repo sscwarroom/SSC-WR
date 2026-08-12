@@ -3609,7 +3609,7 @@ button[onclick="openDistractionModal()"] {
                         <div class="time-block"><div class="time-value" id="t-secs">00</div><div class="time-label">Secs</div></div>
                     </div>
                     
-                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: 2px solid var(--glass-border); box-shadow: 0 0 25px var(--accent-primary);" onclick="openVocabArsenal()">
+                  <button class="btn" style="width: 100%; padding: 15px; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: 2px solid var(--glass-border); border-radius: 14px; box-shadow: 0 0 20px var(--accent-primary); transition: transform 0.2s;" onclick="openVocabArsenal()">
     💣 OPEN VOCAB ARSENAL
 </button>
 
@@ -11209,10 +11209,12 @@ function markVocabAsLearned(word) {
 <div id="vocab-arsenal-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); z-index: 90000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
     <div class="glass-card fade-in" style="width: 90%; max-width: 400px; background: transparent; border: none; box-shadow: none; padding: 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 id="vocab-modal-title" style="color: var(--accent-primary); margin: 0; font-size: 1.5rem; font-weight: 900;">💣 Vocab Arsenal</h3>
-            <!-- 🔥 Close Button Fix 🔥 -->
-            <button onclick="closeVocabArsenal()" style="background: var(--bg-secondary); border: 1px solid var(--glass-border); color: var(--text-primary); width: 35px; height: 35px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);">&times;</button>
-        </div>
+    <h3 id="vocab-modal-title" style="color: var(--accent-primary); margin: 0; font-size: 1.5rem; font-weight: 900; position: relative; z-index: 10;">💣 Vocab Arsenal</h3>
+    
+    <!-- 🔥 100% Clickable Close Button 🔥 -->
+    <button onclick="closeVocabArsenal()" style="background: var(--bg-secondary); border: 2px solid var(--accent-primary); color: var(--text-primary); width: 35px; height: 35px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); position: relative; z-index: 999;">&times;</button>
+</div>
+
         
         <div id="vocab-card-render-area">
             <!-- Flashcard Yahan Aayega -->
@@ -11658,5 +11660,15 @@ if (typeof firebase !== 'undefined') {
     });
 }
 </script>
+<script>
+    window.closeVocabArsenal = function() {
+        const modal = document.getElementById('vocab-arsenal-modal');
+        if(modal) {
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+    };
+</script>
+
 </body>
 </html>
