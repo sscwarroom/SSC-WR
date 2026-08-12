@@ -9598,15 +9598,16 @@ function startBattleTimer(seconds) {
         if (timeLeft <= 0) {
             if(isMyTurnActive) {
                 isMyTurnActive = false;
-                clearAllBattleTimers(); // Stop everything immediately
+                clearAllBattleTimers();
                 disableBattleOptions();
                 
                 let feedbackHtml = "";
-                if (Date.now() > botScheduledTime && botWillBeCorrect) {
+                // 🔥 FIX: Agar time up ho gaya, toh sirf tabhi bot ko point milega agar uska answer sahi tha
+                if (botWillBeCorrect) {
                     botBattleScore += 1;
                     feedbackHtml = `<span style='color:#ef4444;'>⏱️ Time Up! ${currentBotName} answered correctly. (${currentBotName} +1)</span>`;
                 } else {
-                    feedbackHtml = `<span style='color:#ef4444;'>⏱️ Time Up! Nobody scored.</span>`;
+                    feedbackHtml = `<span style='color:#ef4444;'>⏱️ Time Up! Both failed to score.</span>`;
                 }
                 
                 document.getElementById('battle-feedback').innerHTML = feedbackHtml;
@@ -9625,21 +9626,19 @@ function simulateBotAnswer() {
     if(delay < 0) delay = 1000;
     
     botAnswerTimeout = setTimeout(() => {
-        if (!isMyTurnActive) return; // Agar user ne click kar diya toh bot chup rahega
-        if (botWillBeCorrect) {
-            botBattleScore += 1; 
-        }
-        updateBattleScoreboard();
+        if (!isMyTurnActive) return; // Agar user ne pehle click kar diya toh bot chup rahega
+        
+        // 🔥 FIX: Yahan se double scoring hata di. Ab sirf User ko darane ke liye text aayega!
         let fb = document.getElementById('battle-feedback');
-        if(fb && isMyTurnActive) fb.innerHTML += `<br><span style='color:#ef4444; font-size:0.8rem;'>${currentBotName} answered!</span>`;
+        if(fb && isMyTurnActive) fb.innerHTML = `<span style='color:#ef4444; font-size:0.9rem; font-weight:900;'>⚠️ ${currentBotName} has locked an answer! Hurry!</span>`;
     }, delay);
 }
 
-// 6. User Answers (Speed Comparison Engine)
+// 6. User Answers (Speed & Accuracy Comparison Engine)
 function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     if (!isMyTurnActive) return;
     isMyTurnActive = false; 
-    clearAllBattleTimers(); // 🔥 Bot ko aur Timer dono ko block kar diya
+    clearAllBattleTimers(); // Timer roko
     disableBattleOptions();
 
     let userAnswerTime = Date.now();
@@ -9650,55 +9649,53 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
     const selectedBtn = document.getElementById(`battle-opt-${selectedIdx}`);
     const correctBtn = document.getElementById(`battle-opt-${correctIdx}`);
     
-    // UI Colors
+    // UI Colors Update
     if (userCorrect) {
         selectedBtn.style.background = "#22c55e"; selectedBtn.style.color = "white";
+        selectedBtn.style.borderColor = "#22c55e";
     } else {
         selectedBtn.style.background = "#ef4444"; selectedBtn.style.color = "white";
-        correctBtn.style.border = "2px solid #22c55e"; 
+        selectedBtn.style.borderColor = "#ef4444";
+        if (correctBtn) {
+            correctBtn.style.border = "2px solid #22c55e"; 
+            correctBtn.style.color = "#22c55e";
+        }
     }
 
-    // 🏆 FASTEST FINGER FIRST & DRAW LOGIC 🏆
-    if (Math.abs(timeDiff) <= 800) { 
-        if (userCorrect && botWillBeCorrect) {
+    // 🏆 THE NEW FAIR SCORING LOGIC 🏆
+    if (userCorrect && botWillBeCorrect) {
+        // Condition 1: Dono Sahi hain (Ab speed check hogi)
+        if (Math.abs(timeDiff) <= 800) { 
             myBattleScore += 0.5; botBattleScore += 0.5;
             feedbackHtml = `<span style='color:#3b82f6;'>🤝 Clash! Both answered correctly together! (+0.5 each)</span>`;
-        } else if (userCorrect) {
+        } else if (timeDiff < 0) { // User faster hai
             myBattleScore += 1;
-            feedbackHtml = `<span style='color:#22c55e;'>🔥 You were correct, ${currentBotName} missed! (+1)</span>`;
-        } else if (botWillBeCorrect) {
+            feedbackHtml = `<span style='color:#22c55e;'>⚡ Lightning Fast! You beat ${currentBotName}! (+1)</span>`;
+        } else { // Bot faster hai
             botBattleScore += 1;
-            feedbackHtml = `<span style='color:#ef4444;'>💀 You missed, but ${currentBotName} got it! (${currentBotName} +1)</span>`;
-        } else {
-            feedbackHtml = `<span style='color:#ef4444;'>❌ Both answered wrong together!</span>`;
+            feedbackHtml = `<span style='color:#ef4444;'>💀 ${currentBotName} answered correctly before you! (${currentBotName} +1)</span>`;
         }
     } 
-    else if (timeDiff < 0) {
-        if (userCorrect) {
-            myBattleScore += 1;
-            feedbackHtml = `<span style='color:#22c55e;'>⚡ Lightning Fast & Correct! (+1)</span>`;
-        } else if (botWillBeCorrect) {
-            botBattleScore += 1;
-            feedbackHtml = `<span style='color:#ef4444;'>❌ You were fast but wrong! ${currentBotName} got it right. (${currentBotName} +1)</span>`;
-        } else {
-            feedbackHtml = `<span style='color:#ef4444;'>❌ You were fast but wrong! ${currentBotName} also missed.</span>`;
-        }
+    else if (userCorrect && !botWillBeCorrect) {
+        // Condition 2: Sirf User Sahi (Speed se farq nahi padta)
+        myBattleScore += 1;
+        feedbackHtml = `<span style='color:#22c55e;'>😂 ${currentBotName} answered wrong! You got it right! (+1)</span>`;
+    } 
+    else if (!userCorrect && botWillBeCorrect) {
+        // Condition 3: Sirf Bot Sahi (Speed se farq nahi padta)
+        botBattleScore += 1;
+        feedbackHtml = `<span style='color:#ef4444;'>❌ You missed! ${currentBotName} got it right. (${currentBotName} +1)</span>`;
     } 
     else {
-        if (botWillBeCorrect) {
-            botBattleScore += 1;
-            feedbackHtml = `<span style='color:#ef4444;'>💀 ${currentBotName} answered first & correctly! (${currentBotName} +1)</span>`;
-        } else if (userCorrect) {
-            myBattleScore += 1;
-            feedbackHtml = `<span style='color:#22c55e;'>😂 ${currentBotName} was fast but wrong! You got it right! (+1)</span>`;
-        } else {
-            feedbackHtml = `<span style='color:#ef4444;'>❌ ${currentBotName} answered first but wrong. You also missed!</span>`;
-        }
+        // Condition 4: Dono Galat!
+        feedbackHtml = `<span style='color:#ef4444;'>❌ Both of you answered incorrectly! No points.</span>`;
     }
     
+    // Scoreboard Update karna
     document.getElementById('battle-feedback').innerHTML = feedbackHtml;
     updateBattleScoreboard();
     
+    // Save Question History
     if (quizId) {
         let answeredIds = JSON.parse(localStorage.getItem(getUserKey('warRoomAnsweredQuizIdsList')) || '[]');
         if (!answeredIds.includes(quizId)) {
@@ -9707,9 +9704,11 @@ function submitBattleAnswer(selectedIdx, correctIdx, quizId) {
         }
     }
     
+    // Move to next question
     currentBattleQ++; 
     roundTransitionTimeout = setTimeout(loadNextBattleQuestion, 3000); 
 }
+
 
 // 7. Route Next Question or End Round
 function loadNextBattleQuestion() {
