@@ -3609,9 +3609,10 @@ button[onclick="openDistractionModal()"] {
                         <div class="time-block"><div class="time-value" id="t-secs">00</div><div class="time-label">Secs</div></div>
                     </div>
                     
-                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-color: var(--accent-secondary); box-shadow: 0 0 20px rgba(0,0,0,0.3);" onclick="openVocabArsenal()">
+                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: 2px solid var(--glass-border); box-shadow: 0 0 25px var(--accent-primary);" onclick="openVocabArsenal()">
     💣 OPEN VOCAB ARSENAL
 </button>
+
 
 
 
@@ -10963,26 +10964,28 @@ function openVocabArsenal() {
     const savedDate = localStorage.getItem(`vocab_date_${email}`);
     let savedDailyList = JSON.parse(localStorage.getItem(`vocab_daily_list_${email}`) || '[]');
 
-    if (savedDate !== todayStr || savedDailyList.length === 0) {
-        let allVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
-        
-        // 🌟 NAYA HINGLISH DATABASE (Agar DB khali ho)
-        if (allVocab.length === 0) {
-            allVocab = [
-                {word: "Abate", meaning: "To become less active or intense", hinglish: "Zor kam hona ya ghatna", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated.", hinglishEx: "Toofan achanak se shant ho gaya (abate ho gaya)."},
-                {word: "Candid", meaning: "Truthful and straightforward", hinglish: "Ekdum sacha aur khara", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer.", hinglishEx: "Uske khare (candid) jawabon ne interviewer ko impress kar diya."},
-                {word: "Diligent", meaning: "Having or showing care in one's work", hinglish: "Mehnati aur lagansheel", syn: "Hardworking, Earnest", ant: "Lazy, Careless", ex: "She was a diligent student.", hinglishEx: "Wo ek bahut mehnati (diligent) student thi."},
-                {word: "Lucid", meaning: "Expressed clearly; easy to understand", hinglish: "Saaf aur asani se samajh aane wala", syn: "Clear, Comprehensible", ant: "Confusing, Unclear", ex: "The teacher gave a lucid explanation.", hinglishEx: "Teacher ne ekdum saaf (lucid) explanation diya."},
-                {word: "Obsolete", meaning: "No longer produced or used", hinglish: "Purana ya jo ab use mein nahi hai", syn: "Outdated, Old-fashioned", ant: "Current, Modern", ex: "Typewriters are now obsolete.", hinglishEx: "Typewriters ab purane (obsolete) ho chuke hain."}
-            ];
-            localStorage.setItem('warRoomVocabDB', JSON.stringify(allVocab));
-        }
+    let allVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
+    
+    // 🔥 AUTO-UPDATE DATABASE FIX: Agar DB khali hai, ya purani English wali hai (jisme hinglish nahi tha), toh update karo!
+    if (allVocab.length === 0 || !allVocab[0].hinglish) {
+        allVocab = [
+            {word: "Abate", meaning: "To become less active or intense", hinglish: "Zor kam hona ya ghatna", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated.", hinglishEx: "Toofan achanak se shant ho gaya."},
+            {word: "Candid", meaning: "Truthful and straightforward", hinglish: "Ekdum sacha aur khara", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer.", hinglishEx: "Uske khare jawabon ne interviewer ko impress kar diya."},
+            {word: "Diligent", meaning: "Having or showing care in one's work", hinglish: "Mehnati aur lagansheel", syn: "Hardworking, Earnest", ant: "Lazy, Careless", ex: "She was a diligent student.", hinglishEx: "Wo ek bahut mehnati student thi."},
+            {word: "Lucid", meaning: "Expressed clearly; easy to understand", hinglish: "Saaf aur asani se samajh aane wala", syn: "Clear, Comprehensible", ant: "Confusing, Unclear", ex: "The teacher gave a lucid explanation.", hinglishEx: "Teacher ne ekdum saaf explanation diya."},
+            {word: "Obsolete", meaning: "No longer produced or used", hinglish: "Purana ya jo ab use mein nahi hai", syn: "Outdated, Old-fashioned", ant: "Current, Modern", ex: "Typewriters are now obsolete.", hinglishEx: "Typewriters ab purane ho chuke hain."}
+        ];
+        localStorage.setItem('warRoomVocabDB', JSON.stringify(allVocab));
+        // Force reset daily list so user sees new words immediately
+        savedDailyList = []; 
+    }
 
+    if (savedDate !== todayStr || savedDailyList.length === 0) {
         const learnedWords = JSON.parse(localStorage.getItem(`vocab_learned_${email}`) || '[]');
         let freshWords = allVocab.filter(v => !learnedWords.includes(v.word.toLowerCase()));
 
         if (freshWords.length < 5) {
-            alert("🏆 Incredible! You have learned almost all words. Keep revising!");
+            alert("🏆 Incredible! You have learned almost all words. Admin needs to upload more!");
             freshWords = allVocab; 
         }
 
@@ -10996,13 +10999,13 @@ function openVocabArsenal() {
     dailyVocabList = savedDailyList;
     currentVocabIndex = 0;
     
-    // 🔥 ADMIN BUTTON LOGIC: Agar admin hai toh Upload button show karo
+    // 🔥 FIX: Sirf title span update hoga, Close button delete nahi hoga
     const userRole = localStorage.getItem('warRoomUserRole');
-    const modalHeader = document.querySelector('#vocab-arsenal-modal h3');
+    const titleSpan = document.getElementById('vocab-modal-title');
     if (userRole === 'admin') {
-        modalHeader.innerHTML = `💣 Vocab Arsenal <button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; margin-left:10px; border-color:var(--accent-secondary); color:var(--accent-secondary);" onclick="openAdminVocab()">➕ Add New Vocab</button>`;
+        titleSpan.innerHTML = `💣 Vocab Arsenal <button class="btn btn-outline" style="font-size:0.7rem; padding:4px 8px; margin-left:10px; border-color:var(--accent-secondary); color:var(--accent-secondary);" onclick="openAdminVocab()">➕ Add New</button>`;
     } else {
-        modalHeader.innerHTML = `💣 Vocab Arsenal`;
+        titleSpan.innerHTML = `💣 Vocab Arsenal`;
     }
 
     renderVocabCard();
@@ -11015,6 +11018,10 @@ function renderVocabCard() {
     const wordData = dailyVocabList[currentVocabIndex];
     
     document.getElementById('vocab-progress-text').innerText = `Word ${currentVocabIndex + 1} of ${dailyVocabList.length}`;
+
+    // 🔥 FIX: Agar future mein koi word bina Hinglish ke aata hai, toh faltu ke "N/A" ya khali quotes ("") nahi dikhenge
+    let hinglishMeaningHtml = wordData.hinglish ? `<p style="color: var(--accent-secondary); font-size: 0.9rem; font-weight: 600; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">अर्थ: ${wordData.hinglish}</p>` : '';
+    let hinglishExHtml = wordData.hinglishEx ? `<p style="color: var(--text-primary); font-size: 0.85rem; font-weight: 600; margin: 0;">" ${wordData.hinglishEx} "</p>` : '';
 
     area.innerHTML = `
         <div class="vocab-card-container" onclick="this.classList.toggle('flipped')">
@@ -11031,8 +11038,8 @@ function renderVocabCard() {
                     <h3 style="color: var(--accent-primary); font-size: 1.5rem; margin-top: 0; margin-bottom: 5px;">${wordData.word}</h3>
                     
                     <p style="color: var(--text-primary); font-size: 0.95rem; font-weight: 700; margin-bottom: 5px;">${wordData.meaning}</p>
-                    <!-- 🌟 HINGLISH MEANING ADDED HERE -->
-                    <p style="color: var(--accent-secondary); font-size: 0.9rem; font-weight: 600; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">अर्थ: ${wordData.hinglish || 'N/A'}</p>
+                    
+                    ${hinglishMeaningHtml}
                     
                     <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 0.85rem; width: 100%;">
                         <div style="flex: 1; background: rgba(34, 197, 94, 0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3);">
@@ -11043,10 +11050,9 @@ function renderVocabCard() {
                         </div>
                     </div>
                     
-                    <!-- 🌟 ENGLISH & HINGLISH SENTENCES -->
                     <div style="margin-bottom: 15px; text-align: center;">
                         <p style="color: var(--text-secondary); font-size: 0.8rem; font-style: italic; margin-bottom: 4px;">" ${wordData.ex} "</p>
-                        <p style="color: var(--text-primary); font-size: 0.85rem; font-weight: 600; margin: 0;">" ${wordData.hinglishEx || ''} "</p>
+                        ${hinglishExHtml}
                     </div>
                     
                     <button class="btn" style="background: var(--accent-primary); color: white; width: 100%; font-weight: 800; padding: 10px;" onclick="event.stopPropagation(); markVocabAsLearned('${wordData.word}')">✅ Mark as Learned</button>
@@ -11203,8 +11209,9 @@ function markVocabAsLearned(word) {
 <div id="vocab-arsenal-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); z-index: 90000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
     <div class="glass-card fade-in" style="width: 90%; max-width: 400px; background: transparent; border: none; box-shadow: none; padding: 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="color: #a78bfa; margin: 0; font-size: 1.5rem; font-weight: 900;">💣 Vocab Arsenal</h3>
-            <button onclick="closeVocabArsenal()" style="background: none; border: none; color: #cbd5e1; font-size: 2rem; cursor: pointer;">&times;</button>
+            <h3 id="vocab-modal-title" style="color: var(--accent-primary); margin: 0; font-size: 1.5rem; font-weight: 900;">💣 Vocab Arsenal</h3>
+            <!-- 🔥 Close Button Fix 🔥 -->
+            <button onclick="closeVocabArsenal()" style="background: var(--bg-secondary); border: 1px solid var(--glass-border); color: var(--text-primary); width: 35px; height: 35px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);">&times;</button>
         </div>
         
         <div id="vocab-card-render-area">
@@ -11212,8 +11219,9 @@ function markVocabAsLearned(word) {
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-            <div id="vocab-progress-text" style="color: #94a3b8; font-weight: 800; font-size: 0.9rem;">Word 1 of 5</div>
-            <button class="btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 10px 20px; font-weight: 800; border-radius: 12px; box-shadow: 0 4px 15px rgba(37,99,235,0.4);" onclick="nextVocabCard()">Next Word ➔</button>
+            <div id="vocab-progress-text" style="color: var(--text-secondary); font-weight: 800; font-size: 0.95rem;">Word 1 of 5</div>
+            <!-- 🔥 Next Button Theme Fix 🔥 -->
+            <button class="btn" style="background: var(--accent-primary); color: white; padding: 10px 20px; font-weight: 800; border-radius: 12px; border: none;" onclick="nextVocabCard()">Next Word ➔</button>
         </div>
     </div>
 </div>
