@@ -10458,7 +10458,9 @@ window.renderVipHubContent = function() {
 };
 
 
-// 1. OUTSIDE CARD RENDER ENGINE (LOCK & PAYMENT REDIRECT)
+
+// 1. OUTSIDE CARD RENDER ENGINE (WITH EXPIRY & PLAN DETAILS)
+
 window.renderPremiumHubContent = function() {
     const chapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     const container = document.getElementById('premium-chapter-list');
@@ -10479,16 +10481,47 @@ window.renderPremiumHubContent = function() {
         let thumbHTML = chap.thumbnail ? `<img src="${chap.thumbnail}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 2px solid #ca8a04;">` : `👑`;
         let delBtn = isAdmin ? `<button style="position:absolute; top:15px; right:15px; background:rgba(239,68,68,0.2); border:none; color:#ef4444; border-radius:50%; width:32px; height:32px; cursor:pointer; z-index:10;" onclick="event.stopPropagation(); deleteVipChapter('${chap.id}')">🗑️</button>` : '';
 
-        // 🔥 SAFETY FIX: Title mein se single quotes escape karna taaki HTML break na ho
+        // Safety Fix: Title mein se single quotes escape karna taaki HTML break na ho
         let safeTitle = chap.title.replace(/'/g, "\\'");
 
         // Card Action & Visuals based on Access
         let cardAction = hasAccess ? `onclick="openVipChapterHub('${chap.id}')"` : `onclick="requestVipAccess('${safeTitle}')"`;
         let lockOverlay = hasAccess ? '' : `<div style="position:absolute; top:-8px; right:-8px; background:#ef4444; color:white; font-size:0.8rem; padding:4px 8px; border-radius:50%; border:2px solid #000; box-shadow:0 0 10px #ef4444; z-index:5;">🔒</div>`;
-        let btnText = hasAccess ? 'OPEN VAULT' : 'UNLOCK VAULT 🔒';
+        let btnText = hasAccess ? 'OPEN VAULT 🔓' : 'UNLOCK VAULT 🔒';
         let btnBg = hasAccess ? 'linear-gradient(135deg, #16a34a, #15803d)' : 'linear-gradient(135deg, #ca8a04, #854d0e)';
         let btnShadow = hasAccess ? 'rgba(22, 163, 74, 0.4)' : 'rgba(202, 138, 4, 0.4)';
         let filterStyle = hasAccess ? '' : 'filter: grayscale(60%) brightness(0.8);';
+
+        // 🌟 NAYA CODE: EXPIRY DATE AUR PLAN DIKHANE KE LIYE 🌟
+        let planDetailsHtml = '';
+        if (hasAccess && !isAdmin) {
+            let expiry = localStorage.getItem(`vip_access_${chap.id}_${email}`);
+            if (!expiry) expiry = localStorage.getItem(`global_vip_${email}`); 
+
+            if (expiry) {
+                let expiryDate = new Date(parseInt(expiry));
+                let formattedDate = expiryDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }); // e.g., "15 Oct"
+                let formattedTime = expiryDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); // e.g., "09:30 PM"
+                
+                let timeLeft = parseInt(expiry) - Date.now();
+                let daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+                let planTag = daysLeft > 1 ? `${daysLeft} Days Left` : `Expires Today!`;
+
+                planDetailsHtml = `
+                <div style="background: rgba(34, 197, 94, 0.1); border: 1px dashed rgba(34, 197, 94, 0.4); padding: 8px 12px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.7rem; font-weight: 800; color: #4ade80; text-transform: uppercase; letter-spacing: 0.5px;">💎 VIP: ${planTag}</span>
+                    <span style="font-size: 0.7rem; font-weight: 700; color: #a3e635;">⏳ Ends: ${formattedDate}, ${formattedTime}</span>
+                </div>
+                `;
+            }
+        } else if (isAdmin) {
+            planDetailsHtml = `
+                <div style="background: rgba(234, 179, 8, 0.1); border: 1px dashed rgba(234, 179, 8, 0.4); padding: 8px 12px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.7rem; font-weight: 800; color: #facc15; text-transform: uppercase; letter-spacing: 0.5px;">👑 Admin Access</span>
+                    <span style="font-size: 0.7rem; font-weight: 700; color: #fef08a;">Lifetime Validity</span>
+                </div>
+                `;
+        }
 
         return `
         <div class="vip-chapter-card" style="position:relative; cursor:pointer;" ${cardAction}>
@@ -10501,10 +10534,14 @@ window.renderPremiumHubContent = function() {
                     <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">🛡️ ${chap.subject}</div>
                 </div>
             </div>
-            <button style="width: 100%; margin-top: 20px; background: ${btnBg}; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px ${btnShadow}; pointer-events: none;">${btnText}</button>
+            
+            ${planDetailsHtml} <!-- YAHAN PLAN DETAILS RENDER HONGI -->
+
+            <button style="width: 100%; margin-top: ${hasAccess ? '10px' : '20px'}; background: ${btnBg}; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px ${btnShadow}; pointer-events: none;">${btnText}</button>
         </div>`;
     }).join('');
 };
+
 
 // 2. INNER MODAL CONTENT (NO LOCKS INSIDE)
 window.renderVipHubContent = function() {
