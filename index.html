@@ -2703,6 +2703,49 @@ button[onclick="openDistractionModal()"] {
 .ts-title { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
 .ts-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
 
+/* 💣 VOCAB ARSENAL FLASHCARDS CSS */
+.vocab-card-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 320px;
+    margin-bottom: 20px;
+}
+.vocab-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+.vocab-card-container.flipped .vocab-card-inner {
+    transform: rotateY(180deg);
+}
+.vocab-front, .vocab-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent-primary);
+}
+.vocab-front {
+    background: linear-gradient(145deg, #1e1b4b, #0f172a);
+}
+.vocab-back {
+    background: linear-gradient(145deg, #020617, #172554);
+    transform: rotateY(180deg);
+    overflow-y: auto;
+}
+
+
     </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -3565,9 +3608,10 @@ button[onclick="openDistractionModal()"] {
                         <div class="time-block"><div class="time-value" id="t-secs">00</div><div class="time-label">Secs</div></div>
                     </div>
                     
-                    <button class="btn-fiery-fight" onclick="openBattleArena()">
-                        🔥 BATTLE ARENA
-                    </button>
+                    <button class="btn-fiery-fight" style="background: linear-gradient(135deg, #4c1d95, #1e3a8a); border-color: #8b5cf6; box-shadow: 0 0 25px rgba(76, 29, 149, 0.6);" onclick="openVocabArsenal()">
+    💣 OPEN VOCAB ARSENAL
+</button>
+
 
                     <button class="btn btn-outline" style="position: relative; z-index: 10; margin-top: 15px; font-size: 0.75rem; padding: 6px 12px; border-color: #475569; color: #94a3b8;" onclick="resetTarget()">Reset Target</button>
                 </div>
@@ -3676,6 +3720,8 @@ button[onclick="openDistractionModal()"] {
         </div>
         
         <div id="admin-premium-controls" class="hidden" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 15px;">
+            <button class="btn" style="flex: 1; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; font-weight: 900; border: 1px solid #c4b5fd;" onclick="openAdminVocab()">💣 UPLOAD VOCAB</button>
+            
             <button class="btn" style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); color: black; font-weight: 900; border: 1px solid #fef08a;" onclick="openCreateVipChapterModal()">➕ CREATE VIP CHAPTER</button>
             <button class="btn" style="flex: 1; background: linear-gradient(135deg, #f97316, #ea580c); color: white; font-weight: 900; border: 1px solid #fdba74;" onclick="openUploadVipContentModal()">📤 ADD VIP CONTENT</button>
             <button class="btn" style="flex: 1; background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 900; border: 1px solid #bbf7d0;" onclick="openAdminGrantModal()">✅ GRANT VIP ACCESS</button>
@@ -10853,6 +10899,190 @@ window.resetScheduleToDefaultAI = function() {
         alert("🔄 Reset complete! AI Default Strategy restored.");
     }
 };
+// =================================================================
+// 💣 VOCAB ARSENAL ENGINE (FLASHCARDS & SMART FILTER)
+// =================================================================
+
+let dailyVocabList = [];
+let currentVocabIndex = 0;
+
+// 1. ADMIN UPLOAD LOGIC
+function openAdminVocab() { document.getElementById('admin-vocab-modal').style.display = 'flex'; }
+function closeAdminVocab() { document.getElementById('admin-vocab-modal').style.display = 'none'; }
+
+function uploadBulkVOCAB() {
+    const jsonText = document.getElementById('admin-vocab-json').value.trim();
+    if (!jsonText) return alert("Please paste the JSON data.");
+    
+    try {
+        const newWords = JSON.parse(jsonText);
+        if (!Array.isArray(newWords)) return alert("Must be a JSON Array []");
+        
+        let existingDB = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
+        
+        // Remove duplicates and merge
+        newWords.forEach(nw => {
+            if (!existingDB.find(ew => ew.word.toLowerCase() === nw.word.toLowerCase())) {
+                existingDB.push(nw);
+            }
+        });
+
+        localStorage.setItem('warRoomVocabDB', JSON.stringify(existingDB));
+        
+        // Push to Firebase (If you want global sync)
+        if (typeof firebase !== 'undefined') {
+            const db = firebase.firestore();
+            const batch = db.batch();
+            newWords.forEach(nw => {
+                const docRef = db.collection("vocab_db").doc(nw.word.toLowerCase());
+                batch.set(docRef, nw);
+            });
+            batch.commit();
+        }
+
+        alert(`✅ Success! ${newWords.length} words added. Total words in DB: ${existingDB.length}`);
+        document.getElementById('admin-vocab-json').value = '';
+        closeAdminVocab();
+    } catch (e) {
+        alert("JSON Parsing Error! Check your format.");
+    }
+}
+
+// 2. USER DAILY SELECTION LOGIC
+function openVocabArsenal() {
+    const email = localStorage.getItem('warRoomUserEmail');
+    if (!email) {
+        alert("Please login to access your daily Vocab Arsenal.");
+        if(typeof openAuthModal === 'function') openAuthModal();
+        return;
+    }
+
+    const todayStr = new Date().toDateString();
+    const savedDate = localStorage.getItem(`vocab_date_${email}`);
+    let savedDailyList = JSON.parse(localStorage.getItem(`vocab_daily_list_${email}`) || '[]');
+
+    // Agar naya din hai, toh 5 naye words chuno
+    if (savedDate !== todayStr || savedDailyList.length === 0) {
+        let allVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
+        
+        // Fallback default vocab if DB is empty
+        if (allVocab.length === 0) {
+            allVocab = [
+                {word: "Abate", meaning: "To become less active or intense", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated."},
+                {word: "Candid", meaning: "Truthful and straightforward", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer."},
+                {word: "Diligent", meaning: "Having or showing care in one's work", syn: "Hardworking, Earnest", ant: "Lazy, Careless", ex: "She was a diligent student."},
+                {word: "Lucid", meaning: "Expressed clearly; easy to understand", syn: "Clear, Comprehensible", ant: "Confusing, Unclear", ex: "The teacher gave a lucid explanation."},
+                {word: "Obsolete", meaning: "No longer produced or used", syn: "Outdated, Old-fashioned", ant: "Current, Modern", ex: "Typewriters are now obsolete."}
+            ];
+            localStorage.setItem('warRoomVocabDB', JSON.stringify(allVocab));
+        }
+
+        const learnedWords = JSON.parse(localStorage.getItem(`vocab_learned_${email}`) || '[]');
+        
+        // 🌟 THE SMART FILTER (0% Repetition)
+        let freshWords = allVocab.filter(v => !learnedWords.includes(v.word.toLowerCase()));
+
+        if (freshWords.length < 5) {
+            alert("🏆 Incredible! You have learned almost all words in the database. Admin needs to upload more!");
+            freshWords = allVocab; // Loop back for practice
+        }
+
+        // Shuffle and pick top 5
+        freshWords.sort(() => 0.5 - Math.random());
+        savedDailyList = freshWords.slice(0, 5);
+        
+        // Save for the day
+        localStorage.setItem(`vocab_daily_list_${email}`, JSON.stringify(savedDailyList));
+        localStorage.setItem(`vocab_date_${email}`, todayStr);
+    }
+
+    dailyVocabList = savedDailyList;
+    currentVocabIndex = 0;
+    
+    renderVocabCard();
+    document.getElementById('vocab-arsenal-modal').style.display = 'flex';
+    setTimeout(() => { document.getElementById('vocab-arsenal-modal').style.opacity = '1'; }, 10);
+}
+
+function closeVocabArsenal() {
+    document.getElementById('vocab-arsenal-modal').style.opacity = '0';
+    setTimeout(() => { document.getElementById('vocab-arsenal-modal').style.display = 'none'; }, 300);
+}
+
+// 3. FLASHCARD RENDERING LOGIC
+function renderVocabCard() {
+    const area = document.getElementById('vocab-card-render-area');
+    const wordData = dailyVocabList[currentVocabIndex];
+    
+    document.getElementById('vocab-progress-text').innerText = `Word ${currentVocabIndex + 1} of ${dailyVocabList.length}`;
+
+    area.innerHTML = `
+        <div class="vocab-card-container" onclick="this.classList.toggle('flipped')">
+            <div class="vocab-card-inner">
+                
+                <!-- FRONT OF CARD -->
+                <div class="vocab-front">
+                    <div style="font-size: 0.8rem; color: #a78bfa; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Tap to Flip</div>
+                    <h2 style="font-size: 2.5rem; color: white; margin: 0; font-weight: 900; letter-spacing: 1px;">${wordData.word}</h2>
+                </div>
+
+                <!-- BACK OF CARD -->
+                <div class="vocab-back">
+                    <h3 style="color: #a78bfa; font-size: 1.5rem; margin-top: 0; margin-bottom: 10px;">${wordData.word}</h3>
+                    <p style="color: white; font-size: 1rem; font-weight: 600; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Meaning: <span style="color: #cbd5e1; font-weight: normal;">${wordData.meaning}</span></p>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 0.85rem; width: 100%;">
+                        <div style="flex: 1; background: rgba(34, 197, 94, 0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                            <strong style="color: #4ade80;">Synonyms:</strong><br><span style="color: #cbd5e1;">${wordData.syn}</span>
+                        </div>
+                        <div style="flex: 1; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            <strong style="color: #f87171;">Antonyms:</strong><br><span style="color: #cbd5e1;">${wordData.ant}</span>
+                        </div>
+                    </div>
+                    
+                    <p style="color: #94a3b8; font-size: 0.85rem; font-style: italic; margin-bottom: 15px;">" ${wordData.ex} "</p>
+                    
+                    <button class="btn" style="background: #16a34a; color: white; width: 100%; font-weight: 800; padding: 10px;" onclick="event.stopPropagation(); markVocabAsLearned('${wordData.word}')">✅ Mark as Learned</button>
+                </div>
+
+            </div>
+        </div>
+    `;
+}
+
+function nextVocabCard() {
+    if (currentVocabIndex < dailyVocabList.length - 1) {
+        currentVocabIndex++;
+        renderVocabCard();
+    } else {
+        alert("🔥 Great Job! You have reviewed all 5 tactical words for today.");
+        closeVocabArsenal();
+    }
+}
+
+// 4. THE MAGIC: MARK AS LEARNED
+function markVocabAsLearned(word) {
+    const email = localStorage.getItem('warRoomUserEmail');
+    let learnedWords = JSON.parse(localStorage.getItem(`vocab_learned_${email}`) || '[]');
+    
+    if (!learnedWords.includes(word.toLowerCase())) {
+        learnedWords.push(word.toLowerCase());
+        localStorage.setItem(`vocab_learned_${email}`, JSON.stringify(learnedWords));
+        
+        // Background Cloud Sync
+        if (typeof firebase !== 'undefined') {
+            const currentUser = firebase.auth().currentUser;
+            if (currentUser) {
+                firebase.firestore().collection("users").doc(currentUser.uid).set({
+                    learnedVocabCount: learnedWords.length
+                }, { merge: true });
+            }
+        }
+    }
+    
+    alert(`✅ "${word}" added to your permanent memory! It won't repeat again.`);
+    nextVocabCard();
+}
 
 </script>
 <!-- 👑 VIP Access Congratulation Popup (ROYAL PREMIUM EDITION) -->
@@ -10962,6 +11192,37 @@ window.resetScheduleToDefaultAI = function() {
     </div>
 </div>
 
+<!-- 1. USER: VOCAB ARSENAL MODAL (FLASHCARDS) -->
+<div id="vocab-arsenal-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); z-index: 90000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+    <div class="glass-card fade-in" style="width: 90%; max-width: 400px; background: transparent; border: none; box-shadow: none; padding: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: #a78bfa; margin: 0; font-size: 1.5rem; font-weight: 900;">💣 Vocab Arsenal</h3>
+            <button onclick="closeVocabArsenal()" style="background: none; border: none; color: #cbd5e1; font-size: 2rem; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div id="vocab-card-render-area">
+            <!-- Flashcard Yahan Aayega -->
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+            <div id="vocab-progress-text" style="color: #94a3b8; font-weight: 800; font-size: 0.9rem;">Word 1 of 5</div>
+            <button class="btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 10px 20px; font-weight: 800; border-radius: 12px; box-shadow: 0 4px 15px rgba(37,99,235,0.4);" onclick="nextVocabCard()">Next Word ➔</button>
+        </div>
+    </div>
+</div>
+
+<!-- 2. ADMIN: BULK UPLOAD VOCAB MODAL -->
+<div id="admin-vocab-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 95000; display: none; justify-content: center; align-items: center;">
+    <div class="glass-card" style="width: 100%; max-width: 450px; background: #0f172a; border: 2px solid #8b5cf6;">
+        <button onclick="closeAdminVocab()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.8rem; color: #94a3b8; cursor: pointer;">&times;</button>
+        <h3 style="color: #a78bfa; margin-bottom: 10px;">📤 Admin: Bulk Upload Vocab</h3>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 15px;">Paste JSON Array from ChatGPT. <br>Format: <code>[{"word":"Abate", "meaning":"Reduce", "syn":"Decrease", "ant":"Increase", "ex":"The storm abated."}]</code></p>
+        
+        <textarea id="admin-vocab-json" class="search-input" placeholder="Paste JSON here..." style="width: 100%; height: 150px; font-family: monospace; font-size: 0.8rem; resize: vertical; margin-bottom: 15px;"></textarea>
+        
+        <button class="btn" style="width: 100%; background: #8b5cf6; color: white; font-weight: 800;" onclick="uploadBulkVOCAB()">🚀 Deploy Vocab Database</button>
+    </div>
+</div>
 
 <!-- 🧭 ONBOARDING TOUR MODAL -->
 <div id="tour-overlay"></div>
