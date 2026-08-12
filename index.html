@@ -7825,7 +7825,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Function to check if user has unseen VIP grants
-function checkNewVipGrants() {
+window.checkNewVipGrants = function() {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     const currentPhone = localStorage.getItem(`user_phone_${currentEmail}`);
     const currentName = localStorage.getItem('warRoomUserName') || 'Warrior';
@@ -7834,19 +7834,20 @@ function checkNewVipGrants() {
     const userRole = localStorage.getItem('warRoomUserRole');
     if (!currentEmail || userRole === 'admin') return;
 
-    const premiumItems = JSON.parse(localStorage.getItem('warRoomPremiumContent') || '[]');
+    // 🔥 FIX: Ab ye purane 'PremiumContent' ki jagah naye 'VipChapters' ko check karega
+    const premiumChapters = JSON.parse(localStorage.getItem('warRoomVipChapters') || '[]');
     let newlyUnlockedContent = [];
 
-    premiumItems.forEach(item => {
-        // Check if user has active access for this specific item
-        const hasEmailAccess = hasVipAccess(currentEmail, item.id);
-        const hasPhoneAccess = currentPhone ? hasVipAccess(currentPhone, item.id) : false;
+    premiumChapters.forEach(chap => {
+        // Check if user has active access for this specific chapter
+        const hasEmailAccess = typeof hasVipAccess === 'function' && hasVipAccess(currentEmail, chap.id);
+        const hasPhoneAccess = typeof hasVipAccess === 'function' && currentPhone ? hasVipAccess(currentPhone, chap.id) : false;
 
         if (hasEmailAccess || hasPhoneAccess) {
             // Check if we already showed the popup for this item
-            const notifiedKey = `vip_notified_${item.id}_${currentEmail}`;
+            const notifiedKey = `vip_notified_${chap.id}_${currentEmail}`;
             if (!localStorage.getItem(notifiedKey)) {
-                newlyUnlockedContent.push(item.title);
+                newlyUnlockedContent.push(chap.title);
                 
                 // Mark as notified so it only shows ONCE
                 localStorage.setItem(notifiedKey, 'true');
@@ -7858,7 +7859,7 @@ function checkNewVipGrants() {
     if (newlyUnlockedContent.length > 0) {
         document.getElementById('vip-welcome-name').innerText = `Greetings, ${currentName}!`;
         
-                const listHtml = newlyUnlockedContent.map(title => `
+        const listHtml = newlyUnlockedContent.map(title => `
             <div style="font-weight: 800; color: #facc15; margin-bottom: 8px; font-size: 1rem; letter-spacing: 0.5px;">
                 👑 ${title}
             </div>
@@ -7868,13 +7869,13 @@ function checkNewVipGrants() {
         document.getElementById('vip-welcome-content-list').innerHTML = listHtml;
         
         const modal = document.getElementById('vip-welcome-modal');
-        modal.style.display = 'flex';
-        setTimeout(() => { modal.style.opacity = '1'; }, 10);
-        
-        // Success sound play karo (aapka existing function)
-        playChimeSound(); 
+        if (modal) {
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+            if (typeof playChimeSound === 'function') playChimeSound(); 
+        }
     }
-}
+};
 
 // Function to close the popup and redirect to Premium Hub
 function closeVipWelcomeModal() {
@@ -10832,12 +10833,13 @@ window.initiatePayment = function() {
             if(typeof closePricingModal === 'function') closePricingModal();
             
             // 3. ✨ MAGIC: PEECHE WALE CARDS KO TURANT REDRAW KARO ✨
+                        // 3. ✨ MAGIC: PEECHE WALE CARDS KO TURANT REDRAW KARO ✨
             if(typeof window.renderPremiumHubContent === 'function') window.renderPremiumHubContent();
             if(typeof window.renderVipHubContent === 'function') window.renderVipHubContent();
             
-            // 4. User ko Success ka Alert de do
-            alert(`🎉 Payment Successful! ${docTitle} is now UNLOCKED.`);
-            
+            // 🔥 4. NORMAL ALERT HATA KAR ROYAL POPUP TRIGGER KAR DIYA 🔥
+            if (typeof window.checkNewVipGrants === 'function') window.checkNewVipGrants();
+
             // 5. Chupchaap background mein Cloud (Firebase) par save kar do
             if (typeof firebase !== 'undefined') {
                 const db = firebase.firestore();
