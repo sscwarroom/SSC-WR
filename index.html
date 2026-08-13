@@ -7744,16 +7744,24 @@ function saveMissionTarget() {
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
     
-    alert("1. Requesting Permission..."); // Checking step 1
+    alert("1. Requesting Permission..."); 
 
     messaging.requestPermission()
     .then(function() {
-        alert("2. Permission Granted! Generating Token..."); // Checking step 2
-        return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
+        alert("2. Permission Granted! Registering Service Worker..."); 
+        
+        // 🔥 YAHAN HUM FIREBASE KO MANUALLY SAHI PATH BATA RAHE HAIN 🔥
+        return navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        .then(function(registration) {
+            messaging.useServiceWorker(registration); // Tell Firebase to use this specific file
+            
+            alert("3. SW Registered! Generating Token...");
+            return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
+        });
     })
     .then(function(token) {
         if (token) {
-            alert("3. Token Generated! Saving to DB..."); // Checking step 3
+            alert("4. Token Generated! Saving to DB..."); 
             const currentUser = firebase.auth().currentUser;
             if (currentUser) {
                 firebase.firestore().collection("users").doc(currentUser.uid).set({
@@ -7761,7 +7769,7 @@ function requestNotificationPermission(userEmail) {
                     targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
                     targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
                 }, { merge: true })
-                .then(() => alert("✅ 4. SUCCESS! Saved to Database!"));
+                .then(() => alert("✅ 5. SUCCESS! Saved to Database!"));
             } else {
                 alert("Error: User not logged in");
             }
@@ -7770,7 +7778,6 @@ function requestNotificationPermission(userEmail) {
         }
     })
     .catch(function(err) {
-        // Agar koi error aayega toh yahan screen par dikh jayega!
         alert("Error aaya: " + err.message); 
     });
 }
