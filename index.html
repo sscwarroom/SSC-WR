@@ -10,6 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-messaging.js"></script>
 
     <style>
      /* 🚀 1. Native Momentum Scrolling (Sabse Upar) */
@@ -720,17 +721,11 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
     display: inline-block;
 }
 
-/* 🚨 Urgent Pulse for Seconds (Neon Red) */
+/* Normal Red Seconds (No Glow, No Pulse) */
 .time-value.seconds-val {
-    color: #ef4444; 
-    text-shadow: 0 0 15px rgba(239, 68, 68, 0.7);
-    animation: secPulse 1s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    color: #ef4444; /* Bas red color rahega, baki sab hata diya */
 }
 
-@keyframes secPulse {
-    0%, 100% { transform: scale(1); text-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
-    50% { transform: scale(1.08); text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 5px rgba(255,255,255,0.5); }
-}
 
 .time-label {
     font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;
@@ -7724,7 +7719,6 @@ function saveMissionTarget() {
         return;
     }
 
-    // Set time to end of the selected day for accurate countdown
     const targetDate = new Date(examDateStr);
     targetDate.setHours(23, 59, 59, 999);
     const targetTime = targetDate.getTime();
@@ -7738,12 +7732,46 @@ function saveMissionTarget() {
     localStorage.setItem(`warRoomTargetExam_${currentEmail}`, examName);
     localStorage.setItem(`warRoomTargetDate_${currentEmail}`, targetTime);
 
-    // Close modal and refresh dashboard
     closeTargetSetupModal();
     loadDashboardState();
     loadAccountDetails(localStorage.getItem('warRoomUserName'), currentEmail);
     alert("Mission Initialized! Timer activated.");
-} 
+
+    // 🔥 NAYA CODE: YAHAN HUM NOTIFICATION PERMISSION MANGENGE 🔥
+    requestNotificationPermission(currentEmail);
+}
+
+// Ye naya function add karo jo user se permission mangega
+function requestNotificationPermission(userEmail) {
+    const messaging = firebase.messaging();
+    
+    messaging.requestPermission()
+    .then(function() {
+        console.log('Notification permission granted.');
+        // Permission mil gayi, ab token get karo
+        return messaging.getToken();
+    })
+    .then(function(token) {
+        if (token) {
+            console.log('FCM Token:', token);
+            // Is token ko Firestore me user ke data ke sath save kar do
+            const currentUser = firebase.auth().currentUser;
+            if (currentUser) {
+                firebase.firestore().collection("users").doc(currentUser.uid).set({
+                    fcmToken: token,
+                    targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
+                    targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
+                }, { merge: true });
+            }
+        } else {
+            console.log('No Instance ID token available. Request permission to generate one.');
+        }
+    })
+    .catch(function(err) {
+        console.log('Unable to get permission to notify.', err);
+    });
+}
+
 function closeAdminGrantModal() {
     document.getElementById('admin-grant-modal').style.display = 'none';
 }
