@@ -640,12 +640,145 @@ button, a, .btn, .nav-item, .study-sub-card, .glass-card, input, select {
         .greeting-text h2 { font-size: 2.2rem; margin-bottom: 0.2rem; }
         .greeting-text p { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; }
         
-        .target-lock-box { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 2.0rem; border-radius: 20px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 2rem; width: 100%; box-sizing: border-box; }
-        .target-lock-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 60%); animation: rotateBg 20s linear infinite; }
-        .timer-display { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; position: relative; z-index: 10; }
-        .time-block { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; min-width: 80px; border: 1px solid rgba(255,255,255,0.05); }
-        .time-value { font-size: 2rem; font-weight: 800; color: #3b82f6; font-variant-numeric: tabular-nums; line-height: 1; }
-        .time-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 600; }
+      /* ==========================================
+   🌟 ULTRA PREMIUM DYNAMIC TIMER CSS
+   ========================================== */
+.target-lock-box {
+    background: linear-gradient(145deg, #090e17, #020617) !important;
+    color: white;
+    padding: 2.5rem 2rem !important;
+    border-radius: 24px !important;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(59, 130, 246, 0.1) !important;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    margin-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 📡 Animated Radar Scanline Background */
+.target-lock-box::before {
+    content: ''; position: absolute; top: -100%; left: -100%; width: 300%; height: 300%;
+    background: conic-gradient(from 90deg at 50% 50%, transparent 70%, rgba(59, 130, 246, 0.15) 100%);
+    animation: radarSpin 8s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+@keyframes radarSpin { 100% { transform: rotate(360deg); } }
+
+/* ▦ Tactical Grid Overlay */
+.target-lock-box::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1; pointer-events: none;
+}
+
+.timer-display {
+    display: flex; justify-content: center; gap: 1.2rem; margin-top: 1.8rem;
+    position: relative; z-index: 10;
+}
+
+/* 🧊 3D Glassmorphic Time Blocks */
+.time-block {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 18px 12px;
+    border-radius: 16px;
+    min-width: 85px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-top: 1px solid rgba(96, 165, 250, 0.5); /* Top highlight */
+    box-shadow: 0 15px 25px rgba(0,0,0,0.6), inset 0 4px 15px rgba(59, 130, 246, 0.1);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, border-color 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Lift Effect */
+.time-block:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 20px 35px rgba(37, 99, 235, 0.4), inset 0 4px 20px rgba(59, 130, 246, 0.3);
+    border-color: rgba(96, 165, 250, 0.8);
+}
+
+/* Inner Glass Shine */
+.time-block::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: skewX(-20deg); animation: blockShine 5s infinite;
+}
+@keyframes blockShine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+
+.time-value {
+    font-size: 2.2rem; font-weight: 900; color: #60a5fa;
+    font-variant-numeric: tabular-nums; line-height: 1;
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    display: inline-block;
+}
+
+/* 🚨 Urgent Pulse for Seconds (Neon Red) */
+.time-value.seconds-val {
+    color: #ef4444; 
+    text-shadow: 0 0 15px rgba(239, 68, 68, 0.7);
+    animation: secPulse 1s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes secPulse {
+    0%, 100% { transform: scale(1); text-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+    50% { transform: scale(1.08); text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 5px rgba(255,255,255,0.5); }
+}
+
+.time-label {
+    font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;
+    letter-spacing: 1.5px; margin-top: 8px; font-weight: 800;
+}
+
+/* 🎯 Target Locked Animated Header */
+.target-header-wrap { position: relative; z-index: 10; display: inline-block; }
+
+.target-status-text {
+    color: #38bdf8; font-weight: 900; font-size: 0.85rem; letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* Blinking Red Dot */
+.target-status-text::before {
+    content: ''; display: inline-block; width: 8px; height: 8px;
+    background: #ef4444; border-radius: 50%; box-shadow: 0 0 10px #ef4444;
+    animation: recBlink 1s infinite;
+}
+@keyframes recBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+#active-exam-title {
+    color: white; font-size: 2.5rem; margin-bottom: 0; font-weight: 900;
+    letter-spacing: -1px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Tactical Brackets */
+#active-exam-title::before, #active-exam-title::after {
+    content: '⌜'; color: rgba(59, 130, 246, 0.5); margin-right: 8px; font-weight: 300;
+    animation: bracketPulse 2s infinite alternate; display: inline-block;
+}
+#active-exam-title::after { content: '⌟'; margin-right: 0; margin-left: 8px; }
+@keyframes bracketPulse {
+    0% { transform: scale(0.9); opacity: 0.5; color: rgba(59, 130, 246, 0.5); }
+    100% { transform: scale(1.1); opacity: 1; color: rgba(96, 165, 250, 1); text-shadow: 0 0 15px #3b82f6;}
+}
+
+/* Mobile Setup */
+@media (max-width: 900px) {
+    .target-lock-box { padding: 2rem 1rem !important; }
+    .timer-display { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; width: 100% !important; margin-top: 1.5rem; }
+    .time-block { padding: 12px 4px !important; min-width: auto !important; border-radius: 12px; }
+    .time-value { font-size: 1.4rem !important; }
+    .time-label { font-size: 0.65rem !important; letter-spacing: 0.5px; }
+    #active-exam-title { font-size: 2rem !important; }
+}
+
 
         .intel-ticker { background: var(--bg-secondary); border: 1px solid var(--accent-secondary); border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.1); margin-bottom: 2.5rem; width: 100%; box-sizing: border-box; }
         .intel-badge { background: var(--accent-secondary); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
@@ -3597,28 +3730,29 @@ button[onclick="openDistractionModal()"] {
     <button class="btn-launch" style="width: auto; margin: 0 auto; display: inline-flex;" onclick="openTargetSetupModal()">🎯 START MISSION</button>
 </div>
 
-                <div id="target-active-area" class="target-lock-box" style="display: none;">
-                    <div style="position: relative; z-index: 10;">
-                        <div style="color: var(--accent-secondary); font-weight: 800; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;">Target Locked</div>
-                        <h3 style="color: white; font-size: 2rem; margin-bottom: 0;" id="active-exam-title">SSC CGL Tier 1</h3>
-                    </div>
-                    <div class="timer-display">
-                        <div class="time-block"><div class="time-value" id="t-days">00</div><div class="time-label">Days</div></div>
-                        <div class="time-block"><div class="time-value" id="t-hours">00</div><div class="time-label">Hrs</div></div>
-                        <div class="time-block"><div class="time-value" id="t-mins">00</div><div class="time-label">Mins</div></div>
-                        <div class="time-block"><div class="time-value" id="t-secs">00</div><div class="time-label">Secs</div></div>
-                    </div>
-                    
-                  <button class="btn" style="margin-top: 25px; width: 100%; padding: 15px; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: 2px solid var(--glass-border); border-radius: 14px; box-shadow: 0 0 20px var(--accent-primary); transition: transform 0.2s;" onclick="openVocabArsenal()">
-    💣 OPEN VOCAB ARSENAL
-</button>
+              <div id="target-active-area" class="target-lock-box" style="display: none;">
+    <!-- Animated Header -->
+    <div class="target-header-wrap">
+        <div class="target-status-text">Target Locked</div>
+        <h3 id="active-exam-title">SSC CGL Tier 1</h3>
+    </div>
+    
+    <!-- Timer Grid -->
+    <div class="timer-display">
+        <div class="time-block"><div class="time-value" id="t-days">00</div><div class="time-label">Days</div></div>
+        <div class="time-block"><div class="time-value" id="t-hours">00</div><div class="time-label">Hrs</div></div>
+        <div class="time-block"><div class="time-value" id="t-mins">00</div><div class="time-label">Mins</div></div>
+        <!-- 🚨 Nayi Class .seconds-val add hui hai jisse ye red pulse marega -->
+        <div class="time-block"><div class="time-value seconds-val" id="t-secs">00</div><div class="time-label">Secs</div></div>
+    </div>
+    
+    <button class="btn" style="margin-top: 30px; width: 100%; padding: 16px; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: 1px solid var(--glass-border); border-radius: 14px; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(234, 88, 12, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px rgba(234, 88, 12, 0.4)';" onclick="openVocabArsenal()">
+        💣 OPEN VOCAB ARSENAL
+    </button>
 
+    <button class="btn btn-outline" style="position: relative; z-index: 10; margin-top: 15px; font-size: 0.75rem; padding: 6px 12px; border-color: rgba(255,255,255,0.2); color: #cbd5e1;" onclick="resetTarget()">Reset Target 🔄</button>
+</div>
 
-
-
-
-                    <button class="btn btn-outline" style="position: relative; z-index: 10; margin-top: 15px; font-size: 0.75rem; padding: 6px 12px; border-color: #475569; color: #94a3b8;" onclick="resetTarget()">Reset Target</button>
-                </div>
 
                 <!-- 🌟 LIVE COMMANDER STATS (Replaces old Subject Tabs) 🌟 -->
 <div class="glass-card fade-in" style="padding: 22px; border-radius: 20px; border: 1px solid var(--accent-primary); background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent); margin-bottom: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);">
@@ -4473,6 +4607,7 @@ function pushToFirestoreCloud(title, subject, type, format, content, thumbnailBa
             initDefaultPremiumContent();
             renderDashboardExams();
             syncQuizzesFromCloud();
+            syncVocabFromCloud(); 
 
             
             renderDedicatedMockTests();
@@ -10967,8 +11102,8 @@ function openVocabArsenal() {
 
     let allVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
     
-    // 🔥 AUTO-UPDATE FIX: Agar DB khali hai ya purane format me hai (bina pronunciation ke)
-    if (allVocab.length === 0 || !allVocab[0].pronunciation) {
+    // 🔥 FIX: Ab database tabhi reset hoga jab wo ekdum khali ho (pronunciation wala error hata diya)
+    if (allVocab.length === 0) {
         allVocab = [
             {word: "Abate", pronunciation: "अबेट", meaning: "To become less active or intense", hinglish: "Zor kam hona ya ghatna", syn: "Decrease, Diminish", ant: "Intensify, Increase", ex: "The storm suddenly abated.", hinglishEx: "Toofan achanak se shant ho gaya."},
             {word: "Candid", pronunciation: "कैंडिड", meaning: "Truthful and straightforward", hinglish: "Ekdum sacha aur khara", syn: "Frank, Honest", ant: "Deceitful, Secretive", ex: "His candid responses impressed the interviewer.", hinglishEx: "Uske khare jawabon ne interviewer ko impress kar diya."},
@@ -10980,20 +11115,35 @@ function openVocabArsenal() {
         savedDailyList = []; // Force reload today's words
     }
 
+    // 🌟 NAYA LOGIC: Naya din aate hi kal wale words block ho jayenge
     if (savedDate !== todayStr || savedDailyList.length === 0) {
         const learnedWords = JSON.parse(localStorage.getItem(`vocab_learned_${email}`) || '[]');
+        const yesterdayWords = JSON.parse(localStorage.getItem(`vocab_last_shown_${email}`) || '[]');
+        
+        // Step 1: Jo words seekh liye unko hatao
         let freshWords = allVocab.filter(v => !learnedWords.includes(v.word.toLowerCase()));
+
+        // Step 2: Jo words kal dikhaye the unko bhi hatao taaki ekdum NAYE 5 words aayein
+        let strictlyNewWords = freshWords.filter(v => !yesterdayWords.includes(v.word.toLowerCase()));
+
+        // Agar purely naye words bache hain toh unko use karo
+        if (strictlyNewWords.length >= 5) {
+            freshWords = strictlyNewWords;
+        }
 
         if (freshWords.length < 5) {
             alert("🏆 Incredible! You have learned almost all words. Admin needs to upload more!");
             freshWords = allVocab; 
         }
 
+        // Shuffle and pick top 5
         freshWords.sort(() => 0.5 - Math.random());
         savedDailyList = freshWords.slice(0, 5);
         
+        // Memory me save karo taaki refresh karne par change na ho aur kal avoid ho sakein
         localStorage.setItem(`vocab_daily_list_${email}`, JSON.stringify(savedDailyList));
         localStorage.setItem(`vocab_date_${email}`, todayStr);
+        localStorage.setItem(`vocab_last_shown_${email}`, JSON.stringify(savedDailyList.map(v => v.word.toLowerCase())));
     }
 
     dailyVocabList = savedDailyList;
@@ -11100,6 +11250,33 @@ function markVocabAsLearned(word) {
     
     alert(`✅ "${word}" added to your permanent memory! It won't repeat again.`);
     nextVocabCard();
+}
+// ==========================================
+// 📡 FETCH LIVE VOCAB FROM FIREBASE CLOUD
+// ==========================================
+function syncVocabFromCloud() {
+    if (typeof firebase === 'undefined') return;
+
+    firebase.firestore().collection("vocab_db").get()
+        .then((snapshot) => {
+            let cloudVocab = [];
+            snapshot.forEach(doc => { cloudVocab.push(doc.data()); });
+
+            if (cloudVocab.length > 0) {
+                let localVocab = JSON.parse(localStorage.getItem('warRoomVocabDB') || '[]');
+                let mergedVocab = [...cloudVocab];
+
+                // Check and Merge without duplicates
+                localVocab.forEach(lv => {
+                    if (!mergedVocab.find(cv => cv.word.toLowerCase() === lv.word.toLowerCase())) {
+                        mergedVocab.push(lv);
+                    }
+                });
+
+                localStorage.setItem('warRoomVocabDB', JSON.stringify(mergedVocab));
+            }
+        })
+        .catch(err => console.log("Vocab Cloud Sync Failed: ", err));
 }
 
 </script>
