@@ -7743,45 +7743,38 @@ function saveMissionTarget() {
 // Ye naya function add karo check karne ke liye
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
-    
-    alert("1. Requesting Permission..."); 
 
     messaging.requestPermission()
     .then(function() {
-        alert("2. Permission Granted! Registering Service Worker..."); 
-        
-        // 🔥 YAHAN HUM FIREBASE KO MANUALLY SAHI PATH BATA RAHE HAIN 🔥
+        // Register Service worker silently
         return navigator.serviceWorker.register('./firebase-messaging-sw.js')
         .then(function(registration) {
-            messaging.useServiceWorker(registration); // Tell Firebase to use this specific file
-            
-            alert("3. SW Registered! Generating Token...");
+            messaging.useServiceWorker(registration); 
+            // Generate token silently
             return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
         });
     })
     .then(function(token) {
         if (token) {
-            alert("4. Token Generated! Saving to DB..."); 
             const currentUser = firebase.auth().currentUser;
             if (currentUser) {
+                // Save to Database silently
                 firebase.firestore().collection("users").doc(currentUser.uid).set({
                     fcmToken: token,
                     targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
                     targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
                 }, { merge: true })
-                .then(() => alert("✅ 5. SUCCESS! Saved to Database!"));
-            } else {
-                alert("Error: User not logged in");
+                .then(() => {
+                    console.log("✅ Mission Target & Notification Token saved to Cloud quietly.");
+                });
             }
-        } else {
-            alert("Token null aaya.");
         }
     })
     .catch(function(err) {
-        alert("Error aaya: " + err.message); 
+        // Agar future mein koi error aaye toh user ko disturb kiye bina console mein dikhega
+        console.error("Notification Setup Error: ", err); 
     });
 }
-
 
 function closeAdminGrantModal() {
     document.getElementById('admin-grant-modal').style.display = 'none';
