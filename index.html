@@ -8399,8 +8399,12 @@ function removeBlockItem(index) {
     renderBlocklist();
 }
 
+// ==========================================
+// 🛡️ TACTICAL LOCKDOWN & TAB TRACKING ENGINE
+// ==========================================
 let lockdownTimer = null;
 let lockdownSecondsLeft = 0;
+let lockdownActive = false; // 🔥 Naya variable tab track karne ke liye
 
 function startDistractionLock() {
     const sel = document.getElementById('distract-duration-sel');
@@ -8412,6 +8416,8 @@ function startDistractionLock() {
     const shield = document.getElementById('lockdown-shield-overlay');
     if(shield) shield.style.display = 'flex';
     
+    lockdownActive = true; // 🔥 Lockdown Shuru
+    
     clearInterval(lockdownTimer);
     lockdownTimer = setInterval(() => {
         if(lockdownSecondsLeft > 0) {
@@ -8419,6 +8425,7 @@ function startDistractionLock() {
             updateLockdownDisplay();
         } else {
             clearInterval(lockdownTimer);
+            lockdownActive = false; // 🔥 Lockdown Khatam
             const shieldEl = document.getElementById('lockdown-shield-overlay');
             if(shieldEl) shieldEl.style.display = 'none';
             alert("Lockdown completed! Excellent focus session, Warrior.");
@@ -8438,10 +8445,35 @@ function updateLockdownDisplay() {
 function forceUnlockEmergency() {
     if(confirm("Are you sure you want to break focus and disable lockdown early?")) {
         clearInterval(lockdownTimer);
+        lockdownActive = false; // 🔥 Lockdown Cancelled
         const shield = document.getElementById('lockdown-shield-overlay');
         if(shield) shield.style.display = 'none';
     }
 }
+
+// 🔥 MAIN TRICK: Tab Change / Minimize Track Karne ka Code
+document.addEventListener("visibilitychange", function() {
+    // Agar lockdown chalu hai aur user ne tab change kiya ya phone home screen par gaya
+    if (lockdownActive && document.visibilityState === 'hidden') {
+        
+        lockdownActive = false; // Lockdown tod do
+        clearInterval(lockdownTimer);
+        
+        const shieldEl = document.getElementById('lockdown-shield-overlay');
+        if(shieldEl) shieldEl.style.display = 'none';
+
+        // Penalty lagao
+        if(typeof updateGlobalPoints === 'function') {
+            updateGlobalPoints(-5); // 5 points kaat lo
+        }
+
+        // Wapas aane par dhamki
+        setTimeout(() => {
+            alert("🚨 MISSION FAILED! 🚨\nYou left the War Room during an active Lockdown! Penalty: -5 Points. Focus warrior, distractions will ruin your rank!");
+        }, 500);
+    }
+});
+
 function generatePracticeSet() {
     // Ye rahi wo line jo aapko function ke start mein rakhni hai 👇
     
