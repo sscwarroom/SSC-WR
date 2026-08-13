@@ -1,8 +1,6 @@
-// firebase-messaging-sw.js
 importScripts('https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.20.0/firebase-messaging.js');
 
-// Apni Firebase Config yahan paste karo (jo aapki HTML me hai)
 const firebaseConfig = {
   apiKey: "AIzaSyBOJZp4UvClw1F0DQ6HBNIxs5VTcJLsjNg",
   authDomain: "ssc-war-room-a6c12.firebaseapp.com",
@@ -13,20 +11,21 @@ const firebaseConfig = {
   measurementId: "G-BEJ4LSJ3SP"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Initialize Firebase Cloud Messaging
 const messaging = firebase.messaging();
 
-// Jab app background me hogi tab ye function message catch karega
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log('Message received in background: ', payload);
 
-  const notificationTitle = payload.notification.title;
+  const notificationTitle = payload.notification.title || "SSC War Room";
   const notificationOptions = {
     body: payload.notification.body,
-    icon: 'SSCWARROOM.PNG' // Aapka logo
+    // 🔥 FIX: Yahan maine aapke logo ka pura original address daal diya hai
+    icon: 'https://sscwarroom.github.io/SSC-WR/SSCWARROOM.PNG',
+    // 🔥 NAYA FEATURE: Jab user notification par click karega toh website khul jayegi
+    data: {
+      click_action: 'https://sscwarroom.github.io/SSC-WR/'
+    }
   };
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
