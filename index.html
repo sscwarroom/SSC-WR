@@ -7740,20 +7740,20 @@ function saveMissionTarget() {
     // 🔥 NAYA CODE: YAHAN HUM NOTIFICATION PERMISSION MANGENGE 🔥
     requestNotificationPermission(currentEmail);
 }
-// Ye naya function add karo jo user se permission mangega aur token generate karega
+// Ye naya function add karo check karne ke liye
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
     
+    alert("1. Requesting Permission..."); // Checking step 1
+
     messaging.requestPermission()
     .then(function() {
-        console.log('Notification permission granted.');
-        // 👇 Aapki actual VAPID Key yahan laga di hai 👇
+        alert("2. Permission Granted! Generating Token..."); // Checking step 2
         return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
     })
     .then(function(token) {
         if (token) {
-            console.log('FCM Token:', token);
-            // Is token ko Firestore me user ke data ke sath save kar do
+            alert("3. Token Generated! Saving to DB..."); // Checking step 3
             const currentUser = firebase.auth().currentUser;
             if (currentUser) {
                 firebase.firestore().collection("users").doc(currentUser.uid).set({
@@ -7761,14 +7761,17 @@ function requestNotificationPermission(userEmail) {
                     targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
                     targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
                 }, { merge: true })
-                .then(() => console.log("🔥 Token successfully saved to Database!"));
+                .then(() => alert("✅ 4. SUCCESS! Saved to Database!"));
+            } else {
+                alert("Error: User not logged in");
             }
         } else {
-            console.log('No Instance ID token available. Request permission to generate one.');
+            alert("Token null aaya.");
         }
     })
     .catch(function(err) {
-        console.log('Unable to get permission to notify.', err);
+        // Agar koi error aayega toh yahan screen par dikh jayega!
+        alert("Error aaya: " + err.message); 
     });
 }
 
