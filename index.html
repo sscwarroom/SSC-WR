@@ -7743,36 +7743,37 @@ function saveMissionTarget() {
 // Ye naya function add karo check karne ke liye
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
+    
+    // 🔥 FIX: Firebase ko exact location batani padegi kyunki site subfolder (SSC-WR) me hai
+    navigator.serviceWorker.register('/SSC-WR/firebase-messaging-sw.js')
+    .then(function(registration) {
+        // Firebase ko bolo ki isi file ko use kare
+        messaging.useServiceWorker(registration);
 
-    messaging.requestPermission()
+        // Ab permission maango
+        return messaging.requestPermission();
+    })
     .then(function() {
-        // Register Service worker silently
-        return navigator.serviceWorker.register('./firebase-messaging-sw.js')
-        .then(function(registration) {
-            messaging.useServiceWorker(registration); 
-            // Generate token silently
-            return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
-        });
+        console.log('Notification permission granted.');
+        return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
     })
     .then(function(token) {
         if (token) {
+            console.log('FCM Token:', token);
+            // Token Database me save karo
             const currentUser = firebase.auth().currentUser;
             if (currentUser) {
-                // Save to Database silently
                 firebase.firestore().collection("users").doc(currentUser.uid).set({
                     fcmToken: token,
                     targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
                     targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
                 }, { merge: true })
-                .then(() => {
-                    console.log("✅ Mission Target & Notification Token saved to Cloud quietly.");
-                });
+                .then(() => console.log("🔥 Token successfully saved to Database!"));
             }
         }
     })
     .catch(function(err) {
-        // Agar future mein koi error aaye toh user ko disturb kiye bina console mein dikhega
-        console.error("Notification Setup Error: ", err); 
+        console.log('Error during notification setup:', err);
     });
 }
 
