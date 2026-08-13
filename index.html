@@ -7740,16 +7740,15 @@ function saveMissionTarget() {
     // 🔥 NAYA CODE: YAHAN HUM NOTIFICATION PERMISSION MANGENGE 🔥
     requestNotificationPermission(currentEmail);
 }
-
-// Ye naya function add karo jo user se permission mangega
+// Ye naya function add karo jo user se permission mangega aur token generate karega
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
     
     messaging.requestPermission()
     .then(function() {
         console.log('Notification permission granted.');
-        // Permission mil gayi, ab token get karo
-        return messaging.getToken();
+        // 👇 Aapki actual VAPID Key yahan laga di hai 👇
+        return messaging.getToken({ vapidKey: "BDAsFY0fmk17_LkasxaF9J3rhMCmdLb7itmecjn09qKJkQ6EEtKJLLh04k0NS36dGWVdy_e5eufVqBMKuSYBH40" });
     })
     .then(function(token) {
         if (token) {
@@ -7761,7 +7760,8 @@ function requestNotificationPermission(userEmail) {
                     fcmToken: token,
                     targetExam: localStorage.getItem(`warRoomTargetExam_${userEmail}`),
                     targetDate: localStorage.getItem(`warRoomTargetDate_${userEmail}`)
-                }, { merge: true });
+                }, { merge: true })
+                .then(() => console.log("🔥 Token successfully saved to Database!"));
             }
         } else {
             console.log('No Instance ID token available. Request permission to generate one.');
@@ -7771,6 +7771,7 @@ function requestNotificationPermission(userEmail) {
         console.log('Unable to get permission to notify.', err);
     });
 }
+
 
 function closeAdminGrantModal() {
     document.getElementById('admin-grant-modal').style.display = 'none';
