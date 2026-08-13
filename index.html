@@ -8450,27 +8450,37 @@ function forceUnlockEmergency() {
         if(shield) shield.style.display = 'none';
     }
 }
-
-// 🔥 MAIN TRICK: Tab Change / Minimize Track Karne ka Code
+// 🔥 NAYA TAB-TRACKING AUR WARNING ENGINE
 document.addEventListener("visibilitychange", function() {
-    // Agar lockdown chalu hai aur user ne tab change kiya ya phone home screen par gaya
+    // 1. Jab user lockdown ke waqt site chhod kar jaye
     if (lockdownActive && document.visibilityState === 'hidden') {
-        
-        lockdownActive = false; // Lockdown tod do
+        lockdownActive = false;
         clearInterval(lockdownTimer);
         
         const shieldEl = document.getElementById('lockdown-shield-overlay');
         if(shieldEl) shieldEl.style.display = 'none';
 
-        // Penalty lagao
+        // Points minus karo
         if(typeof updateGlobalPoints === 'function') {
-            updateGlobalPoints(-5); // 5 points kaat lo
+            updateGlobalPoints(-5);
         }
 
-        // Wapas aane par dhamki
-        setTimeout(() => {
-            alert("🚨 MISSION FAILED! 🚨\nYou left the War Room during an active Lockdown! Penalty: -5 Points. Focus warrior, distractions will ruin your rank!");
-        }, 500);
+        // LocalStorage mein flag set kar do ki penalty lagi hai
+        localStorage.setItem('warRoomPenaltyFlag', 'true');
+    }
+});
+
+// 2. Jab user wapas site par laute, tab message dikhao
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'visible') {
+        if (localStorage.getItem('warRoomPenaltyFlag') === 'true') {
+            localStorage.removeItem('warRoomPenaltyFlag');
+            
+            // Ab user ko wapas aate hi turant alert dikhega
+            setTimeout(() => {
+                alert("🚨 MISSION FAILED! 🚨\nYou left the War Room during an active Lockdown! Penalty: -5 Points. Focus warrior, distractions will ruin your rank!");
+            }, 300);
+        }
     }
 });
 
