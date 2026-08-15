@@ -47,55 +47,59 @@
 [data-theme="solar-system"]{ --bg-card:rgba(15,10,5,0.75); --glass-border:rgba(251,146,60,0.15); --glass-shadow:0 30px 60px -12px rgba(0,0,0,0.9), 0 0 30px rgba(251,146,60,0.05); --text-primary:#fffaf0; --text-secondary:#cbd5e1; --accent-primary:#fb923c; --accent-primary-hover:#f97316; --accent-glow:rgba(251,146,60,0.3); --type-primary:#fb923c; --type-bg:rgba(8,5,2,0.8); --type-text:#fffaf0; --type-active:rgba(251,146,60,0.15); --type-correct:#4ade80; }
 
 /* ======== LIGHT MODE OVERRIDES ======== */
+/* CSS Variables automatically override when class is applied, NO !important needed */
 body.light-mode {
-  --bg-base: #f8fafc !important;
-  --bg-card: rgba(255, 255, 255, 0.85) !important;
-  --glass-border: rgba(0, 0, 0, 0.15) !important;
-  --glass-shadow: 0 30px 60px -12px rgba(0,0,0,0.1), 0 0 20px rgba(0,0,0,0.05) !important;
-  --text-primary: #0f172a !important;
-  --text-secondary: #334155 !important; 
-  --type-bg: rgba(255, 255, 255, 0.9) !important;
-  --type-text: #0f172a !important;
-  --type-active: rgba(0, 0, 0, 0.05) !important;
-  --type-correct: #16a34a !important; 
-  --type-error: #dc2626 !important;   
-  --type-error-bg: rgba(220, 38, 38, 0.1) !important;
+  --bg-base: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.15);
+  --glass-shadow: 0 30px 60px -12px rgba(0,0,0,0.1), 0 0 20px rgba(0,0,0,0.05);
+  --text-primary: #0f172a;
+  --text-secondary: #334155; 
+  --type-bg: rgba(255, 255, 255, 0.9);
+  --type-text: #0f172a;
+  --type-active: rgba(0, 0, 0, 0.05);
+  --type-correct: #16a34a; 
+  --type-error: #dc2626;   
+  --type-error-bg: rgba(220, 38, 38, 0.1);
 }
 
 body.light-mode[data-theme="none"] { 
-  --accent-primary: #3b82f6 !important; 
-  --accent-glow: rgba(59,130,246,0.2) !important; 
-  --type-primary: #3b82f6 !important; 
+  --accent-primary: #3b82f6; 
+  --accent-glow: rgba(59,130,246,0.2); 
+  --type-primary: #3b82f6; 
 }
 
-/* Light Mode UI Adaptations */
-body.light-mode #dynamic-bg-container { background-color: #f8fafc !important; }
-body.light-mode .kb-key { background: #ffffff !important; color: #0f172a !important; border-color: rgba(0,0,0,0.15) !important; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
-body.light-mode .kb-key[data-finger="l-pinky"], body.light-mode .kb-key[data-finger="r-pinky"] { background: rgba(192, 132, 252, 0.15) !important; border-color: #a855f7 !important; color: #7e22ce !important; }
-body.light-mode .kb-key[data-finger="l-ring"], body.light-mode .kb-key[data-finger="r-ring"] { background: rgba(52, 211, 153, 0.15) !important; border-color: #10b981 !important; color: #047857 !important; }
-body.light-mode .kb-key[data-finger="l-middle"], body.light-mode .kb-key[data-finger="r-middle"] { background: rgba(251, 191, 36, 0.2) !important; border-color: #f59e0b !important; color: #b45309 !important; }
-body.light-mode .kb-key[data-finger="l-index"], body.light-mode .kb-key[data-finger="r-index"] { background: rgba(248, 113, 113, 0.15) !important; border-color: #ef4444 !important; color: #b91c1c !important; }
-body.light-mode .kb-key[data-finger="space-thumb"] { background: rgba(96, 165, 250, 0.15) !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; }
-body.light-mode .btn-outline { border-color: rgba(0,0,0,0.2) !important; color: #0f172a !important; }
-body.light-mode .btn-outline:hover { background: rgba(0,0,0,0.05) !important; }
-body.light-mode .search-input { background: rgba(255,255,255,0.8) !important; color: #0f172a !important; border-color: rgba(0,0,0,0.2) !important; }
-body.light-mode .search-input option { background: #ffffff !important; color: #0f172a !important; }
-body.light-mode .stat-card { background: rgba(255,255,255,0.7) !important; border-color: rgba(0,0,0,0.1) !important; }
-body.light-mode .live-chip { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: #0f172a !important; }
-body.light-mode .timer-display { background: #ffffff !important; border-color: rgba(0,0,0,0.1) !important; color: var(--accent-primary) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important; text-shadow: none; }
+/* Light Mode UI Adaptations - Using natural CSS specificity instead of !important */
+body.light-mode #dynamic-bg-container { background-color: var(--bg-base); }
+
+body.light-mode .kb-key { background: #ffffff; color: var(--text-primary); border-color: var(--glass-border); box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+body.light-mode .kb-key[data-finger="l-pinky"], body.light-mode .kb-key[data-finger="r-pinky"] { background: rgba(192, 132, 252, 0.15); border-color: #a855f7; color: #7e22ce; }
+body.light-mode .kb-key[data-finger="l-ring"], body.light-mode .kb-key[data-finger="r-ring"] { background: rgba(52, 211, 153, 0.15); border-color: #10b981; color: #047857; }
+body.light-mode .kb-key[data-finger="l-middle"], body.light-mode .kb-key[data-finger="r-middle"] { background: rgba(251, 191, 36, 0.2); border-color: #f59e0b; color: #b45309; }
+body.light-mode .kb-key[data-finger="l-index"], body.light-mode .kb-key[data-finger="r-index"] { background: rgba(248, 113, 113, 0.15); border-color: #ef4444; color: #b91c1c; }
+body.light-mode .kb-key[data-finger="space-thumb"] { background: rgba(96, 165, 250, 0.15); border-color: #3b82f6; color: #1d4ed8; }
+
+body.light-mode .btn-outline { border-color: rgba(0,0,0,0.2); color: var(--text-primary); }
+body.light-mode .btn-outline:hover { background: rgba(0,0,0,0.05); }
+body.light-mode .search-input { background: rgba(255,255,255,0.8); color: var(--text-primary); border-color: rgba(0,0,0,0.2); }
+body.light-mode .search-input option { background: #ffffff; color: var(--text-primary); }
+body.light-mode .stat-card { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); }
+body.light-mode .live-chip { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: var(--text-primary); }
+body.light-mode .timer-display { background: #ffffff; border-color: rgba(0,0,0,0.1); color: var(--accent-primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-shadow: none; }
+
 body.light-mode .v-palm { fill: #ffffff; stroke: rgba(0,0,0,0.2); }
-body.light-mode .typing-flash-overlay { background: rgba(255,255,255,0.6) !important; }
-body.light-mode .t-char.correct { text-shadow: none; font-weight: inherit; }
-body.light-mode .t-char.incorrect { text-shadow: none; font-weight: inherit; }
+body.light-mode .typing-flash-overlay { background: rgba(255,255,255,0.6); }
+body.light-mode .t-char.correct, body.light-mode .t-char.incorrect { text-shadow: none; font-weight: inherit; }
 body.light-mode .typing-box { font-weight: 500; }
-body.light-mode .stat-value { text-shadow: none; }
-body.light-mode .live-chip span { text-shadow: none; }
-body.light-mode .neon-orb { mix-blend-mode: multiply !important; opacity: 0.7; }
+body.light-mode .stat-value, body.light-mode .live-chip span { text-shadow: none; }
+
+body.light-mode .neon-orb { mix-blend-mode: multiply; opacity: 0.7; }
 body.light-mode .sakura-petal { box-shadow: 2px 2px 6px rgba(0,0,0,0.1); }
 body.light-mode .firefly { background: #65a30d; box-shadow: 0 0 8px rgba(77, 166, 15, 0.6); }
 body.light-mode .solar-orbit { border-color: rgba(0,0,0,0.15); }
 body.light-mode .solar-asteroid { background: #cbd5e1; box-shadow: inset -2px -2px 5px rgba(255,255,255,0.8); }
 body.light-mode .solar-sun { box-shadow: 0 0 80px rgba(234, 88, 12, 0.4); }
+
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:var(--ui-font);}
 body{background-color:var(--bg-base);color:var(--text-primary);padding:20px;display:flex;flex-direction:column;align-items:center;min-height:100dvh;overflow-x:hidden;position:relative; transition: background-color 0.4s ease;}
@@ -533,6 +537,713 @@ body.light-mode .de-input:focus { background: rgba(0,0,0,0.03) !important; box-s
 body.light-mode .de-input.correct { text-shadow: none !important; font-weight: 600; }
 body.light-mode .de-input.error { text-shadow: none !important; font-weight: 600; }
 body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.1) !important; }
+/* --- ENHANCED FONT SIZE & GLIDING CELL CURSOR --- */
+.de-table { font-size: 1.1rem !important; } /* Font size bada kar diya */
+.de-table th, .de-table td { height: 44px; min-width: 145px; } /* Cells thode bade */
+.de-input, .de-bg-text { font-size: 1.1rem !important; font-weight: 500; }
+
+/* 🌟 NEW: Smooth Gliding Active Cell Box */
+.de-glider {
+    position: absolute;
+    top: 0; left: 0;
+    border: 2px solid var(--accent-primary);
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 20;
+    transition: transform 0.15s cubic-bezier(0.33, 1, 0.68, 1), width 0.15s ease, height 0.15s ease;
+    box-shadow: 0 0 15px var(--accent-glow), inset 0 0 5px var(--accent-glow);
+    opacity: 0; /* Jab select nahi hoga toh gayab rahega */
+}
+body.light-mode .de-glider {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Purana hard box outline hide kar rahe hain taaki glider dikhe */
+.de-input:focus { box-shadow: none !important; background: rgba(255,255,255,0.05); }
+body.light-mode .de-input:focus { background: rgba(0,0,0,0.03) !important; box-shadow: none !important; }
+/* =========================================================
+   🎮 MINI-GAME MOBILE SCREEN HEIGHT FIX
+========================================================= */
+.game-area {
+    height: 50vh !important;
+    min-height: 380px !important; /* PC/Tablet par bada dikhega */
+}
+
+@media (max-width: 768px) {
+    .game-area {
+        height: 50vh !important;
+        min-height: 330px !important; /* Mobile par keyboard khulne ke baad bhi height maintain karega */
+        margin-bottom: 10px !important;
+    }
+    .game-hud-display {
+        min-height: 55px !important;
+        font-size: 1.4rem !important; /* Mobile par type kiya hua text thoda clear dikhega */
+    }
+}
+
+/* Light mode me Game HUD ka color thoda theek karne ke liye */
+body.light-mode .game-hud-display {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+    border-color: rgba(0,0,0,0.2) !important;
+}
+/* =========================================================
+   🚀 ULTIMATE PERFORMANCE OPTIMIZATION (FOR LOW-END DEVICES)
+========================================================= */
+/* 1. Force GPU Hardware Acceleration for smooth animations */
+.t-char, .de-glider, .falling-word, .neon-orb, .matrix-rain, .sakura-petal, .ember, .solar-sun, .solar-asteroid {
+    will-change: transform, opacity;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 2. LITE MODE (When "Remove Effect" is checked in Settings) */
+body.no-effects .app-container,
+body.no-effects .modal-box,
+body.no-effects .de-panel,
+body.no-effects .de-hud,
+body.no-effects .de-stat-card,
+body.no-effects .stat-card,
+body.no-effects .tutor-lesson-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    background-color: #111 !important; /* Solid color instead of transparent glass */
+}
+
+/* Light mode Lite Version */
+body.light-mode.no-effects .app-container,
+body.light-mode.no-effects .de-panel,
+body.light-mode.no-effects .de-hud {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+/* Completely stop rendering background particles in Lite Mode */
+body.no-effects #dynamic-bg-container {
+    display: none !important;
+}
+
+/* Remove heavy glowing shadows from typing letters in Lite Mode */
+body.no-effects .t-char.correct,
+body.no-effects .t-char.incorrect,
+body.no-effects .de-input.correct,
+body.no-effects .de-input.error {
+    text-shadow: none !important; 
+}
+/* =========================================================
+   🎮 TYPING GAMES MODULE CSS (PREMIUM THEME)
+========================================================= */
+.dest-games-container { padding: 20px; max-width: 1200px; margin: 0 auto; color: var(--text-primary); font-family: inherit; }
+.games-header { text-align: center; margin-bottom: 30px; }
+.header-title { font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: 2px; text-shadow: 0 0 15px var(--accent-glow); }
+.header-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+.games-controls-bar { margin-top: 15px; display: flex; justify-content: center; gap: 15px; }
+
+.games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.game-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--glass-shadow); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.game-card:hover { transform: translateY(-5px); border-color: var(--accent-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px var(--accent-glow); }
+.game-card-tag { font-size: 0.75rem; font-weight: 800; color: var(--accent-primary); letter-spacing: 1px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; width: fit-content; border: 1px solid var(--glass-border); }
+.game-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.game-card p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px; }
+
+.game-stats-preview { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); background: rgba(0,0,0,0.4); padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--glass-border); }
+.game-stats-preview b { color: var(--text-primary); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+
+.game-diff-select { width: 100%; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; outline: none; margin-bottom: 15px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+.game-diff-select:focus, .game-diff-select:hover { border-color: var(--accent-primary); box-shadow: 0 0 10px var(--accent-glow); }
+.game-diff-select option { background: #111; color: #fff; }
+
+/* Premium Buttons for Games Module */
+.dest-btn-primary { background: transparent; color: var(--text-primary); border: 1px solid var(--accent-primary); padding: 12px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 10px var(--accent-glow); width: 100%; text-transform: uppercase; letter-spacing: 1px; }
+.dest-btn-primary:hover { background: rgba(255,255,255,0.05); transform: translateY(-2px); box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 0 20px var(--accent-glow); border-color: var(--accent-primary-hover); }
+
+.dest-btn-secondary { background: rgba(0,0,0,0.3); color: var(--text-secondary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.dest-btn-secondary:hover { color: var(--text-primary); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); }
+
+/* Arena Styles */
+.dest-game-arena { display: flex; flex-direction: column; height: 85vh; max-height: 800px; width: 100%; max-width: 1000px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; box-shadow: var(--glass-shadow); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+/* ---- REPLACE THESE SPECIFIC CLASSES IN YOUR CSS ---- */
+/* =========================================================
+   🚀 PREMIUM HUD STYLES (SCI-FI LOOK)
+========================================================= */
+.arena-top-bar { 
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 100%) !important; 
+    border-bottom: 2px solid rgba(0, 255, 204, 0.3) !important; 
+    padding: 10px 15px !important; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    backdrop-filter: blur(10px) !important; 
+    -webkit-backdrop-filter: blur(10px) !important;
+    z-index: 10 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+}
+
+.arena-stats { 
+    background: rgba(0, 0, 0, 0.4) !important;
+    padding: 6px 15px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    display: flex; 
+    gap: 15px; 
+    font-size: 0.85rem; 
+    font-family: 'JetBrains Mono', monospace; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+}
+
+.arena-stats span {
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.arena-stats strong { 
+    font-size: 1.1rem; 
+    margin-left: 6px;
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* Specific Stat Colors */
+#liveScore { color: #3b82f6 !important; }  /* Blue */
+#liveWpm { color: #a855f7 !important; }    /* Purple */
+#liveAcc { color: #10b981 !important; }    /* Green */
+#liveCombo { color: #f59e0b !important; }  /* Orange */
+
+@media (max-width: 768px) {
+    .arena-title { display: none !important; } 
+    .arena-stats { width: 100%; gap: 10px; font-size: 0.75rem; margin-bottom: 5px; padding: 5px !important;}
+    .arena-stats strong { font-size: 0.95rem; }
+    .arena-buttons { width: 100%; display: flex; justify-content: space-between; }
+}
+
+/* =========================================================
+   🚀 FIX: HIDE INPUT BOX & FIX CANVAS SIZE
+========================================================= */
+#gameInputPromptBar {
+    display: none !important; /* Input box aur "Awaiting Target" hamesha ke liye gayab */
+}
+
+.game-viewport {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.game-canvas-layer {
+    flex: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative !important;
+    display: block !important;
+}
+
+canvas#arcadeCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+}
+/* =========================================================
+   🛠️ FIX: RESULT MODAL POPUP & LANDSCAPE MODE
+========================================================= */
+
+/* 1. Modal ko Popup Overlay Banana */
+.dest-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important; /* Screen par sabse upar */
+}
+
+.dest-modal.hidden {
+    display: none !important;
+}
+
+/* Modal ke andar ka Box */
+.dest-modal-content {
+    background: #0f172a !important;
+    border: 2px solid #3b82f6 !important;
+    padding: 30px !important;
+    border-radius: 16px !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    text-align: center !important;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.4) !important;
+}
+
+#resultModalHeader {
+    color: #fff !important;
+    margin-bottom: 20px !important;
+    font-size: 1.8rem !important;
+    letter-spacing: 2px !important;
+}
+
+/* Stats ko Grid mein properly dikhana */
+.result-stats-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin: 20px 0 !important;
+}
+
+.result-stat-item {
+    background: rgba(0, 0, 0, 0.5) !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    font-size: 0.75rem !important;
+    color: #94a3b8 !important;
+    text-transform: uppercase !important;
+}
+
+.result-stat-item b {
+    color: #00ffcc !important;
+    font-size: 1.4rem !important;
+    margin-top: 5px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* 2. Landscape Mode Optimization */
+.dest-game-arena {
+    height: 100vh !important; /* 'dvh' ki jagah 'vh' landscape me zyada stable hai */
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    /* Landscape me top bar ko chhota kar do taaki canvas ko jagah mile */
+    .arena-top-bar {
+        padding: 5px 15px !important;
+    }
+    .arena-title {
+        font-size: 1rem !important;
+    }
+    .dest-btn-secondary {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+    }
+}
+/* =========================================================
+   🛠️ FIX: SCROLLABLE MODAL & LANDSCAPE FIT
+========================================================= */
+.dest-modal-content {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important; /* Scrollbar hide karne ke liye */
+    -ms-overflow-style: none !important;
+}
+.dest-modal-content::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Landscape Mode Optimization */
+@media (orientation: landscape) and (max-height: 600px) {
+    .dest-modal-content {
+        padding: 15px !important;
+        width: 95% !important;
+    }
+    #resultModalHeader {
+        margin-bottom: 10px !important;
+        font-size: 1.3rem !important;
+    }
+    .result-stats-grid {
+        margin: 10px 0 !important;
+        gap: 8px !important;
+    }
+    .result-stat-item {
+        padding: 8px !important;
+    }
+    .result-stat-item b {
+        font-size: 1.1rem !important;
+        margin-top: 2px !important;
+    }
+    /* Buttons ko vertical se horizontal line me kar do landscape me */
+    .result-buttons {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+    }
+    .result-buttons button {
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+        flex: 1 !important;
+    }
+}
+/* =========================================================
+   🚀 FIX: 100% FULLSCREEN CANVAS & HUD OVERLAY
+========================================================= */
+.dest-game-arena {
+    display: block !important; /* Flex hata diya taaki absolute kaam kare */
+}
+
+.game-viewport {
+    position: absolute !important;
+    inset: 0 !important; /* Canvas ko poori screen par stretch kar dega */
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+}
+
+/* Top bar ko canvas ke upar hawa me tairta (float) hua bana diya */
+.arena-top-bar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 50 !important;
+    background: rgba(15, 23, 42, 0.3) !important; /* Ekdum halka transparent */
+    border-bottom: 1px solid rgba(0, 255, 204, 0.2) !important;
+    padding: 5px 15px !important; /* Ultra-thin padding */
+}
+
+.arena-title { display: none !important; } /* Title hide kar diya space bachane ke liye */
+
+.arena-stats {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    gap: 12px !important;
+}
+
+/* Light Mode ke liye Top Bar Fix */
+body.light-mode .arena-top-bar {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+body.light-mode .arena-stats span { color: #475569 !important; }
+
+/* PLAY AGAIN BUTTON INVISIBLE TEXT FIX */
+#playAgainBtn { color: #ffffff !important; font-weight: bold !important; }
+/* =========================================================
+   🛠️ OVERLAP BUG FIX: HIDE ARENA IN OTHER SECTIONS
+========================================================= */
+
+/* Jab arena par 'hidden' class ho, toh usko forcefully gayab kar do */
+.dest-game-arena.hidden {
+    display: none !important;
+}
+
+/* Jab game active ho tabhi dikhao */
+.dest-game-arena:not(.hidden) {
+    display: block !important; 
+}
+/* =========================================================
+   🛠️ FIX: CENTER COUNTDOWN & PAUSE MENU OVERLAYS
+========================================================= */
+
+/* Overlays ko forcefully poori screen par fix karke center karna */
+.game-overlay {
+    position: fixed !important; 
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important; /* HUD aur Game se sabse aage */
+}
+
+/* Jab JS inko hide kare toh strictly hide ho jayein */
+.game-overlay.hidden {
+    display: none !important;
+}
+
+/* Pause Menu ka Box Design */
+.pause-menu-box {
+    background: #0f172a !important;
+    border: 2px solid #3b82f6 !important;
+    padding: 30px !important;
+    border-radius: 16px !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    min-width: 300px !important;
+    max-width: 90% !important;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.5) !important;
+}
+
+.pause-menu-box h2 {
+    color: #ffffff !important;
+    font-size: 1.8rem !important;
+    margin-bottom: 10px !important;
+    letter-spacing: 2px !important;
+}
+
+/* Countdown Number (3, 2, 1, GO) Center mein */
+.countdown-number {
+    font-size: 8rem !important;
+    font-weight: 800 !important;
+    color: #00ffcc !important;
+    text-shadow: 0 0 40px rgba(0, 255, 204, 0.8) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+/* =========================================================
+   🚀 ULTRA-MINIMALIST HUD (TAM-JHAM REMOVED)
+========================================================= */
+
+/* Top bar ka dabba hata kar usko space me fade-in kiya */
+.arena-top-bar {
+    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%) !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 15px 20px !important;
+}
+
+/* Container ka text invisible kiya taaki purane labels (Score:, WPM:) gayab ho jayein */
+.arena-stats {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 0 !important; 
+    color: transparent !important;
+    gap: 20px !important;
+}
+
+/* Accuracy game ke beech mein zaroori nahi, usko puri tarah chhupa diya */
+#liveAcc { 
+    display: none !important; 
+}
+
+/* Sirf main Values (Numbers) ko show karna */
+#liveScore, #liveWpm, #liveCombo, #liveLives {
+    font-size: 1.2rem !important; 
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 800 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* CSS Magic: Text ki jagah Cool Icons lagaye */
+#liveScore::before { content: "🏆"; margin-right: 6px; font-size: 1.1rem; }
+#liveWpm::before   { content: "⚡"; margin-right: 6px; font-size: 1.1rem; }
+#liveCombo::before { content: "🔥"; margin-right: 6px; font-size: 1.1rem; }
+
+/* Neon Colors */
+#liveScore { color: #00ffcc !important; text-shadow: 0 0 10px rgba(0,255,204,0.6) !important; }
+#liveWpm   { color: #a855f7 !important; text-shadow: 0 0 10px rgba(168,85,247,0.6) !important; }
+#liveCombo { color: #f59e0b !important; text-shadow: 0 0 10px rgba(245,158,11,0.6) !important; }
+
+/* Pause aur Exit Buttons ko sleek, pill-shape banaya */
+#pauseGameBtn, #quitGameBtn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px !important;
+    padding: 6px 16px !important;
+    color: #fff !important;
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+    backdrop-filter: blur(5px) !important;
+    box-shadow: none !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Light Mode Support for new HUD */
+body.light-mode .arena-top-bar {
+    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, transparent 100%) !important;
+}
+body.light-mode #pauseGameBtn, body.light-mode #quitGameBtn {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    color: #000 !important;
+}
+/* =========================================================
+   🚀 FIX: ULTRA-COMPACT & SINGLE-LINE HUD
+========================================================= */
+
+/* Top bar ko patla aur strictly ek line me kiya */
+.arena-top-bar {
+    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%) !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 5px 10px !important; /* Padding bilkul kam kar di */
+    display: flex !important;
+    flex-direction: row !important; /* Force items in a row */
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* Items ko toot kar neeche aane se rokna */
+    width: 100% !important;
+}
+
+/* Stats (Score, WPM) wale dabbe ko tight aur single line banaya */
+.arena-stats {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important; /* Icons ke beech ki doori kam kar di */
+    flex-wrap: nowrap !important; /* Strictly no wrapping */
+}
+
+/* Faltu Text Hide Karna */
+#liveAcc { display: none !important; }
+.arena-title { display: none !important; }
+
+/* Numbers aur Text ka size bohot chhota (compact) kar diya */
+#liveScore, #liveWpm, #liveCombo, #liveLives {
+    font-size: 0.8rem !important; /* Chhota text */
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Icons ka size chhota aur spacing kam */
+#liveScore::before { content: "🏆"; margin-right: 3px; font-size: 0.85rem !important; }
+#liveWpm::before   { content: "⚡"; margin-right: 3px; font-size: 0.85rem !important; }
+#liveCombo::before { content: "🔥"; margin-right: 3px; font-size: 0.85rem !important; }
+
+/* Hearts ko paas-paas chipkana aur chhota karna */
+#liveLives {
+    font-size: 0.75rem !important; 
+    letter-spacing: -2px !important; /* Hearts overlap hone lagte hain isse, space bachti hai */
+}
+
+/* Buttons ka container */
+.arena-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 5px !important;
+    flex-wrap: nowrap !important;
+    width: auto !important; /* Taki mobile pe 100% width na le */
+}
+
+/* Pause aur Exit Buttons ko chhota (Mini Pills) kar diya */
+#pauseGameBtn, #quitGameBtn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important; /* Padding kam ki */
+    color: #fff !important;
+    font-size: 0.65rem !important; /* Text chhota kiya */
+    font-weight: bold !important;
+    backdrop-filter: blur(5px) !important;
+    box-shadow: none !important;
+    text-transform: uppercase;
+    white-space: nowrap !important;
+}
+
+/* Light Mode Support for compact HUD */
+body.light-mode .arena-top-bar {
+    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, transparent 100%) !important;
+}
+body.light-mode #pauseGameBtn, body.light-mode #quitGameBtn {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    color: #000 !important;
+}
+
+/* Agar screen bilkul hi chhoti hai (Ultra small mobile) toh aur shrink karega */
+@media (max-width: 380px) {
+    .arena-top-bar { padding: 4px 6px !important; }
+    .arena-stats { gap: 6px !important; }
+    #liveScore, #liveWpm, #liveCombo { font-size: 0.75rem !important; }
+    #pauseGameBtn, #quitGameBtn { padding: 3px 6px !important; font-size: 0.6rem !important; }
+}
+
+/* =========================================================
+   🛠️ FINAL FIX: BUTTONS STYLING RESTORATION 
+========================================================= */
+
+/* 1. Data Entry Button & Other Top Small Buttons */
+.app-screen .flex-row .btn, 
+.de-btn-main.btn-sm {
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    border: 1px solid var(--glass-border) !important;
+    white-space: nowrap !important;
+}
+
+/* 2. Initialize Assessment Button (The Big One) */
+#typing-setup-screen .btn.w-full[onclick="initializeTypingTest()"] {
+    background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%) !important;
+    color: #0f172a !important;
+    border: 2px solid #94a3b8 !important;
+    padding: 16px 20px !important;
+    font-size: 1.1rem !important;
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    width: 100% !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1), inset 0 -2px 5px rgba(0,0,0,0.05) !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+#typing-setup-screen .btn.w-full[onclick="initializeTypingTest()"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15), inset 0 -2px 5px rgba(0,0,0,0.05) !important;
+}
+
+/* 3. Dark Mode Overrides for Initialize Button */
+body:not(.light-mode) #typing-setup-screen .btn.w-full[onclick="initializeTypingTest()"] {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.05) !important;
+}
+
+body:not(.light-mode) #typing-setup-screen .btn.w-full[onclick="initializeTypingTest()"]:hover {
+    box-shadow: 0 6px 25px rgba(0,0,0,0.8), inset 0 2px 15px rgba(255,255,255,0.1) !important;
+}
+
+/* 4. Fix specifically for "Data Entry" Main Dashboard Start Button */
+#de-dashboard-screen .de-btn-main.w-full {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--accent-primary) !important;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow) !important;
+    padding: 16px 20px !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    border-radius: 12px !important;
+}
+
+#de-dashboard-screen .de-btn-main.w-full:hover {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: var(--accent-primary-hover) !important;
+}
+
+body.light-mode #de-dashboard-screen .de-btn-main.w-full {
+    background: var(--bg-base) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+}
 
 </style>
 </head>
@@ -555,7 +1266,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
 <main class="app-container fade-in" id="main-app-container">
 
   <!-- 1. SETUP SCREEN -->
-  <div id="typing-setup-screen" class="fade-in">
+  <div id="typing-setup-screen" class="app-screen fade-in">
     <div class="flex-between mb-4">
       <div>
         <h3 style="color:var(--text-primary);font-size:1.8rem;font-weight:700;margin-bottom:6px;text-shadow:0 0 20px var(--accent-glow);letter-spacing:-0.5px;line-height:1.2;">DEST Pro <span style="color:var(--accent-primary); font-weight:400;">Premium</span></h3>
@@ -565,6 +1276,8 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
         <!-- MODE TOGGLE BUTTON -->
         <button class="btn btn-outline btn-sm" onclick="toggleLightMode()" id="mode-toggle-btn">☀️ Light Mode</button>
         <button class="btn de-btn-main btn-sm" onclick="DataEntryApp.openDashboard()">📊 Data Entry</button>
+        <button class="btn btn-primary btn-sm" onclick="typingGamesModule.showGamesDashboard()" style="box-shadow: 0 0 15px var(--accent-glow);">🎮 Typing Games</button>
+        
         
         <!-- NEW TUTOR BUTTON -->
         <button class="btn btn-primary btn-sm" onclick="openTutorDashboard()" style="box-shadow: 0 0 15px var(--accent-glow);">🎓 Typing Tutor</button>
@@ -603,7 +1316,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   </div>
 
   <!-- 🎓 NEW: TUTOR DASHBOARD SCREEN (PREMIUM LAYOUT) -->
-  <div id="tutor-dashboard-screen" class="hidden fade-in tutor-layout">
+  <div id="tutor-dashboard-screen" class="app-screen hidden fade-in tutor-layout">
     
     <!-- LEFT PANEL: HERO STATS -->
     <div class="tutor-hero-card">
@@ -654,7 +1367,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   </div>
 
   <!-- 2. ACTIVE TYPING SCREEN (Shared by Test & Tutor) -->
-  <div id="typing-active-screen" class="hidden fade-in">
+  <div id="typing-active-screen" class="app-screen hidden fade-in">
     <!-- 🎓 TUTOR SPECIFIC HEADER (Hidden in Normal Test) -->
     <div id="tutor-active-header" class="hidden mb-3">
         <div class="flex-between mb-2">
@@ -694,7 +1407,8 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
     <p id="typing-sub-instruction" style="font-size:.75rem;color:var(--text-secondary);margin-bottom:10px;font-weight:500;letter-spacing:0.5px;">🔊 Audio enabled. Tap the terminal box to start. Timer begins on first keystroke.</p>
 
     <!-- Hidden input for pure smooth tracking -->
-    <textarea id="hidden-focus-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position:absolute;opacity:0;left:-9999px;top:-9999px;"></textarea>
+    <textarea id="hidden-focus-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position:absolute; opacity:0; width:1px; height:1px; top:50%; left:50%; pointer-events:none;"></textarea>
+
 
     <div class="p-relative w-full" onclick="focusTypingInput()">
       <!-- Aura Glow Layer (Safely isolated to stop text blinking) -->
@@ -743,7 +1457,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   </div>
 
   <!-- 🎮 NEW: TYPING GAME SCREEN -->
-  <div id="typing-game-screen" class="hidden fade-in w-full">
+  <div id="typing-game-screen" class="app-screen hidden fade-in w-full">
       <div class="flex-between mb-3">
           <div>
               <span class="tutor-level-badge tutor-badge-game">MINI-GAME</span>
@@ -762,13 +1476,15 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
       </div>
 
       <div class="game-hud-display" id="game-typed-display" onclick="document.getElementById('game-hidden-input').focus()"></div>
-      <textarea id="game-hidden-input" style="position:absolute;opacity:0;left:-9999px;top:-9999px;"></textarea>
+      <textarea id="game-hidden-input" style="position:absolute; opacity:0; width:1px; height:1px; top:50%; left:50%; pointer-events:none;"></textarea>
+
 
       <button class="btn btn-outline w-full" style="padding:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;" onclick="abortGame()">🚪 Abort Game</button>
   </div>
 
   <!-- 3. RESULT SCREEN (Shared, dynamic logic) -->
-  <div id="typing-result-screen" class="hidden fade-in text-center">
+  <div id="typing-result-screen" class="app-screen hidden fade-in text-center">
+
     <h3 id="result-main-title" style="color:var(--text-primary);font-size:2rem;font-weight:800;margin-bottom:5px;letter-spacing:2px;text-transform:uppercase;">Assessment Complete</h3>
     <p id="result-sub-title" style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:20px;font-weight:400;">Detailed SSC Tier-2 DEST Performance Report.</p>
 
@@ -801,7 +1517,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   </div>
 
   <!-- 4. HISTORY SCREEN -->
-  <div id="typing-history-screen" class="hidden fade-in">
+  <div id="typing-history-screen" class="app-screen hidden fade-in">
     <div class="flex-between mb-4">
       <h3 style="color:var(--text-primary);font-size:1.5rem;font-weight:700;">Performance History</h3>
       <button class="btn btn-outline btn-sm" onclick="backToTypingSetup()">Return</button>
@@ -812,7 +1528,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   <!-- ==========================================
        📊 DATA ENTRY DASHBOARD SCREEN
        ========================================== -->
-  <div id="de-dashboard-screen" class="hidden fade-in w-full">
+  <div id="de-dashboard-screen" class="app-screen hidden fade-in w-full">
     <div class="flex-between mb-4">
       <div>
         <!-- 🌟 Changed color:white to var(--text-primary) -->
@@ -873,7 +1589,7 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   <!-- ==========================================
        📊 DATA ENTRY ACTIVE SPREADSHEET (SINGLE TABLE)
        ========================================== -->
-  <div id="de-active-screen" class="hidden fade-in w-full">
+  <div id="de-active-screen" class="app-screen hidden fade-in w-full">
     <div class="de-hud">
       <div class="flex-row">
         <div style="background:rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-size:0.85rem; font-weight:600;"><span style="color:var(--text-secondary);">COMPLETED: </span><span id="de-live-prog">0%</span></div>
@@ -888,20 +1604,25 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
 
     <div class="de-workspace">
       <!-- SIRF EK SPREADSHEET PANEL -->
-      <div class="de-panel" id="de-panel-entry">
+            <div class="de-panel" id="de-panel-entry">
         <div class="de-panel-header"><span>📝 Live Data Entry Sheet</span></div>
         <div class="de-table-wrapper" id="de-entry-wrapper">
+          
+          <!-- 🌟 NEW: Smooth Glider Element -->
+          <div id="de-glider" class="de-glider"></div>
+          
           <table class="de-table" id="de-entry-table">
             <!-- JS dynamically injects background text & inputs here -->
           </table>
         </div>
       </div>
+
     </div>
   </div>
   <!-- ==========================================
        📊 DATA ENTRY RESULTS
        ========================================== -->
-  <div id="de-result-screen" class="hidden fade-in w-full text-center">
+  <div id="de-result-screen" class="app-screen hidden fade-in w-full text-center">
     <!-- 🌟 Changed color:white to var(--text-primary) -->
     <h3 style="color:var(--text-primary);font-size:2rem;font-weight:800;margin-bottom:5px;letter-spacing:2px;">EVALUATION COMPLETE</h3>
     
@@ -939,6 +1660,193 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
   </div>
   
 </main>
+</main>
+
+<!-- TYPING GAMES DASHBOARD CONTAINER -->
+<div id="typingGamesModule" class="dest-games-container hidden">
+    <!-- Dashboard Header -->
+    <div class="games-header">
+        <div class="header-title">🎮 TYPING GAMES</div>
+        <div class="header-subtitle">"Improve your typing speed while playing."</div>
+        <div class="games-controls-bar">
+            <button id="backToMainFromGames" class="dest-btn-secondary">← Back to Main Menu</button>
+            <button id="toggleAudioBtn" class="dest-btn-secondary">🔊 Sound: ON</button>
+        </div>
+    </div>
+
+    <!-- 5 Game Cards Grid -->
+    <div class="games-grid" id="gamesGrid">
+        <!-- GAME 01 -->
+        <div class="game-card" data-game="spaceTyper">
+            <div class="game-card-tag">GAME 01</div>
+            <h3>SPACE TYPER 🚀</h3>
+            <p>Type to destroy incoming enemies.</p>
+            <div class="game-stats-preview">
+                <span>Best Score: <b class="stat-score">0</b></span>
+                <span>Best WPM: <b class="stat-wpm">0</b></span>
+            </div>
+            <div class="difficulty-selector">
+                <select class="game-diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="extreme">Extreme</option>
+                </select>
+            </div>
+            <button class="dest-btn-primary play-game-btn">PLAY GAME</button>
+        </div>
+
+        <!-- GAME 02 -->
+        <div class="game-card" data-game="wordRush">
+            <div class="game-card-tag">GAME 02</div>
+            <h3>WORD RUSH ⚡</h3>
+            <p>Type words before they disappear.</p>
+            <div class="game-stats-preview">
+                <span>Best Score: <b class="stat-score">0</b></span>
+                <span>Best WPM: <b class="stat-wpm">0</b></span>
+            </div>
+            <div class="difficulty-selector">
+                <select class="game-diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="extreme">Extreme</option>
+                </select>
+            </div>
+            <button class="dest-btn-primary play-game-btn">PLAY GAME</button>
+        </div>
+
+        <!-- GAME 03 -->
+        <div class="game-card" data-game="typingRacer">
+            <div class="game-card-tag">GAME 03</div>
+            <h3>TYPING RACER 🏎️</h3>
+            <p>Type faster to reach the finish line.</p>
+            <div class="game-stats-preview">
+                <span>Best Distance: <b class="stat-score">0m</b></span>
+                <span>Best WPM: <b class="stat-wpm">0</b></span>
+            </div>
+            <div class="difficulty-selector">
+                <select class="game-diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="extreme">Extreme</option>
+                </select>
+            </div>
+            <button class="dest-btn-primary play-game-btn">PLAY GAME</button>
+        </div>
+
+        <!-- GAME 04 -->
+        <div class="game-card" data-game="keyboardNinja">
+            <div class="game-card-tag">GAME 04</div>
+            <h3>KEYBOARD NINJA ⚔️</h3>
+            <p>Type falling words before they hit bottom.</p>
+            <div class="game-stats-preview">
+                <span>Best Score: <b class="stat-score">0</b></span>
+                <span>Best WPM: <b class="stat-wpm">0</b></span>
+            </div>
+            <div class="difficulty-selector">
+                <select class="game-diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="extreme">Extreme</option>
+                </select>
+            </div>
+            <button class="dest-btn-primary play-game-btn">PLAY GAME</button>
+        </div>
+
+        <!-- GAME 05 -->
+        <div class="game-card" data-game="typingSurvivor">
+            <div class="game-card-tag">GAME 05</div>
+            <h3>TYPING SURVIVOR 🛡️</h3>
+            <p>Survive incoming enemy waves with typing.</p>
+            <div class="game-stats-preview">
+                <span>Best Score: <b class="stat-score">0</b></span>
+                <span>Best WPM: <b class="stat-wpm">0</b></span>
+            </div>
+            <div class="difficulty-selector">
+                <select class="game-diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="extreme">Extreme</option>
+                </select>
+            </div>
+            <button class="dest-btn-primary play-game-btn">PLAY GAME</button>
+        </div>
+    </div>
+</div>
+
+<!-- ACTIVE GAME ARENA CONTAINER -->
+<div id="activeGameArena" class="dest-game-arena hidden">
+    <div class="arena-top-bar">
+        <div id="arenaGameTitle" class="arena-title">SPACE TYPER</div>
+        <div id="arenaLiveStats" class="arena-stats">
+            <span>Score: <strong id="liveScore">0</strong></span>
+            <span>WPM: <strong id="liveWpm">0</strong></span>
+            <span>Accuracy: <strong id="liveAcc">100%</strong></span>
+            <span>Combo: <strong id="liveCombo">0x</strong></span>
+            <span>Lives/HP: <strong id="liveLives">❤️ 3</strong></span>
+        </div>
+        <div class="arena-buttons">
+            <button id="pauseGameBtn" class="dest-btn-secondary">⏸ PAUSE</button>
+            <button id="exitGameBtn" class="dest-btn-secondary">EXIT</button>
+        </div>
+    </div>
+
+    <!-- Gameplay Canvas / Viewport -->
+    <div id="gameViewport" class="game-viewport">
+        <!-- Countdown Overlay -->
+        <div id="gameCountdownOverlay" class="game-overlay hidden">
+            <div id="countdownNumber" class="countdown-number">3</div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="gamePauseOverlay" class="game-overlay hidden">
+            <div class="pause-menu-box">
+                <h2>⏸ GAME PAUSED</h2>
+                <button id="resumeGameBtn" class="dest-btn-primary">Resume</button>
+                <button id="restartGameBtn" class="dest-btn-secondary">Restart</button>
+                <button id="quitGameBtn" class="dest-btn-secondary">Exit to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Game Rendering Layer -->
+        <div id="gameCanvasLayer" class="game-canvas-layer"></div>
+        
+        <!-- Active Typing Input / Prompt Bar for Games -->
+        <div id="gameInputPromptBar" class="game-input-bar">
+            <span id="targetWordDisplay">Type target here...</span>
+            <input type="text" id="hiddenGameInput" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        </div>
+    </div>
+</div>
+
+<!-- RESULT SCREEN MODAL -->
+<div id="gameResultModal" class="dest-modal hidden">
+    <div class="dest-modal-content">
+        <h2 id="resultModalHeader">GAME COMPLETE</h2>
+        <div id="newHighScoreBadge" class="high-score-badge hidden">NEW HIGH SCORE! 🏆</div>
+        
+        <div class="result-stats-grid">
+            <div class="result-stat-item"><span>Score</span><b id="resScore">12,450</b></div>
+            <div class="result-stat-item"><span>WPM</span><b id="resWpm">63</b></div>
+            <div class="result-stat-item"><span>Accuracy</span><b id="resAcc">97.4%</b></div>
+            <div class="result-stat-item"><span>Best Combo</span><b id="resCombo">42</b></div>
+            <div class="result-stat-item"><span>Time</span><b id="resTime">05:00</b></div>
+        </div>
+
+        <div class="result-buttons">
+            <button id="playAgainBtn" class="dest-btn-primary">PLAY AGAIN</button>
+            <button id="backToGamesBtn" class="dest-btn-secondary">BACK TO GAMES</button>
+            <button id="viewHistoryFromGameBtn" class="dest-btn-secondary">VIEW HISTORY</button>
+        </div>
+    </div>
+</div>
+
+
+    
 
 <!-- 🚀 PREMIUM SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden" onclick="if(event.target===this) closeSettingsModal()">
@@ -1011,6 +1919,12 @@ body.light-mode .de-review-card { background: rgba(0,0,0,0.03) !important; borde
 </div>
 
 <script>
+// 🛡️ APP ENCAPSULATION: Protective Bubble Start
+const DEST_Premium_App = (function(window) {
+    
+// (Aapka pehle ka saara JS code yahin rahega, usko chhedna nahi hai)
+
+    
 // ============ STANDARD TEST DATA ============
 const sscTypingTestsData = {
   basic: {
@@ -1036,7 +1950,10 @@ function renderDynamicBackground(theme) {
   if(!container) return; 
   
   container.innerHTML = ''; 
-  if (theme === 'none') return; 
+  // 🌟 NEW: Agar settings me Remove Effect on hai, toh particles generate hi mat karo (Saves RAM)
+  if (theme === 'none' || settings.removeEffect) return; 
+  // ... baaki ka code same rahega
+
   
   const isLight = settings.lightMode;
   
@@ -1521,27 +2438,54 @@ function resetCoreTypingState() {
   stopGameEngine();
 }
 
+// ============ VIEW MANAGER (ROUTER) ============
+const ViewManager = {
+    show: function(screenId) {
+        document.querySelectorAll('.app-screen').forEach(screen => {
+            screen.classList.add('hidden');
+        });
+        document.body.classList.remove('tutor-active');
+        const targetScreen = document.getElementById(screenId);
+        if (targetScreen) {
+            targetScreen.classList.remove('hidden');
+        } else {
+            console.error(`ViewManager Error: Screen '${screenId}' not found.`);
+        }
+    }
+};
+
+// ============ LEGACY COMPATIBILITY WRAPPERS ============
 function hideAllScreens() {
-  ['typing-setup-screen', 'tutor-dashboard-screen', 'typing-active-screen', 'typing-result-screen', 'typing-history-screen', 'typing-game-screen'].forEach(id => { 
-      document.getElementById(id).classList.add('hidden'); 
-  });
-  document.body.classList.remove('tutor-active');
+    document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.add('hidden');
+    });
+    document.body.classList.remove('tutor-active');
 }
+
+function hideAppScreens() {
+    document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.add('hidden');
+    });
+    document.body.classList.remove('tutor-active');
+}
+
 
 function resetAppToSetup() {
   resetCoreTypingState(); 
   isTutorMode = false; 
-  hideAllScreens();
-  document.getElementById('typing-setup-screen').classList.remove('hidden');
+  
+  ViewManager.show('typing-setup-screen');
+  
   applySettings(); 
   
   if (document.body.classList.contains('focus-mode-active')) { 
       toggleFocusMode(); 
   } 
-  if(document.fullscreenElement) {
+  if (document.fullscreenElement) {
       document.exitFullscreen();
   }
 }
+
 
 function initializeTypingTest() {
   resetCoreTypingState(); 
@@ -1799,41 +2743,75 @@ function scheduleStatsUpdate() {
     } 
 }
 
+// 1. STATE (Data Store - Current values ko yahan save karenge)
+const TypingState = {
+    wpm: 0,
+    accuracy: 100,
+    mistakes: 0
+};
+
+// 2. LOGIC (Updates State only - Naam same rakha hai taaki app chalti rahe)
 function updateLiveStats() {
   if(!typingStarted || !exactStartTime) return; 
   const mins = (Date.now() - exactStartTime) / 60000; 
   if(mins <= 0) return;
   
   const correct = charIndex - typingMistakes; 
-  const wpm = Math.max(0, Math.round((correct/5)/mins)); 
-  const acc = charIndex > 0 ? Math.round((correct/charIndex)*100) : 100;
   
-  document.getElementById('live-wpm').innerText = wpm; 
-  document.getElementById('live-acc').innerText = acc + '%'; 
-  document.getElementById('live-err').innerText = typingMistakes;
+  // Logic apply karke sirf State object update kar rahe hain
+  TypingState.wpm = Math.max(0, Math.round((correct/5)/mins));
+  TypingState.accuracy = charIndex > 0 ? Math.round((correct/charIndex)*100) : 100;
+  TypingState.mistakes = typingMistakes;
+
+  // State update hone ke baad UI render function ko call karein
+  renderLiveStats(); 
 }
+
+// 3. UI RENDERER (Yeh sirf State ko read karega aur screen update karega)
+function renderLiveStats() {
+  document.getElementById('live-wpm').innerText = TypingState.wpm; 
+  document.getElementById('live-acc').innerText = TypingState.accuracy + '%'; 
+  document.getElementById('live-err').innerText = TypingState.mistakes;
+}
+
 
 function startActiveTypingTimer() {
   clearInterval(typingTimer); 
-  const isNoLimit = !isTutorMode && parseInt(document.getElementById('typing-duration-sel').value) === 0;
+  const durationMins = parseInt(document.getElementById('typing-duration-sel').value);
+  const isNoLimit = !isTutorMode && durationMins === 0;
+  
+  // 🌟 NAYA LOGIC: Test khatam hone ka exact real-world time set kar diya
+  const endTime = exactStartTime + (durationMins * 60000);
+  let lastSampledSecond = 0;
   
   typingTimer = setInterval(() => {
+    const now = Date.now();
+    let currentElapsedSeconds = Math.floor((now - exactStartTime) / 1000);
+    
     if (isNoLimit || isTutorMode) { 
-        typingSecondsLeft++; 
+        // ⏱️ Agar No Limit ya Tutor mode hai toh timer UP jayega
+        typingSecondsLeft = currentElapsedSeconds; 
         updateTypingTimerDisplay(); 
-        secondsTicked++; 
-        if(secondsTicked % 5 === 0) sampleWpm(); 
+        
+        if(currentElapsedSeconds - lastSampledSecond >= 5) {
+            sampleWpm();
+            lastSampledSecond = currentElapsedSeconds;
+        }
     } else { 
-        if(typingSecondsLeft > 0) { 
-            typingSecondsLeft--; 
-            updateTypingTimerDisplay(); 
-            secondsTicked++; 
-            if(secondsTicked % 5 === 0) sampleWpm(); 
-        } else {
+        // ⏱️ Standard Test ke liye timer DOWN jayega (Exact remaining time)
+        typingSecondsLeft = Math.max(0, Math.floor((endTime - now) / 1000));
+        updateTypingTimerDisplay(); 
+        
+        if(currentElapsedSeconds - lastSampledSecond >= 5) {
+            sampleWpm();
+            lastSampledSecond = currentElapsedSeconds;
+        }
+        
+        if(typingSecondsLeft <= 0) {
             finishTypingTest(); 
         }
     }
-  }, 1000);
+  }, 1000); // Bhale hi browser isko slow kar de, Date.now() sahi time nikalega
 }
 
 function sampleWpm() { 
@@ -2201,11 +3179,14 @@ function startNextTutorLesson() {
 }
 
 /* ==============================================================
-   🎮 TYPING GAME ENGINE (DOM Based "Asteroid Defense")
+   🎮 TYPING GAME ENGINE (HTML5 Canvas "Asteroid Defense")
 ============================================================== */
 let gameActive = false, gameScore = 0, gameLives = 3, gameTargetScore = 150;
 let activeWords = [], gameSpawnInt, gameLoopRaf, wordsHitCount = 0, wordsMissedCount = 0;
 let gameWordsList = [], gameSpeedMul = 1;
+
+let canvas, ctx; // Canvas variables
+let gameColors = { accent: '#3b82f6', text: '#ffffff' };
 
 function startGameEngine(lesson) {
     hideAllScreens(); 
@@ -2221,13 +3202,28 @@ function startGameEngine(lesson) {
     wordsHitCount = 0; 
     wordsMissedCount = 0;
     
+    // Get current theme colors for Canvas
+    const bodyStyles = getComputedStyle(document.body);
+    gameColors.accent = bodyStyles.getPropertyValue('--accent-primary').trim() || '#3b82f6';
+    gameColors.text = bodyStyles.getPropertyValue('--text-primary').trim() || '#ffffff';
+
     document.getElementById('game-active-title').innerText = lesson.title;
     document.getElementById('game-active-goal').innerText = gameTargetScore + " Pts";
     document.getElementById('game-score').innerText = gameScore;
     document.getElementById('game-lives').innerText = '❤️'.repeat(gameLives);
-    document.getElementById('game-area').innerHTML = '';
     document.getElementById('game-typed-display').innerText = '';
     
+    // 🌟 DYNAMIC CANVAS SETUP
+    const gameArea = document.getElementById('game-area');
+    gameArea.innerHTML = '<canvas id="game-canvas"></canvas>';
+    canvas = document.getElementById('game-canvas');
+    ctx = canvas.getContext('2d');
+    
+    // Set canvas dimensions to match the container
+    canvas.width = gameArea.clientWidth;
+    canvas.height = gameArea.clientHeight;
+    window.addEventListener('resize', resizeCanvas);
+
     const hiddenInput = document.getElementById('game-hidden-input');
     hiddenInput.value = ''; 
     hiddenInput.focus();
@@ -2237,7 +3233,7 @@ function startGameEngine(lesson) {
         if(e.key === ' ') { 
             hiddenInput.value = ''; 
             document.getElementById('game-typed-display').innerText = ''; 
-            playErrorSound(); 
+            if(typeof playErrorSound === 'function') playErrorSound(); 
         } 
     };
     
@@ -2246,39 +3242,65 @@ function startGameEngine(lesson) {
     gameLoopRaf = requestAnimationFrame(updateGameLoop);
 }
 
+function resizeCanvas() {
+    if(!gameActive || !canvas) return;
+    const gameArea = document.getElementById('game-area');
+    canvas.width = gameArea.clientWidth;
+    canvas.height = gameArea.clientHeight;
+}
+
 function spawnGameWord() {
-    if(!gameActive) return;
+    if(!gameActive || !ctx) return;
+    
+    ctx.font = "bold 18px 'JetBrains Mono', monospace";
     let wordText = gameWordsList[Math.floor(Math.random() * gameWordsList.length)];
-    let wordEl = document.createElement('div'); 
-    wordEl.className = 'falling-word'; 
-    wordEl.innerText = wordText;
-    wordEl.style.left = Math.floor(Math.random() * 70) + 10 + '%'; 
-    wordEl.style.top = '-30px';
-    document.getElementById('game-area').appendChild(wordEl);
+    let textWidth = ctx.measureText(wordText).width;
+    
+    // Ensure word spawns within canvas bounds
+    let minX = 10;
+    let maxX = canvas.width - textWidth - 20;
+    let randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
     
     let baseSpeed = (Math.random() * 0.5 + 0.3) * gameSpeedMul;
-    activeWords.push({ el: wordEl, text: wordText, y: -30, speed: baseSpeed });
+    // activeWords mein DOM element ki jagah sirf X, Y coordinates save kar rahe hain
+    activeWords.push({ text: wordText, x: randomX, y: -30, speed: baseSpeed, width: textWidth });
 }
 
 function updateGameLoop() {
-    if(!gameActive) return;
-    let areaHeight = document.getElementById('game-area').clientHeight;
+    if(!gameActive || !ctx) return;
+    
+    // Clear previous frame (har frame par purani drawing mitaani padti hai)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     for(let i = activeWords.length - 1; i >= 0; i--) {
         let w = activeWords[i]; 
         w.y += w.speed; 
-        w.el.style.top = w.y + 'px';
         
-        if(w.y > areaHeight - 35) {
-            w.el.remove(); 
+        // Draw the glowing box
+        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        ctx.strokeStyle = gameColors.accent;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(w.x - 10, w.y - 20, w.width + 20, 30, 8); // Box logic
+        ctx.fill();
+        ctx.stroke();
+        
+        // Draw the text inside the box
+        ctx.fillStyle = gameColors.text;
+        ctx.font = "bold 16px 'JetBrains Mono', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText(w.text, w.x, w.y);
+        
+        // Collision detection (jab word zameen par gire)
+        if(w.y > canvas.height + 10) {
             activeWords.splice(i, 1);
             gameLives--; 
             wordsMissedCount++;
             
             document.getElementById('game-lives').innerText = '❤️'.repeat(Math.max(0, gameLives)) + (gameLives<=0 ? '💔' : '');
-            playErrorSound();
-            document.getElementById('game-area').style.boxShadow = 'inset 0 0 40px rgba(255,0,0,0.8)';
+            if(typeof playErrorSound === 'function') playErrorSound();
             
+            document.getElementById('game-area').style.boxShadow = 'inset 0 0 40px rgba(255,0,0,0.8)';
             setTimeout(()=> { 
                 if(document.getElementById('game-area')) {
                     document.getElementById('game-area').style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.8)'; 
@@ -2302,8 +3324,8 @@ function handleGameInput(e) {
     let matchIdx = activeWords.findIndex(w => w.text.toLowerCase() === val);
     if(matchIdx > -1) {
         let w = activeWords[matchIdx];
-        w.el.classList.add('exploding'); 
-        setTimeout(() => w.el.remove(), 200);
+        
+        // Target match hone par array se hata do
         activeWords.splice(matchIdx, 1);
         
         wordsHitCount++; 
@@ -2312,7 +3334,7 @@ function handleGameInput(e) {
         
         e.target.value = ''; 
         document.getElementById('game-typed-display').innerText = '';
-        playCorrectSound();
+        if(typeof playCorrectSound === 'function') playCorrectSound();
         
         if(gameScore >= gameTargetScore) finishGame(true);
     }
@@ -2322,9 +3344,18 @@ function stopGameEngine() {
     gameActive = false; 
     clearInterval(gameSpawnInt); 
     cancelAnimationFrame(gameLoopRaf);
+    window.removeEventListener('resize', resizeCanvas);
+    
+    const gameArea = document.getElementById('game-area');
+    if (gameArea) gameArea.innerHTML = ''; 
+    activeWords = []; 
+    
     let hInput = document.getElementById('game-hidden-input'); 
-    hInput.oninput = null; 
-    hInput.onkeydown = null;
+    if (hInput) {
+        hInput.oninput = null; 
+        hInput.onkeydown = null;
+        hInput.value = ''; 
+    }
 }
 
 function abortGame() { 
@@ -2336,7 +3367,8 @@ function abortGame() {
 
 function finishGame(passed) {
     stopGameEngine(); 
-    registerTutorActivity();
+    if(typeof registerTutorActivity === 'function') registerTutorActivity();
+    
     let lesson = tutorCurrentLessonData;
     let msg = ""; let rankColor = "#a3e635"; let rankTitle = "VICTORY!";
     
@@ -2353,9 +3385,10 @@ function finishGame(passed) {
         msg = `Goal not met! Required: ${lesson.targetScore} Points.\nYour Score: ${gameScore} Pts.`;
         document.getElementById('btn-tutor-next').classList.add('hidden');
     }
-    saveTutorData();
+    if(typeof saveTutorData === 'function') saveTutorData();
     showResultScreen("Mini-Game Over", lesson.title, "Game Status", rankTitle, rankColor, msg, { isGame: true, score: gameScore, lives: gameLives, wordsHit: wordsHitCount, wordsMissed: wordsMissedCount }, true);
 }
+
 
 /* ==============================================================
    📊 DATA ENTRY DEDICATED TRAINING MODULE (ISOLATED & FINAL)
@@ -2375,22 +3408,23 @@ const DataEntryApp = (function() {
   function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function randNum(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
   function genID(prefix) { return `${prefix}-${randNum(1000,9999)}`; }
-
+  // 🛡️ SECURITY: Sanitize user input to prevent XSS attacks
+  function escapeHTML(str) {
+      return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+  }
+  
   let state = {
     active: false, timerInt: null, timeTotal: 0, timeLeft: 0,
     referenceData: [], columns: [], cellsTotal: 0, cellsFilled: 0, errorsFound: [],
     stats: { bestAcc: 0, bestCpm: 0, totalCells: 0, sessions: 0 }
   };
 
-  function hideAppScreens() {
-    ['typing-setup-screen', 'tutor-dashboard-screen', 'typing-active-screen', 'typing-result-screen', 'typing-history-screen', 'typing-game-screen'].forEach(id => { 
-        let el = document.getElementById(id); if(el) el.classList.add('hidden'); 
-    });
-    ['de-dashboard-screen', 'de-active-screen', 'de-result-screen'].forEach(id => {
-        let el = document.getElementById(id); if(el) el.classList.add('hidden');
-    });
-  }
-
+  
   function loadStats() {
     try { const saved = JSON.parse(localStorage.getItem('DE_Stats') || '{}'); if(saved.sessions) state.stats = saved; } catch(e){}
     document.getElementById('de-dash-acc').innerText = state.stats.bestAcc + '%';
@@ -2413,7 +3447,7 @@ const DataEntryApp = (function() {
       const rawData = document.getElementById('de-custom-excel-input').value.trim();
       if(!rawData) { alert("Please paste your Excel data first!"); throw new Error("No Data"); }
       
-      const lines = rawData.split('\n');
+      const lines = rawData.split(/\r?\n/);
       const headers = lines[0].split('\t'); // Excel automatically uses Tabs (\t)
       
       headers.forEach((h, i) => cols.push({ key: 'c'+i, title: h.trim() || 'Col '+(i+1) }));
@@ -2475,10 +3509,13 @@ const DataEntryApp = (function() {
   }
 
 
-  // 1. UPDATED RENDER TABLES (Strict Character Block ke sath)
-  function renderTables() {
+  // YAHAN HAIN SINGLE TABLE + GREEN FONT + GLIDING CURSOR
+   function renderTables() {
     let headerHTML = `<tr><th class="row-num">#</th>`;
-    state.columns.forEach(c => { headerHTML += `<th>${c.title}</th>`; });
+    state.columns.forEach(c => { 
+        // 🔒 Header ko secure kiya
+        headerHTML += `<th>${escapeHTML(c.title)}</th>`; 
+    });
     headerHTML += `</tr>`;
     
     let entryHTML = headerHTML;
@@ -2489,7 +3526,8 @@ const DataEntryApp = (function() {
         let expectedVal = String(row[c.key]).trim();
         entryHTML += `<td>
           <div class="de-cell-wrap">
-            <span class="de-bg-text">${expectedVal}</span>
+            <!-- 🔒 Background text ko secure kiya -->
+            <span class="de-bg-text">${escapeHTML(expectedVal)}</span>
             <input type="text" class="de-input" data-row="${rIdx}" data-col="${cIdx}" autocomplete="off" spellcheck="false">
           </div>
         </td>`; 
@@ -2499,31 +3537,63 @@ const DataEntryApp = (function() {
 
     document.getElementById('de-entry-table').innerHTML = entryHTML;
 
+    
+
+    // Reset glider on new table render
+    const glider = document.getElementById('de-glider');
+    if(glider) glider.style.opacity = '0';
+
     document.querySelectorAll('.de-input').forEach(inp => {
-      inp._lastValid = ""; // Pata lagane ke liye ki aakhiri sahi text kya tha
+      inp._lastValid = "";
       inp.addEventListener('keydown', handleCellNav);
       
+      // 🌟 NEW: SMOOTH GLIDING CELL ANIMATION
+      inp.addEventListener('focus', function(e) {
+        const wrap = document.getElementById('de-entry-wrapper');
+        if (glider && wrap) {
+            glider.style.opacity = '1';
+            const td = e.target.closest('td');
+            const tRect = td.getBoundingClientRect();
+            const wRect = wrap.getBoundingClientRect();
+            
+            // Calculate exact position relative to wrapper's scroll
+            const top = tRect.top - wRect.top + wrap.scrollTop;
+            const left = tRect.left - wRect.left + wrap.scrollLeft;
+            
+            glider.style.width = tRect.width + 'px';
+            glider.style.height = tRect.height + 'px';
+            glider.style.transform = `translate(${left}px, ${top}px)`;
+        }
+      });
+      
+      inp.addEventListener('blur', function() {
+        // Agar table ke bahar click kiya toh glider hide kar do
+        setTimeout(() => {
+            if (!document.activeElement.classList.contains('de-input')) {
+                if(glider) glider.style.opacity = '0';
+            }
+        }, 10);
+      });
+
       inp.addEventListener('input', function(e) {
         const r = parseInt(inp.dataset.row);
         const c = parseInt(inp.dataset.col);
         const expected = String(state.referenceData[r][state.columns[c].key]).trim();
         const val = inp.value;
         
-        // 🚨 STRICT BLOCK: Agar galat type kiya toh turant delete karke piche fek do
         if (!expected.startsWith(val)) {
-          inp.value = inp._lastValid; // Purana sahi text wapas daal do
+          inp.value = inp._lastValid; 
           inp.classList.add('error');
-          setTimeout(() => inp.classList.remove('error'), 150); // Red flash
+          setTimeout(() => inp.classList.remove('error'), 150); 
           if(typeof playErrorSound === 'function') playErrorSound();
-          return; // Aage mat badho
+          return; 
         }
 
-        // Agar sahi type kiya
         if (val.length > inp._lastValid.length && typeof playCorrectSound === 'function') {
-          playCorrectSound(); // Typo sound
+          playCorrectSound(); 
         }
 
-        inp._lastValid = val; // Naya valid state update kar do
+        inp._lastValid = val; 
 
         if (val === expected) {
           inp.classList.add('correct');
@@ -2535,6 +3605,7 @@ const DataEntryApp = (function() {
     });
   }
 
+
   // 2. UPDATED CELL NAVIGATION (Strict Cell Lock ke sath)
   function handleCellNav(e) {
     if(!state.active) return;
@@ -2543,13 +3614,17 @@ const DataEntryApp = (function() {
     const expected = String(state.referenceData[r][state.columns[c].key]).trim();
 
     // 🚨 CELL LOCK: Jab tak current cell poora 'sahi' type nahi hota, TAB/ENTER se aage mat badhne do
-    if ((e.key === 'Tab' || e.key === 'Enter') && e.target.value !== expected) {
-        e.preventDefault();
-        e.target.classList.add('error');
-        setTimeout(() => e.target.classList.remove('error'), 150);
-        if(typeof playErrorSound === 'function') playErrorSound();
-        return;
-    }
+    // ISKO HATA DO YA COMMENT KAR DO:
+/*
+if ((e.key === 'Tab' || e.key === 'Enter') && e.target.value !== expected) {
+    e.preventDefault();
+    e.target.classList.add('error');
+    setTimeout(() => e.target.classList.remove('error'), 150);
+    if(typeof playErrorSound === 'function') playErrorSound();
+    return;
+}
+*/
+
 
     let targetR = r, targetC = c, move = false;
 
@@ -2618,15 +3693,17 @@ const DataEntryApp = (function() {
     document.getElementById('de-res-errRate').innerText = errRate + '%';
 
     const errList = document.getElementById('de-error-list'); errList.innerHTML = '';
-    if(state.errorsFound.length === 0) {
+        if(state.errorsFound.length === 0) {
       errList.innerHTML = `<div style="color:var(--type-correct); font-weight:700;">Flawless! No errors detected.</div>`;
       document.getElementById('de-btn-review').classList.add('hidden');
     } else {
       document.getElementById('de-btn-review').classList.remove('hidden');
       state.errorsFound.forEach(err => {
-        errList.innerHTML += `<div class="de-review-card"><div style="color:var(--text-secondary); font-size:0.75rem; margin-bottom:5px;">Row ${err.row} | Column: ${err.colName}</div><div>Expected: <span class="de-review-expected">${err.expected}</span></div><div>Entered: <span class="de-review-entered">${err.entered}</span></div></div>`;
+        // 🔒 Error details ko secure kiya
+        errList.innerHTML += `<div class="de-review-card"><div style="color:var(--text-secondary); font-size:0.75rem; margin-bottom:5px;">Row ${err.row} | Column: ${escapeHTML(err.colName)}</div><div>Expected: <span class="de-review-expected">${escapeHTML(err.expected)}</span></div><div>Entered: <span class="de-review-entered">${escapeHTML(err.entered)}</span></div></div>`;
       });
     }
+
 
     hideAppScreens();
     document.getElementById('de-error-container').classList.add('hidden');
@@ -2672,7 +3749,1021 @@ const DataEntryApp = (function() {
 
   
 })();
+    // ==========================================
+    // 📜 MISSING HISTORY FUNCTIONS (Fix for ReferenceError)
+    // ==========================================
+    function openTypingHistoryModal() {
+        hideAllScreens();
+        document.getElementById('typing-history-screen').classList.remove('hidden');
+        renderTypingHistory();
+    }
 
+    function backToTypingSetup() {
+        hideAllScreens();
+        document.getElementById('typing-setup-screen').classList.remove('hidden');
+    }
+
+    function clearTypingHistory() {
+        if(confirm("Are you sure you want to delete all typing history?")) {
+            localStorage.removeItem('StandaloneTypingHistory');
+            renderTypingHistory(); // UI ko refresh karne ke liye
+        }
+    }
+
+    function renderTypingHistory() {
+        const container = document.getElementById('typing-history-list-container');
+        let history = [];
+        try {
+            history = JSON.parse(localStorage.getItem('StandaloneTypingHistory') || '[]');
+        } catch(e) {}
+
+        container.innerHTML = '';
+        if(history.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding: 20px;">No performance history found. Take a test first!</p>';
+            return;
+        }
+
+        history.forEach(record => {
+            let div = document.createElement('div');
+            div.style.background = 'rgba(0,0,0,0.4)';
+            div.style.border = '1px solid var(--glass-border)';
+            div.style.padding = '15px';
+            div.style.marginBottom = '10px';
+            div.style.borderRadius = '12px';
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <strong style="color:var(--text-primary); font-size: 0.95rem;">${record.date}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.85rem; font-weight: 600;">${record.level} (${record.duration})</span>
+                </div>
+                <div style="display:flex; gap:15px; font-family:'JetBrains Mono', monospace; font-size: 0.9rem;">
+                    <span style="color:var(--accent-primary);">WPM: ${record.wpm}</span>
+                    <span style="color:var(--type-correct);">Acc: ${record.accuracy}</span>
+                    <span style="color:var(--text-secondary);">KDPH: ${record.kdph}</span>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+    
+    // ==========================================
+    // 🚪 PUBLIC API EXPORTS
+    // ==========================================
+    // HTML buttons ko jo functions chahiye, sirf unhe 'window' par expose kar rahe hain.
+    // Baaki saare variables aur functions ab puri tarah se secured aur hidden hain.
+    
+    window.toggleLightMode = toggleLightMode;
+    window.openSettingsModal = openSettingsModal;
+    window.closeSettingsModal = closeSettingsModal;
+    window.applySettingsFromModal = applySettingsFromModal;
+    window.toggleCustomTextarea = toggleCustomTextarea;
+    window.initializeTypingTest = initializeTypingTest;
+    window.toggleFocusMode = toggleFocusMode;
+    window.focusTypingInput = focusTypingInput;
+    window.resetAppToSetup = resetAppToSetup;
+    window.finishTypingTestEarly = finishTypingTestEarly;
+    window.clearTypingHistory = clearTypingHistory;
+    window.openTypingHistoryModal = openTypingHistoryModal;
+    window.backToTypingSetup = backToTypingSetup;
+    window.openTutorDashboard = openTutorDashboard;
+    window.backToTypingSetupFromTutor = backToTypingSetupFromTutor;
+    window.startCurrentTutorLesson = startCurrentTutorLesson;
+    window.startNextTutorLesson = startNextTutorLesson;
+    window.generateWeakKeyDrill = generateWeakKeyDrill;
+    window.abortGame = abortGame;
+    
+     // DataEntryApp pehle se isolated module hai, usko bhi public kar diya
+    window.DataEntryApp = DataEntryApp; 
+
+// 🛡️ Protective Bubble End
+})(window);
+/* =========================================================
+   🎮 TYPING GAMES ENGINE — SONIC BOOM UPGRADE
+========================================================= */
+
+class SpaceTyperGame {
+    constructor(difficulty, parentModule) {
+        this.parent = parentModule;
+        this.difficulty = difficulty;
+        this.canvas = document.getElementById('arcadeCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.state = 'INIT'; 
+        this.score = 0;
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.keystrokes = 0;
+        this.correctKeystrokes = 0;
+        this.wpm = 0;
+        this.startTime = 0;
+        this.pausedTime = 0;
+        this.lastFrameTime = 0;
+        this.loopReq = null;
+        
+        this.enemies = [];
+        this.particles = [];
+        this.bullets = []; 
+        this.stars = this.initStars(80);
+        this.spawnTimer = 0;
+        this.currentInput = "";
+        this.targetedEnemy = null;
+        
+        // 💥 SONIC BOOM VARIABLES
+        this.sonicCharge = 0;
+        this.sonicMax = 10; // 10 word kill par full
+        this.sonicWaves = []; // Shockwave animation store karne ke liye
+        
+        this.words = {
+            easy: ["cat", "book", "road", "time", "work", "fast", "space", "light", "fire", "moon"],
+            medium: ["planet", "rocket", "future", "school", "typing", "system", "energy", "meteor", "shield", "laser"],
+            hard: ["technology", "adventure", "challenge", "important", "beautiful", "satellite", "gravity", "universe"],
+            extreme: ["determination", "responsibility", "extraordinary", "concentration", "achievement", "interstellar"]
+        };
+
+        this.config = this.getDifficultyConfig(difficulty);
+        
+        this.loopBind = this.gameLoop.bind(this);
+        this.keydownBind = this.handleKeyDown.bind(this); 
+        this.resizeBind = this.resize.bind(this);
+    }
+
+    getDifficultyConfig(diff) {
+        const configs = {
+            easy: { speed: 0.4, spawnRate: 2500, multiplier: 1, list: this.words.easy },
+            medium: { speed: 0.8, spawnRate: 2000, multiplier: 2, list: [...this.words.easy, ...this.words.medium] },
+            hard: { speed: 1.2, spawnRate: 1500, multiplier: 3.5, list: [...this.words.medium, ...this.words.hard] },
+            extreme: { speed: 1.8, spawnRate: 1000, multiplier: 5, list: [...this.words.hard, ...this.words.extreme] }
+        };
+        return configs[diff] || configs.medium;
+    }
+
+    initStars(count) {
+        let stars = [];
+        for(let i=0; i<count; i++) {
+            stars.push({ x: Math.random() * 1200, y: Math.random() * 800, size: Math.random() * 2, speed: Math.random() * 0.5 + 0.1, alpha: Math.random() });
+        }
+        return stars;
+    }
+
+    start() {
+        this.resize();
+        window.addEventListener('resize', this.resizeBind);
+        window.addEventListener('keydown', this.keydownBind);
+        this.updateHUD();
+        this.startCountdown();
+    }
+
+    resize() {
+        if(this.canvas && this.canvas.parentElement) {
+            this.canvas.width = this.canvas.parentElement.clientWidth;
+            this.canvas.height = this.canvas.parentElement.clientHeight;
+        }
+    }
+
+    startCountdown() {
+        this.state = 'COUNTDOWN';
+        const overlay = document.getElementById('gameCountdownOverlay');
+        const countText = document.getElementById('countdownNumber');
+        overlay.classList.remove('hidden'); 
+        overlay.style.display = 'flex';
+        
+        let count = 3;
+        countText.innerText = count;
+        this.playSound(600, 'sine', 0.1);
+        
+        let intv = setInterval(() => {
+            if(this.state === 'EXIT') { clearInterval(intv); return; } 
+            count--;
+            if(count > 0) {
+                countText.innerText = count;
+                this.playSound(600, 'sine', 0.1);
+            } else if(count === 0) {
+                countText.innerText = "GO!";
+                this.playSound(1000, 'square', 0.2);
+            } else {
+                clearInterval(intv);
+                overlay.classList.add('hidden'); 
+                overlay.style.display = 'none';
+                this.beginGameplay();
+            }
+        }, 1000);
+    }
+
+    beginGameplay() {
+        this.state = 'PLAYING';
+        this.startTime = Date.now();
+        this.lastFrameTime = performance.now();
+        this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    pause() {
+        if(this.state !== 'PLAYING') return;
+        this.state = 'PAUSED';
+        this.pausedTime = Date.now();
+        if(this.loopReq) cancelAnimationFrame(this.loopReq); 
+        
+        const pauseOverlay = document.getElementById('gamePauseOverlay');
+        pauseOverlay.classList.remove('hidden'); 
+        pauseOverlay.style.display = 'flex';
+    }
+
+    resume() {
+        if(this.state !== 'PAUSED') return;
+        this.state = 'PLAYING';
+        this.startTime += (Date.now() - this.pausedTime); 
+        this.lastFrameTime = performance.now();
+        
+        const pauseOverlay = document.getElementById('gamePauseOverlay');
+        pauseOverlay.classList.add('hidden'); 
+        pauseOverlay.style.display = 'none';
+        
+        this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    spawnEnemy() {
+        const word = this.config.list[Math.floor(Math.random() * this.config.list.length)];
+        this.ctx.font = "bold 16px 'JetBrains Mono'";
+        const width = this.ctx.measureText(word).width + 30;
+        const x = Math.max(10, Math.random() * (this.canvas.width - width - 10));
+        
+        this.enemies.push({
+            id: Math.random().toString(36).substr(2, 9),
+            word: word, typed: "", x: x, y: -40, width: width,
+            speed: this.config.speed + (Math.random() * 0.4)
+        });
+    }
+
+    // 🚀 SONIC BOOM TRIGGER LOGIC
+    triggerSonicBoom() {
+        this.sonicCharge = 0;
+        this.combo += this.enemies.length; // Bonus combo for screen clear
+        if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+
+        this.playSound(100, 'sawtooth', 0.4, 20); // Deep Shockwave rumble
+        this.playSound(2000, 'sine', 0.2, 50);    // High pitch screech
+        this.screenShake(25); 
+
+        // Create Massive Expanding Wave
+        this.sonicWaves.push({
+            x: this.canvas.width / 2,
+            y: this.canvas.height - 35,
+            radius: 10,
+            maxRadius: this.canvas.width * 1.5,
+            alpha: 1.0
+        });
+
+        // Destroy All Enemies Instantly
+        for(let i = this.enemies.length - 1; i >= 0; i--) {
+            let en = this.enemies[i];
+            this.score += Math.round(en.word.length * 10 * this.config.multiplier);
+            this.createExplosion(en.x + en.width/2, en.y + 15, '#00ffcc', 30, 15);
+            this.enemies.splice(i, 1);
+        }
+
+        this.targetedEnemy = null;
+        this.currentInput = "";
+        this.updateHUD();
+    }
+
+    handleKeyDown(e) {
+        if(this.state !== 'PLAYING') return;
+        if(e.key === 'Escape') { this.pause(); return; }
+        
+        // 🚀 SPACEBAR LOGIC FOR SONIC BOOM
+        if(e.key === ' ') {
+            e.preventDefault();
+            if(this.sonicCharge >= this.sonicMax) {
+                this.triggerSonicBoom();
+            } else {
+                // Not charged enough - Error sound
+                this.playSound(200, 'sawtooth', 0.1, 150);
+            }
+            return;
+        }
+
+        if(e.key === 'Backspace') {
+            e.preventDefault();
+            if(this.currentInput.length > 0) {
+                this.currentInput = this.currentInput.slice(0, -1);
+                if(this.targetedEnemy) this.targetedEnemy.typed = this.currentInput;
+                if(this.currentInput.length === 0) this.targetedEnemy = null;
+            }
+            return;
+        }
+
+        if(e.key.length !== 1 || !/[a-zA-Z]/.test(e.key)) return;
+        
+        e.preventDefault(); 
+        const char = e.key.toLowerCase();
+        this.keystrokes++;
+
+        if(!this.targetedEnemy) {
+            let potential = this.enemies.filter(en => en.word.startsWith(char));
+            if(potential.length > 0) {
+                potential.sort((a,b) => b.y - a.y);
+                this.targetedEnemy = potential[0];
+            }
+        }
+
+        if(this.targetedEnemy) {
+            let expectedChar = this.targetedEnemy.word[this.currentInput.length];
+            if(char === expectedChar) {
+                this.currentInput += char;
+                this.targetedEnemy.typed = this.currentInput;
+                this.correctKeystrokes++;
+                
+                this.fireBullet(this.targetedEnemy);
+                this.playSound(800, 'square', 0.05, 200);
+                
+                if(this.currentInput === this.targetedEnemy.word) {
+                    this.destroyEnemy(this.targetedEnemy, true);
+                    this.currentInput = "";
+                    this.targetedEnemy = null;
+                }
+            } else {
+                this.combo = 0;
+                this.screenShake(3);
+                this.playSound(150, 'sawtooth', 0.1);
+            }
+        } else {
+            this.combo = 0;
+            this.screenShake(3);
+            this.playSound(150, 'sawtooth', 0.1);
+        }
+        
+        this.updateHUD();
+    }
+
+    fireBullet(target) {
+        let typedWidth = this.ctx.measureText(this.currentInput).width;
+        let shipX = this.canvas.width / 2;
+        let shipY = this.canvas.height - 45; 
+
+        this.bullets.push({
+            x: shipX, y: shipY,
+            tx: target.x + 15 + typedWidth, ty: target.y + 20, 
+            speed: 25, color: '#fef08a', glow: '#f59e0b', size: 3
+        });
+
+        this.createExplosion(shipX, shipY, '#fef08a', 4, 3);
+    }
+
+    destroyEnemy(enemy, killedByPlayer) {
+        const index = this.enemies.indexOf(enemy);
+        if(index > -1) {
+            this.enemies.splice(index, 1);
+            if(killedByPlayer) {
+                this.combo++;
+                if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+                let comboMult = Math.min(5, 1 + Math.floor(this.combo / 5));
+                this.score += Math.round(enemy.word.length * 10 * this.config.multiplier * comboMult);
+                
+                // 💥 INCREASE SONIC CHARGE
+                if(this.sonicCharge < this.sonicMax) {
+                    this.sonicCharge++;
+                }
+
+                this.createExplosion(enemy.x + enemy.width/2, enemy.y + 15, '#f59e0b', 40, 10); 
+                this.createExplosion(enemy.x + enemy.width/2, enemy.y + 15, '#ef4444', 20, 15); 
+                this.playSound(200, 'sawtooth', 0.2, 50); 
+            } else {
+                this.combo = 0;
+                this.lives--;
+                this.createExplosion(enemy.x + enemy.width/2, this.canvas.height, '#ff3333', 30, 8);
+                this.screenShake(10);
+                this.playSound(100, 'sawtooth', 0.3, 50); 
+                if(this.lives <= 0) this.gameOver();
+            }
+        }
+        if(this.targetedEnemy === enemy) {
+            this.targetedEnemy = null;
+            this.currentInput = "";
+        }
+        this.updateHUD();
+    }
+
+    createExplosion(x, y, color, amount, speedMultiplier = 8) {
+        for(let i=0; i<amount; i++) {
+            this.particles.push({
+                x: x, y: y, 
+                vx: (Math.random() - 0.5) * speedMultiplier, 
+                vy: (Math.random() - 0.5) * speedMultiplier, 
+                life: Math.random() * 0.8 + 0.4, 
+                color: Math.random() > 0.5 ? color : '#ffffff', 
+                size: Math.random() * 3 + 1
+            });
+        }
+    }
+
+    screenShake(intensity) {
+        const vp = document.getElementById('gameViewport');
+        vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
+        setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+    }
+
+    updateHUD() {
+        document.getElementById('liveScore').innerText = this.score;
+        document.getElementById('liveLives').innerText = '❤️ '.repeat(Math.max(0, this.lives));
+        document.getElementById('liveCombo').innerText = this.combo + 'x';
+        
+        let mins = (Date.now() - this.startTime) / 60000;
+        if(mins > 0) this.wpm = Math.max(0, Math.round((this.correctKeystrokes / 5) / mins));
+        document.getElementById('liveWpm').innerText = this.wpm;
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        document.getElementById('liveAcc').innerText = acc + '%';
+    }
+
+    gameLoop(timestamp) {
+        if(this.state !== 'PLAYING') return; 
+        
+        let dt = timestamp - this.lastFrameTime;
+        this.lastFrameTime = timestamp;
+
+        const isLight = document.body.classList.contains('light-mode');
+
+        this.ctx.fillStyle = isLight ? '#f8fafc' : '#070709';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.ctx.fillStyle = isLight ? '#cbd5e1' : '#ffffff';
+        this.stars.forEach(s => {
+            s.y += s.speed;
+            if(s.y > this.canvas.height) { s.y = 0; s.x = Math.random() * this.canvas.width; }
+            this.ctx.globalAlpha = s.alpha;
+            this.ctx.beginPath(); this.ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); this.ctx.fill();
+        });
+        this.ctx.globalAlpha = 1.0;
+
+        // 💥 DRAW SONIC WAVES
+        for(let i = this.sonicWaves.length - 1; i >= 0; i--) {
+            let wave = this.sonicWaves[i];
+            wave.radius += 35; // Expansion speed
+            wave.alpha -= 0.02; // Fade out
+
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+            this.ctx.lineWidth = 15;
+            this.ctx.strokeStyle = `rgba(0, 255, 204, ${Math.max(0, wave.alpha)})`;
+            this.ctx.shadowColor = '#00ffcc';
+            this.ctx.shadowBlur = 20;
+            this.ctx.stroke();
+            
+            this.ctx.beginPath();
+            this.ctx.arc(wave.x, wave.y, wave.radius * 0.8, 0, Math.PI * 2);
+            this.ctx.lineWidth = 5;
+            this.ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, wave.alpha * 0.5)})`;
+            this.ctx.stroke();
+            this.ctx.restore();
+
+            if(wave.alpha <= 0) this.sonicWaves.splice(i, 1);
+        }
+
+        this.spawnTimer += dt;
+        if(this.spawnTimer >= this.config.spawnRate) {
+            this.spawnEnemy();
+            this.spawnTimer = 0;
+            if(this.config.spawnRate > 600) this.config.spawnRate -= 5;
+        }
+
+        for(let i = this.enemies.length - 1; i >= 0; i--) {
+            let en = this.enemies[i];
+            let isTarget = (this.targetedEnemy === en);
+            
+            let moveSpeed = isTarget ? (en.speed * 0.25) : en.speed;
+            en.y += moveSpeed * (dt/16);
+
+            this.ctx.fillStyle = isTarget ? 'rgba(59, 130, 246, 0.15)' : (isLight ? '#ffffff' : 'rgba(20, 20, 25, 0.9)');
+            this.ctx.strokeStyle = isTarget ? (isLight ? '#3b82f6' : '#00ffcc') : (isLight ? '#cbd5e1' : '#475569');
+            this.ctx.lineWidth = 1.5;
+            
+            if(isTarget && !isLight) {
+                this.ctx.shadowColor = '#00ffcc';
+                this.ctx.shadowBlur = 15;
+            }
+            
+            this.ctx.beginPath();
+            this.ctx.roundRect(en.x, en.y, en.width, 28, 6);
+            this.ctx.fill();
+            this.ctx.stroke();
+            this.ctx.shadowBlur = 0; 
+
+            this.ctx.font = "bold 15px 'JetBrains Mono'";
+            this.ctx.textAlign = 'left';
+            this.ctx.textBaseline = 'middle';
+            let typedW = this.ctx.measureText(en.typed).width;
+            
+            this.ctx.fillStyle = isTarget ? (isLight ? '#2563eb' : '#00ffcc') : (isLight ? '#3b82f6' : '#00ffcc');
+            this.ctx.fillText(en.typed, en.x + 15, en.y + 14);
+            
+            this.ctx.fillStyle = isTarget ? (isLight ? '#0f172a' : '#ffffff') : '#94a3b8';
+            this.ctx.fillText(en.word.substring(en.typed.length), en.x + 15 + typedW, en.y + 14);
+
+            if(en.y > this.canvas.height - 40) this.destroyEnemy(en, false);
+        }
+
+        let cx = this.canvas.width / 2;
+        let cy = this.canvas.height - 35;
+        
+        const primaryColor = isLight ? '#3b82f6' : '#00ffcc';
+        const bodyColor = isLight ? '#ffffff' : '#0f172a';
+
+        this.ctx.shadowColor = '#f59e0b';
+        this.ctx.shadowBlur = 15;
+        this.ctx.fillStyle = '#f59e0b';
+        this.ctx.beginPath(); this.ctx.arc(cx - 8, cy + 12, 3 + Math.random()*3, 0, Math.PI*2); this.ctx.fill();
+        this.ctx.beginPath(); this.ctx.arc(cx + 8, cy + 12, 3 + Math.random()*3, 0, Math.PI*2); this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.fillStyle = bodyColor;
+        this.ctx.strokeStyle = primaryColor;
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(cx, cy - 22); 
+        this.ctx.lineTo(cx + 20, cy + 10); 
+        this.ctx.lineTo(cx + 8, cy + 8); 
+        this.ctx.lineTo(cx, cy + 12); 
+        this.ctx.lineTo(cx - 8, cy + 8); 
+        this.ctx.lineTo(cx - 20, cy + 10); 
+        this.ctx.closePath();
+        this.ctx.fill();
+        this.ctx.stroke();
+
+        this.ctx.fillStyle = primaryColor;
+        this.ctx.beginPath();
+        this.ctx.ellipse(cx, cy - 6, 3, 7, 0, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        for(let i=this.bullets.length-1; i>=0; i--) {
+            let b = this.bullets[i];
+            let dx = b.tx - b.x; let dy = b.ty - b.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if (dist < b.speed) {
+                this.bullets.splice(i, 1);
+                this.createExplosion(b.tx, b.ty, '#f59e0b', 4, 3); 
+                continue;
+            }
+            let velX = (dx / dist) * b.speed;
+            let velY = (dy / dist) * b.speed;
+            
+            b.x += velX; b.y += velY;
+            
+            this.ctx.shadowColor = b.glow;
+            this.ctx.shadowBlur = 10; 
+            
+            this.ctx.fillStyle = b.color;
+            this.ctx.beginPath();
+            this.ctx.arc(b.x, b.y, b.size, 0, Math.PI*2);
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+            
+            this.ctx.strokeStyle = b.glow;
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(b.x, b.y);
+            this.ctx.lineTo(b.x - velX*1.5, b.y - velY*1.5);
+            this.ctx.stroke();
+        }
+
+        for(let i=this.particles.length-1; i>=0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
+            this.ctx.fillStyle = p.color;
+            this.ctx.globalAlpha = Math.max(0, p.life);
+            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
+            if(p.life <= 0) this.particles.splice(i, 1);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        // 🚀 DRAW SONIC BOOM CHARGE BAR
+        let barWidth = 200;
+        let barHeight = 8;
+        let barX = (this.canvas.width - barWidth) / 2;
+        let barY = this.canvas.height - 15; // Bottom edge
+        
+        this.ctx.fillStyle = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+        this.ctx.beginPath();
+        this.ctx.roundRect(barX, barY, barWidth, barHeight, 4);
+        this.ctx.fill();
+
+        let fillRatio = this.sonicCharge / this.sonicMax;
+        let isReady = fillRatio >= 1;
+        
+        this.ctx.fillStyle = isReady ? '#00ffcc' : '#f59e0b';
+        if(isReady && !isLight) {
+            this.ctx.shadowColor = '#00ffcc';
+            this.ctx.shadowBlur = 10;
+        }
+        this.ctx.beginPath();
+        this.ctx.roundRect(barX, barY, barWidth * fillRatio, barHeight, 4);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.font = "bold 11px 'JetBrains Mono'";
+        this.ctx.fillStyle = isReady ? (isLight ? '#059669' : '#00ffcc') : '#94a3b8';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(isReady ? "SONIC BOOM READY [SPACE]" : "CHARGING...", this.canvas.width/2, barY - 10);
+
+        if(this.state === 'PLAYING') {
+            this.loopReq = requestAnimationFrame(this.loopBind);
+        }
+    }
+
+    gameOver() {
+        this.state = 'GAMEOVER';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        this.playSound(150, 'square', 0.5, 50);
+        this.saveStats();
+        
+        document.getElementById('resScore').innerText = this.score.toLocaleString();
+        document.getElementById('resWpm').innerText = this.wpm;
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        document.getElementById('resAcc').innerText = acc + '%';
+        document.getElementById('resCombo').innerText = this.maxCombo;
+        
+        let secs = Math.floor((Date.now() - this.startTime)/1000);
+        document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+        
+        const modal = document.getElementById('gameResultModal');
+        modal.classList.remove('hidden'); 
+        modal.style.display = 'flex';
+    }
+
+                saveStats() {
+        let scoreKey = `spaceTyper_bestScore_${this.difficulty}`;
+        let wpmKey = `spaceTyper_bestWpm_${this.difficulty}`;
+        
+        // Strict parsing to prevent NaN errors
+        let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
+        let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
+        
+        let badge = document.getElementById('newHighScoreBadge');
+        
+        if(this.score > existingScore) {
+            localStorage.setItem(scoreKey, this.score);
+            if(badge) { badge.style.display = 'inline-block'; badge.classList.remove('hidden'); }
+        } else {
+            if(badge) badge.style.display = 'none';
+        }
+
+        // 🔥 WPM FIX: Safely save new WPM if it's higher or if none existed
+        if(this.wpm > existingWpm || existingWpm === 0) {
+            localStorage.setItem(wpmKey, this.wpm);
+        }
+        
+        // Smart History System
+        let historyKey = 'spaceTyper_GameHistory';
+        let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        let dateStr = new Date().toLocaleString('en-IN', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});
+
+        let currentGameStat = { date: dateStr, score: this.score, wpm: this.wpm, accuracy: acc, diff: this.difficulty.toUpperCase() };
+
+        history.unshift(currentGameStat); 
+        if(history.length > 10) history = history.slice(0, 10); 
+        localStorage.setItem(historyKey, JSON.stringify(history)); 
+        
+        this.parent.loadPersistentStats(); 
+    }
+
+
+    playSound(freq, type, vol, endFreq = null) {
+        if(!this.parent.soundEnabled || !this.parent.audioCtx) return;
+        let ctx = this.parent.audioCtx;
+        if(ctx.state === 'suspended') ctx.resume();
+        let osc = ctx.createOscillator(); let gain = ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        if(endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(vol, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+    }
+
+    cleanup() {
+        this.state = 'EXIT';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        window.removeEventListener('keydown', this.keydownBind);
+        window.removeEventListener('resize', this.resizeBind);
+    }
+}
+// MAIN MODULE MANAGER (With "Coming Soon" Screen for other games)
+class TypingGamesModule {
+    constructor() {
+        this.audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+        this.soundEnabled = true;
+        this.activeGameInstance = null;
+        this.wasLightMode = false;
+        setTimeout(() => { this.bindMenuEvents(); this.loadPersistentStats(); }, 500); 
+    }
+
+    bindMenuEvents() {
+        const sndBtn = document.getElementById('toggleAudioBtn');
+        if(sndBtn) {
+            sndBtn.addEventListener('click', () => {
+                this.soundEnabled = !this.soundEnabled;
+                sndBtn.innerText = `🔊 Sound: ${this.soundEnabled ? 'ON' : 'OFF'}`;
+            });
+        }
+
+        document.querySelectorAll('.play-game-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.game-card');
+                if(card) this.startGame(card.dataset.game, card.querySelector('.game-diff-select').value);
+            });
+        });
+
+        document.getElementById('backToMainFromGames')?.addEventListener('click', () => this.hideGamesDashboard());
+        document.getElementById('exitGameBtn')?.addEventListener('click', () => this.exitToDashboard());
+        document.getElementById('pauseGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.pause === 'function') this.activeGameInstance.pause(); });
+        document.getElementById('resumeGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.resume === 'function') this.activeGameInstance.resume(); });
+        document.getElementById('quitGameBtn')?.addEventListener('click', () => this.exitToDashboard());
+        document.getElementById('restartGameBtn')?.addEventListener('click', () => {
+            if(!this.activeGameInstance) return;
+            let diff = this.activeGameInstance.difficulty;
+            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : null;
+            this.exitToDashboard();
+            if(game) setTimeout(() => this.startGame(game, diff), 100);
+        });
+
+        document.getElementById('backToGamesBtn')?.addEventListener('click', () => {
+            const modal = document.getElementById('gameResultModal');
+            if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+            this.exitToDashboard();
+        });
+
+        document.getElementById('playAgainBtn')?.addEventListener('click', () => {
+            if(!this.activeGameInstance) return;
+            let diff = this.activeGameInstance.difficulty;
+            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : null;
+            const modal = document.getElementById('gameResultModal');
+            if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+            this.exitToDashboard();
+            if(game) setTimeout(() => this.startGame(game, diff), 100);
+        });
+
+        const viewHistoryBtns = Array.from(document.querySelectorAll('button')).filter(b => b.innerText.includes('VIEW HISTORY'));
+        viewHistoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modal = document.getElementById('gameResultModal');
+                if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+                this.showHistoryModal();
+            });
+        });
+    }
+
+    showHistoryModal() {
+        let modal = document.getElementById('spaceTyperHistoryModal');
+        if (modal) { modal.remove(); }
+
+        const modalHTML = `
+        <div id="spaceTyperHistoryModal" class="dest-modal" style="display:flex; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); z-index:9999999; align-items:center; justify-content:center; flex-direction:column; backdrop-filter:blur(10px);">
+            <div class="dest-modal-content" style="background:#0f172a; border:2px solid #3b82f6; padding:30px; border-radius:16px; max-height:85vh; overflow-y:auto; width:90%; max-width:450px; box-shadow:0 0 40px rgba(59,130,246,0.5);">
+                <h2 style="color: #00ffcc; margin-bottom: 20px; font-size: 1.5rem; text-align:center; text-shadow: 0 0 10px rgba(0,255,204,0.5); letter-spacing: 2px; text-transform: uppercase;">Recent Combat Logs</h2>
+                <div id="historyListContainer" style="display:flex; flex-direction:column; gap:12px;"></div>
+                <button onclick="window.typingGamesModule.closeHistoryModal()" class="dest-btn-primary" style="margin-top:25px; width: 100%; border: 1px solid #ef4444; color: #ef4444; font-weight: bold; cursor: pointer; padding: 12px; background: transparent; border-radius: 8px;">CLOSE ARCHIVE</button>
+            </div>
+        </div>`;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        const container = document.getElementById('historyListContainer');
+        let history = JSON.parse(localStorage.getItem('spaceTyper_GameHistory') || '[]');
+
+        if(history.length === 0) {
+            container.innerHTML = '<p style="color:#94a3b8; font-size: 0.9rem; margin: 20px 0; text-align:center;">No combat records found yet. Play a game!</p>';
+        } else {
+            history.forEach(game => {
+                let badgeColor = game.diff === 'EASY' ? '#10b981' : (game.diff === 'MEDIUM' ? '#f59e0b' : (game.diff === 'HARD' ? '#ef4444' : '#a855f7'));
+                container.innerHTML += `
+                <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid ${badgeColor}; padding: 15px; border-radius: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                    <div>
+                        <div style="color: #ffffff; font-weight: 800; font-size: 1.2rem;">${game.score.toLocaleString()} <span style="font-size: 0.7rem; color: #94a3b8; font-weight: normal;">PTS</span></div>
+                        <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 4px;">${game.date} <span style="color:${badgeColor}; font-weight:bold; margin-left:8px;">[${game.diff}]</span></div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: #a855f7; font-weight: 800; font-size: 1.1rem; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">${game.wpm} <span style="font-size: 0.7rem;">WPM</span></div>
+                        <div style="color: #10b981; font-size: 0.85rem; font-weight: bold; margin-top: 2px;">${game.accuracy}% ACC</div>
+                    </div>
+                </div>`;
+            });
+        }
+    }
+
+    closeHistoryModal() {
+        let modal = document.getElementById('spaceTyperHistoryModal');
+        if (modal) { modal.remove(); }
+        
+        let resModal = document.getElementById('gameResultModal');
+        if (resModal) { resModal.classList.add('hidden'); resModal.style.display = 'none'; }
+
+        this.exitToDashboard();
+    }
+
+    loadPersistentStats() {
+        const card = document.querySelector('.game-card[data-game="spaceTyper"]');
+        if(card) {
+            const diff = card.querySelector('.game-diff-select').value;
+            const bestScore = localStorage.getItem(`spaceTyper_bestScore_${diff}`) || '0';
+            const bestWpm = localStorage.getItem(`spaceTyper_bestWpm_${diff}`) || '0';
+            
+            let scoreElem = card.querySelector('.stat-score');
+            let wpmElem = card.querySelector('.stat-wpm');
+            
+            if(scoreElem) scoreElem.innerText = bestScore;
+            if(wpmElem) {
+                wpmElem.innerText = bestWpm;
+            } else {
+                const previewDiv = card.querySelector('.game-stats-preview');
+                if(previewDiv) {
+                    previewDiv.innerHTML = `<b>Best Score: <span class="stat-score">${bestScore}</span></b> <b>Best WPM: <span class="stat-wpm">${bestWpm}</span></b>`;
+                }
+            }
+        }
+        
+        document.querySelectorAll('.game-diff-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                const pCard = e.target.closest('.game-card');
+                if(pCard && pCard.dataset.game === 'spaceTyper') {
+                    const diff = e.target.value;
+                    const bScore = localStorage.getItem(`spaceTyper_bestScore_${diff}`) || '0';
+                    const bWpm = localStorage.getItem(`spaceTyper_bestWpm_${diff}`) || '0';
+                    
+                    let sElem = pCard.querySelector('.stat-score');
+                    let wElem = pCard.querySelector('.stat-wpm');
+                    
+                    if(sElem) sElem.innerText = bScore;
+                    if(wElem) { wElem.innerText = bWpm; } 
+                    else {
+                        const previewDiv = pCard.querySelector('.game-stats-preview');
+                        if(previewDiv) { previewDiv.innerHTML = `<b>Best Score: <span class="stat-score">${bScore}</span></b> <b>Best WPM: <span class="stat-wpm">${bWpm}</span></b>`; }
+                    }
+                }
+            });
+        });
+    }
+
+    showGamesDashboard() {
+        if (document.body.classList.contains('light-mode')) {
+            this.wasLightMode = true; 
+            document.body.classList.remove('light-mode'); 
+            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode'));
+            if(themeBtn) themeBtn.innerHTML = '☀️ Light Mode'; 
+        }
+
+        const mainApp = document.getElementById('main-app-container');
+        if (mainApp) mainApp.style.display = 'none';
+
+        document.getElementById('activeGameArena').classList.add('hidden');
+        document.getElementById('activeGameArena').style.display = 'none';
+        
+        const dash = document.getElementById('typingGamesModule');
+        dash.classList.remove('hidden'); dash.style.display = 'block';
+        this.loadPersistentStats();
+    }
+
+        hideGamesDashboard() {
+        // 🔥 WAPAS LIGHT MODE MEIN BHEJO (Agar pehle tha)
+        if (this.wasLightMode) {
+            document.body.classList.add('light-mode');
+            this.wasLightMode = false;
+            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode'));
+            if(themeBtn) themeBtn.innerHTML = '🌙 Dark Mode'; 
+        }
+
+        // 1. Games Dashboard chhupao
+        document.getElementById('typingGamesModule').classList.add('hidden');
+        document.getElementById('typingGamesModule').style.display = 'none';
+        
+        // 2. Main App Container wapas lao
+        const mainApp = document.getElementById('main-app-container');
+        if (mainApp) mainApp.style.display = '';
+
+        // 3. 🛑 THE ULTIMATE FIX 🛑
+        // Saare inline display styles hata do taaki app ke apne buttons wapas kaam karein.
+        document.querySelectorAll('.app-screen').forEach(s => {
+            s.style.display = ''; // Inline style clear kar diya
+            s.classList.add('hidden'); // Sabko CSS class se hide kar diya
+        });
+        
+        // Sirf aur sirf Main Setup screen ko visible rakho
+        const setupScreen = document.getElementById('typing-setup-screen');
+        if(setupScreen) {
+            setupScreen.classList.remove('hidden');
+        }
+    }
+
+
+    // 🚀 UPDATED: STARTS GAME OR SHOWS "COMING SOON"
+    startGame(gameKey, difficulty) {
+        if(this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume();
+        
+        if (document.body.classList.contains('light-mode')) {
+            this.wasLightMode = true;
+            document.body.classList.remove('light-mode');
+        }
+
+        const mainApp = document.getElementById('main-app-container');
+        if (mainApp) mainApp.style.display = 'none';
+        
+        document.getElementById('typingGamesModule').style.display = 'none';
+        
+        const arena = document.getElementById('activeGameArena');
+        if(arena) {
+            arena.classList.remove('hidden'); 
+            arena.style.display = 'block';
+        }
+        
+        if(this.activeGameInstance) {
+            if(typeof this.activeGameInstance.cleanup === 'function') {
+                this.activeGameInstance.cleanup();
+            }
+            this.activeGameInstance = null;
+        }
+
+        const statsBar = document.querySelector('.arena-stats');
+        
+        // Agar Space Typer hai, toh normally start karo
+        if(gameKey === 'spaceTyper') {
+            if(statsBar) statsBar.style.display = 'flex'; // Stats dikhao
+            document.getElementById('arenaGameTitle').innerText = `SPACE TYPER`;
+            document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
+            this.activeGameInstance = new SpaceTyperGame(difficulty, this);
+            this.activeGameInstance.start();
+        } 
+        // Baaki sabhi games ke liye COMING SOON screen
+        else {
+            if(statsBar) statsBar.style.display = 'none'; // Stats chupao
+            
+            // Game ka naam format karne ke liye (e.g. "wordRush" -> "WORD RUSH")
+            let displayTitle = gameKey.replace(/([A-Z])/g, ' $1').trim().toUpperCase();
+            
+            document.getElementById('arenaGameTitle').innerText = displayTitle;
+            
+            // 🚧 Coming Soon UI Template
+            document.getElementById('gameCanvasLayer').innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; background: #070709; color: #fff; text-align: center; padding: 20px; box-sizing: border-box; position: absolute; top:0; left:0; z-index: 100;">
+                    <div style="font-size: 5rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,204,0.5));">🚧</div>
+                    <h1 style="color: #00ffcc; font-size: 2.2rem; font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 0 20px rgba(0,255,204,0.6);">Coming Soon</h1>
+                    <p style="color: #94a3b8; font-size: 1rem; max-width: 80%; line-height: 1.6; margin-bottom: 30px;">${displayTitle} is currently in development. It will be available in the next big update!</p>
+                    <button onclick="window.typingGamesModule.exitToDashboard()" style="padding: 12px 30px; font-size: 1rem; font-weight: bold; border: 2px solid #3b82f6; background: rgba(59,130,246,0.1); color: #3b82f6; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(59,130,246,0.3); transition: all 0.3s;">GO BACK</button>
+                </div>
+            `;
+        }
+    }
+
+    exitToDashboard() {
+        if(this.activeGameInstance && typeof this.activeGameInstance.cleanup === 'function') {
+            this.activeGameInstance.cleanup(); 
+            this.activeGameInstance = null;
+        }
+        
+        const pauseOverlay = document.getElementById('gamePauseOverlay');
+        if(pauseOverlay) { pauseOverlay.classList.add('hidden'); pauseOverlay.style.display = 'none'; }
+        
+        const resultModal = document.getElementById('gameResultModal');
+        if(resultModal) { resultModal.classList.add('hidden'); resultModal.style.display = 'none'; }
+        
+        this.showGamesDashboard();
+    }
+}
+
+window.typingGamesModule = new TypingGamesModule();
+
+// =========================================================
+// 🚀 FIX: FORCE RESULT MODAL BUTTONS TO WORK
+// =========================================================
+setTimeout(() => {
+    // 1. PLAY AGAIN BUTTON
+    document.getElementById('playAgainBtn').onclick = function() {
+        document.getElementById('gameResultModal').classList.add('hidden');
+        document.getElementById('gameResultModal').style.display = 'none';
+        
+        let diff = window.typingGamesModule.activeGameInstance ? window.typingGamesModule.activeGameInstance.difficulty : 'medium';
+        window.typingGamesModule.exitToDashboard();
+        
+        // Thoda delay dekar game wapas start karein
+        setTimeout(() => window.typingGamesModule.startGame('spaceTyper', diff), 150);
+    };
+
+    // 2. BACK TO GAMES BUTTON
+    document.getElementById('backToGamesBtn').onclick = function() {
+        document.getElementById('gameResultModal').classList.add('hidden');
+        document.getElementById('gameResultModal').style.display = 'none';
+        window.typingGamesModule.exitToDashboard();
+    };
+
+    // 3. VIEW HISTORY BUTTON
+    document.getElementById('viewHistoryFromGameBtn').onclick = function() {
+        document.getElementById('gameResultModal').classList.add('hidden');
+        document.getElementById('gameResultModal').style.display = 'none';
+        window.typingGamesModule.exitToDashboard();
+        
+        // History modal open karne ka function
+        if(typeof openTypingHistoryModal === 'function') {
+            openTypingHistoryModal();
+        }
+    };
+}, 1000);
 
 </script>
 </body>
