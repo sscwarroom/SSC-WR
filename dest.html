@@ -314,7 +314,8 @@ body.focus-mode-active .t-char.active {
     background: var(--type-primary);
     border-radius: 4px;
     box-shadow: none; 
-    transition: left 0.12s cubic-bezier(0.33, 1, 0.68, 1), top 0.15s ease-out;
+   transition: left 0.05s linear, top 0.1s ease-out;
+
     pointer-events: none;
     z-index: 1; 
     opacity: 1;
@@ -1243,6 +1244,18 @@ body.light-mode #de-dashboard-screen .de-btn-main.w-full {
     border-color: var(--accent-primary) !important;
     color: var(--text-primary) !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+}
+/* 🚀 ULTRA-LOW LATENCY OPTIMIZATION */
+body.is-typing #dynamic-bg-container { 
+    display: none !important; /* Typing ke time background animation band */
+}
+.typing-box { 
+    will-change: scroll-position; 
+    -webkit-transform: translateZ(0); 
+    transform: translateZ(0); 
+}
+.t-char { 
+    will-change: color; /* Browser ko pehle bata do ki color change hoga */
 }
 
 </style>
@@ -2723,17 +2736,23 @@ function handleMobileFriendlyInput(e) {
   
   if(isTutorMode) updateTutorKeyHighlight();
 
-  if (charIndex < charactersInfo.length) {
-      const activeEl = charactersInfo[charIndex].el; 
-      activeEl.classList.add('active'); 
-      lastActiveIndex = charIndex;
-      if (activeEl.offsetTop !== lastActiveOffsetTop) { 
-          lastActiveOffsetTop = activeEl.offsetTop; 
-          document.getElementById('typing-passage-box').scrollTo({ top: activeEl.offsetTop - (document.getElementById('typing-passage-box').clientHeight / 2), behavior: 'smooth' }); 
-      }
-  } else { 
-      finishTypingTest(); 
-  }
+ if (charIndex < charactersInfo.length) {
+    const activeEl = charactersInfo[charIndex].el; 
+    activeEl.classList.add('active'); 
+    lastActiveIndex = charIndex;
+
+    // 🚀 LAG FIX: requestAnimationFrame browser ko hang hone se bachayega
+    requestAnimationFrame(() => {
+        if (activeEl.offsetTop !== lastActiveOffsetTop) { 
+            lastActiveOffsetTop = activeEl.offsetTop; 
+            document.getElementById('typing-passage-box').scrollTo({ top: activeEl.offsetTop - (document.getElementById('typing-passage-box').clientHeight / 2), behavior: 'smooth' }); 
+        }
+    });
+} else { 
+    finishTypingTest(); 
+}
+
+
 }
 
 function scheduleStatsUpdate() { 
@@ -3859,6 +3878,16 @@ class SpaceTyperGame {
         this.pausedTime = 0;
         this.lastFrameTime = 0;
         this.loopReq = null;
+                // 💥 COMBO GREETINGS (Action Theme)
+        this.greetings = [];
+        this.greetingWords = {
+            5: "GOOD!",
+            10: "AWESOME!",
+            15: "UNSTOPPABLE!",
+            20: "DOMINATING!",
+            25: "RAMPAGE!",
+            30: "GODLIKE!"
+        };
         
         this.enemies = [];
         this.particles = [];
@@ -4112,10 +4141,40 @@ class SpaceTyperGame {
         const index = this.enemies.indexOf(enemy);
         if(index > -1) {
             this.enemies.splice(index, 1);
-            if(killedByPlayer) {
+                        if(killedByPlayer) {
                 this.combo++;
                 if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+                // ⚡ NEW: Trigger Greeting every 5 combos
+                if (this.combo > 0 && this.combo % 5 === 0) {
+                    let text = this.greetingWords[this.combo] || "GODLIKE!";
+                    this.greetings.push({
+                        text: text,
+                        comboVal: this.combo,
+                        y: this.canvas.height / 2.5,
+                        alpha: 1.0,
+                        scale: 0.5
+                    });
+                }
+                
+                
+             
+                                              // 🌟 NEW: Trigger Greeting every 5 combos
+            if (this.combo > 0 && this.combo % 5 === 0) {
+                let text = this.greetingWords[this.combo] || "GODLIKE!";
+                this.greetings.push({
+                    text: text,
+                    comboVal: this.combo, // <-- YE LINE ADD KI HAI
+                    y: this.canvas.height / 2.5,
+                    alpha: 1.0,
+                    scale: 0.5
+                });
+            }
+
+                      
+                
+                // ... (baaki purana code waise hi rahega)
                 let comboMult = Math.min(5, 1 + Math.floor(this.combo / 5));
+
                 this.score += Math.round(enemy.word.length * 10 * this.config.multiplier * comboMult);
                 
                 // 💥 INCREASE SONIC CHARGE
@@ -4192,6 +4251,50 @@ class SpaceTyperGame {
             this.ctx.beginPath(); this.ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); this.ctx.fill();
         });
         this.ctx.globalAlpha = 1.0;
+                // Draw Particles
+        for(let i=this.particles.length-1; i>=0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
+            this.ctx.fillStyle = p.color; this.ctx.globalAlpha = Math.max(0, p.life);
+            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
+            if(p.life <= 0) this.particles.splice(i, 1);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        // ⚡ DRAW COMBO GREETINGS (Electric Style)
+        for (let i = this.greetings.length - 1; i >= 0; i--) {
+            let g = this.greetings[i];
+            g.y -= 1.5; 
+            g.alpha -= 0.015; 
+            if (g.scale < 1.2) g.scale += 0.08; 
+
+            this.ctx.save();
+            this.ctx.globalAlpha = Math.max(0, g.alpha);
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            
+            // Electric Yellow/Orange Glow
+            this.ctx.shadowColor = '#eab308'; 
+            this.ctx.shadowBlur = 25;
+            this.ctx.fillStyle = '#ffffff'; 
+            
+            let currentScale = Math.min(g.scale, 1.2);
+            
+            // 1. Combo Number
+            this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
+            
+            // 2. Greeting Word
+            this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
+            
+            this.ctx.restore();
+
+            if (g.alpha <= 0) {
+                this.greetings.splice(i, 1);
+            }
+        }
+        
 
         // 💥 DRAW SONIC WAVES
         for(let i = this.sonicWaves.length - 1; i >= 0; i--) {
@@ -4334,6 +4437,39 @@ class SpaceTyperGame {
             if(p.life <= 0) this.particles.splice(i, 1);
         }
         this.ctx.globalAlpha = 1.0;
+                   // 🌟 DRAW COMBO GREETINGS (Action Style with Combo Text)
+    for (let i = this.greetings.length - 1; i >= 0; i--) {
+        let g = this.greetings[i];
+        g.y -= 1.5; 
+        g.alpha -= 0.015; 
+        if (g.scale < 1.2) g.scale += 0.08; 
+
+        this.ctx.save();
+        this.ctx.globalAlpha = Math.max(0, g.alpha);
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        // Space Vibe Neon Glow
+        this.ctx.shadowColor = '#00ffcc'; // Cyan color
+        this.ctx.shadowBlur = 25;
+        this.ctx.fillStyle = '#ffffff'; 
+        
+        let currentScale = Math.min(g.scale, 1.2);
+        
+        // 1. Upar chhota text: "5 COMBO!" 
+        this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
+        this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
+        
+        // 2. Neeche bada text: "GOOD!" / "AWESOME!"
+        this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
+        this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
+        
+        this.ctx.restore();
+
+        if (g.alpha <= 0) {
+            this.greetings.splice(i, 1);
+        }
+    }
 
         // 🚀 DRAW SONIC BOOM CHARGE BAR
         let barWidth = 200;
@@ -4446,6 +4582,1184 @@ class SpaceTyperGame {
         window.removeEventListener('resize', this.resizeBind);
     }
 }
+/* =========================================================
+   🎮 GAME 02: WORD RUSH (ELECTRIC WHACK-A-MOLE)
+========================================================= */
+class WordRushGame {
+    constructor(difficulty, parentModule) {
+        this.parent = parentModule;
+        this.difficulty = difficulty;
+        this.canvas = document.getElementById('arcadeCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.state = 'INIT'; 
+        this.score = 0;
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.keystrokes = 0;
+        this.correctKeystrokes = 0;
+        this.wpm = 0;
+        this.startTime = 0;
+        this.lastFrameTime = 0;
+        this.loopReq = null;
+        
+        this.activeWords = [];
+        this.particles = [];
+        this.spawnTimer = 0;
+        this.currentInput = "";
+        this.targetedWord = null;
+
+        // ⚡ ELECTRIC COMBO GREETINGS
+        this.greetings = [];
+        this.greetingWords = {
+            5: "NICE!",
+            10: "ELECTRIC!",
+            15: "SHOCKING!",
+            20: "OVERLOAD!",
+            25: "UNSTOPPABLE!",
+            30: "GODLIKE!"
+        };
+        
+        this.words = {
+            easy: ["fast", "run", "zap", "bolt", "rush", "time", "quick", "flash", "spark", "wire"],
+            medium: ["electric", "thunder", "energy", "charge", "strike", "voltage", "speed", "panic", "storm"],
+            hard: ["lightning", "adrenaline", "velocity", "generator", "shockwave", "reaction", "overload"],
+            extreme: ["electromagnetic", "instantaneous", "hyperactive", "supercharged", "acceleration"]
+        };
+
+        this.config = this.getDifficultyConfig(difficulty);
+        this.loopBind = this.gameLoop.bind(this);
+        this.keydownBind = this.handleKeyDown.bind(this); 
+        this.resizeBind = this.resize.bind(this);
+    }
+
+    getDifficultyConfig(diff) {
+        const configs = {
+            easy: { lifeTime: 5000, spawnRate: 2000, multiplier: 1, list: this.words.easy },
+            medium: { lifeTime: 4000, spawnRate: 1500, multiplier: 2, list: [...this.words.easy, ...this.words.medium] },
+            hard: { lifeTime: 3000, spawnRate: 1200, multiplier: 3.5, list: [...this.words.medium, ...this.words.hard] },
+            extreme: { lifeTime: 2500, spawnRate: 900, multiplier: 5, list: [...this.words.hard, ...this.words.extreme] }
+        };
+        return configs[diff] || configs.medium;
+    }
+
+    start() {
+        this.resize();
+        window.addEventListener('resize', this.resizeBind);
+        window.addEventListener('keydown', this.keydownBind);
+        this.updateHUD();
+        this.startCountdown();
+    }
+
+    resize() {
+        if(this.canvas && this.canvas.parentElement) {
+            this.canvas.width = this.canvas.parentElement.clientWidth;
+            this.canvas.height = this.canvas.parentElement.clientHeight;
+        }
+    }
+
+    startCountdown() {
+        this.state = 'COUNTDOWN';
+        const overlay = document.getElementById('gameCountdownOverlay');
+        const countText = document.getElementById('countdownNumber');
+        overlay.classList.remove('hidden'); overlay.style.display = 'flex';
+        
+        let count = 3; countText.innerText = count;
+        this.playSound(600, 'sine', 0.1);
+        
+        let intv = setInterval(() => {
+            if(this.state === 'EXIT') { clearInterval(intv); return; } 
+            count--;
+            if(count > 0) {
+                countText.innerText = count; this.playSound(600, 'sine', 0.1);
+            } else if(count === 0) {
+                countText.innerText = "GO!"; this.playSound(1000, 'square', 0.2);
+            } else {
+                clearInterval(intv); overlay.classList.add('hidden'); overlay.style.display = 'none';
+                this.beginGameplay();
+            }
+        }, 1000);
+    }
+
+    beginGameplay() {
+        this.state = 'PLAYING';
+        this.startTime = Date.now();
+        this.lastFrameTime = performance.now();
+        this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    pause() { 
+        if(this.state !== 'PLAYING') return; 
+        this.state = 'PAUSED'; 
+        const overlay = document.getElementById('gamePauseOverlay');
+        overlay.classList.remove('hidden'); // FIX: Hidden class remove karni zaroori thi
+        overlay.style.display = 'flex'; 
+    }
+
+    resume() { 
+        if(this.state !== 'PAUSED') return; 
+        this.state = 'PLAYING'; 
+        const overlay = document.getElementById('gamePauseOverlay');
+        overlay.classList.add('hidden'); 
+        overlay.style.display = 'none'; 
+        this.lastFrameTime = performance.now(); 
+        this.loopReq = requestAnimationFrame(this.loopBind); 
+    }
+
+    spawnWord() {
+        const wordText = this.config.list[Math.floor(Math.random() * this.config.list.length)];
+        this.ctx.font = "bold 18px 'JetBrains Mono'";
+        const width = this.ctx.measureText(wordText).width + 30;
+        const x = Math.max(10, Math.random() * (this.canvas.width - width - 20));
+        const y = Math.max(50, Math.random() * (this.canvas.height - 100));
+        
+        this.activeWords.push({
+            id: Math.random().toString(36).substr(2, 9),
+            text: wordText, typed: "", x: x, y: y, width: width,
+            maxLife: this.config.lifeTime, lifeLeft: this.config.lifeTime
+        });
+        
+        this.playSound(400, 'square', 0.05); 
+    }
+
+    handleKeyDown(e) {
+        if(this.state !== 'PLAYING') return;
+        if(e.key === 'Escape') { this.pause(); return; }
+        
+        if(e.key === 'Backspace') {
+            e.preventDefault();
+            if(this.currentInput.length > 0) {
+                this.currentInput = this.currentInput.slice(0, -1);
+                if(this.targetedWord) this.targetedWord.typed = this.currentInput;
+                if(this.currentInput.length === 0) this.targetedWord = null;
+            }
+            return;
+        }
+
+        if(e.key.length !== 1 || !/[a-zA-Z]/.test(e.key)) return;
+        
+        e.preventDefault(); 
+        const char = e.key.toLowerCase();
+        this.keystrokes++;
+
+        if(!this.targetedWord) {
+            let potential = this.activeWords.filter(w => w.text.startsWith(char));
+            if(potential.length > 0) {
+                potential.sort((a,b) => a.lifeLeft - b.lifeLeft);
+                this.targetedWord = potential[0];
+            }
+        }
+
+        if(this.targetedWord) {
+            let expectedChar = this.targetedWord.text[this.currentInput.length];
+            if(char === expectedChar) {
+                this.currentInput += char;
+                this.targetedWord.typed = this.currentInput;
+                this.correctKeystrokes++;
+                
+                this.playSound(1200, 'sawtooth', 0.05); 
+                
+                if(this.currentInput === this.targetedWord.text) {
+                    this.destroyWord(this.targetedWord, true);
+                    this.currentInput = "";
+                    this.targetedWord = null;
+                }
+            } else {
+                this.combo = 0;
+                this.screenShake(3);
+                this.playSound(150, 'sawtooth', 0.1);
+            }
+        } else {
+            this.combo = 0; this.screenShake(3); this.playSound(150, 'sawtooth', 0.1);
+        }
+        
+        this.updateHUD();
+    }
+
+    destroyWord(word, isSuccess) {
+        const index = this.activeWords.indexOf(word);
+        if(index > -1) {
+            this.activeWords.splice(index, 1);
+            if(isSuccess) {
+                this.combo++;
+                if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+
+                // ⚡ NEW: Trigger Greeting every 5 combos
+                if (this.combo > 0 && this.combo % 5 === 0) {
+                    let text = this.greetingWords[this.combo] || "GODLIKE!";
+                    this.greetings.push({
+                        text: text,
+                        comboVal: this.combo,
+                        y: this.canvas.height / 2.5,
+                        alpha: 1.0,
+                        scale: 0.5
+                    });
+                }
+
+                let comboMult = Math.min(5, 1 + Math.floor(this.combo / 5));
+                let timeBonus = word.lifeLeft > (word.maxLife * 0.7) ? 2 : 1; 
+                
+                this.score += Math.round(word.text.length * 10 * this.config.multiplier * comboMult * timeBonus);
+                
+                this.createExplosion(word.x + word.width/2, word.y + 15, '#eab308', 20, 10); 
+                this.playSound(800, 'square', 0.1, 1600); 
+            } else {
+                this.combo = 0;
+                this.lives--;
+                this.createExplosion(word.x + word.width/2, word.y + 15, '#ff3333', 30, 8); 
+                this.screenShake(10);
+                this.playSound(100, 'sawtooth', 0.3, 50); 
+                if(this.lives <= 0) this.gameOver();
+            }
+        }
+        if(this.targetedWord === word) {
+            this.targetedWord = null;
+            this.currentInput = "";
+        }
+        this.updateHUD();
+    }
+
+    createExplosion(x, y, color, amount, speedMultiplier = 8) {
+        for(let i=0; i<amount; i++) {
+            this.particles.push({
+                x: x, y: y, 
+                vx: (Math.random() - 0.5) * speedMultiplier, vy: (Math.random() - 0.5) * speedMultiplier, 
+                life: Math.random() * 0.8 + 0.4, 
+                color: Math.random() > 0.5 ? color : '#ffffff', size: Math.random() * 3 + 1
+            });
+        }
+    }
+
+    screenShake(intensity) {
+        const vp = document.getElementById('gameViewport');
+        vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
+        setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+    }
+
+    updateHUD() {
+        document.getElementById('liveScore').innerText = this.score;
+        document.getElementById('liveLives').innerText = '⚡ '.repeat(Math.max(0, this.lives));
+        document.getElementById('liveCombo').innerText = this.combo + 'x';
+        
+        let mins = (Date.now() - this.startTime) / 60000;
+        if(mins > 0) this.wpm = Math.max(0, Math.round((this.correctKeystrokes / 5) / mins));
+        document.getElementById('liveWpm').innerText = this.wpm;
+    }
+
+    gameLoop(timestamp) {
+        if(this.state !== 'PLAYING') return; 
+        let dt = timestamp - this.lastFrameTime;
+        this.lastFrameTime = timestamp;
+
+        this.ctx.fillStyle = '#070709'; 
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.spawnTimer += dt;
+        if(this.spawnTimer >= this.config.spawnRate) {
+            this.spawnWord();
+            this.spawnTimer = 0;
+            if(this.config.spawnRate > 500) this.config.spawnRate -= 10; 
+        }
+
+        for(let i = this.activeWords.length - 1; i >= 0; i--) {
+            let w = this.activeWords[i];
+            let isTarget = (this.targetedWord === w);
+            
+            w.lifeLeft -= dt;
+            if(w.lifeLeft <= 0) {
+                this.destroyWord(w, false); 
+                continue;
+            }
+
+            this.ctx.fillStyle = isTarget ? 'rgba(234, 179, 8, 0.15)' : 'rgba(20, 20, 25, 0.9)'; 
+            this.ctx.strokeStyle = isTarget ? '#eab308' : '#475569';
+            this.ctx.lineWidth = 1.5;
+            
+            if(isTarget) { this.ctx.shadowColor = '#eab308'; this.ctx.shadowBlur = 15; }
+            this.ctx.beginPath(); this.ctx.roundRect(w.x, w.y, w.width, 32, 6);
+            this.ctx.fill(); this.ctx.stroke(); this.ctx.shadowBlur = 0; 
+
+            this.ctx.font = "bold 16px 'JetBrains Mono'";
+            this.ctx.textAlign = 'left'; this.ctx.textBaseline = 'middle';
+            let typedW = this.ctx.measureText(w.typed).width;
+            
+            this.ctx.fillStyle = isTarget ? '#eab308' : '#eab308'; 
+            this.ctx.fillText(w.typed, w.x + 15, w.y + 16);
+            
+            this.ctx.fillStyle = isTarget ? '#ffffff' : '#94a3b8'; 
+            this.ctx.fillText(w.text.substring(w.typed.length), w.x + 15 + typedW, w.y + 16);
+
+            let lifeRatio = w.lifeLeft / w.maxLife;
+            this.ctx.fillStyle = lifeRatio > 0.4 ? '#eab308' : '#ef4444'; 
+            this.ctx.fillRect(w.x + 5, w.y + 28, (w.width - 10) * lifeRatio, 3);
+        }
+
+        for(let i=this.particles.length-1; i>=0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
+            this.ctx.fillStyle = p.color; this.ctx.globalAlpha = Math.max(0, p.life);
+            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
+            if(p.life <= 0) this.particles.splice(i, 1);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        // ⚡ DRAW COMBO GREETINGS (Electric Style)
+        for (let i = this.greetings.length - 1; i >= 0; i--) {
+            let g = this.greetings[i];
+            g.y -= 1.5; 
+            g.alpha -= 0.015; 
+            if (g.scale < 1.2) g.scale += 0.08; 
+
+            this.ctx.save();
+            this.ctx.globalAlpha = Math.max(0, g.alpha);
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            
+            this.ctx.shadowColor = '#eab308'; 
+            this.ctx.shadowBlur = 25;
+            this.ctx.fillStyle = '#ffffff'; 
+            
+            let currentScale = Math.min(g.scale, 1.2);
+            
+            this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
+            
+            this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
+            
+            this.ctx.restore();
+
+            if (g.alpha <= 0) {
+                this.greetings.splice(i, 1);
+            }
+        }
+
+        if(this.state === 'PLAYING') this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    gameOver() {
+        this.state = 'GAMEOVER';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        this.saveStats();
+        
+        document.getElementById('resScore').innerText = this.score.toLocaleString();
+        document.getElementById('resWpm').innerText = this.wpm;
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        document.getElementById('resAcc').innerText = acc + '%';
+        document.getElementById('resCombo').innerText = this.maxCombo;
+        
+        let secs = Math.floor((Date.now() - this.startTime)/1000);
+        document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+        
+        const modal = document.getElementById('gameResultModal');
+        modal.classList.remove('hidden'); modal.style.display = 'flex';
+    }
+
+    saveStats() {
+        let scoreKey = `wordRush_bestScore_${this.difficulty}`;
+        let wpmKey = `wordRush_bestWpm_${this.difficulty}`;
+        
+        let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
+        let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
+        
+        let badge = document.getElementById('newHighScoreBadge');
+        if(this.score > existingScore) {
+            localStorage.setItem(scoreKey, this.score);
+            if(badge) { badge.style.display = 'inline-block'; badge.classList.remove('hidden'); }
+        } else { if(badge) badge.style.display = 'none'; }
+
+        if(this.wpm > existingWpm || existingWpm === 0) localStorage.setItem(wpmKey, this.wpm);
+        
+        let history = JSON.parse(localStorage.getItem('wordRush_GameHistory') || '[]');
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        let dateStr = new Date().toLocaleString('en-IN', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});
+        history.unshift({ date: dateStr, score: this.score, wpm: this.wpm, accuracy: acc, diff: this.difficulty.toUpperCase() }); 
+        if(history.length > 10) history = history.slice(0, 10); 
+        localStorage.setItem('wordRush_GameHistory', JSON.stringify(history)); 
+        
+        this.parent.loadPersistentStats(); 
+    }
+
+    playSound(freq, type, vol, endFreq = null) {
+        if(!this.parent.soundEnabled || !this.parent.audioCtx) return;
+        let ctx = this.parent.audioCtx;
+        if(ctx.state === 'suspended') ctx.resume();
+        let osc = ctx.createOscillator(); let gain = ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        if(endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(vol, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+    }
+
+    cleanup() {
+        this.state = 'EXIT';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        window.removeEventListener('keydown', this.keydownBind);
+        window.removeEventListener('resize', this.resizeBind);
+    }
+}
+/* =========================================================
+   🏎️ GAME 03: TYPING RACER (3D SYNTHWAVE CYBERPUNK - ULTIMATE EDITION)
+========================================================= */
+class TypingRacerGame {
+    constructor(difficulty, parentModule) {
+        this.parent = parentModule;
+        this.difficulty = difficulty;
+        this.canvas = document.getElementById('arcadeCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.state = 'INIT'; 
+        this.distance = 0; 
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.keystrokes = 0;
+        this.correctKeystrokes = 0;
+        this.wpm = 0;
+        this.startTime = 0;
+        this.lastFrameTime = 0;
+        this.loopReq = null;
+        
+        // 🚀 3D ENGINE CONSTANTS
+        this.focalLength = 300; 
+        this.cameraY = 150; 
+        this.maxZ = 1200; 
+        this.baseSpeed = 300; 
+        this.currentSpeed = 300;
+        
+        this.lanes = [0, 1, 2]; 
+        this.laneOffsets = [-200, 0, 200]; 
+        this.playerLane = 1; 
+        this.playerX = 0; 
+        
+        this.nitroCharge = 0;
+        this.isNitroActive = false;
+        this.roadOffset = 0; 
+        this.dashOffset = 0;
+        
+        this.obstacles = [];
+        this.particles = [];
+        this.scenery = [];
+        this.buildings = [];
+        this.bullets = []; 
+        this.muzzleFlashes = []; // 💥 Muzzle flash effect
+        
+        this.spawnTimer = 0;
+        this.sceneryTimer = 0;
+        this.currentInput = "";
+        this.targetedObstacle = null;
+        
+        this.greetings = [];
+        this.greetingWords = {
+            5: "DRIFT!", 10: "TURBO!", 15: "BURNOUT!", 
+            20: "UNTOUCHABLE!", 25: "SUPERSONIC!", 30: "GODLIKE!"
+        };
+
+        this.words = {
+            easy: ["fast", "road", "type", "drive", "speed", "city", "car", "boost", "neon", "gear"],
+            medium: ["rapid", "typing", "future", "engine", "highway", "motion", "clutch", "drift", "chase"],
+            hard: ["velocity", "challenge", "precision", "reaction", "keyboard", "performance", "overtake"],
+            extreme: ["electromagnetic", "acceleration", "transmission", "aerodynamic", "turbocharger"]
+        };
+
+        this.config = this.getDifficultyConfig(difficulty);
+        this.loopBind = this.gameLoop.bind(this);
+        this.keydownBind = this.handleKeyDown.bind(this); 
+        this.resizeBind = this.resize.bind(this);
+    }
+
+    getDifficultyConfig(diff) {
+        const configs = {
+            easy: { speed: 300, spawnRate: 3500, nitroDrain: 20, list: this.words.easy },
+            medium: { speed: 400, spawnRate: 2500, nitroDrain: 30, list: [...this.words.easy, ...this.words.medium] },
+            hard: { speed: 550, spawnRate: 2000, nitroDrain: 40, list: [...this.words.medium, ...this.words.hard] },
+            extreme: { speed: 700, spawnRate: 1500, nitroDrain: 50, list: [...this.words.hard, ...this.words.extreme] }
+        };
+        return configs[diff] || configs.medium;
+    }
+
+    start() {
+        this.resize();
+        this.generateCityscape();
+        
+        window.addEventListener('resize', this.resizeBind);
+        window.addEventListener('keydown', this.keydownBind);
+        
+        this.baseSpeed = this.config.speed;
+        this.currentSpeed = this.baseSpeed;
+        this.updateHUD();
+        this.startCountdown();
+    }
+
+    generateCityscape() {
+        this.buildings = [];
+        for(let i=0; i<40; i++) {
+            this.buildings.push({
+                x: (Math.random() - 0.5) * 2500,
+                width: 50 + Math.random() * 100,
+                height: 150 + Math.random() * 400,
+                color: Math.random() > 0.5 ? '#ff00cc' : '#00ffcc',
+                opacity: 0.15 + Math.random() * 0.4
+            });
+        }
+    }
+
+    resize() {
+        if(this.canvas && this.canvas.parentElement) {
+            this.canvas.width = this.canvas.parentElement.clientWidth;
+            this.canvas.height = this.canvas.parentElement.clientHeight;
+            this.focalLength = this.canvas.width * 0.8;
+            this.cameraY = this.canvas.height * 0.35;
+        }
+    }
+
+    startCountdown() {
+        this.state = 'COUNTDOWN';
+        const overlay = document.getElementById('gameCountdownOverlay');
+        const countText = document.getElementById('countdownNumber');
+        overlay.classList.remove('hidden'); overlay.style.display = 'flex';
+        
+        let count = 3; countText.innerText = count;
+        this.playSound(600, 'sine', 0.1);
+        
+        let intv = setInterval(() => {
+            if(this.state === 'EXIT') { clearInterval(intv); return; } 
+            count--;
+            if(count > 0) {
+                countText.innerText = count; this.playSound(600, 'sine', 0.1);
+            } else if(count === 0) {
+                countText.innerText = "GO!"; this.playSound(1000, 'square', 0.2);
+            } else {
+                clearInterval(intv); overlay.classList.add('hidden'); overlay.style.display = 'none';
+                this.beginGameplay();
+            }
+        }, 1000);
+    }
+
+    beginGameplay() {
+        this.state = 'PLAYING';
+        this.startTime = Date.now();
+        this.lastFrameTime = performance.now();
+        this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    pause() { 
+        if(this.state !== 'PLAYING') return; 
+        this.state = 'PAUSED'; 
+        document.getElementById('gamePauseOverlay').classList.remove('hidden'); 
+        document.getElementById('gamePauseOverlay').style.display = 'flex'; 
+    }
+
+    resume() { 
+        if(this.state !== 'PAUSED') return; 
+        this.state = 'PLAYING'; 
+        document.getElementById('gamePauseOverlay').classList.add('hidden'); 
+        document.getElementById('gamePauseOverlay').style.display = 'none'; 
+        this.lastFrameTime = performance.now(); 
+        this.loopReq = requestAnimationFrame(this.loopBind); 
+    }
+
+    spawnObstacle() {
+        const wordText = this.config.list[Math.floor(Math.random() * this.config.list.length)];
+        const laneIdx = Math.floor(Math.random() * 3);
+        
+        this.obstacles.push({
+            id: Math.random().toString(36).substr(2, 9),
+            text: wordText, typed: "", 
+            lane: laneIdx, 
+            z: this.maxZ 
+        });
+    }
+
+    spawnScenery() {
+        const isLeft = Math.random() > 0.5;
+        this.scenery.push({
+            x: isLeft ? -500 - Math.random()*300 : 500 + Math.random()*300,
+            z: this.maxZ,
+            type: Math.random() > 0.5 ? 'light' : 'sign'
+        });
+    }
+
+    activateNitro() {
+        if(this.nitroCharge >= 100 && !this.isNitroActive) {
+            this.isNitroActive = true;
+            this.nitroCharge = 100;
+            this.playSound(400, 'sawtooth', 0.4, 2000); 
+        } else {
+            this.playSound(200, 'square', 0.1); 
+        }
+    }
+
+    handleKeyDown(e) {
+        if(this.state !== 'PLAYING') return;
+        if(e.key === 'Escape') { this.pause(); return; }
+        if(e.key === ' ') { e.preventDefault(); this.activateNitro(); return; }
+        
+        if(e.key === 'Backspace') {
+            e.preventDefault();
+            if(this.currentInput.length > 0) {
+                this.currentInput = this.currentInput.slice(0, -1);
+                if(this.targetedObstacle) this.targetedObstacle.typed = this.currentInput;
+                if(this.currentInput.length === 0) this.targetedObstacle = null;
+            }
+            return;
+        }
+
+        if(e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+            e.preventDefault();
+            this.processKeystroke(e.key.toLowerCase());
+        }
+    }
+
+    processKeystroke(char) {
+        this.keystrokes++;
+
+        if(!this.targetedObstacle) {
+            let potential = this.obstacles.filter(o => o.text.startsWith(char));
+            if(potential.length > 0) {
+                potential.sort((a,b) => a.z - b.z);
+                this.targetedObstacle = potential[0];
+                this.playerLane = this.targetedObstacle.lane; 
+            }
+        }
+
+        if(this.targetedObstacle) {
+            let expectedChar = this.targetedObstacle.text[this.currentInput.length];
+            if(char === expectedChar) {
+                this.currentInput += char;
+                this.targetedObstacle.typed = this.currentInput;
+                this.correctKeystrokes++;
+                
+                this.playSound(1200, 'triangle', 0.05); 
+                
+                // 💥 FIRE BULLET & MUZZLE FLASH
+                this.bullets.push({
+                    x: this.playerX, 
+                    z: 20, 
+                    targetLane: this.targetedObstacle.lane,
+                    targetZ: this.targetedObstacle.z
+                });
+                this.muzzleFlashes.push({ life: 1.0 });
+
+                if(this.currentInput === this.targetedObstacle.text) {
+                    this.destroyObstacle(this.targetedObstacle, true);
+                    this.currentInput = "";
+                    this.targetedObstacle = null;
+                }
+            } else {
+                this.combo = 0; this.currentSpeed = this.baseSpeed; 
+                this.screenShake(3); this.playSound(150, 'sawtooth', 0.1);
+            }
+        } else {
+            this.combo = 0; this.currentSpeed = this.baseSpeed; this.screenShake(3); this.playSound(150, 'sawtooth', 0.1);
+        }
+    }
+
+    project3D(x, y, z) {
+        if (z < 1) z = 1; 
+        let scale = this.focalLength / (this.focalLength + z);
+        let screenX = (this.canvas.width / 2) + (x * scale);
+        let screenY = (this.canvas.height * 0.45) + (y * scale);
+        return { x: screenX, y: screenY, scale: scale };
+    }
+
+    destroyObstacle(obs, isSuccess) {
+        const index = this.obstacles.indexOf(obs);
+        if(index > -1) {
+            this.obstacles.splice(index, 1);
+            let proj = this.project3D(this.laneOffsets[obs.lane], 0, obs.z);
+
+            if(isSuccess) {
+                this.combo++;
+                if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+                
+                if(!this.isNitroActive) this.currentSpeed = this.baseSpeed + (Math.min(this.combo, 20) * 15);
+                if(!this.isNitroActive) this.nitroCharge = Math.min(100, this.nitroCharge + 5);
+
+                if (this.combo > 0 && this.combo % 5 === 0) {
+                    this.greetings.push({
+                        text: this.greetingWords[this.combo] || "GODLIKE!", 
+                        comboVal: this.combo, y: this.canvas.height / 3, alpha: 1.0, scale: 0.5
+                    });
+                }
+
+                this.createExplosion(proj.x, proj.y, '#00ffcc', 30, 8); 
+                this.playSound(800, 'square', 0.1, 100); 
+            } else {
+                if(this.isNitroActive) {
+                    this.createExplosion(proj.x, proj.y, '#ff00cc', 30, 15);
+                    this.playSound(400, 'sawtooth', 0.2, 50);
+                } else {
+                    this.combo = 0; this.currentSpeed = this.baseSpeed; this.lives--;
+                    this.createExplosion(proj.x, proj.y, '#ff3333', 50, 15); 
+                    this.screenShake(20); this.playSound(100, 'sawtooth', 0.4, 30); 
+                    if(this.lives <= 0) this.gameOver();
+                }
+            }
+        }
+        if(this.targetedObstacle === obs) {
+            this.targetedObstacle = null;
+            this.currentInput = "";
+        }
+        this.updateHUD();
+    }
+
+    createExplosion(x, y, color, amount, speedMultiplier = 8) {
+        for(let i=0; i<amount; i++) {
+            this.particles.push({
+                x: x, y: y, 
+                vx: (Math.random() - 0.5) * speedMultiplier, vy: (Math.random() - 0.5) * speedMultiplier, 
+                life: Math.random() * 0.8 + 0.4, 
+                color: Math.random() > 0.5 ? color : '#ffffff', size: Math.random() * 4 + 1
+            });
+        }
+    }
+
+    screenShake(intensity) {
+        const vp = document.getElementById('gameViewport');
+        vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
+        setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+    }
+
+    updateHUD() {
+        document.getElementById('liveScore').innerText = Math.floor(this.distance) + 'm';
+        document.getElementById('liveLives').innerText = '❤️ '.repeat(Math.max(0, this.lives));
+        document.getElementById('liveCombo').innerText = this.combo + 'x';
+        
+        let mins = (Date.now() - this.startTime) / 60000;
+        if(mins > 0) this.wpm = Math.max(0, Math.round((this.correctKeystrokes / 5) / mins));
+        document.getElementById('liveWpm').innerText = this.wpm;
+    }
+
+    gameLoop(timestamp) {
+        if(this.state !== 'PLAYING') return; 
+        let dt = timestamp - this.lastFrameTime;
+        this.lastFrameTime = timestamp;
+
+        if(this.isNitroActive) {
+            this.currentSpeed = this.baseSpeed * 3.5;
+            this.nitroCharge -= (this.config.nitroDrain * (dt/1000));
+            if(this.nitroCharge <= 0) {
+                this.isNitroActive = false; this.nitroCharge = 0;
+                this.currentSpeed = this.baseSpeed + (Math.min(this.combo, 20) * 15);
+            }
+            this.screenShake(2); // Constant speed vibration
+        }
+
+        let speedMuliplier = this.currentSpeed * (dt/1000);
+        this.distance += speedMuliplier / 10; 
+        
+        let horizonY = this.canvas.height * 0.45;
+        let centerX = this.canvas.width / 2;
+
+        // 1. SKY & SUN
+        this.ctx.fillStyle = '#03030b'; 
+        this.ctx.fillRect(0, 0, this.canvas.width, horizonY);
+        
+        this.ctx.fillStyle = '#ff00cc';
+        this.ctx.shadowColor = '#ff00cc';
+        this.ctx.shadowBlur = 40;
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, horizonY, 120, Math.PI, 0);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+        
+        this.ctx.fillStyle = '#03030b';
+        for(let i=0; i<6; i++) {
+            this.ctx.fillRect(centerX - 130, horizonY - 5 - (i*18), 260, 3 + i*1.5);
+        }
+
+        // 2. CITY BUILDINGS
+        this.buildings.forEach(b => {
+            this.ctx.fillStyle = `rgba(10, 10, 25, 0.9)`;
+            this.ctx.strokeStyle = `rgba(${b.color === '#ff00cc' ? '255,0,204' : '0,255,204'}, ${b.opacity})`;
+            this.ctx.lineWidth = 1;
+            let bx = centerX + b.x;
+            this.ctx.beginPath();
+            this.ctx.rect(bx, horizonY - b.height, b.width, b.height);
+            this.ctx.fill();
+            this.ctx.stroke();
+        });
+
+        // 3. ROAD BACKGROUND
+        this.ctx.fillStyle = '#0a0a16'; 
+        this.ctx.fillRect(0, horizonY, this.canvas.width, this.canvas.height - horizonY);
+
+        // 4. MOVING ROAD LINES
+        this.dashOffset -= speedMuliplier * 2;
+        if(this.dashOffset < 0) this.dashOffset += 200;
+
+        this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.8)';
+        this.ctx.lineWidth = 3;
+        
+        [-100, 100].forEach(x => {
+            for(let i=0; i<10; i++) {
+                let z1 = (i * 200) + this.dashOffset;
+                let z2 = z1 + 100; 
+                if(z1 > this.maxZ) continue;
+                
+                let p1 = this.project3D(x, this.cameraY, z1);
+                let p2 = this.project3D(x, this.cameraY, z2);
+                
+                if(p1.y > horizonY) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p1.x, p1.y);
+                    this.ctx.lineTo(p2.x, p2.y);
+                    this.ctx.stroke();
+                }
+            }
+        });
+
+        this.ctx.strokeStyle = 'rgba(255, 0, 204, 0.8)';
+        [-300, 300].forEach(x => {
+            this.ctx.beginPath();
+            let far = this.project3D(x, this.cameraY, this.maxZ);
+            let near = this.project3D(x, this.cameraY, 0);
+            this.ctx.moveTo(far.x, far.y);
+            this.ctx.lineTo(near.x, near.y);
+            this.ctx.stroke();
+        });
+
+        // 5. SCENERY
+        this.sceneryTimer += speedMuliplier;
+        if(this.sceneryTimer > 300) {
+            this.spawnScenery(); this.sceneryTimer = 0;
+        }
+
+        for(let i = this.scenery.length - 1; i >= 0; i--) {
+            let s = this.scenery[i];
+            s.z -= speedMuliplier;
+            if(s.z < -100) { this.scenery.splice(i, 1); continue; }
+            
+            let proj = this.project3D(s.x, this.cameraY, s.z);
+            if(proj.y < horizonY) continue;
+
+            this.ctx.fillStyle = s.type === 'sign' ? '#ff00cc' : '#00ffcc';
+            this.ctx.globalAlpha = 1 - (s.z / this.maxZ);
+            this.ctx.fillRect(proj.x - 2*proj.scale, proj.y - 300*proj.scale, 4*proj.scale, 300*proj.scale);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        // 6. OBSTACLES (WORDS & HOLOGRAPHIC STANDS)
+        this.spawnTimer += speedMuliplier; 
+        if(this.spawnTimer >= this.config.spawnRate) {
+            this.spawnObstacle(); this.spawnTimer = 0;
+            if(this.config.spawnRate > 600) this.config.spawnRate -= 10; 
+        }
+
+        this.obstacles.sort((a,b) => b.z - a.z);
+
+        for(let i = this.obstacles.length - 1; i >= 0; i--) {
+            let obs = this.obstacles[i];
+            let isTarget = (this.targetedObstacle === obs);
+            obs.z -= speedMuliplier;
+
+            if(obs.z < 20 && obs.z > -20) {
+                if (this.playerLane === obs.lane) {
+                    if (isTarget && obs.z > -10) {} 
+                    else { this.destroyObstacle(obs, false); continue; }
+                }
+            } else if (obs.z <= -20) {
+                this.destroyObstacle(obs, false); continue;
+            }
+
+            let proj = this.project3D(this.laneOffsets[obs.lane], this.cameraY, obs.z);
+            if(proj.y < horizonY) continue;
+
+            let boxW = 200 * proj.scale;
+            let boxH = 50 * proj.scale;
+            
+            let isClose = obs.z < 300;
+            let strokeColor = isTarget ? '#00ffcc' : (isClose ? '#ff3333' : '#ff00cc');
+            
+            // 🌟 Holographic Stand
+            this.ctx.strokeStyle = `rgba(${isTarget ? '0,255,204' : '255,0,204'}, 0.4)`;
+            this.ctx.lineWidth = 3 * proj.scale;
+            this.ctx.beginPath();
+            this.ctx.moveTo(proj.x, proj.y);
+            this.ctx.lineTo(proj.x, proj.y - boxH - (40*proj.scale));
+            this.ctx.stroke();
+
+            // Word Box
+            this.ctx.fillStyle = isTarget ? 'rgba(0, 255, 204, 0.3)' : 'rgba(255, 0, 204, 0.15)';
+            this.ctx.strokeStyle = strokeColor;
+            this.ctx.lineWidth = 2 * proj.scale;
+            
+            this.ctx.shadowColor = strokeColor; 
+            this.ctx.shadowBlur = 20 * proj.scale; 
+            
+            this.ctx.beginPath(); 
+            this.ctx.roundRect(proj.x - (boxW/2), proj.y - boxH - (40*proj.scale), boxW, boxH, 8 * proj.scale);
+            this.ctx.fill(); this.ctx.stroke(); this.ctx.shadowBlur = 0; 
+
+            // Text Rendering
+            let fontSize = Math.max(10, 30 * proj.scale);
+            this.ctx.font = `900 ${fontSize}px 'JetBrains Mono', monospace`;
+            
+            let typedText = obs.typed;
+            let untypedText = obs.text.substring(obs.typed.length);
+            let totalW = this.ctx.measureText(obs.text).width;
+            
+            let startX = proj.x - (totalW / 2);
+            let textY = proj.y - (boxH/2) - (40*proj.scale) + (fontSize * 0.35);
+            
+            this.ctx.textAlign = 'left';
+            this.ctx.fillStyle = isTarget ? '#00ffcc' : (isClose ? '#ff3333' : '#ff00cc'); 
+            this.ctx.fillText(typedText, startX, textY);
+            
+            let typedW = this.ctx.measureText(typedText).width;
+            this.ctx.fillStyle = '#ffffff'; 
+            this.ctx.fillText(untypedText, startX + typedW, textY);
+        }
+
+        // 7. RENDER BULLETS (Pew Pew Lasers!) 🔫
+        for(let i = this.bullets.length - 1; i >= 0; i--) {
+            let b = this.bullets[i];
+            b.z += 2500 * (dt/1000); 
+            
+            if(b.z >= b.targetZ || b.z > this.maxZ) {
+                let impactProj = this.project3D(this.laneOffsets[b.targetLane], this.cameraY - 20, b.targetZ);
+                this.createExplosion(impactProj.x, impactProj.y, '#ffff00', 5, 4);
+                this.bullets.splice(i, 1);
+                continue;
+            }
+
+            let proj1 = this.project3D(this.playerX + ((this.laneOffsets[b.targetLane] - this.playerX) * (b.z/b.targetZ)), this.cameraY - 20, b.z);
+            let proj2 = this.project3D(this.playerX + ((this.laneOffsets[b.targetLane] - this.playerX) * ((b.z+80)/b.targetZ)), this.cameraY - 20, b.z + 80);
+
+            if(proj1.y > horizonY) {
+                this.ctx.strokeStyle = '#ffff00'; 
+                this.ctx.lineWidth = Math.max(2, 6 * proj1.scale);
+                this.ctx.shadowColor = '#ff00cc';
+                this.ctx.shadowBlur = 15;
+                this.ctx.beginPath(); this.ctx.moveTo(proj1.x, proj1.y); this.ctx.lineTo(proj2.x, proj2.y); this.ctx.stroke();
+                this.ctx.shadowBlur = 0;
+            }
+        }
+
+        // 8. RENDER PLAYER CAR (DYNAMIC TILT)
+        let targetX = this.laneOffsets[this.playerLane];
+        let diffX = targetX - this.playerX;
+        this.playerX += diffX * 0.15; // Smooth horizontal movement
+        
+        let tiltAngle = diffX * 0.0015; // 🔄 Dynamic Car Banking/Tilt
+        
+        let carProj = this.project3D(this.playerX, this.cameraY, 10); 
+        let carBounce = Math.sin(timestamp / 40) * (this.currentSpeed / 120);
+        let cx = carProj.x;
+        let cy = this.canvas.height - 80 + carBounce;
+        let cw = 140 * carProj.scale;
+        
+        this.ctx.save(); // Save context state
+        this.ctx.translate(cx, cy); // Move origin to car center
+        this.ctx.rotate(tiltAngle); // Rotate canvas based on tilt
+        
+        // Shadow Underglow
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        this.ctx.shadowColor = this.isNitroActive ? '#00e5ff' : '#ff00cc';
+        this.ctx.shadowBlur = this.isNitroActive ? 30 : 15;
+        this.ctx.beginPath(); this.ctx.ellipse(0, 25, cw*0.6, 8, 0, 0, Math.PI*2); this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        // Exhaust Flames
+        if(this.currentSpeed > 50) {
+            this.ctx.fillStyle = this.isNitroActive ? '#ffffff' : '#00ffcc';
+            this.ctx.beginPath();
+            let flameLen = 20 + Math.random() * (this.currentSpeed / 10);
+            this.ctx.moveTo(-cw*0.3, 10); this.ctx.lineTo(-cw*0.2, 10); this.ctx.lineTo(-cw*0.25, flameLen);
+            this.ctx.fill();
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(cw*0.2, 10); this.ctx.lineTo(cw*0.3, 10); this.ctx.lineTo(cw*0.25, flameLen);
+            this.ctx.fill();
+        }
+
+        // Tires
+        this.ctx.fillStyle = '#050505';
+        this.ctx.fillRect(-cw*0.55, -10, cw*0.2, 30);
+        this.ctx.fillRect(cw*0.35, -10, cw*0.2, 30);
+
+        // Car Chassis
+        this.ctx.fillStyle = '#1a1a24'; 
+        this.ctx.strokeStyle = this.isNitroActive ? '#00e5ff' : '#00ffcc';
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(-cw*0.4, 10); this.ctx.lineTo(-cw*0.5, -10);
+        this.ctx.lineTo(-cw*0.35, -25); this.ctx.lineTo(cw*0.35, -25);
+        this.ctx.lineTo(cw*0.5, -10); this.ctx.lineTo(cw*0.4, 10);
+        this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+
+        // Cockpit
+        this.ctx.fillStyle = '#050510';
+        this.ctx.beginPath();
+        this.ctx.moveTo(-cw*0.3, -25); this.ctx.lineTo(-cw*0.2, -40);
+        this.ctx.lineTo(cw*0.2, -40); this.ctx.lineTo(cw*0.3, -25);
+        this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+
+        // 🔫 ROOF TURRET / GUN
+        this.ctx.fillStyle = '#222';
+        this.ctx.fillRect(-cw*0.1, -43, cw*0.2, 8); 
+        this.ctx.fillStyle = '#555';
+        this.ctx.fillRect(-cw*0.04, -50, cw*0.08, 12); 
+        this.ctx.fillStyle = '#00ffcc';
+        this.ctx.fillRect(-cw*0.02, -48, cw*0.04, 4); 
+
+        // 💥 Muzzle Flashes
+        for(let i = this.muzzleFlashes.length - 1; i >= 0; i--) {
+            let flash = this.muzzleFlashes[i];
+            flash.life -= 0.1;
+            if(flash.life > 0) {
+                this.ctx.fillStyle = `rgba(255, 255, 0, ${flash.life})`;
+                this.ctx.shadowColor = '#ff00cc';
+                this.ctx.shadowBlur = 20 * flash.life;
+                this.ctx.beginPath();
+                this.ctx.arc(0, -52, 10 * flash.life, 0, Math.PI*2);
+                this.ctx.fill();
+                this.ctx.shadowBlur = 0;
+            } else {
+                this.muzzleFlashes.splice(i, 1);
+            }
+        }
+
+        // Spoiler
+        this.ctx.fillStyle = '#11111a';
+        this.ctx.beginPath();
+        this.ctx.moveTo(-cw*0.45, -35); this.ctx.lineTo(cw*0.45, -35);
+        this.ctx.lineTo(cw*0.4, -30); this.ctx.lineTo(-cw*0.4, -30);
+        this.ctx.closePath(); this.ctx.fill(); this.ctx.stroke();
+
+        // Taillights
+        this.ctx.fillStyle = '#ff0055';
+        this.ctx.shadowColor = '#ff0055';
+        this.ctx.shadowBlur = 20;
+        this.ctx.fillRect(-cw*0.45, -5, cw*0.25, 8);
+        this.ctx.fillRect(cw*0.2, -5, cw*0.25, 8);
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.restore(); // 🔄 Restore canvas rotation
+
+        // 9. DRAW PARTICLES
+        for(let i=this.particles.length-1; i>=0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
+            this.ctx.fillStyle = p.color; this.ctx.globalAlpha = Math.max(0, p.life);
+            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
+            if(p.life <= 0) this.particles.splice(i, 1);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        // 10. GREETINGS
+        for (let i = this.greetings.length - 1; i >= 0; i--) {
+            let g = this.greetings[i];
+            g.y -= 2; g.alpha -= 0.015; 
+            if (g.scale < 1.2) g.scale += 0.08; 
+
+            this.ctx.save();
+            this.ctx.globalAlpha = Math.max(0, g.alpha);
+            this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+            this.ctx.shadowColor = '#ff00cc'; this.ctx.shadowBlur = 25; this.ctx.fillStyle = '#ffffff'; 
+            let sc = Math.min(g.scale, 1.2);
+            
+            this.ctx.font = `800 ${25 * sc}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(`${g.comboVal} COMBO!`, centerX, g.y - (25 * sc));
+            this.ctx.font = `900 ${45 * sc}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(g.text, centerX, g.y + (15 * sc));
+            this.ctx.restore();
+
+            if (g.alpha <= 0) this.greetings.splice(i, 1);
+        }
+
+        // Nitro Bar
+        let barWidth = 200; let barHeight = 10;
+        let barX = (this.canvas.width - barWidth) / 2;
+        let barY = this.canvas.height - 20; 
+        
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.beginPath(); this.ctx.roundRect(barX, barY, barWidth, barHeight, 4); this.ctx.fill();
+
+        let fillRatio = this.nitroCharge / 100;
+        let isReady = fillRatio >= 1;
+        
+        this.ctx.fillStyle = this.isNitroActive ? '#ff00cc' : (isReady ? '#00e5ff' : '#3b82f6');
+        if(isReady || this.isNitroActive) { this.ctx.shadowColor = this.ctx.fillStyle; this.ctx.shadowBlur = 10; }
+        this.ctx.beginPath(); this.ctx.roundRect(barX, barY, barWidth * fillRatio, barHeight, 4); this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.font = "bold 12px 'JetBrains Mono'";
+        this.ctx.fillStyle = this.isNitroActive ? '#ff00cc' : (isReady ? '#00e5ff' : '#94a3b8');
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(this.isNitroActive ? "NITRO BOOST ACTIVE!" : (isReady ? "NITRO READY [SPACE]" : "CHARGING NITRO..."), centerX, barY - 10);
+
+        this.updateHUD(); 
+        if(this.state === 'PLAYING') this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    gameOver() {
+        this.state = 'GAMEOVER';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        this.saveStats();
+        
+        document.getElementById('resScore').innerText = Math.floor(this.distance) + 'm'; 
+        document.getElementById('resWpm').innerText = this.wpm;
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        document.getElementById('resAcc').innerText = acc + '%';
+        document.getElementById('resCombo').innerText = this.maxCombo;
+        
+        let secs = Math.floor((Date.now() - this.startTime)/1000);
+        document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+        
+        const modal = document.getElementById('gameResultModal');
+        modal.classList.remove('hidden'); modal.style.display = 'flex';
+    }
+
+    saveStats() {
+        let scoreKey = `typingRacer_bestScore_${this.difficulty}`; 
+        let wpmKey = `typingRacer_bestWpm_${this.difficulty}`;
+        
+        let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
+        let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
+        
+        let badge = document.getElementById('newHighScoreBadge');
+        if(Math.floor(this.distance) > existingScore) {
+            localStorage.setItem(scoreKey, Math.floor(this.distance));
+            if(badge) { badge.style.display = 'inline-block'; badge.classList.remove('hidden'); }
+        } else { if(badge) badge.style.display = 'none'; }
+
+        if(this.wpm > existingWpm || existingWpm === 0) localStorage.setItem(wpmKey, this.wpm);
+        
+        let history = JSON.parse(localStorage.getItem('typingRacer_GameHistory') || '[]');
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        let dateStr = new Date().toLocaleString('en-IN', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});
+        history.unshift({ date: dateStr, score: Math.floor(this.distance), wpm: this.wpm, accuracy: acc, diff: this.difficulty.toUpperCase() }); 
+        if(history.length > 10) history = history.slice(0, 10); 
+        localStorage.setItem('typingRacer_GameHistory', JSON.stringify(history)); 
+        
+        this.parent.loadPersistentStats(); 
+    }
+
+    playSound(freq, type, vol, endFreq = null) {
+        if(!this.parent.soundEnabled || !this.parent.audioCtx) return;
+        let ctx = this.parent.audioCtx;
+        if(ctx.state === 'suspended') ctx.resume();
+        let osc = ctx.createOscillator(); let gain = ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        if(endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(vol, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+    }
+
+    cleanup() {
+        this.state = 'EXIT';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        window.removeEventListener('keydown', this.keydownBind);
+        window.removeEventListener('resize', this.resizeBind);
+    }
+}
+
+
 // MAIN MODULE MANAGER (With "Coming Soon" Screen for other games)
 class TypingGamesModule {
     constructor() {
@@ -4477,28 +5791,24 @@ class TypingGamesModule {
         document.getElementById('pauseGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.pause === 'function') this.activeGameInstance.pause(); });
         document.getElementById('resumeGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.resume === 'function') this.activeGameInstance.resume(); });
         document.getElementById('quitGameBtn')?.addEventListener('click', () => this.exitToDashboard());
-        document.getElementById('restartGameBtn')?.addEventListener('click', () => {
+                document.getElementById('restartGameBtn')?.addEventListener('click', () => {
             if(!this.activeGameInstance) return;
             let diff = this.activeGameInstance.difficulty;
-            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : null;
+            // DYNAMIC GAME SELECTION FIX
+            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : 'wordRush';
             this.exitToDashboard();
-            if(game) setTimeout(() => this.startGame(game, diff), 100);
-        });
-
-        document.getElementById('backToGamesBtn')?.addEventListener('click', () => {
-            const modal = document.getElementById('gameResultModal');
-            if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
-            this.exitToDashboard();
+            setTimeout(() => this.startGame(game, diff), 100);
         });
 
         document.getElementById('playAgainBtn')?.addEventListener('click', () => {
             if(!this.activeGameInstance) return;
             let diff = this.activeGameInstance.difficulty;
-            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : null;
+            // DYNAMIC GAME SELECTION FIX
+            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : 'wordRush';
             const modal = document.getElementById('gameResultModal');
             if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
             this.exitToDashboard();
-            if(game) setTimeout(() => this.startGame(game, diff), 100);
+            setTimeout(() => this.startGame(game, diff), 100);
         });
 
         const viewHistoryBtns = Array.from(document.querySelectorAll('button')).filter(b => b.innerText.includes('VIEW HISTORY'));
@@ -4559,46 +5869,43 @@ class TypingGamesModule {
         this.exitToDashboard();
     }
 
-    loadPersistentStats() {
-        const card = document.querySelector('.game-card[data-game="spaceTyper"]');
-        if(card) {
-            const diff = card.querySelector('.game-diff-select').value;
-            const bestScore = localStorage.getItem(`spaceTyper_bestScore_${diff}`) || '0';
-            const bestWpm = localStorage.getItem(`spaceTyper_bestWpm_${diff}`) || '0';
+        loadPersistentStats() {
+        // Har game card ko dhoondho aur uska data update karo
+        document.querySelectorAll('.game-card').forEach(card => {
+            const gameKey = card.dataset.game; 
+            if(!gameKey) return;
+
+            const diffSelect = card.querySelector('.game-diff-select');
+            if(!diffSelect) return;
+            
+            const diff = diffSelect.value;
+            const bestScore = localStorage.getItem(`${gameKey}_bestScore_${diff}`) || '0';
+            const bestWpm = localStorage.getItem(`${gameKey}_bestWpm_${diff}`) || '0';
             
             let scoreElem = card.querySelector('.stat-score');
             let wpmElem = card.querySelector('.stat-wpm');
             
             if(scoreElem) scoreElem.innerText = bestScore;
-            if(wpmElem) {
-                wpmElem.innerText = bestWpm;
-            } else {
-                const previewDiv = card.querySelector('.game-stats-preview');
-                if(previewDiv) {
-                    previewDiv.innerHTML = `<b>Best Score: <span class="stat-score">${bestScore}</span></b> <b>Best WPM: <span class="stat-wpm">${bestWpm}</span></b>`;
-                }
-            }
-        }
+            if(wpmElem) wpmElem.innerText = bestWpm;
+        });
         
+        // Dropdown change hone par score update karne ka logic
         document.querySelectorAll('.game-diff-select').forEach(sel => {
-            sel.addEventListener('change', (e) => {
+            sel.onchange = (e) => {
                 const pCard = e.target.closest('.game-card');
-                if(pCard && pCard.dataset.game === 'spaceTyper') {
+                if(pCard) {
+                    const gameKey = pCard.dataset.game;
                     const diff = e.target.value;
-                    const bScore = localStorage.getItem(`spaceTyper_bestScore_${diff}`) || '0';
-                    const bWpm = localStorage.getItem(`spaceTyper_bestWpm_${diff}`) || '0';
+                    const bScore = localStorage.getItem(`${gameKey}_bestScore_${diff}`) || '0';
+                    const bWpm = localStorage.getItem(`${gameKey}_bestWpm_${diff}`) || '0';
                     
                     let sElem = pCard.querySelector('.stat-score');
                     let wElem = pCard.querySelector('.stat-wpm');
                     
                     if(sElem) sElem.innerText = bScore;
-                    if(wElem) { wElem.innerText = bWpm; } 
-                    else {
-                        const previewDiv = pCard.querySelector('.game-stats-preview');
-                        if(previewDiv) { previewDiv.innerHTML = `<b>Best Score: <span class="stat-score">${bScore}</span></b> <b>Best WPM: <span class="stat-wpm">${bWpm}</span></b>`; }
-                    }
+                    if(wElem) wElem.innerText = bWpm;
                 }
-            });
+            };
         });
     }
 
@@ -4653,7 +5960,7 @@ class TypingGamesModule {
     }
 
 
-    // 🚀 UPDATED: STARTS GAME OR SHOWS "COMING SOON"
+        // 🚀 UPDATED: STARTS GAME OR SHOWS "COMING SOON"
     startGame(gameKey, difficulty) {
         if(this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume();
         
@@ -4682,24 +5989,36 @@ class TypingGamesModule {
 
         const statsBar = document.querySelector('.arena-stats');
         
-        // Agar Space Typer hai, toh normally start karo
+        // 1. SPACE TYPER
         if(gameKey === 'spaceTyper') {
-            if(statsBar) statsBar.style.display = 'flex'; // Stats dikhao
+            if(statsBar) statsBar.style.display = 'flex'; 
             document.getElementById('arenaGameTitle').innerText = `SPACE TYPER`;
             document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
             this.activeGameInstance = new SpaceTyperGame(difficulty, this);
             this.activeGameInstance.start();
         } 
+        // 2. WORD RUSH
+        else if (gameKey === 'wordRush') {
+            if(statsBar) statsBar.style.display = 'flex'; 
+            document.getElementById('arenaGameTitle').innerText = `WORD RUSH ⚡`;
+            document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
+            this.activeGameInstance = new WordRushGame(difficulty, this);
+            this.activeGameInstance.start();
+        }
+        // 3. 🏎️ YAHAN TYPING RACER ADD HUA HAI 🏎️
+        else if (gameKey === 'typingRacer') {
+            if(statsBar) statsBar.style.display = 'flex'; 
+            document.getElementById('arenaGameTitle').innerText = `TYPING RACER 🏎️`;
+            document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
+            this.activeGameInstance = new TypingRacerGame(difficulty, this);
+            this.activeGameInstance.start();
+        }
         // Baaki sabhi games ke liye COMING SOON screen
         else {
-            if(statsBar) statsBar.style.display = 'none'; // Stats chupao
-            
-            // Game ka naam format karne ke liye (e.g. "wordRush" -> "WORD RUSH")
+            if(statsBar) statsBar.style.display = 'none'; 
             let displayTitle = gameKey.replace(/([A-Z])/g, ' $1').trim().toUpperCase();
-            
             document.getElementById('arenaGameTitle').innerText = displayTitle;
             
-            // 🚧 Coming Soon UI Template
             document.getElementById('gameCanvasLayer').innerHTML = `
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; background: #070709; color: #fff; text-align: center; padding: 20px; box-sizing: border-box; position: absolute; top:0; left:0; z-index: 100;">
                     <div style="font-size: 5rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,204,0.5));">🚧</div>
@@ -4710,6 +6029,7 @@ class TypingGamesModule {
             `;
         }
     }
+
 
     exitToDashboard() {
         if(this.activeGameInstance && typeof this.activeGameInstance.cleanup === 'function') {
@@ -4728,42 +6048,63 @@ class TypingGamesModule {
 }
 
 window.typingGamesModule = new TypingGamesModule();
-
 // =========================================================
-// 🚀 FIX: FORCE RESULT MODAL BUTTONS TO WORK
+// 🚀 THE REAL BULLETPROOF BUTTON FIX (KILLS OLD LISTENERS)
 // =========================================================
 setTimeout(() => {
-    // 1. PLAY AGAIN BUTTON
-    document.getElementById('playAgainBtn').onclick = function() {
-        document.getElementById('gameResultModal').classList.add('hidden');
-        document.getElementById('gameResultModal').style.display = 'none';
-        
-        let diff = window.typingGamesModule.activeGameInstance ? window.typingGamesModule.activeGameInstance.difficulty : 'medium';
-        window.typingGamesModule.exitToDashboard();
-        
-        // Thoda delay dekar game wapas start karein
-        setTimeout(() => window.typingGamesModule.startGame('spaceTyper', diff), 150);
-    };
+    function handleReplay() {
+        const modal = document.getElementById('gameResultModal');
+        const pauseMenu = document.getElementById('gamePauseOverlay');
 
-    // 2. BACK TO GAMES BUTTON
-    document.getElementById('backToGamesBtn').onclick = function() {
-        document.getElementById('gameResultModal').classList.add('hidden');
-        document.getElementById('gameResultModal').style.display = 'none';
-        window.typingGamesModule.exitToDashboard();
-    };
+        if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+        if(pauseMenu) { pauseMenu.classList.add('hidden'); pauseMenu.style.display = 'none'; }
 
-    // 3. VIEW HISTORY BUTTON
-    document.getElementById('viewHistoryFromGameBtn').onclick = function() {
-        document.getElementById('gameResultModal').classList.add('hidden');
-        document.getElementById('gameResultModal').style.display = 'none';
-        window.typingGamesModule.exitToDashboard();
-        
-        // History modal open karne ka function
-        if(typeof openTypingHistoryModal === 'function') {
-            openTypingHistoryModal();
+        if(!window.typingGamesModule || !window.typingGamesModule.activeGameInstance) return;
+
+        let diff = window.typingGamesModule.activeGameInstance.difficulty;
+
+        // 🚀 EXACT GAME SELECTION
+        let gameClass = window.typingGamesModule.activeGameInstance.constructor.name;
+        let gameKey = 'spaceTyper';
+
+        if (gameClass === 'WordRushGame') {
+            gameKey = 'wordRush';
+        } else if (gameClass === 'TypingRacerGame') {
+            gameKey = 'typingRacer';
         }
-    };
-}, 1000);
+
+        window.typingGamesModule.exitToDashboard();
+
+        setTimeout(() => window.typingGamesModule.startGame(gameKey, diff), 150);
+    }
+
+    // Function to strip all hidden event listeners
+    function replaceButton(id, callback) {
+        let oldBtn = document.getElementById(id);
+        if(oldBtn) {
+            let newBtn = oldBtn.cloneNode(true);
+            oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+            newBtn.addEventListener('click', callback);
+        }
+    }
+
+    replaceButton('playAgainBtn', handleReplay);
+    replaceButton('restartGameBtn', handleReplay);
+
+    replaceButton('backToGamesBtn', function() {
+        const modal = document.getElementById('gameResultModal');
+        if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+        window.typingGamesModule.exitToDashboard();
+    });
+
+    replaceButton('viewHistoryFromGameBtn', function() {
+        const modal = document.getElementById('gameResultModal');
+        if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+        window.typingGamesModule.exitToDashboard();
+        if(typeof openTypingHistoryModal === 'function') openTypingHistoryModal();
+    });
+
+}, 1500);
 
 </script>
 </body>
