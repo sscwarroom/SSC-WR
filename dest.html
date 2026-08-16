@@ -242,7 +242,13 @@ body.focus-mode-active #aura-glow-layer {
    🚀 SMOOTH TYPING COLORS (NORMAL MODE)
 ========================================================= */
 body:not(.focus-mode-active) .t-char.correct{color:var(--type-correct);text-shadow:0 0 12px rgba(163,230,53,.4);}
-body:not(.focus-mode-active) .t-char.incorrect{color:var(--type-error);background-color:var(--type-error-bg);text-shadow:0 0 10px rgba(255,51,51,.6);border-radius:4px;}
+body:not(.focus-mode-active) .t-char.incorrect {
+    color: var(--type-error) !important;
+    background-color: transparent !important; /* Background hata diya */
+    text-shadow: none !important; /* Clean look ke liye glow hata diya */
+    border-radius: 0 !important;
+    border-bottom: 2px solid var(--type-error); /* Optional: Agar aap chaho toh sirf ek red underline de sakte ho, warna ise hata dena */
+}
 
 /* ==============================================================
    🎯 BUTTER SMOOTH FOCUS MODE (MONKEYTYPE KILLER)
@@ -1257,6 +1263,185 @@ body.is-typing #dynamic-bg-container {
 .t-char { 
     will-change: color; /* Browser ko pehle bata do ki color change hoga */
 }
+/* =========================================================
+   ⚡ PURE PERFORMANCE MODE (ZERO LAG & CLEAN UI)
+========================================================= */
+
+/* 1. Sahi type kiye hue letters ka glow hatane ke liye */
+body:not(.focus-mode-active) .t-char.correct {
+    color: var(--type-correct) !important;
+    text-shadow: none !important; 
+}
+
+/* 2. Galat type kiye hue letters ka background aur glow hatane ke liye */
+body:not(.focus-mode-active) .t-char.incorrect {
+    color: var(--type-error) !important;
+    background-color: transparent !important; 
+    text-shadow: none !important; 
+    border-radius: 0 !important;
+    border-bottom: 2px solid var(--type-error) !important; 
+}
+
+/* 3. Typing box ka dabba (background, border, shadow) hatane ke liye */
+.typing-box {
+    background-color: transparent !important; 
+    border: none !important;                  
+    box-shadow: none !important;              
+    padding: 10px 5px !important;             
+}
+
+/* 4. Typing box par click/hover karne par aane wala glow hatane ke liye */
+.typing-box:focus-within, .typing-box:hover {
+    box-shadow: none !important;
+    border: none !important; 
+}
+
+/* 5. Streak ke sath badhne wala background aura/glow layer disable karne ke liye */
+#aura-glow-layer {
+    display: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+}
+
+/* 6. Background particles aur heavy animations hide karne ke liye (For Zero Lag) */
+#dynamic-bg-container {
+    display: none !important;
+}
+/* =========================================================
+   🔠 FONT SIZE & 🖱️ SMOOTH CURSOR ANIMATION FIX
+========================================================= */
+
+/* 1. Desktop ke liye font size bada karna */
+.typing-box {
+    font-size: 2rem !important; /* Pehle 1.6rem tha, isko 2rem kar diya */
+    line-height: 1.8 !important; /* Text ke beech thodi aur breathing space */
+}
+
+/* 2. Mobile screens ke liye font size bada karna */
+@media (max-width: 768px) {
+    .typing-box {
+        font-size: 1.8rem !important; /* Pehle 1.4rem tha, isko bada kar diya */
+    }
+}
+
+/* 3. Cursor glide animation ko ekdum smooth banana */
+#smooth-caret {
+    /* Timing thodi badha di aur cubic-bezier lagaya taaki ekdum smoothly slide kare */
+    transition: left 0.12s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.15s ease-out !important;
+    will-change: left, top !important; /* GPU acceleration force karne ke liye */
+}
+/* =========================================================
+   🖱️ CURSOR HEIGHT & ALIGNMENT FIX
+========================================================= */
+#smooth-caret {
+    height: 1.1em !important; /* Cursor ko theek font ke size ka banane ke liye */
+    margin-top: 0.3em !important; /* Upar se thoda neeche push karke text ke sath center align karne ke liye */
+}
+/* =========================================================
+   ✨ DYNAMIC MORPHING CURSOR (Width auto-adjusts to letter)
+========================================================= */
+
+/* Wapas apna premium font laane ke liye */
+body.focus-mode-active .typing-box, 
+.typing-box {
+    font-family: var(--ui-font) !important;
+    letter-spacing: normal !important;
+}
+#smooth-caret {
+    display: block !important;
+    background-color: var(--type-primary) !important;
+    border-radius: 4px !important; 
+    z-index: 1 !important; 
+    
+    /* 1. Lambai badhane ke liye height force kar di */
+    height: 1.5em !important; 
+    
+    /* 2. Upar ki taraf stretch karne ke liye margin-top ko 10px se kam karke 4px kar diya */
+    margin-top: 4px !important; 
+    margin-left: 0 !important; 
+    
+    transition: left 0.12s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                top 0.12s ease-out,
+                width 0.12s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+                
+    will-change: left, top, width, opacity !important;
+    animation: premiumBlink 0.8s infinite alternate cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes premiumBlink {
+    0% { opacity: 0.35; transform: scale(1); }
+    100% { opacity: 0.15; transform: scale(0.95); }
+}
+/* =========================================================
+   🎯 FOCUS MODE CARET (Perfect Size & Alignment)
+========================================================= */
+
+body.focus-mode-active #smooth-caret {
+    /* 1. Lightness theek karne ke liye thoda mota (4px) kar diya */
+    width: 4px !important;         
+    
+    /* 2. Neeche se lamba na nikle isliye height 1.5em se kam karke 1.2em kar di */
+    height: 1.2em !important;      
+    
+    /* 3. Text ke bilkul barabar (center) rakhne ke liye upar se thoda sa margin diya */
+    margin-top: 4px !important;    
+    
+    margin-left: -2px !important;  
+    border-radius: 2px !important; 
+    background-color: var(--type-primary) !important;
+    
+    /* Agar animation ki wajah se fade ho raha ho toh isko solid rakhne ke liye */
+    opacity: 1 !important; 
+}
+/* =========================================================
+   🎯 FOCUS MODE: FONT SIZE & CURSOR OVERLAP FIX
+========================================================= */
+
+/* 1. Focus Mode mein Font Size bada karne ke liye */
+body.focus-mode-active .typing-box {
+    font-size: 2.4rem !important; /* Pehle se aur bada kar diya */
+    line-height: 1.8 !important;
+}
+
+/* 2. Cursor ko text ke upar aane se rokne ke liye */
+body.focus-mode-active #smooth-caret {
+    width: 3px !important;         /* 4px thoda zyada mota tha, 3px perfect rahega */
+    height: 1.2em !important;      
+    margin-top: 4px !important;    
+    margin-left: -1px !important;  
+    
+    background-color: var(--type-primary) !important;
+    
+    /* MAGIC FIX: Cursor ko text ke peeche bhej diya taaki text kabhi na chhupe */
+    z-index: -1 !important; 
+}
+
+/* 3. Text ko hamesha upar aur clear rakhne ke liye */
+.t-char {
+    position: relative !important;
+    z-index: 2 !important;
+}
+/* =========================================================
+   🔤 UNTYPED TEXT INTENSITY (Mode Specific Logic)
+========================================================= */
+
+/* 1. Sabhi letters default 35% opacity (dim) par rahenge */
+.t-char {
+    opacity: 0.35 !important; 
+}
+
+/* 2. Dono modes mein type kiye hue (sahi/galat) letters 100% bright honge */
+.t-char.correct, 
+.t-char.incorrect {
+    opacity: 1 !important;
+}
+
+/* 3. SIRF NORMAL MODE MEIN: Jo letter type karna hai (active), wo bright rahega */
+body:not(.focus-mode-active) .t-char.active {
+    opacity: 1 !important;
+}
+
+/* Focus Mode mein .active letter dim (0.35 opacity) hi rahega kyunki us par upar wala rule apply nahi hoga! */
 
 </style>
 </head>
@@ -2369,7 +2554,6 @@ function focusTypingInput() {
   }
   initAudio();
 }
-
 function updateSmoothCaret() {
     if(charactersInfo.length > 0 && !isGameMode) {
         const activeIndex = Math.min(charIndex, charactersInfo.length - 1); 
@@ -2379,11 +2563,29 @@ function updateSmoothCaret() {
         if(activeEl && caret) { 
             if(charIndex >= charactersInfo.length) { 
                 caret.style.left = (activeEl.offsetLeft + activeEl.offsetWidth + 1) + 'px'; 
+                caret.style.width = '10px'; /* Test khatam hone par default size */
             } else { 
-                caret.style.left = (activeEl.offsetLeft - 3) + 'px'; 
+                // Ye 2 lines magic karengi!
+                caret.style.left = (activeEl.offsetLeft) + 'px'; 
+                caret.style.width = (activeEl.offsetWidth) + 'px'; /* Letter ki exact width le lega! */
             } 
             caret.style.top = (activeEl.offsetTop + activeEl.offsetHeight * 0.075) + 'px'; 
             caret.style.height = (activeEl.offsetHeight * 0.85) + 'px'; 
+        }
+    }
+}
+
+// =========================================================
+// ⛶ FULL SCREEN TOGGLE FUNCTION
+// =========================================================
+function toggleTypingFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
         }
     }
 }
@@ -3837,6 +4039,8 @@ if ((e.key === 'Tab' || e.key === 'Enter') && e.target.value !== expected) {
     window.toggleCustomTextarea = toggleCustomTextarea;
     window.initializeTypingTest = initializeTypingTest;
     window.toggleFocusMode = toggleFocusMode;
+    window.toggleTypingFullscreen = toggleTypingFullscreen;
+
     window.focusTypingInput = focusTypingInput;
     window.resetAppToSetup = resetAppToSetup;
     window.finishTypingTestEarly = finishTypingTestEarly;
@@ -4364,37 +4568,60 @@ class SpaceTyperGame {
             if(en.y > this.canvas.height - 40) this.destroyEnemy(en, false);
         }
 
+                // 🚀 UPGRADED SPACESHIP DRAWING LOGIC
         let cx = this.canvas.width / 2;
-        let cy = this.canvas.height - 35;
+        let cy = this.canvas.height - 50; 
         
         const primaryColor = isLight ? '#3b82f6' : '#00ffcc';
-        const bodyColor = isLight ? '#ffffff' : '#0f172a';
+        const bodyColor = isLight ? '#e2e8f0' : '#1e293b';
+        const innerArmor = isLight ? '#ffffff' : '#0f172a';
 
-        this.ctx.shadowColor = '#f59e0b';
+        // 1. Thruster Glow (Engine Fire)
+        this.ctx.shadowColor = '#00e5ff';
         this.ctx.shadowBlur = 15;
-        this.ctx.fillStyle = '#f59e0b';
-        this.ctx.beginPath(); this.ctx.arc(cx - 8, cy + 12, 3 + Math.random()*3, 0, Math.PI*2); this.ctx.fill();
-        this.ctx.beginPath(); this.ctx.arc(cx + 8, cy + 12, 3 + Math.random()*3, 0, Math.PI*2); this.ctx.fill();
+        this.ctx.fillStyle = '#00e5ff';
+        this.ctx.beginPath(); 
+        this.ctx.ellipse(cx, cy + 12, 4, 10 + Math.random() * 8, 0, 0, Math.PI*2); 
+        this.ctx.fill();
         this.ctx.shadowBlur = 0;
 
+        // 2. Main Outer Hull (Swept-back Wings)
         this.ctx.fillStyle = bodyColor;
         this.ctx.strokeStyle = primaryColor;
         this.ctx.lineWidth = 2;
+        this.ctx.lineJoin = "round";
         this.ctx.beginPath();
-        this.ctx.moveTo(cx, cy - 22); 
-        this.ctx.lineTo(cx + 20, cy + 10); 
-        this.ctx.lineTo(cx + 8, cy + 8); 
-        this.ctx.lineTo(cx, cy + 12); 
-        this.ctx.lineTo(cx - 8, cy + 8); 
-        this.ctx.lineTo(cx - 20, cy + 10); 
+        this.ctx.moveTo(cx, cy - 28);       
+        this.ctx.lineTo(cx + 10, cy - 10);  
+        this.ctx.lineTo(cx + 26, cy + 12);  
+        this.ctx.lineTo(cx + 10, cy + 6);   
+        this.ctx.lineTo(cx, cy + 14);       
+        this.ctx.lineTo(cx - 10, cy + 6);   
+        this.ctx.lineTo(cx - 26, cy + 12);  
+        this.ctx.lineTo(cx - 10, cy - 10);  
         this.ctx.closePath();
         this.ctx.fill();
         this.ctx.stroke();
 
-        this.ctx.fillStyle = primaryColor;
+        // 3. Inner Armor Plates
+        this.ctx.fillStyle = innerArmor;
         this.ctx.beginPath();
-        this.ctx.ellipse(cx, cy - 6, 3, 7, 0, 0, Math.PI * 2);
+        this.ctx.moveTo(cx, cy - 18);
+        this.ctx.lineTo(cx + 6, cy + 4);
+        this.ctx.lineTo(cx, cy + 10);
+        this.ctx.lineTo(cx - 6, cy + 4);
+        this.ctx.closePath();
         this.ctx.fill();
+
+        // 4. Glowing Cockpit Canopy
+        this.ctx.fillStyle = primaryColor;
+        this.ctx.shadowColor = primaryColor;
+        this.ctx.shadowBlur = 10;
+        this.ctx.beginPath();
+        this.ctx.ellipse(cx, cy - 6, 3.5, 7, 0, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
 
         for(let i=this.bullets.length-1; i>=0; i--) {
             let b = this.bullets[i];
