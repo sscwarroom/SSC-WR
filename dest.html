@@ -1442,6 +1442,113 @@ body:not(.focus-mode-active) .t-char.active {
 }
 
 /* Focus Mode mein .active letter dim (0.35 opacity) hi rahega kyunki us par upar wala rule apply nahi hoga! */
+/* =========================================================
+   🌟 HEADER FIX (MOBILE OPTIMIZED)
+========================================================= */
+.setup-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    flex-wrap: wrap; /* Chhoti screen pe auto-adjust karega */
+    gap: 15px; 
+    margin-bottom: 24px; 
+    padding-bottom: 15px; 
+    border-bottom: 1px solid rgba(128,128,128,0.15); 
+    width: 100%; 
+}
+.setup-title { 
+    display: flex; 
+    flex-direction: column; 
+}
+.setup-title h3 { 
+    color: var(--text-primary); 
+    font-size: 1.6rem; /* Mobile ke liye font thoda adjust kiya */
+    font-weight: 800; 
+    display: flex; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    margin-bottom: 4px; 
+    letter-spacing: -0.5px; 
+}
+.pro-badge { 
+    font-size: 0.65rem; 
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6); 
+    color: #fff; 
+    padding: 4px 8px; 
+    border-radius: 6px; 
+    font-weight: 800; 
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+    box-shadow: 0 4px 10px rgba(59,130,246,0.3); 
+}
+.setup-title p { 
+    font-size: 0.85rem; 
+    color: var(--text-secondary); 
+    font-weight: 500; 
+    margin: 0; 
+}
+
+.utils-group { 
+    display: flex; 
+    gap: 8px; 
+}
+.util-icon-btn { 
+    width: 42px; 
+    height: 42px; 
+    padding: 0; /* Faltu padding hatayi */
+    border-radius: 12px; 
+    background: rgba(128,128,128,0.08); 
+    border: 1px solid rgba(128,128,128,0.15); 
+    color: var(--text-primary); 
+    font-size: 1.2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    outline: none; 
+    flex-shrink: 0; /* Button ko sikudne se rokega */
+}
+.util-icon-btn:hover { 
+    background: rgba(128,128,128,0.15); 
+    transform: translateY(-2px); 
+    border-color: var(--accent-primary); 
+    color: var(--accent-primary); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+}
+
+
+/* Bento Grid System */
+.bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.bento-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: rgba(128,128,128,0.05); border: 1px solid rgba(128,128,128,0.1); cursor: pointer; transition: all 0.3s ease; text-align: left; }
+.bento-card.full-width { grid-column: 1 / -1; }
+.bento-card:hover { border-color: var(--accent-primary); background: rgba(59,130,246,0.05); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.bento-icon { font-size: 1.6rem; background: rgba(255,255,255,0.08); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(255,255,255,0.05); }
+.bento-info { display: flex; flex-direction: column; }
+.bento-title { font-weight: 700; font-size: 0.95rem; color: var(--text-primary); letter-spacing: 0.3px; }
+.bento-desc { font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px; }
+
+/* Clean Config Card */
+.config-card { background: transparent; border: 1px solid rgba(128,128,128,0.15); border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+.config-header { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.config-header::after { content: ''; flex: 1; height: 1px; background: rgba(128,128,128,0.15); }
+
+.search-input { width: 100%; padding: 14px 16px; border-radius: 12px; background: rgba(128,128,128,0.06); border: 1px solid rgba(128,128,128,0.2); color: var(--text-primary); font-size: 0.95rem; font-weight: 600; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="%23888" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position: right 14px center; transition: all 0.2s; }
+.search-input:focus { border-color: var(--accent-primary); background: rgba(128,128,128,0.1); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); outline: none; }
+
+/* The Solid Invert CTA Button */
+.ultimate-start-btn { width: 100%; background: var(--text-primary); color: var(--bg-base) !important; border: none; padding: 18px; font-size: 1.1rem; border-radius: 14px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); outline: none; }
+.ultimate-start-btn:hover { transform: translateY(-3px); opacity: 0.9; box-shadow: 0 12px 25px rgba(0,0,0,0.3); }
+
+/* LIGHT MODE OVERRIDES FOR CRISP LOOK */
+body.light-mode .bento-card { background: #ffffff; border-color: rgba(0,0,0,0.08); box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+body.light-mode .bento-card:hover { border-color: var(--accent-primary); box-shadow: 0 10px 25px rgba(59,130,246,0.1); background: #f8fafc; }
+body.light-mode .bento-icon { background: #f1f5f9; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+body.light-mode .util-icon-btn { background: #ffffff; border-color: rgba(0,0,0,0.1); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+body.light-mode .config-card { background: #ffffff; border-color: rgba(0,0,0,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+body.light-mode .search-input { background: #f8fafc; border-color: rgba(0,0,0,0.1); }
+body.light-mode .ultimate-start-btn { background: #0f172a; color: #ffffff !important; box-shadow: 0 8px 20px rgba(15,23,42,0.2); }
 
 </style>
 </head>
@@ -1463,54 +1570,83 @@ body:not(.focus-mode-active) .t-char.active {
 
 <main class="app-container fade-in" id="main-app-container">
 
-  <!-- 1. SETUP SCREEN -->
+  <!-- 1. SETUP SCREEN (PREMIUM 2025 BENTO UI) -->
   <div id="typing-setup-screen" class="app-screen fade-in">
-    <div class="flex-between mb-4">
-      <div>
-        <h3 style="color:var(--text-primary);font-size:1.8rem;font-weight:700;margin-bottom:6px;text-shadow:0 0 20px var(--accent-glow);letter-spacing:-0.5px;line-height:1.2;">DEST Pro <span style="color:var(--accent-primary); font-weight:400;">Premium</span></h3>
-        <p style="font-size:0.95rem;color:var(--text-secondary);font-weight:400;letter-spacing:0.5px;">Configure your terminal parameters to begin.</p>
+    
+    <!-- Top Header: Title & Utility Icons -->
+    <div class="setup-header">
+      <div class="setup-title">
+        <h3>DEST Pro <span class="pro-badge">Premium</span></h3>
+        <p>Select a module to begin</p>
       </div>
-      <div class="flex-row">
-        <!-- MODE TOGGLE BUTTON -->
-        <button class="btn btn-outline btn-sm" onclick="toggleLightMode()" id="mode-toggle-btn">☀️ Light Mode</button>
-        <button class="btn de-btn-main btn-sm" onclick="DataEntryApp.openDashboard()">📊 Data Entry</button>
-        <button class="btn btn-primary btn-sm" onclick="typingGamesModule.showGamesDashboard()" style="box-shadow: 0 0 15px var(--accent-glow);">🎮 Typing Games</button>
-        
-        
-        <!-- NEW TUTOR BUTTON -->
-        <button class="btn btn-primary btn-sm" onclick="openTutorDashboard()" style="box-shadow: 0 0 15px var(--accent-glow);">🎓 Typing Tutor</button>
-        <button class="btn btn-outline btn-sm" onclick="openSettingsModal()">⚙️ Settings</button>
-        <button class="btn btn-outline btn-sm" onclick="openTypingHistoryModal()">📜 History</button>
+      <div class="utils-group">
+        <button class="util-icon-btn" onclick="toggleLightMode()" id="mode-toggle-btn" title="Toggle Theme">🌓</button>
+        <button class="util-icon-btn" onclick="openTypingHistoryModal()" title="View History">📊</button>
+        <button class="util-icon-btn" onclick="openSettingsModal()" title="System Settings">⚙️</button>
       </div>
     </div>
 
-    <div class="flex-col mb-4 fade-in stagger-1">
-      <div class="input-group">
-        <label>Select Duration</label>
-        <select id="typing-duration-sel" class="search-input">
-          <option value="0">No Limit (Endless Mode)</option>
-          <option value="1">1 Minute (Sprint Mode)</option>
-          <option value="3">3 Minutes (Practice Mode)</option>
-          <option value="5" selected>5 Minutes (Standard SSC)</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label>Select Difficulty Level</label>
-        <select id="typing-level-sel" class="search-input" onchange="toggleCustomTextarea()">
-          <option value="basic">Basic (Simple Sentences)</option>
-          <option value="average" selected>Average (Govt Notifications)</option>
-          <option value="hard">Hard (Technical &amp; Legal)</option>
-          <option value="custom">Custom (Provide your own paragraph)</option>
-        </select>
-      </div>
-      <!-- Custom Text Area -->
-      <div class="input-group hidden" id="custom-text-group">
-        <label>Paste Custom Paragraph</label>
-        <textarea id="custom-text-input" class="search-input" rows="4" style="resize:vertical;" placeholder="Paste or type your custom text here..."></textarea>
+    <!-- Modern Bento Grid System -->
+    <div class="bento-grid fade-in stagger-1">
+      <button class="bento-card" onclick="openTutorDashboard()">
+        <div class="bento-icon">🎓</div>
+        <div class="bento-info">
+            <span class="bento-title">Tutor</span>
+            <span class="bento-desc">Learn typing</span>
+        </div>
+      </button>
+      <button class="bento-card" onclick="typingGamesModule.showGamesDashboard()">
+        <div class="bento-icon">🎮</div>
+        <div class="bento-info">
+            <span class="bento-title">Games</span>
+            <span class="bento-desc">Play & practice</span>
+        </div>
+      </button>
+      <button class="bento-card full-width" onclick="DataEntryApp.openDashboard()">
+        <div class="bento-icon">📑</div>
+        <div class="bento-info">
+            <span class="bento-title">Data Entry Training</span>
+            <span class="bento-desc">Official spreadsheet simulation</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Test Configuration Section -->
+    <div class="config-card fade-in stagger-2">
+      <div class="config-header">Assessment Settings</div>
+      
+      <div class="flex-col">
+        <div class="input-group">
+          <label>Test Duration</label>
+          <select id="typing-duration-sel" class="search-input">
+            <option value="0">Endless Practice (No Limit)</option>
+            <option value="1">1 Minute (Speed Sprint)</option>
+            <option value="3">3 Minutes (Warm Up)</option>
+            <option value="5" selected>5 Minutes (Standard SSC)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Difficulty Level</label>
+          <select id="typing-level-sel" class="search-input" onchange="toggleCustomTextarea()">
+            <option value="basic">Basic (Simple Sentences)</option>
+            <option value="average" selected>Average (Govt Notifications)</option>
+            <option value="hard">Hard (Technical &amp; Legal)</option>
+            <option value="custom">Custom (Paste Paragraph)</option>
+          </select>
+        </div>
+        <!-- Custom Text Area -->
+        <div class="input-group hidden" id="custom-text-group">
+          <label>Custom Text Data</label>
+          <textarea id="custom-text-input" class="search-input" rows="3" style="resize:vertical; border-radius: 12px;" placeholder="Paste your custom paragraph here..."></textarea>
+        </div>
       </div>
     </div>
 
-    <button class="btn btn-primary w-full fade-in stagger-2" style="padding:16px;font-size:1rem;margin-top:5px;letter-spacing:1px;text-transform:uppercase;" onclick="initializeTypingTest()">Initialize Assessment</button>
+    <!-- Ultimate Solid Call to Action Button -->
+    <button class="ultimate-start-btn fade-in stagger-2" onclick="initializeTypingTest()">
+      Start Assessment <span>→</span>
+    </button>
+
   </div>
 
   <!-- 🎓 NEW: TUTOR DASHBOARD SCREEN (PREMIUM LAYOUT) -->
@@ -2364,7 +2500,9 @@ function applySettings() {
     document.body.style.setProperty('--ui-font', settings.font); 
     document.body.classList.toggle('no-effects', settings.removeEffect); 
     document.body.classList.toggle('light-mode', settings.lightMode); 
-    document.getElementById('mode-toggle-btn').innerHTML = settings.lightMode ? '🌙 Dark Mode' : '☀️ Light Mode'; 
+    document.getElementById('mode-toggle-btn').innerHTML = settings.lightMode ? '🌙' : '☀️';
+    
+
     renderDynamicBackground(settings.theme); 
 }
 
@@ -2496,7 +2634,9 @@ function buildKeyboard() {
 
 function flashKey(char, isCorrect) {
   const k = (char || '').toLowerCase(); 
-  const el = document.querySelector(`.kb-key[data-key="${k === ' ' ? ' ' : k}"]`);
+  
+  // 🔥 BULLETPROOF FIX: Safely find the key element without querySelector syntax errors
+  const el = Array.from(document.querySelectorAll('.kb-key')).find(key => key.dataset.key === (k === ' ' ? ' ' : k));
   
   if(el) { 
       el.classList.remove('hit-correct', 'hit-wrong'); 
@@ -3166,21 +3306,26 @@ const TUTOR_LESSONS = [
   { id: 'l1', level: '0', title: 'Home Row Basics', desc: 'Place index fingers on F and J.', instruction: 'Type F and J using index fingers.', text: 'ff jj ff jj fj jf ff jj fj jf ff jj fj jf jj ff fj jf ff jj fj', minAcc: 90, xp: 20 },
   { id: 'l2', level: '0', title: 'Home Row Extended', desc: 'Add D and K (Middle fingers).', instruction: 'Keep fingers on home row.', text: 'dd kk dk kd fd jk df kj ddkk ffdd jjkk dfdf kjkj dk fj dk fj ddkk', minAcc: 90, xp: 20 },
   { id: 'l3', level: '0', title: 'Full Home Row', desc: 'Add A, S, L, ;', instruction: 'All fingers on home row.', text: 'asdf jkl; as df jk l; asdf jkl; sad lak fall dash flash salad ask dad fall glad', minAcc: 90, xp: 30 },
-  { id: 'g1', level: '0', type: 'game', title: 'Asteroid: Home Row', desc: 'Destroy falling words!', gameWords: ['as','df','jk','l;','sad','dad','fall','ask','glad'], targetScore: 200, xp: 50 },
+  
+  /* 🔥 GAME 1: Space Typer */
+  { id: 'g1', level: '0', type: 'game', gameKey: 'spaceTyper', title: 'Space Typer: Home Row', desc: 'Defend using Home Row keys!', gameWords: ['as','df','jk','l;','sad','dad','fall','ask','glad'], targetScore: 300, xp: 50 },
   
   { id: 'l4', level: '1', title: 'Top Row Index', desc: 'R, T, Y, U.', instruction: 'Reach up with index fingers.', text: 'rt yu rt yu ru ty ur yt rt yu rty yut rut try truly your youth rust trust truth', minAcc: 90, xp: 30 },
   { id: 'l5', level: '1', title: 'Full Top Row', desc: 'Q, W, E, I, O, P', instruction: 'Reach up from home row.', text: 'qwe uio poi ewa qwe poi uio ewa quiet power equal weight quote require upper quiet people wire', minAcc: 90, xp: 30 },
-  { id: 'g2', level: '1', type: 'game', title: 'Asteroid: Top Row', desc: 'Defend with Top Row words!', gameWords: ['qwe','uio','power','wire','try','your','truth','quiet','upper'], targetScore: 300, xp: 60 },
+  
+  /* 🔥 GAME 2: Word Rush */
+  { id: 'g2', level: '1', type: 'game', gameKey: 'wordRush', title: 'Word Rush: Top Row', desc: 'Zap fast words from the Top Row!', gameWords: ['qwe','uio','power','wire','try','your','truth','quiet','upper'], targetScore: 500, xp: 60 },
   
   { id: 'l6', level: '2', title: 'Bottom Row Index', desc: 'V, B, N, M', instruction: 'Reach down with index fingers.', text: 'vb nm vb nm vn bm nv mb vbn mnb van ban man map nab move boom nova oven move', minAcc: 90, xp: 30 },
   { id: 'l7', level: '2', title: 'Full Bottom Row', desc: 'Z, X, C, , . /', instruction: 'Complete bottom row reach.', text: 'zxc ,./ xcv m,. zxc ,./ vcx .,m zero exam next mix zoom exact zinc vex box lazy', minAcc: 90, xp: 40 },
-  { id: 'g3', level: '2', type: 'game', title: 'Asteroid: Mixed Survival', desc: 'Fast falling mixed words!', gameWords: ['van','mix','zoom','exam','lazy','power','truth','salad','glad','next'], targetScore: 400, speedMul: 1.2, xp: 75 },
+  
+  /* 🔥 GAME 3: Typing Survivor */
+  { id: 'g3', level: '2', type: 'game', gameKey: 'typingSurvivor', title: 'Survivor: Mixed Row', desc: 'Survive the horde with mixed keys!', gameWords: ['van','mix','zoom','exam','lazy','power','truth','salad','glad','next'], targetScore: 800, xp: 75 },
   
   { id: 'l8', level: '3', title: 'Shift & Capitals', desc: 'Use opposite shift key.', instruction: 'Capitalize the first letter.', text: 'India Delhi Govt State Desk Bank Indian Constitution Geography Indian Railway Bank State Police Force Indian Central System', minAcc: 92, xp: 50 },
   { id: 'l9', level: '4', title: 'Numbers & Symbols', desc: 'Number row basics.', instruction: 'Look at screen, not hands.', text: '1947 2024 100% Rs.500 (SSC) CGL The year 2025 will be 100% better than 2023. Rs. 5000 is required.', minAcc: 90, xp: 50 },
   { id: 'l10', level: '5', title: 'Govt. Vocabulary', desc: 'Common exam words.', instruction: 'Focus on smooth typing.', text: 'Government Constitution Parliament Administration Education Development Agriculture Economy Department Ministry Commission Selection Candidates Notification', minAcc: 94, xp: 60 },
   { id: 'l11', level: '6', title: 'Sentence Fluency', desc: 'Typing full sentences.', instruction: 'Maintain consistent rhythm.', text: 'The staff selection commission conducts various exams every year. Proper practice improves typing speed rapidly. You need to focus heavily on the accuracy level. Speed comes naturally once you are accurate.', minAcc: 94, xp: 60 },
-  
   { id: 'l12', level: '7', title: 'Accuracy Drill', desc: 'No mistakes allowed.', instruction: 'Type slowly and accurately.', text: 'It is highly important to focus on accuracy before speed. A single mistake can drop your net WPM significantly in official tests. Avoid rushing and maintain a rhythmic flow across your keyboard. Precision is always rewarded in standard government typing tests.', minAcc: 98, xp: 75 },
   { id: 'l13', level: '8', title: 'Speed Target: 30 WPM', desc: 'Maintain 30+ WPM.', instruction: 'Push your speed slightly.', text: 'Candidates must regularly practice typing tests to clear the DEST module of SSC CGL and CHSL examinations. Consistent practice over a few weeks will absolutely guarantee a typing speed above thirty words per minute which is sufficient for clearing the cutoff criteria.', minAcc: 95, targetWpm: 30, xp: 100 },
   { id: 'l14', level: '10', title: 'SSC CHSL Simulator', desc: 'Format typical to CHSL.', instruction: 'Simulated Exam Environment.', text: 'The Indian economy is one of the fastest-growing major economies in the world. Recent policy changes aim to boost manufacturing and infrastructure development across various states. Candidates appearing for CHSL must ensure they do not make spelling errors. Daily typing exercises, focusing heavily on eliminating backward corrections, will solidify muscle memory and improve the overall key depression rate.', minAcc: 95, targetWpm: 35, duration: 1, xp: 150 },
@@ -3296,7 +3441,9 @@ function startSpecificTutorLesson(id) {
     saveTutorData();
     
     if(lesson.type === 'game') {
-        startGameEngine(lesson);
+        hideAllScreens();
+        // 🚀 Directly launch the Premium Game Module instead of old HTML games
+        window.typingGamesModule.startGame(lesson.gameKey, 'medium', lesson);
     } else {
         document.getElementById('tutor-active-title').innerText = lesson.title; 
         document.getElementById('tutor-active-level').innerText = 'LVL ' + lesson.level; 
@@ -3305,6 +3452,7 @@ function startSpecificTutorLesson(id) {
         prepareActiveScreenUI(lesson.text, !lesson.duration);
     }
 }
+
 
 function generateWeakKeyDrill() {
     let keys = Object.entries(tutorData.weakKeys).sort((a,b)=>b[1]-a[1]).map(k=>k[0]).slice(0, 4);
@@ -3346,7 +3494,10 @@ function updateTutorKeyHighlight() {
     document.querySelectorAll('.tutor-highlight').forEach(el => el.classList.remove('tutor-highlight'));
     
     let expected = charactersInfo[charIndex].char.toLowerCase(); 
-    let keyEl = document.querySelector(`.kb-key[data-key="${expected===' '?' ':expected}"]`); 
+    
+    // 🔥 BULLETPROOF FIX: Safely find the key element for Tutor Highlight
+    let keyEl = Array.from(document.querySelectorAll('.kb-key')).find(key => key.dataset.key === (expected === ' ' ? ' ' : expected));
+    
     if(keyEl) keyEl.classList.add('tutor-highlight');
     
     let fMap = fingerMap[expected]; 
@@ -4053,6 +4204,11 @@ if ((e.key === 'Tab' || e.key === 'Enter') && e.target.value !== expected) {
     window.startNextTutorLesson = startNextTutorLesson;
     window.generateWeakKeyDrill = generateWeakKeyDrill;
     window.abortGame = abortGame;
+        window.showResultScreen = showResultScreen;
+    window.registerTutorActivity = registerTutorActivity;
+    window.saveTutorData = saveTutorData;
+    window.tutorData = tutorData;
+    
     
      // DataEntryApp pehle se isolated module hai, usko bhi public kar diya
     window.DataEntryApp = DataEntryApp; 
@@ -4060,9 +4216,8 @@ if ((e.key === 'Tab' || e.key === 'Enter') && e.target.value !== expected) {
 // 🛡️ Protective Bubble End
 })(window);
 /* =========================================================
-   🎮 TYPING GAMES ENGINE — SONIC BOOM UPGRADE
+   🎮 GAME 01: SPACE TYPER (FULL CLASS WITH MOBILE & SYMBOL FIX)
 ========================================================= */
-
 class SpaceTyperGame {
     constructor(difficulty, parentModule) {
         this.parent = parentModule;
@@ -4082,7 +4237,7 @@ class SpaceTyperGame {
         this.pausedTime = 0;
         this.lastFrameTime = 0;
         this.loopReq = null;
-                // 💥 COMBO GREETINGS (Action Theme)
+        
         this.greetings = [];
         this.greetingWords = {
             5: "GOOD!",
@@ -4101,10 +4256,9 @@ class SpaceTyperGame {
         this.currentInput = "";
         this.targetedEnemy = null;
         
-        // 💥 SONIC BOOM VARIABLES
         this.sonicCharge = 0;
-        this.sonicMax = 10; // 10 word kill par full
-        this.sonicWaves = []; // Shockwave animation store karne ke liye
+        this.sonicMax = 10; 
+        this.sonicWaves = []; 
         
         this.words = {
             easy: ["cat", "book", "road", "time", "work", "fast", "space", "light", "fire", "moon"],
@@ -4142,6 +4296,29 @@ class SpaceTyperGame {
         this.resize();
         window.addEventListener('resize', this.resizeBind);
         window.addEventListener('keydown', this.keydownBind);
+        
+        // 🔥 MOBILE TYPING FIX (HIDDEN INPUT)
+        const hiddenInput = document.getElementById('game-hidden-input') || document.getElementById('hiddenGameInput');
+        if(hiddenInput) {
+            hiddenInput.value = '';
+            setTimeout(() => hiddenInput.focus(), 100);
+            const canvasLayer = document.getElementById('gameCanvasLayer');
+            if(canvasLayer) canvasLayer.onclick = () => { if(this.state === 'PLAYING') hiddenInput.focus(); };
+            
+            hiddenInput.oninput = (e) => {
+                if(this.state !== 'PLAYING') return;
+                let val = e.target.value; 
+                e.target.value = '';
+                if(val.length > 0) {
+                    let char = val[val.length-1];
+                    if(char !== ' ') {
+                        // Keyboard input ko direct bhej raha hai
+                        this.handleKeyDown({ key: char, preventDefault: () => {} });
+                    }
+                }
+            };
+        }
+
         this.updateHUD();
         this.startCountdown();
     }
@@ -4157,26 +4334,24 @@ class SpaceTyperGame {
         this.state = 'COUNTDOWN';
         const overlay = document.getElementById('gameCountdownOverlay');
         const countText = document.getElementById('countdownNumber');
-        overlay.classList.remove('hidden'); 
-        overlay.style.display = 'flex';
+        if(overlay) { overlay.classList.remove('hidden'); overlay.style.display = 'flex'; }
         
         let count = 3;
-        countText.innerText = count;
+        if(countText) countText.innerText = count;
         this.playSound(600, 'sine', 0.1);
         
         let intv = setInterval(() => {
             if(this.state === 'EXIT') { clearInterval(intv); return; } 
             count--;
             if(count > 0) {
-                countText.innerText = count;
+                if(countText) countText.innerText = count;
                 this.playSound(600, 'sine', 0.1);
             } else if(count === 0) {
-                countText.innerText = "GO!";
+                if(countText) countText.innerText = "GO!";
                 this.playSound(1000, 'square', 0.2);
             } else {
                 clearInterval(intv);
-                overlay.classList.add('hidden'); 
-                overlay.style.display = 'none';
+                if(overlay) { overlay.classList.add('hidden'); overlay.style.display = 'none'; }
                 this.beginGameplay();
             }
         }, 1000);
@@ -4196,8 +4371,7 @@ class SpaceTyperGame {
         if(this.loopReq) cancelAnimationFrame(this.loopReq); 
         
         const pauseOverlay = document.getElementById('gamePauseOverlay');
-        pauseOverlay.classList.remove('hidden'); 
-        pauseOverlay.style.display = 'flex';
+        if(pauseOverlay) { pauseOverlay.classList.remove('hidden'); pauseOverlay.style.display = 'flex'; }
     }
 
     resume() {
@@ -4207,8 +4381,7 @@ class SpaceTyperGame {
         this.lastFrameTime = performance.now();
         
         const pauseOverlay = document.getElementById('gamePauseOverlay');
-        pauseOverlay.classList.add('hidden'); 
-        pauseOverlay.style.display = 'none';
+        if(pauseOverlay) { pauseOverlay.classList.add('hidden'); pauseOverlay.style.display = 'none'; }
         
         this.loopReq = requestAnimationFrame(this.loopBind);
     }
@@ -4226,17 +4399,15 @@ class SpaceTyperGame {
         });
     }
 
-    // 🚀 SONIC BOOM TRIGGER LOGIC
     triggerSonicBoom() {
         this.sonicCharge = 0;
-        this.combo += this.enemies.length; // Bonus combo for screen clear
+        this.combo += this.enemies.length; 
         if(this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-        this.playSound(100, 'sawtooth', 0.4, 20); // Deep Shockwave rumble
-        this.playSound(2000, 'sine', 0.2, 50);    // High pitch screech
+        this.playSound(100, 'sawtooth', 0.4, 20); 
+        this.playSound(2000, 'sine', 0.2, 50);    
         this.screenShake(25); 
 
-        // Create Massive Expanding Wave
         this.sonicWaves.push({
             x: this.canvas.width / 2,
             y: this.canvas.height - 35,
@@ -4245,7 +4416,6 @@ class SpaceTyperGame {
             alpha: 1.0
         });
 
-        // Destroy All Enemies Instantly
         for(let i = this.enemies.length - 1; i >= 0; i--) {
             let en = this.enemies[i];
             this.score += Math.round(en.word.length * 10 * this.config.multiplier);
@@ -4262,20 +4432,18 @@ class SpaceTyperGame {
         if(this.state !== 'PLAYING') return;
         if(e.key === 'Escape') { this.pause(); return; }
         
-        // 🚀 SPACEBAR LOGIC FOR SONIC BOOM
         if(e.key === ' ') {
-            e.preventDefault();
+            if(e.preventDefault) e.preventDefault();
             if(this.sonicCharge >= this.sonicMax) {
                 this.triggerSonicBoom();
             } else {
-                // Not charged enough - Error sound
                 this.playSound(200, 'sawtooth', 0.1, 150);
             }
             return;
         }
 
         if(e.key === 'Backspace') {
-            e.preventDefault();
+            if(e.preventDefault) e.preventDefault();
             if(this.currentInput.length > 0) {
                 this.currentInput = this.currentInput.slice(0, -1);
                 if(this.targetedEnemy) this.targetedEnemy.typed = this.currentInput;
@@ -4284,14 +4452,15 @@ class SpaceTyperGame {
             return;
         }
 
-        if(e.key.length !== 1 || !/[a-zA-Z]/.test(e.key)) return;
+        // 🔥 FIX: Ye ab numbers aur punctuation (jaise ; , .) sabko allow karega
+        if(e.key.length !== 1) return;
         
-        e.preventDefault(); 
+        if(e.preventDefault) e.preventDefault(); 
         const char = e.key.toLowerCase();
         this.keystrokes++;
 
         if(!this.targetedEnemy) {
-            let potential = this.enemies.filter(en => en.word.startsWith(char));
+            let potential = this.enemies.filter(en => en.word.toLowerCase().startsWith(char));
             if(potential.length > 0) {
                 potential.sort((a,b) => b.y - a.y);
                 this.targetedEnemy = potential[0];
@@ -4299,16 +4468,16 @@ class SpaceTyperGame {
         }
 
         if(this.targetedEnemy) {
-            let expectedChar = this.targetedEnemy.word[this.currentInput.length];
+            let expectedChar = this.targetedEnemy.word[this.currentInput.length].toLowerCase();
             if(char === expectedChar) {
-                this.currentInput += char;
+                this.currentInput += this.targetedEnemy.word[this.currentInput.length];
                 this.targetedEnemy.typed = this.currentInput;
                 this.correctKeystrokes++;
                 
                 this.fireBullet(this.targetedEnemy);
                 this.playSound(800, 'square', 0.05, 200);
                 
-                if(this.currentInput === this.targetedEnemy.word) {
+                if(this.currentInput.toLowerCase() === this.targetedEnemy.word.toLowerCase()) {
                     this.destroyEnemy(this.targetedEnemy, true);
                     this.currentInput = "";
                     this.targetedEnemy = null;
@@ -4330,25 +4499,31 @@ class SpaceTyperGame {
     fireBullet(target) {
         let typedWidth = this.ctx.measureText(this.currentInput).width;
         let shipX = this.canvas.width / 2;
-        let shipY = this.canvas.height - 45; 
+        let shipY = this.canvas.height - 75; 
 
         this.bullets.push({
-            x: shipX, y: shipY,
+            x: shipX - 24, y: shipY - 10, 
             tx: target.x + 15 + typedWidth, ty: target.y + 20, 
             speed: 25, color: '#fef08a', glow: '#f59e0b', size: 3
         });
 
-        this.createExplosion(shipX, shipY, '#fef08a', 4, 3);
+        this.bullets.push({
+            x: shipX + 24, y: shipY - 10, 
+            tx: target.x + 15 + typedWidth, ty: target.y + 20, 
+            speed: 25, color: '#fef08a', glow: '#f59e0b', size: 3
+        });
+
+        this.createExplosion(shipX - 24, shipY - 10, '#fef08a', 3, 2);
+        this.createExplosion(shipX + 24, shipY - 10, '#fef08a', 3, 2);
     }
 
     destroyEnemy(enemy, killedByPlayer) {
         const index = this.enemies.indexOf(enemy);
         if(index > -1) {
             this.enemies.splice(index, 1);
-                        if(killedByPlayer) {
+            if(killedByPlayer) {
                 this.combo++;
                 if(this.combo > this.maxCombo) this.maxCombo = this.combo;
-                // ⚡ NEW: Trigger Greeting every 5 combos
                 if (this.combo > 0 && this.combo % 5 === 0) {
                     let text = this.greetingWords[this.combo] || "GODLIKE!";
                     this.greetings.push({
@@ -4360,28 +4535,9 @@ class SpaceTyperGame {
                     });
                 }
                 
-                
-             
-                                              // 🌟 NEW: Trigger Greeting every 5 combos
-            if (this.combo > 0 && this.combo % 5 === 0) {
-                let text = this.greetingWords[this.combo] || "GODLIKE!";
-                this.greetings.push({
-                    text: text,
-                    comboVal: this.combo, // <-- YE LINE ADD KI HAI
-                    y: this.canvas.height / 2.5,
-                    alpha: 1.0,
-                    scale: 0.5
-                });
-            }
-
-                      
-                
-                // ... (baaki purana code waise hi rahega)
                 let comboMult = Math.min(5, 1 + Math.floor(this.combo / 5));
-
                 this.score += Math.round(enemy.word.length * 10 * this.config.multiplier * comboMult);
                 
-                // 💥 INCREASE SONIC CHARGE
                 if(this.sonicCharge < this.sonicMax) {
                     this.sonicCharge++;
                 }
@@ -4420,20 +4576,25 @@ class SpaceTyperGame {
 
     screenShake(intensity) {
         const vp = document.getElementById('gameViewport');
-        vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
-        setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+        if(vp) {
+            vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
+            setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+        }
     }
 
     updateHUD() {
-        document.getElementById('liveScore').innerText = this.score;
-        document.getElementById('liveLives').innerText = '❤️ '.repeat(Math.max(0, this.lives));
-        document.getElementById('liveCombo').innerText = this.combo + 'x';
+        const liveScore = document.getElementById('liveScore');
+        const liveLives = document.getElementById('liveLives');
+        const liveCombo = document.getElementById('liveCombo');
+        const liveWpm = document.getElementById('liveWpm');
+        
+        if(liveScore) liveScore.innerText = this.score;
+        if(liveLives) liveLives.innerText = '❤️ '.repeat(Math.max(0, this.lives));
+        if(liveCombo) liveCombo.innerText = this.combo + 'x';
         
         let mins = (Date.now() - this.startTime) / 60000;
         if(mins > 0) this.wpm = Math.max(0, Math.round((this.correctKeystrokes / 5) / mins));
-        document.getElementById('liveWpm').innerText = this.wpm;
-        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
-        document.getElementById('liveAcc').innerText = acc + '%';
+        if(liveWpm) liveWpm.innerText = this.wpm;
     }
 
     gameLoop(timestamp) {
@@ -4455,7 +4616,7 @@ class SpaceTyperGame {
             this.ctx.beginPath(); this.ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); this.ctx.fill();
         });
         this.ctx.globalAlpha = 1.0;
-                // Draw Particles
+        
         for(let i=this.particles.length-1; i>=0; i--) {
             let p = this.particles[i];
             p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
@@ -4465,7 +4626,6 @@ class SpaceTyperGame {
         }
         this.ctx.globalAlpha = 1.0;
 
-        // ⚡ DRAW COMBO GREETINGS (Electric Style)
         for (let i = this.greetings.length - 1; i >= 0; i--) {
             let g = this.greetings[i];
             g.y -= 1.5; 
@@ -4476,35 +4636,23 @@ class SpaceTyperGame {
             this.ctx.globalAlpha = Math.max(0, g.alpha);
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
-            
-            // Electric Yellow/Orange Glow
             this.ctx.shadowColor = '#eab308'; 
             this.ctx.shadowBlur = 25;
             this.ctx.fillStyle = '#ffffff'; 
-            
             let currentScale = Math.min(g.scale, 1.2);
-            
-            // 1. Combo Number
             this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
             this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
-            
-            // 2. Greeting Word
             this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
             this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
-            
             this.ctx.restore();
 
-            if (g.alpha <= 0) {
-                this.greetings.splice(i, 1);
-            }
+            if (g.alpha <= 0) this.greetings.splice(i, 1);
         }
-        
 
-        // 💥 DRAW SONIC WAVES
         for(let i = this.sonicWaves.length - 1; i >= 0; i--) {
             let wave = this.sonicWaves[i];
-            wave.radius += 35; // Expansion speed
-            wave.alpha -= 0.02; // Fade out
+            wave.radius += 35; 
+            wave.alpha -= 0.02; 
 
             this.ctx.save();
             this.ctx.beginPath();
@@ -4568,60 +4716,84 @@ class SpaceTyperGame {
             if(en.y > this.canvas.height - 40) this.destroyEnemy(en, false);
         }
 
-                // 🚀 UPGRADED SPACESHIP DRAWING LOGIC
         let cx = this.canvas.width / 2;
-        let cy = this.canvas.height - 50; 
+        let cy = this.canvas.height - 75; 
         
         const primaryColor = isLight ? '#3b82f6' : '#00ffcc';
-        const bodyColor = isLight ? '#e2e8f0' : '#1e293b';
-        const innerArmor = isLight ? '#ffffff' : '#0f172a';
+        const bodyColor = isLight ? '#e2e8f0' : '#0f172a';
+        const accentColor = '#ff00cc';
 
-        // 1. Thruster Glow (Engine Fire)
-        this.ctx.shadowColor = '#00e5ff';
+        this.ctx.fillStyle = primaryColor;
+        this.ctx.shadowColor = primaryColor;
         this.ctx.shadowBlur = 15;
-        this.ctx.fillStyle = '#00e5ff';
         this.ctx.beginPath(); 
-        this.ctx.ellipse(cx, cy + 12, 4, 10 + Math.random() * 8, 0, 0, Math.PI*2); 
+        this.ctx.moveTo(cx - 10, cy + 15);
+        this.ctx.lineTo(cx, cy + 35 + Math.random() * 10);
+        this.ctx.lineTo(cx + 10, cy + 15);
+        this.ctx.fill();
+        
+        this.ctx.fillStyle = '#ffffff'; 
+        this.ctx.shadowBlur = 0;
+        this.ctx.beginPath(); 
+        this.ctx.moveTo(cx - 4, cy + 15);
+        this.ctx.lineTo(cx, cy + 25 + Math.random() * 5);
+        this.ctx.lineTo(cx + 4, cy + 15);
+        this.ctx.fill();
+
+        this.ctx.fillStyle = '#050a15'; 
+        this.ctx.strokeStyle = accentColor;
+        this.ctx.lineWidth = 1.5;
+        
+        this.ctx.beginPath(); this.ctx.roundRect(cx - 26, cy - 10, 4, 20, 2); this.ctx.fill(); this.ctx.stroke();
+        this.ctx.beginPath(); this.ctx.roundRect(cx + 22, cy - 10, 4, 20, 2); this.ctx.fill(); this.ctx.stroke();
+
+        this.ctx.fillStyle = accentColor;
+        this.ctx.shadowColor = accentColor;
+        this.ctx.shadowBlur = 10;
+        this.ctx.beginPath();
+        this.ctx.arc(cx - 24, cy - 10, 2.5, 0, Math.PI * 2);
+        this.ctx.arc(cx + 24, cy - 10, 2.5, 0, Math.PI * 2);
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
 
-        // 2. Main Outer Hull (Swept-back Wings)
         this.ctx.fillStyle = bodyColor;
         this.ctx.strokeStyle = primaryColor;
         this.ctx.lineWidth = 2;
         this.ctx.lineJoin = "round";
+        
         this.ctx.beginPath();
-        this.ctx.moveTo(cx, cy - 28);       
-        this.ctx.lineTo(cx + 10, cy - 10);  
-        this.ctx.lineTo(cx + 26, cy + 12);  
-        this.ctx.lineTo(cx + 10, cy + 6);   
-        this.ctx.lineTo(cx, cy + 14);       
-        this.ctx.lineTo(cx - 10, cy + 6);   
-        this.ctx.lineTo(cx - 26, cy + 12);  
-        this.ctx.lineTo(cx - 10, cy - 10);  
+        this.ctx.moveTo(cx, cy - 35);       
+        this.ctx.lineTo(cx + 8, cy - 10);   
+        this.ctx.lineTo(cx + 38, cy + 15);  
+        this.ctx.lineTo(cx + 15, cy + 15);  
+        this.ctx.lineTo(cx + 10, cy + 20);  
+        this.ctx.lineTo(cx, cy + 15);       
+        this.ctx.lineTo(cx - 10, cy + 20);  
+        this.ctx.lineTo(cx - 15, cy + 15);  
+        this.ctx.lineTo(cx - 38, cy + 15);  
+        this.ctx.lineTo(cx - 8, cy - 10);   
         this.ctx.closePath();
         this.ctx.fill();
         this.ctx.stroke();
 
-        // 3. Inner Armor Plates
-        this.ctx.fillStyle = innerArmor;
+        this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.4)';
+        this.ctx.lineWidth = 1;
         this.ctx.beginPath();
-        this.ctx.moveTo(cx, cy - 18);
-        this.ctx.lineTo(cx + 6, cy + 4);
-        this.ctx.lineTo(cx, cy + 10);
-        this.ctx.lineTo(cx - 6, cy + 4);
-        this.ctx.closePath();
-        this.ctx.fill();
+        this.ctx.moveTo(cx - 15, cy + 5); this.ctx.lineTo(cx - 30, cy + 10);
+        this.ctx.moveTo(cx + 15, cy + 5); this.ctx.lineTo(cx + 30, cy + 10);
+        this.ctx.stroke();
 
-        // 4. Glowing Cockpit Canopy
         this.ctx.fillStyle = primaryColor;
         this.ctx.shadowColor = primaryColor;
         this.ctx.shadowBlur = 10;
         this.ctx.beginPath();
-        this.ctx.ellipse(cx, cy - 6, 3.5, 7, 0, 0, Math.PI * 2);
+        this.ctx.moveTo(cx, cy - 20);
+        this.ctx.lineTo(cx + 4, cy - 5);
+        this.ctx.lineTo(cx, cy + 2);
+        this.ctx.lineTo(cx - 4, cy - 5);
+        this.ctx.closePath();
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
-
 
         for(let i=this.bullets.length-1; i>=0; i--) {
             let b = this.bullets[i];
@@ -4655,54 +4827,10 @@ class SpaceTyperGame {
             this.ctx.stroke();
         }
 
-        for(let i=this.particles.length-1; i>=0; i--) {
-            let p = this.particles[i];
-            p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
-            this.ctx.fillStyle = p.color;
-            this.ctx.globalAlpha = Math.max(0, p.life);
-            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
-            if(p.life <= 0) this.particles.splice(i, 1);
-        }
-        this.ctx.globalAlpha = 1.0;
-                   // 🌟 DRAW COMBO GREETINGS (Action Style with Combo Text)
-    for (let i = this.greetings.length - 1; i >= 0; i--) {
-        let g = this.greetings[i];
-        g.y -= 1.5; 
-        g.alpha -= 0.015; 
-        if (g.scale < 1.2) g.scale += 0.08; 
-
-        this.ctx.save();
-        this.ctx.globalAlpha = Math.max(0, g.alpha);
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        
-        // Space Vibe Neon Glow
-        this.ctx.shadowColor = '#00ffcc'; // Cyan color
-        this.ctx.shadowBlur = 25;
-        this.ctx.fillStyle = '#ffffff'; 
-        
-        let currentScale = Math.min(g.scale, 1.2);
-        
-        // 1. Upar chhota text: "5 COMBO!" 
-        this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
-        this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
-        
-        // 2. Neeche bada text: "GOOD!" / "AWESOME!"
-        this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
-        this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
-        
-        this.ctx.restore();
-
-        if (g.alpha <= 0) {
-            this.greetings.splice(i, 1);
-        }
-    }
-
-        // 🚀 DRAW SONIC BOOM CHARGE BAR
         let barWidth = 200;
         let barHeight = 8;
         let barX = (this.canvas.width - barWidth) / 2;
-        let barY = this.canvas.height - 15; // Bottom edge
+        let barY = this.canvas.height - 15; 
         
         this.ctx.fillStyle = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
         this.ctx.beginPath();
@@ -4738,25 +4866,26 @@ class SpaceTyperGame {
         this.playSound(150, 'square', 0.5, 50);
         this.saveStats();
         
-        document.getElementById('resScore').innerText = this.score.toLocaleString();
-        document.getElementById('resWpm').innerText = this.wpm;
-        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
-        document.getElementById('resAcc').innerText = acc + '%';
-        document.getElementById('resCombo').innerText = this.maxCombo;
-        
-        let secs = Math.floor((Date.now() - this.startTime)/1000);
-        document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
-        
-        const modal = document.getElementById('gameResultModal');
-        modal.classList.remove('hidden'); 
-        modal.style.display = 'flex';
+        const resScore = document.getElementById('resScore');
+        if(resScore) {
+            resScore.innerText = this.score.toLocaleString();
+            document.getElementById('resWpm').innerText = this.wpm;
+            let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+            document.getElementById('resAcc').innerText = acc + '%';
+            document.getElementById('resCombo').innerText = this.maxCombo;
+            
+            let secs = Math.floor((Date.now() - this.startTime)/1000);
+            document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+            
+            const modal = document.getElementById('gameResultModal');
+            if(modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+        }
     }
 
-                saveStats() {
+    saveStats() {
         let scoreKey = `spaceTyper_bestScore_${this.difficulty}`;
         let wpmKey = `spaceTyper_bestWpm_${this.difficulty}`;
         
-        // Strict parsing to prevent NaN errors
         let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
         let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
         
@@ -4769,12 +4898,10 @@ class SpaceTyperGame {
             if(badge) badge.style.display = 'none';
         }
 
-        // 🔥 WPM FIX: Safely save new WPM if it's higher or if none existed
         if(this.wpm > existingWpm || existingWpm === 0) {
             localStorage.setItem(wpmKey, this.wpm);
         }
         
-        // Smart History System
         let historyKey = 'spaceTyper_GameHistory';
         let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
         let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
@@ -4788,7 +4915,6 @@ class SpaceTyperGame {
         
         this.parent.loadPersistentStats(); 
     }
-
 
     playSound(freq, type, vol, endFreq = null) {
         if(!this.parent.soundEnabled || !this.parent.audioCtx) return;
@@ -4807,8 +4933,12 @@ class SpaceTyperGame {
         if(this.loopReq) cancelAnimationFrame(this.loopReq);
         window.removeEventListener('keydown', this.keydownBind);
         window.removeEventListener('resize', this.resizeBind);
+        
+        const hiddenInput = document.getElementById('game-hidden-input') || document.getElementById('hiddenGameInput');
+        if(hiddenInput) hiddenInput.oninput = null;
     }
 }
+
 /* =========================================================
    🎮 GAME 02: WORD RUSH (ELECTRIC WHACK-A-MOLE)
 ========================================================= */
@@ -4861,15 +4991,18 @@ class WordRushGame {
         this.resizeBind = this.resize.bind(this);
     }
 
-    getDifficultyConfig(diff) {
+         getDifficultyConfig(diff) {
         const configs = {
-            easy: { lifeTime: 5000, spawnRate: 2000, multiplier: 1, list: this.words.easy },
-            medium: { lifeTime: 4000, spawnRate: 1500, multiplier: 2, list: [...this.words.easy, ...this.words.medium] },
-            hard: { lifeTime: 3000, spawnRate: 1200, multiplier: 3.5, list: [...this.words.medium, ...this.words.hard] },
-            extreme: { lifeTime: 2500, spawnRate: 900, multiplier: 5, list: [...this.words.hard, ...this.words.extreme] }
+            // lifeTime = word kitni der tak screen par zinda rahega (ms)
+            // spawnRate = naya word kitni der me aayega (ms)
+            easy: { lifeTime: 6000, spawnRate: 2000, multiplier: 1, list: this.words.easy },
+            medium: { lifeTime: 4500, spawnRate: 1500, multiplier: 2, list: [...this.words.easy, ...this.words.medium] },
+            hard: { lifeTime: 3500, spawnRate: 1000, multiplier: 3.5, list: [...this.words.medium, ...this.words.hard] },
+            extreme: { lifeTime: 2500, spawnRate: 700, multiplier: 5, list: [...this.words.hard, ...this.words.extreme] }
         };
         return configs[diff] || configs.medium;
     }
+
 
     start() {
         this.resize();
@@ -4934,21 +5067,44 @@ class WordRushGame {
         this.loopReq = requestAnimationFrame(this.loopBind); 
     }
 
-    spawnWord() {
+     spawnWord() {
+        // 🔥 FIX: Agar screen par pehle se 7 words hain, toh naya word mat bulao (Clutter control)
+        if(this.activeWords.length >= 7) return;
+
         const wordText = this.config.list[Math.floor(Math.random() * this.config.list.length)];
-        this.ctx.font = "bold 18px 'JetBrains Mono'";
-        const width = this.ctx.measureText(wordText).width + 30;
-        const x = Math.max(10, Math.random() * (this.canvas.width - width - 20));
-        const y = Math.max(50, Math.random() * (this.canvas.height - 100));
-        
+        this.ctx.font = "900 22px 'JetBrains Mono', monospace";
+        const width = this.ctx.measureText(wordText).width + 50; 
+
+        let x, y;
+        let attempts = 0;
+        let overlap = true;
+
+        // Overlap Check
+        while(overlap && attempts < 15) {
+            x = Math.max(20, Math.random() * (this.canvas.width - width - 20));
+            y = Math.max(80, Math.random() * (this.canvas.height - 100)); // HUD se door
+
+            overlap = this.activeWords.some(w => {
+                let existingW = w.width;
+                return (x < w.x + existingW + 20 && x + width + 20 > w.x &&
+                        y < w.y + 70 && y + 60 > w.y);
+            });
+            attempts++;
+        }
+
+        // 🔥 FIX: Default fallback lifeTime (agar setting miss ho jaye toh game crash na ho)
+        let setLife = this.config.lifeTime || 4000;
+
         this.activeWords.push({
             id: Math.random().toString(36).substr(2, 9),
             text: wordText, typed: "", x: x, y: y, width: width,
-            maxLife: this.config.lifeTime, lifeLeft: this.config.lifeTime
+            maxLife: setLife, 
+            lifeLeft: setLife
         });
-        
-        this.playSound(400, 'square', 0.05); 
+
+        this.playSound(400, 'square', 0.05);
     }
+
 
     handleKeyDown(e) {
         if(this.state !== 'PLAYING') return;
@@ -5076,11 +5232,26 @@ class WordRushGame {
 
     gameLoop(timestamp) {
         if(this.state !== 'PLAYING') return; 
+        
         let dt = timestamp - this.lastFrameTime;
+        // 🔥 FIX: Background time-glitch (agar tab switch kiya toh words ek sath nahi aayenge)
+        if(dt > 100) dt = 16; 
         this.lastFrameTime = timestamp;
 
-        this.ctx.fillStyle = '#070709'; 
+        // 1. Cool Electric Background
+        let bgGrad = this.ctx.createRadialGradient(this.canvas.width/2, this.canvas.height/2, 0, this.canvas.width/2, this.canvas.height/2, this.canvas.width);
+        bgGrad.addColorStop(0, '#0f172a'); // Dark Slate
+        bgGrad.addColorStop(1, '#020617'); // Almost Black
+        this.ctx.fillStyle = bgGrad;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Subtle Cyber Grid
+        this.ctx.strokeStyle = 'rgba(234, 179, 8, 0.04)'; // Faint yellow
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        for(let x = 0; x < this.canvas.width; x += 60) { this.ctx.moveTo(x,0); this.ctx.lineTo(x,this.canvas.height); }
+        for(let y = 0; y < this.canvas.height; y += 60) { this.ctx.moveTo(0,y); this.ctx.lineTo(this.canvas.width,y); }
+        this.ctx.stroke();
 
         this.spawnTimer += dt;
         if(this.spawnTimer >= this.config.spawnRate) {
@@ -5089,6 +5260,7 @@ class WordRushGame {
             if(this.config.spawnRate > 500) this.config.spawnRate -= 10; 
         }
 
+            // 2. Draw Words with Solid Boxes, Timer Line & Target Lock
         for(let i = this.activeWords.length - 1; i >= 0; i--) {
             let w = this.activeWords[i];
             let isTarget = (this.targetedWord === w);
@@ -5099,29 +5271,88 @@ class WordRushGame {
                 continue;
             }
 
-            this.ctx.fillStyle = isTarget ? 'rgba(234, 179, 8, 0.15)' : 'rgba(20, 20, 25, 0.9)'; 
-            this.ctx.strokeStyle = isTarget ? '#eab308' : '#475569';
-            this.ctx.lineWidth = 1.5;
-            
-            if(isTarget) { this.ctx.shadowColor = '#eab308'; this.ctx.shadowBlur = 15; }
-            this.ctx.beginPath(); this.ctx.roundRect(w.x, w.y, w.width, 32, 6);
-            this.ctx.fill(); this.ctx.stroke(); this.ctx.shadowBlur = 0; 
-
-            this.ctx.font = "bold 16px 'JetBrains Mono'";
-            this.ctx.textAlign = 'left'; this.ctx.textBaseline = 'middle';
+            let fontSize = 22;
+            this.ctx.font = `900 ${fontSize}px 'JetBrains Mono', monospace`;
             let typedW = this.ctx.measureText(w.typed).width;
-            
-            this.ctx.fillStyle = isTarget ? '#eab308' : '#eab308'; 
-            this.ctx.fillText(w.typed, w.x + 15, w.y + 16);
-            
-            this.ctx.fillStyle = isTarget ? '#ffffff' : '#94a3b8'; 
-            this.ctx.fillText(w.text.substring(w.typed.length), w.x + 15 + typedW, w.y + 16);
 
-            let lifeRatio = w.lifeLeft / w.maxLife;
-            this.ctx.fillStyle = lifeRatio > 0.4 ? '#eab308' : '#ef4444'; 
-            this.ctx.fillRect(w.x + 5, w.y + 28, (w.width - 10) * lifeRatio, 3);
+            let boxW = w.width;
+            let boxH = 48; // Fixed height ekdum clean look ke liye
+            let boxX = w.x;
+            let boxY = w.y;
+            
+            // Cyberpunk Colors: Target hai toh Cyan, warna Dark Slate
+            let mainColor = isTarget ? '#00e5ff' : '#334155'; 
+            let bgColor = isTarget ? 'rgba(0, 40, 60, 0.9)' : 'rgba(10, 15, 25, 0.85)';
+
+            // 🎯 Target Lock Animation (SIRF us word par jise type kar rahe ho)
+            if(isTarget) {
+                let pulse = Math.abs(Math.sin(timestamp / 150)) * 5;
+                this.ctx.strokeStyle = '#00e5ff';
+                this.ctx.lineWidth = 2;
+                this.ctx.shadowColor = '#00e5ff';
+                this.ctx.shadowBlur = 10;
+
+                let gap = 4 + pulse;
+                let len = 10;
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(boxX - gap, boxY - gap + len); this.ctx.lineTo(boxX - gap, boxY - gap); this.ctx.lineTo(boxX - gap + len, boxY - gap);
+                this.ctx.moveTo(boxX + boxW + gap - len, boxY - gap); this.ctx.lineTo(boxX + boxW + gap, boxY - gap); this.ctx.lineTo(boxX + boxW + gap, boxY - gap + len);
+                this.ctx.moveTo(boxX + boxW + gap, boxY + boxH + gap - len); this.ctx.lineTo(boxX + boxW + gap, boxY + boxH + gap); this.ctx.lineTo(boxX + boxW + gap - len, boxY + boxH + gap);
+                this.ctx.moveTo(boxX - gap + len, boxY + boxH + gap); this.ctx.lineTo(boxX - gap, boxY + boxH + gap); this.ctx.lineTo(boxX - gap, boxY + boxH + gap - len);
+                this.ctx.stroke();
+                this.ctx.shadowBlur = 0; // Reset
+            }
+
+            // Solid Dark Box
+            this.ctx.fillStyle = bgColor; 
+            this.ctx.strokeStyle = mainColor;
+            this.ctx.lineWidth = isTarget ? 2 : 1;
+            
+            // Glow SIRF active word par hoga
+            if(isTarget) { 
+                this.ctx.shadowColor = mainColor; 
+                this.ctx.shadowBlur = 15; 
+            }
+
+            this.ctx.beginPath(); 
+            this.ctx.roundRect(boxX, boxY, boxW, boxH, 6);
+            this.ctx.fill(); 
+            this.ctx.stroke(); 
+            this.ctx.shadowBlur = 0; // Reset
+
+            // Text
+            let textY = boxY + (boxH / 2) + 6; // Center mein fix kiya
+            let startX = boxX + 25;
+            
+            this.ctx.textAlign = 'left';
+            this.ctx.fillStyle = isTarget ? '#00e5ff' : '#ffffff'; 
+            this.ctx.fillText(w.typed, startX, textY);
+            
+            this.ctx.fillStyle = isTarget ? '#ffffff' : '#64748b'; // Untyped
+            this.ctx.fillText(w.text.substring(w.typed.length), startX + typedW, textY);
+
+            // ⏱️ GLOWING TIMER LINE (Box ke ekdum neeche health-bar style)
+            let lifeRatio = Math.max(0, w.lifeLeft / w.maxLife);
+            let barColor = lifeRatio > 0.5 ? '#10b981' : (lifeRatio > 0.25 ? '#eab308' : '#ef4444');
+
+            // Faint background track
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            this.ctx.beginPath();
+            this.ctx.roundRect(boxX + 4, boxY + boxH - 8, boxW - 8, 4, 2);
+            this.ctx.fill();
+
+            // Active glowing timer line
+            this.ctx.fillStyle = barColor;
+            this.ctx.shadowColor = barColor;
+            this.ctx.shadowBlur = 10;
+            this.ctx.beginPath();
+            this.ctx.roundRect(boxX + 4, boxY + boxH - 8, (boxW - 8) * lifeRatio, 4, 2);
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
         }
 
+        // Draw Particles
         for(let i=this.particles.length-1; i>=0; i--) {
             let p = this.particles[i];
             p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
@@ -5131,35 +5362,24 @@ class WordRushGame {
         }
         this.ctx.globalAlpha = 1.0;
 
-        // ⚡ DRAW COMBO GREETINGS (Electric Style)
+        // Draw Greetings
         for (let i = this.greetings.length - 1; i >= 0; i--) {
             let g = this.greetings[i];
-            g.y -= 1.5; 
-            g.alpha -= 0.015; 
+            g.y -= 1.5; g.alpha -= 0.015; 
             if (g.scale < 1.2) g.scale += 0.08; 
 
             this.ctx.save();
             this.ctx.globalAlpha = Math.max(0, g.alpha);
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            
-            this.ctx.shadowColor = '#eab308'; 
-            this.ctx.shadowBlur = 25;
-            this.ctx.fillStyle = '#ffffff'; 
-            
+            this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+            this.ctx.shadowColor = '#eab308'; this.ctx.shadowBlur = 25; this.ctx.fillStyle = '#ffffff'; 
             let currentScale = Math.min(g.scale, 1.2);
-            
             this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
             this.ctx.fillText(`${g.comboVal} COMBO!`, this.canvas.width / 2, g.y - (25 * currentScale));
-            
             this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
             this.ctx.fillText(g.text, this.canvas.width / 2, g.y + (15 * currentScale));
-            
             this.ctx.restore();
 
-            if (g.alpha <= 0) {
-                this.greetings.splice(i, 1);
-            }
+            if (g.alpha <= 0) this.greetings.splice(i, 1);
         }
 
         if(this.state === 'PLAYING') this.loopReq = requestAnimationFrame(this.loopBind);
@@ -5252,7 +5472,7 @@ class TypingRacerGame {
         // 🚀 3D ENGINE CONSTANTS
         this.focalLength = 300; 
         this.cameraY = 150; 
-        this.maxZ = 1200; 
+        this.maxZ = 4000; 
         this.baseSpeed = 300; 
         this.currentSpeed = 300;
         
@@ -5295,7 +5515,23 @@ class TypingRacerGame {
         this.loopBind = this.gameLoop.bind(this);
         this.keydownBind = this.handleKeyDown.bind(this); 
         this.resizeBind = this.resize.bind(this);
+    this.skyStars = this.initSkyStars(60); 
+
     }
+    initSkyStars(count) {
+    let stars = [];
+    for(let i=0; i<count; i++) {
+        stars.push({ 
+            x: Math.random(), 
+            y: Math.random(), 
+            size: Math.random() * 2, 
+            alpha: Math.random(),
+            twinkleSpeed: Math.random() * 0.05 + 0.01
+        });
+    }
+    return stars;
+}
+
 
     getDifficultyConfig(diff) {
         const configs = {
@@ -5320,18 +5556,19 @@ class TypingRacerGame {
         this.startCountdown();
     }
 
-    generateCityscape() {
-        this.buildings = [];
-        for(let i=0; i<40; i++) {
-            this.buildings.push({
-                x: (Math.random() - 0.5) * 2500,
-                width: 50 + Math.random() * 100,
-                height: 150 + Math.random() * 400,
-                color: Math.random() > 0.5 ? '#ff00cc' : '#00ffcc',
-                opacity: 0.15 + Math.random() * 0.4
+             generateCityscape() {
+        this.clouds = [];
+        for(let i=0; i<12; i++) {
+            this.clouds.push({
+                x: Math.random() * 1500 - 500,
+                y: 40 + Math.random() * 180, // Aasmaan ke andar
+                width: 200 + Math.random() * 350, // Lambi thin streaks
+                speed: 0.2 + Math.random() * 0.5,
+                alpha: 0.3 + Math.random() * 0.4
             });
         }
     }
+
 
     resize() {
         if(this.canvas && this.canvas.parentElement) {
@@ -5388,17 +5625,30 @@ class TypingRacerGame {
         this.loopReq = requestAnimationFrame(this.loopBind); 
     }
 
-    spawnObstacle() {
+          spawnObstacle() {
         const wordText = this.config.list[Math.floor(Math.random() * this.config.list.length)];
-        const laneIdx = Math.floor(Math.random() * 3);
         
+        let laneIdx = Math.floor(Math.random() * 3);
+        let attempts = 0;
+        
+        while(attempts < 3) {
+            // 🔥 FIX 2: Gap ko 1000 se badha kar 1800 kar diya. 
+            // Ab same lane mein 2 words ek doosre ki peeth par nahi chadhenge!
+            let tooClose = this.obstacles.some(obs => obs.lane === laneIdx && obs.z > this.maxZ - 1800);
+            if(!tooClose) break;
+            laneIdx = (laneIdx + 1) % 3;
+            attempts++;
+        }
+
         this.obstacles.push({
             id: Math.random().toString(36).substr(2, 9),
-            text: wordText, typed: "", 
+            text: wordText, 
+            typed: "", 
             lane: laneIdx, 
             z: this.maxZ 
         });
     }
+
 
     spawnScenery() {
         const isLeft = Math.random() > 0.5;
@@ -5578,54 +5828,124 @@ class TypingRacerGame {
         let speedMuliplier = this.currentSpeed * (dt/1000);
         this.distance += speedMuliplier / 10; 
         
-        let horizonY = this.canvas.height * 0.45;
+             let horizonY = this.canvas.height * 0.45;
         let centerX = this.canvas.width / 2;
 
-        // 1. SKY & SUN
-        this.ctx.fillStyle = '#03030b'; 
+        // ==========================================
+        // 1. SKY, SUN & STARS (UPGRADED)
+        // ==========================================
+        // Sunset Synthwave Gradient
+        let skyGrad = this.ctx.createLinearGradient(0, 0, 0, horizonY);
+        skyGrad.addColorStop(0, '#020024'); // Deep space blue
+        skyGrad.addColorStop(0.5, '#16093b'); // Purple mid
+        skyGrad.addColorStop(1, '#ff00cc'); // Neon pink at horizon
+        this.ctx.fillStyle = skyGrad; 
         this.ctx.fillRect(0, 0, this.canvas.width, horizonY);
         
+        // Twinkling Stars
+        this.ctx.fillStyle = '#ffffff';
+        this.skyStars.forEach(s => {
+            this.ctx.globalAlpha = Math.abs(Math.sin(timestamp * s.twinkleSpeed)) * 0.7 + 0.3;
+            this.ctx.beginPath();
+            this.ctx.arc(s.x * this.canvas.width, s.y * horizonY, s.size, 0, Math.PI*2);
+            this.ctx.fill();
+        });
+        this.ctx.globalAlpha = 1.0;
+
+        // Retro Sun
         this.ctx.fillStyle = '#ff00cc';
         this.ctx.shadowColor = '#ff00cc';
-        this.ctx.shadowBlur = 40;
+        this.ctx.shadowBlur = 50;
         this.ctx.beginPath();
         this.ctx.arc(centerX, horizonY, 120, Math.PI, 0);
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
         
-        this.ctx.fillStyle = '#03030b';
-        for(let i=0; i<6; i++) {
-            this.ctx.fillRect(centerX - 130, horizonY - 5 - (i*18), 260, 3 + i*1.5);
+        // Sun Grid slices
+        this.ctx.fillStyle = skyGrad; // Match sky to "cut out" the sun
+        for(let i=0; i<7; i++) {
+            this.ctx.fillRect(centerX - 130, horizonY - 5 - (i*20), 260, 4 + i*1.5);
+        }
+                         // ==========================================
+        // 2. SYNTHWAVE HORIZONTAL CLOUD STREAKS
+        // ==========================================
+        if (this.clouds) {
+            this.clouds.forEach(c => {
+                c.x += c.speed;
+                if (c.x > this.canvas.width + 400) {
+                    c.x = -400;
+                    c.y = 40 + Math.random() * (horizonY - 80);
+                }
+
+                this.ctx.save();
+                this.ctx.globalAlpha = c.alpha;
+                this.ctx.shadowColor = '#ff00cc';
+                this.ctx.shadowBlur = 12;
+                
+                // Smooth gradient fading edges for laser-like look
+                let grad = this.ctx.createLinearGradient(c.x, c.y, c.x + c.width, c.y);
+                grad.addColorStop(0, 'rgba(255, 0, 204, 0)');
+                grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.9)');
+                grad.addColorStop(1, 'rgba(255, 0, 204, 0)');
+                
+                this.ctx.fillStyle = grad;
+                this.ctx.fillRect(c.x, c.y, c.width, 3); // Patli glowing line
+                
+                this.ctx.restore();
+            });
+            this.ctx.globalAlpha = 1.0;
         }
 
-        // 2. CITY BUILDINGS
-        this.buildings.forEach(b => {
-            this.ctx.fillStyle = `rgba(10, 10, 25, 0.9)`;
-            this.ctx.strokeStyle = `rgba(${b.color === '#ff00cc' ? '255,0,204' : '0,255,204'}, ${b.opacity})`;
-            this.ctx.lineWidth = 1;
-            let bx = centerX + b.x;
-            this.ctx.beginPath();
-            this.ctx.rect(bx, horizonY - b.height, b.width, b.height);
-            this.ctx.fill();
-            this.ctx.stroke();
-        });
-
-        // 3. ROAD BACKGROUND
-        this.ctx.fillStyle = '#0a0a16'; 
+            // ==========================================
+        // 3. ROAD BACKGROUND & PERSPECTIVE GRID (FIXED GAP)
+        // ==========================================
+        // Zameen par horizon se milta hua ek glow (Black gap ko fill karne ke liye)
+        let floorGrad = this.ctx.createLinearGradient(0, horizonY, 0, horizonY + 150);
+        floorGrad.addColorStop(0, 'rgba(255, 0, 204, 0.3)'); // Horizon pe pink glow
+        floorGrad.addColorStop(1, '#0a0a16'); // Neeche aate-aate dark
+        
+        this.ctx.fillStyle = floorGrad;
         this.ctx.fillRect(0, horizonY, this.canvas.width, this.canvas.height - horizonY);
+        
+        this.ctx.fillStyle = '#0a0a16'; // Remaining bottom area
+        this.ctx.fillRect(0, horizonY + 150, this.canvas.width, this.canvas.height);
 
-        // 4. MOVING ROAD LINES
+        // Horizontal Grid Lines (Ab ye door horizon tak jayengi)
+        this.ctx.strokeStyle = 'rgba(255, 0, 204, 0.25)';
+        this.ctx.lineWidth = 1;
+        let gridMovingOffset = (this.distance * 5) % 100;
+        
+        // Z-axis ko badha diya hai taaki line theek sun ke paas jake khatam ho
+        for(let z = 50; z < 8000; z += (z < 1500 ? 100 : (z < 3000 ? 300 : 1000))) {
+            let actualZ = z - gridMovingOffset;
+            if(actualZ > 0) {
+                let pLeft = this.project3D(-4000, this.cameraY, actualZ);
+                let pRight = this.project3D(4000, this.cameraY, actualZ);
+                
+                if(pLeft.y > horizonY) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(pLeft.x, pLeft.y);
+                    this.ctx.lineTo(pRight.x, pRight.y);
+                    this.ctx.stroke();
+                }
+            }
+        }
+
+        // ==========================================
+        // 4. MOVING ROAD LINES (CONVERGING TO HORIZON)
+        // ==========================================
         this.dashOffset -= speedMuliplier * 2;
         if(this.dashOffset < 0) this.dashOffset += 200;
 
         this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.8)';
-        this.ctx.lineWidth = 3;
+        this.ctx.lineWidth = 4;
         
-        [-100, 100].forEach(x => {
-            for(let i=0; i<10; i++) {
+        // Inner dashed lines (Ab 15 lines render hongi taaki door tak dikhe)
+        [-120, 120].forEach(x => {
+            for(let i=0; i<15; i++) { 
                 let z1 = (i * 200) + this.dashOffset;
                 let z2 = z1 + 100; 
-                if(z1 > this.maxZ) continue;
+                if(z1 > 4000) continue; // Door horizon tak allow karo
                 
                 let p1 = this.project3D(x, this.cameraY, z1);
                 let p2 = this.project3D(x, this.cameraY, z2);
@@ -5639,17 +5959,22 @@ class TypingRacerGame {
             }
         });
 
-        this.ctx.strokeStyle = 'rgba(255, 0, 204, 0.8)';
-        [-300, 300].forEach(x => {
+        // Outer solid borders (Theek center vanishing point pe judengi)
+        this.ctx.strokeStyle = 'rgba(255, 0, 204, 0.9)';
+        this.ctx.lineWidth = 6;
+        [-360, 360].forEach(x => {
             this.ctx.beginPath();
-            let far = this.project3D(x, this.cameraY, this.maxZ);
-            let near = this.project3D(x, this.cameraY, 0);
-            this.ctx.moveTo(far.x, far.y);
+            let near = this.project3D(x, this.cameraY, 0); // Bottom of screen
+            
+            // Exact Sun ke center (horizon) se road nikalna
+            this.ctx.moveTo(centerX, horizonY);
             this.ctx.lineTo(near.x, near.y);
             this.ctx.stroke();
         });
 
-        // 5. SCENERY
+        // ==========================================
+        // 5. SCENERY / SIDE PILLARS (NEON UPGRADE)
+        // ==========================================
         this.sceneryTimer += speedMuliplier;
         if(this.sceneryTimer > 300) {
             this.spawnScenery(); this.sceneryTimer = 0;
@@ -5663,22 +5988,52 @@ class TypingRacerGame {
             let proj = this.project3D(s.x, this.cameraY, s.z);
             if(proj.y < horizonY) continue;
 
-            this.ctx.fillStyle = s.type === 'sign' ? '#ff00cc' : '#00ffcc';
+            let isMagenta = s.type === 'sign';
+            let mainColor = isMagenta ? '#ff00cc' : '#00ffcc';
+            
+            let pWidth = 12 * proj.scale;
+            let pHeight = 500 * proj.scale;
+            let pX = proj.x - pWidth/2;
+            let pY = proj.y - pHeight;
+
             this.ctx.globalAlpha = 1 - (s.z / this.maxZ);
-            this.ctx.fillRect(proj.x - 2*proj.scale, proj.y - 300*proj.scale, 4*proj.scale, 300*proj.scale);
+            
+            // Pillar Base (Dark Metal)
+            this.ctx.fillStyle = '#0a0a16';
+            this.ctx.fillRect(pX, pY, pWidth, pHeight);
+
+            // Glowing Neon Center Strip
+            this.ctx.shadowColor = mainColor;
+            this.ctx.shadowBlur = 20 * proj.scale;
+            this.ctx.fillStyle = mainColor;
+            this.ctx.fillRect(pX + pWidth*0.3, pY, pWidth*0.4, pHeight);
+
+            // Top Light Orb
+            this.ctx.beginPath();
+            this.ctx.arc(proj.x, pY, 20 * proj.scale, 0, Math.PI*2);
+            this.ctx.fill();
+            
+            this.ctx.shadowBlur = 0; // reset
         }
         this.ctx.globalAlpha = 1.0;
 
+                              // ==========================================
         // 6. OBSTACLES (WORDS & HOLOGRAPHIC STANDS)
-        this.spawnTimer += speedMuliplier; 
+        // ==========================================
+        this.spawnTimer += dt; 
         if(this.spawnTimer >= this.config.spawnRate) {
-            this.spawnObstacle(); this.spawnTimer = 0;
-            if(this.config.spawnRate > 600) this.config.spawnRate -= 10; 
+            this.spawnObstacle(); 
+            this.spawnTimer = 0;
+            if(this.config.spawnRate > 400) this.config.spawnRate -= 10; 
         }
 
-        this.obstacles.sort((a,b) => b.z - a.z);
+        // 🔥 FIX 1: Z-SORTING CORRECTED
+        // Pehle (b.z - a.z) tha jisse door wali cheezein upar draw ho rahi thi.
+        // Ab (a.z - b.z) kar diya hai. Ab sabse door (furthest) word sabse pehle draw hoga, 
+        // aur paas wala word uske oopar aayega!
+        this.obstacles.sort((a,b) => a.z - b.z);
 
-        for(let i = this.obstacles.length - 1; i >= 0; i--) {
+                for(let i = this.obstacles.length - 1; i >= 0; i--) {
             let obs = this.obstacles[i];
             let isTarget = (this.targetedObstacle === obs);
             obs.z -= speedMuliplier;
@@ -5695,51 +6050,96 @@ class TypingRacerGame {
             let proj = this.project3D(this.laneOffsets[obs.lane], this.cameraY, obs.z);
             if(proj.y < horizonY) continue;
 
-            let boxW = 200 * proj.scale;
-            let boxH = 50 * proj.scale;
-            
-            let isClose = obs.z < 300;
-            let strokeColor = isTarget ? '#00ffcc' : (isClose ? '#ff3333' : '#ff00cc');
-            
-            // 🌟 Holographic Stand
-            this.ctx.strokeStyle = `rgba(${isTarget ? '0,255,204' : '255,0,204'}, 0.4)`;
-            this.ctx.lineWidth = 3 * proj.scale;
-            this.ctx.beginPath();
-            this.ctx.moveTo(proj.x, proj.y);
-            this.ctx.lineTo(proj.x, proj.y - boxH - (40*proj.scale));
-            this.ctx.stroke();
+            // 🔥 FIX 2: Door se aate hue Smooth Fade-In effect
+            let distAlpha = 1.0;
+            if (obs.z > this.maxZ - 800) {
+                distAlpha = 1 - ((obs.z - (this.maxZ - 800)) / 800);
+            }
+            this.ctx.globalAlpha = Math.max(0, distAlpha);
 
-            // Word Box
-            this.ctx.fillStyle = isTarget ? 'rgba(0, 255, 204, 0.3)' : 'rgba(255, 0, 204, 0.15)';
-            this.ctx.strokeStyle = strokeColor;
-            this.ctx.lineWidth = 2 * proj.scale;
-            
-            this.ctx.shadowColor = strokeColor; 
-            this.ctx.shadowBlur = 20 * proj.scale; 
-            
-            this.ctx.beginPath(); 
-            this.ctx.roundRect(proj.x - (boxW/2), proj.y - boxH - (40*proj.scale), boxW, boxH, 8 * proj.scale);
-            this.ctx.fill(); this.ctx.stroke(); this.ctx.shadowBlur = 0; 
-
-            // Text Rendering
-            let fontSize = Math.max(10, 30 * proj.scale);
+            // 1. Text aur Font set karo
+            let fontSize = Math.max(14, 36 * proj.scale); // Font thoda aur clear kiya
             this.ctx.font = `900 ${fontSize}px 'JetBrains Mono', monospace`;
             
+            let totalW = this.ctx.measureText(obs.text).width;
             let typedText = obs.typed;
             let untypedText = obs.text.substring(obs.typed.length);
-            let totalW = this.ctx.measureText(obs.text).width;
+            let typedW = this.ctx.measureText(typedText).width;
             
+            // 2. Dynamic Box Size
+            let boxW = totalW + Math.max(16, 40 * proj.scale); 
+            let boxH = fontSize + Math.max(12, 20 * proj.scale);
+            let boxX = proj.x - (boxW / 2);
+            
+            // Box ko zameen se thoda upar uthaya taaki overlap na lage
+            let boxY = proj.y - boxH - Math.max(15, 40 * proj.scale); 
+            
+            let isClose = obs.z < 400;
+            let mainColor = isTarget ? '#00ffcc' : (isClose ? '#ff3333' : '#ff00cc');
+            
+            // 3. Holographic Stand
+            this.ctx.strokeStyle = `rgba(${isTarget ? '0,255,204' : '255,0,204'}, 0.4)`;
+            this.ctx.lineWidth = Math.max(1, 3 * proj.scale);
+            this.ctx.beginPath();
+            this.ctx.moveTo(proj.x, proj.y);
+            this.ctx.lineTo(proj.x, boxY + boxH);
+            this.ctx.stroke();
+
+            // 🎯 TARGET LOCK ANIMATION
+            if (isTarget) {
+                let pulse = Math.abs(Math.sin(timestamp / 150)) * (15 * proj.scale);
+                this.ctx.strokeStyle = '#00ffcc';
+                this.ctx.lineWidth = Math.max(2, 4 * proj.scale);
+                this.ctx.shadowColor = '#00ffcc';
+                this.ctx.shadowBlur = 15;
+                
+                let gap = (10 * proj.scale) + pulse; 
+                let cX = proj.x;
+                let cY = boxY + (boxH / 2);
+                let hw = (boxW / 2) + gap; 
+                let hh = (boxH / 2) + gap; 
+                let len = Math.max(5, 15 * proj.scale); 
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(cX - hw, cY - hh + len); this.ctx.lineTo(cX - hw, cY - hh); this.ctx.lineTo(cX - hw + len, cY - hh);
+                this.ctx.moveTo(cX + hw - len, cY - hh); this.ctx.lineTo(cX + hw, cY - hh); this.ctx.lineTo(cX + hw, cY - hh + len);
+                this.ctx.moveTo(cX + hw, cY + hh - len); this.ctx.lineTo(cX + hw, cY + hh); this.ctx.lineTo(cX + hw - len, cY + hh);
+                this.ctx.moveTo(cX - hw + len, cY + hh); this.ctx.lineTo(cX - hw, cY + hh); this.ctx.lineTo(cX - hw, cY + hh - len);
+                this.ctx.stroke();
+                this.ctx.shadowBlur = 0; 
+            }
+
+            // 4. Solid Dark Box
+            this.ctx.fillStyle = 'rgba(10, 10, 20, 0.95)'; 
+            this.ctx.strokeStyle = mainColor;
+            this.ctx.lineWidth = Math.max(1, 3 * proj.scale);
+            
+            if(!isTarget) {
+                this.ctx.shadowColor = mainColor; 
+                this.ctx.shadowBlur = 15 * proj.scale; 
+            }
+            
+            this.ctx.beginPath(); 
+            this.ctx.roundRect(boxX, boxY, boxW, boxH, 6 * proj.scale);
+            this.ctx.fill(); 
+            this.ctx.stroke(); 
+            this.ctx.shadowBlur = 0; 
+
+            // 5. Draw Text exactly in center
             let startX = proj.x - (totalW / 2);
-            let textY = proj.y - (boxH/2) - (40*proj.scale) + (fontSize * 0.35);
+            let textY = boxY + (boxH / 2) + (fontSize * 0.35); 
             
             this.ctx.textAlign = 'left';
-            this.ctx.fillStyle = isTarget ? '#00ffcc' : (isClose ? '#ff3333' : '#ff00cc'); 
+            this.ctx.fillStyle = mainColor; 
             this.ctx.fillText(typedText, startX, textY);
             
-            let typedW = this.ctx.measureText(typedText).width;
             this.ctx.fillStyle = '#ffffff'; 
             this.ctx.fillText(untypedText, startX + typedW, textY);
+
+            // Opacity reset kar di baaki game elements ke liye
+            this.ctx.globalAlpha = 1.0; 
         }
+
 
         // 7. RENDER BULLETS (Pew Pew Lasers!) 🔫
         for(let i = this.bullets.length - 1; i >= 0; i--) {
@@ -5985,15 +6385,1644 @@ class TypingRacerGame {
         window.removeEventListener('resize', this.resizeBind);
     }
 }
+/* =========================================================
+   ⚔️ GAME 04: KEYBOARD NINJA (CYBER STRIKE EDITION)
+========================================================= */
+class KeyboardNinjaGame {
+    constructor(difficulty, parentModule) {
+        this.parent = parentModule;
+        this.difficulty = difficulty;
+        this.canvas = document.getElementById('arcadeCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.state = 'INIT'; 
+        this.score = 0;
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.keystrokes = 0;
+        this.correctKeystrokes = 0;
+        this.wpm = 0;
+        this.startTime = 0;
+        this.lastFrameTime = 0;
+        this.loopReq = null;
+        
+        // Ninja Specific State
+        this.enemies = [];
+        this.particles = [];
+        this.projectiles = []; 
+        this.spawnTimer = 0;
+        this.currentInput = "";
+        this.targetedEnemy = null;
+        this.lastCorner = -1; // Clumping rokne ke liye
+        
+        // 🔥 SUPER STRIKE (CHAKRA) VARIABLES
+        this.superCharge = 0;
+        this.superMax = 12; // 12 Kills par full charge hoga
+        
+        this.ninja = {
+            angle: 0,
+            targetAngle: 0,
+            isAttacking: false,
+            attackProgress: 0,
+            attackType: 'katana' 
+        };
+
+        // ⚔️ COMBO GREETINGS
+        this.greetings = [];
+        this.greetingWords = {
+            5: "SHARP!",
+            10: "SLICED!",
+            15: "ASSASSIN!",
+            20: "SHINOBI!",
+            25: "MASTER!",
+            30: "GRANDMASTER!"
+        };
+        
+        this.words = {
+            easy: ["cyber", "ninja", "blade", "slash", "ghost", "dark", "neon", "steel", "mask", "swift"],
+            medium: ["katana", "stealth", "shuriken", "sensei", "scroll", "strike", "combat", "spirit", "venom"],
+            hard: ["assassin", "invisible", "warrior", "precision", "discipline", "jujutsu", "chakra", "vengeance"],
+            extreme: ["assassination", "infiltrator", "concentration", "masterpiece", "merciless", "supernatural"]
+        };
+
+        this.config = this.getDifficultyConfig(difficulty);
+        this.loopBind = this.gameLoop.bind(this);
+        this.keydownBind = this.handleKeyDown.bind(this); 
+        this.resizeBind = this.resize.bind(this);
+    }
+
+    // 🛠️ DIFFICULTY CONFIG (SLOWED DOWN FOR BETTER PACING)
+    getDifficultyConfig(diff) {
+        const configs = {
+            easy: { speed: 0.4, spawnRate: 3500, multiplier: 1, list: this.words.easy },
+            medium: { speed: 0.7, spawnRate: 2500, multiplier: 2, list: [...this.words.easy, ...this.words.medium] },
+            hard: { speed: 1.2, spawnRate: 1800, multiplier: 3.5, list: [...this.words.medium, ...this.words.hard] },
+            extreme: { speed: 1.8, spawnRate: 1200, multiplier: 5, list: [...this.words.hard, ...this.words.extreme] }
+        };
+        return configs[diff] || configs.medium;
+    }
+
+    start() {
+        this.resize();
+        window.addEventListener('resize', this.resizeBind);
+        window.addEventListener('keydown', this.keydownBind);
+        this.updateHUD();
+        this.startCountdown();
+    }
+
+    resize() {
+        if(this.canvas && this.canvas.parentElement) {
+            this.canvas.width = this.canvas.parentElement.clientWidth;
+            this.canvas.height = this.canvas.parentElement.clientHeight;
+        }
+    }
+
+    startCountdown() {
+        this.state = 'COUNTDOWN';
+        const overlay = document.getElementById('gameCountdownOverlay');
+        const countText = document.getElementById('countdownNumber');
+        overlay.classList.remove('hidden'); overlay.style.display = 'flex';
+        
+        let count = 3; countText.innerText = count;
+        this.playSound(600, 'sine', 0.1);
+        
+        let intv = setInterval(() => {
+            if(this.state === 'EXIT') { clearInterval(intv); return; } 
+            count--;
+            if(count > 0) {
+                countText.innerText = count; this.playSound(600, 'sine', 0.1);
+            } else if(count === 0) {
+                countText.innerText = "FIGHT!"; this.playSound(1000, 'square', 0.2);
+            } else {
+                clearInterval(intv); overlay.classList.add('hidden'); overlay.style.display = 'none';
+                this.beginGameplay();
+            }
+        }, 1000);
+    }
+
+    beginGameplay() {
+        this.state = 'PLAYING';
+        this.startTime = Date.now();
+        this.lastFrameTime = performance.now();
+        
+        // 🔥 FIX: Game start hote hi bina wait kiye 2 dushman bhej do
+        this.spawnEnemy();
+        this.spawnEnemy();
+        
+        this.spawnTimer = 0; 
+        this.loopReq = requestAnimationFrame(this.loopBind);
+    }
+
+    pause() { 
+        if(this.state !== 'PLAYING') return; 
+        this.state = 'PAUSED'; 
+        document.getElementById('gamePauseOverlay').classList.remove('hidden'); 
+        document.getElementById('gamePauseOverlay').style.display = 'flex'; 
+    }
+
+    resume() { 
+        if(this.state !== 'PAUSED') return; 
+        this.state = 'PLAYING'; 
+        document.getElementById('gamePauseOverlay').classList.add('hidden'); 
+        document.getElementById('gamePauseOverlay').style.display = 'none'; 
+        this.lastFrameTime = performance.now(); 
+        this.loopReq = requestAnimationFrame(this.loopBind); 
+    }
+
+    // 🛠️ EXACT DIAGONAL SPAWNING
+    spawnEnemy() {
+        let word = this.config.list[Math.floor(Math.random() * this.config.list.length)];
+        
+        let corner = Math.floor(Math.random() * 4);
+        if (corner === this.lastCorner) {
+            corner = (corner + 1) % 4;
+        }
+        this.lastCorner = corner;
+
+        let spawnX, spawnY;
+        let offset = 30; // Screen ke theek baahar
+        
+        if (corner === 0) { spawnX = -offset; spawnY = -offset; } 
+        else if (corner === 1) { spawnX = this.canvas.width + offset; spawnY = -offset; } 
+        else if (corner === 2) { spawnX = -offset; spawnY = this.canvas.height + offset; } 
+        else { spawnX = this.canvas.width + offset; spawnY = this.canvas.height + offset; }
+
+        this.enemies.push({
+            id: Math.random().toString(36).substr(2, 9),
+            word: word,
+            typed: "",
+            x: spawnX,
+            y: spawnY,
+            speed: this.config.speed, 
+            errorShake: 0
+        });
+    }
+
+    // 🔥 SUPER STRIKE LOGIC 🔥
+    activateSuperStrike() {
+        this.superCharge = 0;
+        this.combo += this.enemies.length;
+        if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+
+        this.playSound(150, 'sawtooth', 0.5, 30); // Bass drop
+        this.playSound(1200, 'square', 0.2, 2000); // Shuriken flurry
+        this.screenShake(30);
+
+        let cx = this.canvas.width / 2;
+        let cy = this.canvas.height / 2;
+
+        // Ninja spin animation
+        this.ninja.isAttacking = true;
+        this.ninja.attackProgress = 0;
+        this.ninja.attackType = 'super';
+
+        // 🌟 Spawn Radial Stars
+        for(let i=0; i<16; i++) {
+            let angle = (Math.PI * 2 / 16) * i;
+            this.projectiles.push({
+                x: cx, y: cy,
+                tx: cx + Math.cos(angle) * 1000, 
+                ty: cy + Math.sin(angle) * 1000,
+                speed: 45, 
+                isSuper: true // Special color flag
+            });
+        }
+
+        // 💥 Screen Wipe (Destroy all enemies)
+        for(let i = this.enemies.length - 1; i >= 0; i--) {
+            let en = this.enemies[i];
+            this.score += Math.round(en.word.length * 10 * this.config.multiplier);
+            this.createExplosion(en.x + en.width/2, en.y + 15, '#00ffcc', 30, 15);
+            this.createExplosion(en.x + en.width/2, en.y + 15, '#ff003c', 20, 10);
+        }
+        this.enemies = []; // Clear array
+        
+        this.targetedEnemy = null;
+        this.currentInput = "";
+        this.updateHUD();
+        
+        // Massive Greeting
+        this.greetings.push({
+            text: "SUPER STRIKE!",
+            comboVal: "ULTIMATE",
+            y: cy, alpha: 1.0, scale: 0.5
+        });
+
+        // 🔥 FIX: Super strike lagte hi 0.5 seconds mein naye dushman screen par phenk do
+        setTimeout(() => {
+            if (this.state === 'PLAYING') {
+                this.spawnEnemy();
+                this.spawnEnemy();
+            }
+        }, 500); 
+
+        this.spawnTimer = 0; 
+    }
+
+    handleKeyDown(e) {
+        if(this.state !== 'PLAYING') return;
+        if(e.key === 'Escape') { this.pause(); return; }
+        
+        // 🔥 SPACEBAR TRIGGER FOR SUPER STRIKE
+        if(e.key === ' ') {
+            e.preventDefault();
+            if (this.superCharge >= this.superMax) {
+                this.activateSuperStrike();
+            } else {
+                this.playSound(200, 'sawtooth', 0.1, 150); // Error sound
+            }
+            return;
+        }
+
+        if(e.key === 'Backspace') {
+            e.preventDefault();
+            if(this.currentInput.length > 0) {
+                this.currentInput = this.currentInput.slice(0, -1);
+                if(this.targetedEnemy) this.targetedEnemy.typed = this.currentInput;
+                if(this.currentInput.length === 0) this.targetedEnemy = null;
+            }
+            return;
+        }
+
+        if(e.key.length !== 1 || !/[a-zA-Z]/.test(e.key)) return;
+        
+        e.preventDefault(); 
+        const char = e.key.toLowerCase();
+        this.keystrokes++;
+
+        let cx = this.canvas.width / 2;
+        let cy = this.canvas.height / 2;
+
+        if(!this.targetedEnemy) {
+            let potential = this.enemies.filter(w => w.word.startsWith(char));
+            if(potential.length > 0) {
+                potential.sort((a,b) => {
+                    return Math.hypot(cx - a.x, cy - a.y) - Math.hypot(cx - b.x, cy - b.y);
+                });
+                this.targetedEnemy = potential[0];
+                this.ninja.targetAngle = Math.atan2(this.targetedEnemy.y - cy, this.targetedEnemy.x - cx);
+            }
+        }
+
+        if(this.targetedEnemy) {
+            let expectedChar = this.targetedEnemy.word[this.currentInput.length];
+            if(char === expectedChar) {
+                this.currentInput += char;
+                this.targetedEnemy.typed = this.currentInput;
+                this.correctKeystrokes++;
+                
+                this.playSound(1500, 'triangle', 0.03); 
+                
+                if(this.currentInput === this.targetedEnemy.word) {
+                    let dist = Math.hypot(cx - this.targetedEnemy.x, cy - this.targetedEnemy.y);
+                    
+                    this.ninja.isAttacking = true;
+                    this.ninja.attackProgress = 0; 
+                    
+                    if (dist < 180) {
+                        this.ninja.attackType = 'katana';
+                        this.playSound(2000, 'sawtooth', 0.1, 100); 
+                        this.createExplosion(this.targetedEnemy.x, this.targetedEnemy.y, '#00ffcc', 25, 10);
+                    } else {
+                        this.ninja.attackType = 'star';
+                        this.playSound(800, 'square', 0.08); 
+                        this.projectiles.push({
+                            x: cx, y: cy,
+                            tx: this.targetedEnemy.x, ty: this.targetedEnemy.y,
+                            speed: 40, 
+                        });
+                    }
+                    
+                    this.destroyEnemy(this.targetedEnemy, true);
+                    this.currentInput = "";
+                    this.targetedEnemy = null;
+                }
+            } else {
+                this.combo = 0; 
+                this.targetedEnemy.errorShake = 10;
+                this.screenShake(3); 
+                this.playSound(150, 'sawtooth', 0.1);
+            }
+        } else {
+            this.combo = 0; this.screenShake(3); this.playSound(150, 'sawtooth', 0.1);
+        }
+        
+        this.updateHUD();
+    }
+
+    destroyEnemy(enemy, isSuccess) {
+        const index = this.enemies.indexOf(enemy);
+        if(index > -1) {
+            this.enemies.splice(index, 1);
+            if(isSuccess) {
+                this.combo++;
+                if(this.combo > this.maxCombo) this.maxCombo = this.combo;
+                
+                // 🔥 INCREASE CHARGE
+                if (this.superCharge < this.superMax) {
+                    this.superCharge++;
+                }
+
+                if (this.combo > 0 && this.combo % 5 === 0) {
+                    this.greetings.push({
+                        text: this.greetingWords[this.combo] || "GRANDMASTER!",
+                        comboVal: this.combo, y: this.canvas.height / 3, alpha: 1.0, scale: 0.5
+                    });
+                }
+
+                let comboMult = Math.min(5, 1 + Math.floor(this.combo / 5));
+                this.score += Math.round(enemy.word.length * 10 * this.config.multiplier * comboMult);
+                
+            } else {
+                this.combo = 0; this.lives--;
+                this.createExplosion(this.canvas.width/2, this.canvas.height/2, '#ff003c', 30, 8); 
+                this.screenShake(15);
+                this.playSound(100, 'sawtooth', 0.4, 30); 
+                if(this.lives <= 0) this.gameOver();
+            }
+        }
+    }
+
+    createExplosion(x, y, color, amount = 20, speed = 12) {
+        for (let i = 0; i < amount; i++) {
+            this.particles.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * speed,
+                vy: (Math.random() - 0.5) * speed,
+                life: 1.0,
+                color: color,
+                size: Math.random() * 5 + 2
+            });
+        }
+    }
+
+    screenShake(intensity) {
+        const vp = document.getElementById('gameViewport');
+        vp.style.transform = `translate(${(Math.random()-0.5)*intensity}px, ${(Math.random()-0.5)*intensity}px)`;
+        setTimeout(() => vp.style.transform = 'translate(0,0)', 50);
+    }
+
+    updateHUD() {
+        document.getElementById('liveScore').innerText = this.score;
+        document.getElementById('liveLives').innerText = '❤️ '.repeat(Math.max(0, this.lives));
+        document.getElementById('liveCombo').innerText = this.combo + 'x';
+        
+        let mins = (Date.now() - this.startTime) / 60000;
+        if(mins > 0) this.wpm = Math.max(0, Math.round((this.correctKeystrokes / 5) / mins));
+        document.getElementById('liveWpm').innerText = this.wpm;
+    }
+
+    drawNinja(cx, cy, timestamp) {
+        let time = timestamp * 0.003;
+
+        let diff = this.ninja.targetAngle - this.ninja.angle;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        this.ninja.angle += diff * 0.25;
+
+        // 🌟 SUPER STRIKE SPIN ANIMATION
+        if (this.ninja.isAttacking && this.ninja.attackType === 'super') {
+            this.ninja.angle += Math.PI * 0.5; // Spin rapidly
+        }
+
+        this.ctx.save();
+        this.ctx.translate(cx, cy);
+        this.ctx.rotate(this.ninja.angle + Math.PI / 2);
+
+        let wind = Math.sin(time * 3) * 8;
+        this.ctx.strokeStyle = '#ff003c';
+        this.ctx.shadowColor = '#ff003c';
+        this.ctx.shadowBlur = 10;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineWidth = 6;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 15); 
+        this.ctx.quadraticCurveTo(-15 + wind, 40, -10 + wind/2, 60);
+        this.ctx.stroke();
+        this.ctx.shadowBlur = 0;
+
+        if (this.ninja.isAttacking) {
+            this.ninja.attackProgress += 0.15; 
+            if (this.ninja.attackProgress >= 1) this.ninja.isAttacking = false;
+        }
+
+        if (!this.ninja.isAttacking || this.ninja.attackType === 'katana') {
+            let swordAngleOffset = -Math.PI / 4; 
+            let slashAlpha = 0;
+
+            if (this.ninja.isAttacking && this.ninja.attackType === 'katana') {
+                let p = this.ninja.attackProgress;
+                let ease = 1 - Math.pow(1 - p, 5); 
+                swordAngleOffset = -Math.PI / 4 + (ease * Math.PI * 0.9);
+                slashAlpha = 1 - p; 
+                
+                this.ctx.save();
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, 110, -Math.PI / 4, swordAngleOffset);
+                this.ctx.strokeStyle = `rgba(0, 255, 204, ${slashAlpha})`;
+                this.ctx.lineWidth = 20;
+                this.ctx.shadowColor = '#00ffcc';
+                this.ctx.shadowBlur = 15;
+                this.ctx.stroke();
+                this.ctx.restore();
+            }
+
+            this.ctx.save();
+            this.ctx.rotate(swordAngleOffset); 
+            this.ctx.strokeStyle = '#ffffff'; 
+            this.ctx.shadowColor = '#00ffcc';
+            this.ctx.shadowBlur = 15;
+            this.ctx.lineWidth = 4;
+            this.ctx.beginPath();
+            this.ctx.moveTo(15, 0); this.ctx.lineTo(130, 0); this.ctx.stroke();
+            
+            this.ctx.shadowBlur = 0;
+            this.ctx.strokeStyle = '#1e293b'; 
+            this.ctx.lineWidth = 6;
+            this.ctx.beginPath();
+            this.ctx.moveTo(10, 0); this.ctx.lineTo(25, 0); this.ctx.stroke();
+            this.ctx.restore();
+        } 
+        
+        if (this.ninja.isAttacking && this.ninja.attackType === 'star') {
+            this.ctx.translate(0, 5);
+        }
+
+        const isLight = document.body.classList.contains('light-mode');
+        this.ctx.fillStyle = isLight ? '#0f172a' : '#0b1120';
+        this.ctx.strokeStyle = isLight ? '#3b82f6' : '#1e293b';
+        this.ctx.lineWidth = 3;
+        
+        this.ctx.beginPath(); this.ctx.ellipse(0, 5, 25, 12, 0, 0, Math.PI * 2); this.ctx.fill(); this.ctx.stroke(); 
+        this.ctx.beginPath(); this.ctx.arc(0, -2, 16, 0, Math.PI * 2); this.ctx.fill(); this.ctx.stroke(); 
+
+        this.ctx.strokeStyle = '#00ffcc';
+        this.ctx.shadowColor = '#00ffcc';
+        this.ctx.shadowBlur = 15;
+        this.ctx.lineWidth = 4;
+        this.ctx.beginPath();
+        this.ctx.arc(0, -2, 16, Math.PI * 1.1, Math.PI * 1.9); 
+        this.ctx.stroke();
+
+        this.ctx.restore();
+    }
+
+    gameLoop(timestamp) {
+        if(this.state !== 'PLAYING') return; 
+        
+        let dt = timestamp - this.lastFrameTime;
+        if(dt > 100) dt = 16; 
+        this.lastFrameTime = timestamp;
+        
+        let cx = this.canvas.width / 2;
+        let cy = this.canvas.height / 2;
+
+        const isLight = document.body.classList.contains('light-mode');
+
+        this.ctx.fillStyle = isLight ? '#f8fafc' : '#020617';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.ctx.strokeStyle = isLight ? 'rgba(59, 130, 246, 0.1)' : 'rgba(30, 41, 59, 0.4)';
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        for(let x = 0; x < this.canvas.width; x += 80) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); }
+        for(let y = 0; y < this.canvas.height; y += 80) { this.ctx.moveTo(0, y); this.ctx.lineTo(this.canvas.width, y); }
+        this.ctx.stroke();
+
+        this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.15)';
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath(); this.ctx.arc(cx, cy, 260, 0, Math.PI*2); this.ctx.stroke(); 
+        this.ctx.strokeStyle = 'rgba(255, 0, 60, 0.2)'; 
+        this.ctx.beginPath(); this.ctx.arc(cx, cy, 170, 0, Math.PI*2); this.ctx.stroke(); 
+
+        // Spawning
+        this.spawnTimer += dt;
+        if(this.spawnTimer > this.config.spawnRate) {
+            this.spawnEnemy();
+            this.spawnTimer = 0;
+            
+            let minSpawnLimit = this.difficulty === 'easy' ? 2000 : (this.difficulty === 'medium' ? 1200 : 600);
+            if(this.config.spawnRate > minSpawnLimit) {
+                this.config.spawnRate -= 15; 
+            }
+        }
+
+        if (this.targetedEnemy) {
+            this.ninja.targetAngle = Math.atan2(this.targetedEnemy.y - cy, this.targetedEnemy.x - cx);
+        }
+
+        // 🌟 DRAW PROJECTILES
+        for(let i = this.projectiles.length - 1; i >= 0; i--) {
+            let p = this.projectiles[i];
+            let pdx = p.tx - p.x;
+            let pdy = p.ty - p.y;
+            let pDist = Math.hypot(pdx, pdy);
+
+            if (pDist < p.speed) {
+                if(!p.isSuper) this.createExplosion(p.tx, p.ty, '#ff9900', 15, 8); 
+                this.projectiles.splice(i, 1);
+                continue;
+            }
+
+            p.x += (pdx / pDist) * p.speed * (dt/16);
+            p.y += (pdy / pDist) * p.speed * (dt/16);
+
+            this.ctx.save();
+            this.ctx.translate(p.x, p.y);
+            this.ctx.rotate(timestamp * 0.02); 
+            
+            // Neon cyan color for Super Strike, Orange for regular
+            let pColor = p.isSuper ? '#00ffcc' : '#ff9900';
+            this.ctx.fillStyle = pColor;
+            this.ctx.shadowColor = pColor;
+            this.ctx.shadowBlur = 15;
+            
+            for(let j=0; j<4; j++) {
+                this.ctx.rotate(Math.PI/2);
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -5); this.ctx.lineTo(20, 0); this.ctx.lineTo(0, 5);
+                this.ctx.fill();
+            }
+            this.ctx.restore();
+        }
+
+        this.enemies.sort((a, b) => {
+            return Math.hypot(cx - b.x, cy - b.y) - Math.hypot(cx - a.x, cy - a.y); 
+        });
+
+        this.ctx.font = "900 20px 'JetBrains Mono', monospace";
+        this.ctx.textAlign = "left";
+        this.ctx.textBaseline = "middle";
+
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+            let en = this.enemies[i];
+            let isTarget = (this.targetedEnemy === en);
+            
+            let dx = cx - en.x;
+            let dy = cy - en.y;
+            let dist = Math.hypot(dx, dy);
+
+            let activeSpeed = isTarget ? (en.speed * 0.25) : en.speed;
+
+            if (dist > 0) {
+                en.x += (dx / dist) * activeSpeed * (dt/16);
+                en.y += (dy / dist) * activeSpeed * (dt/16);
+            }
+
+            if (dist < 40) {
+                this.destroyEnemy(en, false);
+                if (isTarget) this.targetedEnemy = null;
+                continue;
+            }
+
+            let renderX = en.x;
+            let renderY = en.y;
+
+            if (en.errorShake > 0) {
+                renderX += (Math.random() - 0.5) * 8;
+                renderY += (Math.random() - 0.5) * 8;
+                en.errorShake--;
+            }
+
+            let typedW = this.ctx.measureText(en.typed).width;
+            let totalW = this.ctx.measureText(en.word).width;
+            let boxW = totalW + 30;
+            let boxH = 40;
+
+            this.ctx.save();
+            this.ctx.translate(renderX, renderY);
+
+            this.ctx.fillStyle = isTarget ? 'rgba(0, 40, 60, 0.95)' : (isLight ? '#ffffff' : 'rgba(15, 23, 42, 0.95)');
+            this.ctx.strokeStyle = en.errorShake > 0 ? '#ff003c' : (isTarget ? '#00ffcc' : (isLight ? '#94a3b8' : '#334155'));
+            this.ctx.lineWidth = 2;
+            
+            if(isTarget || en.errorShake > 0) { 
+                this.ctx.shadowColor = en.errorShake > 0 ? '#ff003c' : '#00ffcc'; 
+                this.ctx.shadowBlur = 15; 
+            }
+            
+            this.ctx.beginPath();
+            this.ctx.roundRect(-boxW/2, -boxH/2, boxW, boxH, 6);
+            this.ctx.fill(); this.ctx.stroke();
+            this.ctx.shadowBlur = 0;
+
+            let startX = -(totalW / 2);
+            this.ctx.fillStyle = isTarget ? '#00ffcc' : (isLight ? '#0f172a' : '#ffffff');
+            this.ctx.fillText(en.typed, startX, 2);
+            
+            this.ctx.fillStyle = isTarget ? '#ffffff' : '#64748b';
+            this.ctx.fillText(en.word.substring(en.typed.length), startX + typedW, 2);
+            
+            if (isTarget) {
+                this.ctx.strokeStyle = 'rgba(0, 255, 204, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.moveTo((cx - renderX), (cy - renderY));
+                this.ctx.lineTo(0, 0);
+                this.ctx.stroke();
+            }
+            
+            this.ctx.restore();
+        }
+
+        this.drawNinja(cx, cy, timestamp);
+
+        for(let i=this.particles.length-1; i>=0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx * (dt/16); p.y += p.vy * (dt/16); p.life -= 0.04 * (dt/16); 
+            this.ctx.fillStyle = p.color; 
+            this.ctx.globalAlpha = Math.max(0, p.life);
+            this.ctx.beginPath(); this.ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); this.ctx.fill();
+            if(p.life <= 0) this.particles.splice(i, 1);
+        }
+        this.ctx.globalAlpha = 1.0;
+
+        for (let i = this.greetings.length - 1; i >= 0; i--) {
+            let g = this.greetings[i];
+            g.y -= 1.5 * (dt/16); g.alpha -= 0.015 * (dt/16); 
+            if (g.scale < 1.2) g.scale += 0.08 * (dt/16); 
+
+            this.ctx.save();
+            this.ctx.globalAlpha = Math.max(0, g.alpha);
+            this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+            this.ctx.shadowColor = '#00ffcc'; this.ctx.shadowBlur = 25; this.ctx.fillStyle = '#ffffff'; 
+            let currentScale = Math.min(g.scale, 1.2);
+            
+            this.ctx.font = `800 ${25 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(`${g.comboVal} COMBO!`, cx, g.y - (25 * currentScale));
+            this.ctx.font = `900 ${45 * currentScale}px 'JetBrains Mono', monospace`;
+            this.ctx.fillText(g.text, cx, g.y + (15 * currentScale));
+            this.ctx.restore();
+
+            if (g.alpha <= 0) this.greetings.splice(i, 1);
+        }
+
+        // 🔥 DRAW CHAKRA (SUPER STRIKE) BAR AT BOTTOM
+        let barWidth = 200;
+        let barHeight = 8;
+        let barX = (this.canvas.width - barWidth) / 2;
+        let barY = this.canvas.height - 25; 
+        
+        this.ctx.fillStyle = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+        this.ctx.beginPath();
+        this.ctx.roundRect(barX, barY, barWidth, barHeight, 4);
+        this.ctx.fill();
+
+        let fillRatio = this.superCharge / this.superMax;
+        let isReady = fillRatio >= 1;
+        
+        this.ctx.fillStyle = isReady ? '#00ffcc' : '#ef4444';
+        if(isReady && !isLight) {
+            this.ctx.shadowColor = '#00ffcc';
+            this.ctx.shadowBlur = 10;
+        }
+        this.ctx.beginPath();
+        this.ctx.roundRect(barX, barY, barWidth * fillRatio, barHeight, 4);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.font = "bold 11px 'JetBrains Mono'";
+        this.ctx.fillStyle = isReady ? (isLight ? '#059669' : '#00ffcc') : '#94a3b8';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(isReady ? "SUPER STRIKE READY [SPACE]" : "CHARGING CHAKRA...", this.canvas.width/2, barY - 10);
+
+        if (this.state === 'PLAYING') {
+            this.loopReq = requestAnimationFrame(this.loopBind);
+        }
+    }
+
+    gameOver() {
+        this.state = 'GAMEOVER';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        this.saveStats();
+        
+        document.getElementById('resScore').innerText = this.score.toLocaleString();
+        document.getElementById('resWpm').innerText = this.wpm;
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        document.getElementById('resAcc').innerText = acc + '%';
+        document.getElementById('resCombo').innerText = this.maxCombo;
+        
+        let secs = Math.floor((Date.now() - this.startTime)/1000);
+        document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+        
+        const modal = document.getElementById('gameResultModal');
+        modal.classList.remove('hidden'); modal.style.display = 'flex';
+    }
+
+    saveStats() {
+        let scoreKey = `keyboardNinja_bestScore_${this.difficulty}`;
+        let wpmKey = `keyboardNinja_bestWpm_${this.difficulty}`;
+        
+        let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
+        let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
+        
+        let badge = document.getElementById('newHighScoreBadge');
+        if(this.score > existingScore) {
+            localStorage.setItem(scoreKey, this.score);
+            if(badge) { badge.style.display = 'inline-block'; badge.classList.remove('hidden'); }
+        } else { if(badge) badge.style.display = 'none'; }
+
+        if(this.wpm > existingWpm || existingWpm === 0) localStorage.setItem(wpmKey, this.wpm);
+        
+        let history = JSON.parse(localStorage.getItem('keyboardNinja_GameHistory') || '[]');
+        let acc = this.keystrokes > 0 ? Math.round((this.correctKeystrokes / this.keystrokes) * 100) : 100;
+        let dateStr = new Date().toLocaleString('en-IN', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});
+        history.unshift({ date: dateStr, score: this.score, wpm: this.wpm, accuracy: acc, diff: this.difficulty.toUpperCase() }); 
+        if(history.length > 10) history = history.slice(0, 10); 
+        localStorage.setItem('keyboardNinja_GameHistory', JSON.stringify(history)); 
+        
+        this.parent.loadPersistentStats(); 
+    }
+
+    playSound(freq, type, vol, endFreq = null) {
+        if(!this.parent.soundEnabled || !this.parent.audioCtx) return;
+        let ctx = this.parent.audioCtx;
+        if(ctx.state === 'suspended') ctx.resume();
+        let osc = ctx.createOscillator(); let gain = ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        if(endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(vol, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+    }
+
+    cleanup() {
+        this.state = 'EXIT';
+        if(this.loopReq) cancelAnimationFrame(this.loopReq);
+        window.removeEventListener('keydown', this.keydownBind);
+        window.removeEventListener('resize', this.resizeBind);
+    }
+}
+/* =========================================================
+   🛡️ GAME 05: TYPING SURVIVOR (FINAL PERFECT BUILD)
+   Perfect Bullet Origins, Fixed Grenade Physics, Compact UI
+========================================================= */
+class TypingSurvivorGame {
+    constructor(difficulty, parentModule) {
+        this.parent = parentModule;
+        this.difficulty = difficulty;
+        this.layer = document.getElementById('gameCanvasLayer');
+        
+        const topBar = document.querySelector('.arena-top-bar');
+        if(topBar) {
+            this.origTopBarDisplay = topBar.style.display;
+            topBar.style.display = 'none';
+        }
+
+        this.CONFIG = {
+            maxHP: 5, startZ: 1000, meleeRange: 250, damageZ: 20, focalLength: 400,
+            baseSpeed: this.getSpeed(difficulty), speedCap: 300, 
+            pointsPerLetter: 10, pointsPerKill: 50, killsForHeal: 20, killsForGrenade: 10,
+            words: ["DILIGENT", "PRAGMATIC", "OBSCURE", "CANDID", "LUCID", "VITAL", "EFFICIENT", "ABANDON", "OMNIPRESENT", "INEVITABLE", "GULLIBLE", "FASTIDIOUS", "BELLIGERENT", "CAPRICIOUS", "DEFAMATION", "EMANCIPATE", "FRIVOLOUS", "GARRULOUS"]
+        };
+
+        this.STATE = { 
+            isPlaying: false, score: 0, 
+            highScore: parseInt(localStorage.getItem(`typingSurvivor_bestScore_${difficulty}`)) || 0, 
+            hp: this.CONFIG.maxHP, wave: 1, combo: 0, comboMultiplier: 1.0, speedMultiplier: 1.0, 
+            lastFrameTime: 0, timeElapsed: 0, lastSpawnTime: 0, waveKills: 0, 
+            grenadeCharge: 0, healCounter: 0,
+            keystrokes: 0, correctKeystrokes: 0, startTime: 0, wpm: 0, maxCombo: 0
+        };
+
+        this.zombies = [];
+        this.particles = [];
+        this.activeZombie = null;
+        this.grenadeObj = null;
+        this.loopId = null;
+
+        this.initDOM();
+        this.audio = this.initAudio();
+        
+        this.resizeBind = this.resize.bind(this);
+        this.keydownBind = this.handleKeyDown.bind(this);
+    }
+
+    getSpeed(diff) {
+        if(diff === 'easy') return 40;
+        if(diff === 'hard') return 80;
+        if(diff === 'extreme') return 100;
+        return 60; 
+    }
+
+    initDOM() {
+        if(!document.getElementById('ts-styles')) {
+            const style = document.createElement('style');
+            style.id = 'ts-styles';
+            style.innerHTML = `
+                :root { --ts-bg: #0f172a; --ts-pri: #00e5ff; --ts-dan: #ff1744; --ts-typ: #00e5ff; --ts-un: #ffffff; --ts-nxt: #ffea00; --ts-heal: #4ade80; }
+                #ts-wrap { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background-color: var(--ts-bg); color: white; font-family: 'Courier New', Courier, monospace; overflow: hidden; perspective: 800px; z-index: 999999; margin: 0; padding: 0; }
+                #ts-wrap * { box-sizing: border-box; user-select: none; touch-action: none; }
+                
+                .ts-pause-btn { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.8); border: 1px solid var(--ts-pri); color: var(--ts-pri); padding: 6px 16px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer; z-index: 8500; pointer-events: auto; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;}
+                #ts-pause-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 9000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; opacity: 0; pointer-events: none; transition: 0.2s; }
+                #ts-pause-overlay.active { opacity: 1; pointer-events: auto; }
+                .ts-menu-btn { background: rgba(15, 23, 42, 0.9); border: 2px solid var(--ts-pri); color: #fff; padding: 12px 30px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-weight: 800; width: 220px; box-shadow: 0 0 10px rgba(0,229,255,0.2); transition: 0.2s; font-family: inherit;}
+                .ts-menu-btn:hover { background: var(--ts-pri); color: #000; box-shadow: 0 0 20px var(--ts-pri); }
+                .ts-menu-btn.danger { border-color: var(--ts-dan); box-shadow: 0 0 10px rgba(255,23,68,0.2); color: var(--ts-dan); }
+                .ts-menu-btn.danger:hover { background: var(--ts-dan); color: #fff; box-shadow: 0 0 20px var(--ts-dan); }
+
+                #ts-damage-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 23, 68, 0.3); opacity: 0; pointer-events: none; z-index: 5000; transition: background 0.1s, opacity 0.1s; }
+                .ts-flash-red { background: rgba(255, 23, 68, 0.3) !important; opacity: 1 !important; }
+                .ts-flash-green { background: rgba(74, 222, 128, 0.3) !important; opacity: 1 !important; }
+                
+                #ts-game-ui { position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 8px 12px; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.9) 0%, transparent 100%); z-index: 8000; font-size: 0.8rem; text-shadow: 1px 1px 2px black; pointer-events: none; }
+                .ts-hud-group { display: flex; flex-direction: column; gap: 2px; }
+                .ts-hud-right { text-align: right; }
+                .ts-hud-val { color: var(--ts-pri); font-weight: bold; font-size: 0.95rem; }
+                #ts-hp-container { width: 90px; height: 6px; background: rgba(0,0,0,0.6); border: 1px solid #334155; border-radius: 4px; margin-top: 3px; display: inline-block;}
+                #ts-hp-bar { width: 100%; height: 100%; background: var(--ts-pri); transition: width 0.2s, background-color 0.2s; box-shadow: 0 0 8px var(--ts-pri); }
+                .ts-combo-text { color: var(--ts-nxt); font-size: 0.85rem; font-weight: bold; opacity: 0; text-shadow: 0 0 6px var(--ts-nxt); transition: opacity 0.2s; margin-top: 2px;}
+                
+                #ts-grenade-ui { position: absolute; bottom: 12px; left: 12px; z-index: 7000; display: flex; flex-direction: column; align-items: center; background: rgba(15, 23, 42, 0.8); padding: 5px 10px; border-radius: 6px; border: 1px solid #334155; box-shadow: 0 0 8px rgba(0,0,0,0.8); transition: 0.3s; }
+                #ts-grenade-icon { font-size: 1.2rem; filter: grayscale(1) opacity(0.5); transition: 0.3s; margin-bottom: 2px;}
+                #ts-grenade-container { width: 50px; height: 5px; background: #020617; border-radius: 3px; overflow: hidden; border: 1px solid #1e293b; }
+                #ts-grenade-bar { width: 0%; height: 100%; background: var(--ts-nxt); transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+                #ts-grenade-text { font-size: 0.6rem; font-weight: bold; margin-top: 4px; color: #64748b; letter-spacing: 0.5px; }
+                
+                #ts-grenade-ui.ready { border-color: var(--ts-heal); box-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+                #ts-grenade-ui.ready #ts-grenade-icon { filter: grayscale(0) opacity(1) drop-shadow(0 0 5px var(--ts-heal)); animation: tsPulse 1s infinite alternate; }
+                #ts-grenade-ui.ready #ts-grenade-bar { background: var(--ts-heal); box-shadow: 0 0 8px var(--ts-heal); }
+                #ts-grenade-ui.ready #ts-grenade-text { color: var(--ts-heal); }
+                
+                .ts-heal-text { position: absolute; color: var(--ts-heal); font-weight: 900; font-size: 18px; animation: tsFloatUpHeal 2s forwards; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000; z-index: 8500; top: 40%; left: 50%; pointer-events: none; }
+                
+                #ts-world { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); overflow:hidden; }
+                #ts-crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 15px; height: 15px; z-index: 7000; pointer-events: none; transition: filter 0.15s; }
+                #ts-crosshair::before { content: ''; position: absolute; top: 10px; left: -8px; width: 35px; height: 1.5px; background: rgba(0, 229, 255, 0.8); box-shadow: 0 0 4px var(--ts-pri); transition: background 0.15s, box-shadow 0.15s; }
+                #ts-crosshair::after { content: ''; position: absolute; top: -5px; left: 9px; width: 1.5px; height: 35px; background: rgba(0, 229, 255, 0.8); box-shadow: 0 0 4px var(--ts-pri); transition: background 0.15s, box-shadow 0.15s; }
+                #ts-crosshair.locked::before, #ts-crosshair.locked::after { background: var(--ts-dan); box-shadow: 0 0 8px var(--ts-dan); }
+                #ts-horizon { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: rgba(0, 229, 255, 0.5); box-shadow: 0 0 15px 1px var(--ts-pri); z-index: 1; }
+                #ts-ground { position: absolute; top: 50%; left: -50%; width: 200%; height: 50%; background: repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(0, 229, 255, 0.1) 30px), repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(0, 229, 255, 0.1) 30px); transform: perspective(600px) rotateX(75deg); transform-origin: top center; z-index: 2; pointer-events: none; }
+                
+                .ts-zombie { position: absolute; left: 50%; bottom: 50%; width: 0; height: 0; overflow: visible; will-change: transform; z-index: 1000; }
+                .ts-sprite-wrap { position: absolute; bottom: 0; left: -40px; width: 80px; display: flex; flex-direction: column; align-items: center; transform-origin: bottom center; overflow: visible; }
+                .ts-shadow { width: 50px; height: 10px; background: rgba(0,0,0,0.8); border-radius: 50%; position: absolute; bottom: -5px; filter: blur(3px); }
+                .ts-svg { width: 80px; height: 115px; position: relative; overflow: visible; }
+                .ts-hit .ts-svg { filter: brightness(2) contrast(1.5) !important; }
+                .ts-indicator { position: absolute; top: 10px; left: 50%; margin-left: -25px; width: 50px; height: 50px; border: 2px dashed var(--ts-dan); border-radius: 50%; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.2s; }
+                .ts-active .ts-indicator { animation: tsLockOn 0.3s forwards, tsSpin 3s linear infinite; }
+                
+                .ts-billboard { position: absolute; left: 0; transform: translateX(-50%); transform-origin: bottom center; background: rgba(15, 23, 42, 0.9); padding: 4px 10px; border: 1px solid #334155; border-radius: 4px; font-size: 14px; font-weight: bold; white-space: nowrap; text-align: center; letter-spacing: 1px; box-shadow: 0 3px 8px rgba(0,0,0,0.8); line-height: 1.1; z-index: 10; }
+                .ts-c-typed { color: var(--ts-typ); } .ts-c-next { color: #020617; background: var(--ts-nxt); border-radius: 2px; padding: 0 1px; } .ts-c-un { color: var(--ts-un); opacity: 0.9; }
+                
+                .ts-blood-splatter { position: absolute; width: 0; height: 0; z-index: 4500; pointer-events: none; overflow: visible; }
+                .ts-blood-drop { position: absolute; width: 6px; height: 6px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 3px #aa0000; animation: tsBleed 0.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+                .ts-bullet { position: absolute; width: 2px; height: 60px; background: #ffea00; border-radius: 1px; z-index: 5500; pointer-events: none; transform-origin: top center; will-change: transform; }
+                .ts-phys-grenade { position: absolute; top: 0; left: 0; font-size: 1.5rem; z-index: 6500; pointer-events: none; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); will-change: transform; margin-left: -12px; margin-top: -12px;}
+                .ts-phys-part { position: absolute; top: 0; left: 0; border-radius: 50%; z-index: 4600; pointer-events: none; will-change: transform; margin-left: -5px; margin-top: -5px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+                .ts-shockwave { position: absolute; top: 0; left: 0; width: 120px; height: 120px; border: 4px solid #ffea00; border-radius: 50%; box-shadow: 0 0 30px #ff1744, inset 0 0 30px #ff1744; z-index: 4500; pointer-events: none; margin-left: -60px; margin-top: -60px; animation: tsShock 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+                .ts-blast { position: absolute; left: 50%; bottom: 50%; width: 0; height: 0; z-index: 4500; pointer-events: none; overflow: visible; }
+                .ts-blast-core { position: absolute; top: -40px; left: -20px; width: 40px; height: 40px; background: radial-gradient(circle, #fff 0%, #ffea00 50%, transparent 100%); border-radius: 50%; animation: tsCoreFade 0.3s ease-out forwards; }
+                .ts-blast-part { position: absolute; top: -30px; left: -8px; width: 10px; height: 10px; background: var(--ts-dan); border-radius: 50%; animation: tsExplode 0.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; will-change: transform, opacity; }
+                
+                #ts-player-area { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 6000; height: 30vh; width: 100vw; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; }
+                #ts-weapon-wrap { position: relative; width: 30vh; height: 30vh; transform-origin: bottom center; transition: transform 0.05s linear; display: flex; justify-content: center; align-items: flex-end;}
+                #ts-char { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 10px #000); }
+                
+                #ts-weapon-status { position: absolute; bottom: 12px; right: 12px; font-size: 0.75rem; font-weight: bold; background: rgba(15, 23, 42, 0.8); padding: 5px 12px; border-radius: 4px; z-index: 7000; color: var(--ts-pri); border: 1px solid var(--ts-pri); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+                
+                .ts-recoil .ts-arm { animation: tsRecoilAnim 0.12s ease-out; }
+                .ts-slash .ts-arm { animation: tsSlashAnim 0.15s ease-out; }
+                .ts-muzzle { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; background: radial-gradient(circle, #fff 0%, #ffea00 30%, #ff1744 60%, transparent 80%); opacity: 0; pointer-events: none; mix-blend-mode: screen; z-index: 6500; transform-origin: bottom center;}
+                .ts-flash-active { animation: tsFlashAnim 0.1s; }
+                .ts-dmg-text { position: absolute; color: var(--ts-dan); font-weight: 900; font-size: 24px; animation: tsFloatUp 0.6s forwards; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000; z-index: 7500; pointer-events: none; will-change: transform, opacity; }
+                .ts-shake { animation: tsShakeAnim 0.3s; }
+
+                @keyframes tsPulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+                @keyframes tsFloatUpHeal { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { transform: translate(-50%, -15px) scale(1.1); opacity: 1; } 80% { transform: translate(-50%, -40px) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50px) scale(1); opacity: 0; } }
+                @keyframes tsShock { 0% { transform: scale(0.1); opacity: 1; border-color: #fff; } 100% { transform: scale(4); opacity: 0; border-color: #ff1744; border-width: 0px; } }
+                @keyframes tsBleed { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
+                @keyframes tsLockOn { 0% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+                @keyframes tsSpin { 100% { transform: rotate(360deg); } }
+                @keyframes tsCoreFade { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
+                @keyframes tsExplode { 0% { transform: translate(0,0) scale(1); opacity: 1; background: #ffea00; } 100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; background: var(--ts-dan); } }
+                @keyframes tsRecoilAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(10px) scale(1.02); } 100% { transform: translateY(0) scale(1); } }
+                @keyframes tsSlashAnim { 0% { transform: rotate(0) translateX(0); } 50% { transform: rotate(-35deg) translateX(30px) translateY(-15px); filter: brightness(1.5); } 100% { transform: rotate(0) translateX(0); } }
+                @keyframes tsFlashAnim { 0% { opacity: 1; transform: translateX(-50%) scale(0.5); } 100% { opacity: 0; transform: translateX(-50%) scale(1.5); } }
+                @keyframes tsFloatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-50px) scale(1.2); opacity: 0; } }
+                @keyframes tsShakeAnim { 0% { transform: translateX(0); } 20% { transform: translateX(-6px) translateY(5px); } 40% { transform: translateX(6px) translateY(-5px); } 60% { transform: translateX(-6px) translateY(5px); } 80% { transform: translateX(6px) translateY(-5px); } 100% { transform: translateX(0); } }
+                @keyframes tsFadeOut { 0% { transform: scale(var(--end-scale)); opacity: 1; } 100% { transform: scale(calc(var(--end-scale) * 1.5)); opacity: 0; } }
+            `;
+            document.head.appendChild(style);
+        }
+
+        this.GRAPHICS = {
+            zombie: `<svg viewBox="0 0 100 150" class="ts-svg"><circle cx="50" cy="30" r="22" fill="#4ade80" stroke="#14532d" stroke-width="2"/><circle cx="40" cy="25" r="4" fill="#ff003c"/><circle cx="60" cy="25" r="4" fill="#ff003c"/><rect x="30" y="55" width="40" height="60" rx="8" fill="#475569" stroke="#1e293b" stroke-width="2"/><path d="M 25 60 L 5 90" stroke="#4ade80" stroke-width="14" stroke-linecap="round" /><path d="M 75 60 L 95 90" stroke="#4ade80" stroke-width="14" stroke-linecap="round" /><rect x="35" y="110" width="12" height="40" fill="#1e293b" /><rect x="53" y="110" width="12" height="40" fill="#1e293b" /></svg>`,
+            playerGun: `<svg viewBox="0 0 200 200" width="100%" height="100%" style="overflow:visible;" class="ts-arm"><path d="M 40 220 L 70 140 L 90 120" stroke="#1e293b" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M 85 110 Q 95 100 100 100" stroke="#0f172a" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M 160 220 L 130 140 L 115 110" stroke="#1e293b" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M 115 110 Q 105 100 100 100" stroke="#0f172a" stroke-width="15" stroke-linecap="round" fill="none"/><polygon points="70,200 130,200 115,100 85,100" fill="#0f172a" stroke="#334155" stroke-width="2"/><polygon points="85,100 115,100 108,40 92,40" fill="#1e293b" stroke="#0f172a" stroke-width="2"/><rect x="94" y="10" width="12" height="30" fill="#020617"/><rect x="92" y="15" width="16" height="5" fill="#334155"/><rect x="92" y="25" width="16" height="5" fill="#334155"/><polygon points="94,10 106,10 108,0 92,0" fill="#000"/><rect x="88" y="70" width="24" height="30" fill="#020617" rx="2" stroke="#00e5ff" stroke-width="1"/><rect x="92" y="74" width="16" height="22" fill="rgba(0, 229, 255, 0.15)"/><circle cx="100" cy="85" r="2" fill="#ff1744"/><path d="M 95 85 L 105 85 M 100 80 L 100 90" stroke="#ff1744" stroke-width="1"/><line x1="100" y1="100" x2="100" y2="200" stroke="#020617" stroke-width="8"/></svg>`,
+            playerKnife: `<svg viewBox="0 0 200 200" width="100%" height="100%" style="overflow:visible;" class="ts-arm"><path d="M 180 220 Q 150 160 130 130" stroke="#1e293b" stroke-width="35" stroke-linecap="round" fill="none"/><g transform="translate(130, 130) rotate(-25)"><path d="M -10 -15 L -8 -90 L 0 -110 L 12 -50 L 10 -15 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="2" filter="drop-shadow(0 0 5px #00e5ff)"/><path d="M 0 -15 L 0 -95" stroke="#475569" stroke-width="2"/><rect x="-20" y="-15" width="40" height="10" fill="#0f172a" rx="2" stroke="#334155" stroke-width="1"/><rect x="-12" y="-5" width="24" height="60" fill="#020617" rx="3" stroke="#1e293b" stroke-width="2"/><path d="M -14 5 Q 0 12 14 5" stroke="#334155" stroke-width="10" stroke-linecap="round" fill="none"/><path d="M -14 18 Q 0 25 14 18" stroke="#334155" stroke-width="10" stroke-linecap="round" fill="none"/><path d="M -14 31 Q 0 38 14 31" stroke="#334155" stroke-width="10" stroke-linecap="round" fill="none"/></g></svg>`
+        };
+
+        this.layer.innerHTML = `
+            <div id="ts-wrap">
+                <button id="ts-btn-pause" class="ts-pause-btn">⏸ PAUSE</button>
+                <div id="ts-damage-overlay"></div>
+                
+                <div id="ts-game-ui">
+                    <div class="ts-hud-group">
+                        <div>SCORE: <span id="ts-score" class="ts-hud-val">0</span></div>
+                        <div>WAVE: <span id="ts-wave" class="ts-hud-val">1</span></div>
+                        <div id="ts-combo" class="ts-combo-text">COMBO x1.0</div>
+                    </div>
+                    <div class="ts-hud-group ts-hud-right">
+                        <div>HI: <span id="ts-highscore" class="ts-hud-val">${this.STATE.highScore}</span></div>
+                        <div>HP</div>
+                        <div id="ts-hp-container"><div id="ts-hp-bar"></div></div>
+                    </div>
+                </div>
+                
+                <div id="ts-grenade-ui">
+                    <div id="ts-grenade-icon">💣</div>
+                    <div id="ts-grenade-container"><div id="ts-grenade-bar"></div></div>
+                    <div id="ts-grenade-text">0/${this.CONFIG.killsForGrenade} KILLS</div>
+                </div>
+                
+                <div id="ts-world">
+                    <div id="ts-crosshair"></div>
+                    <div id="ts-horizon"></div>
+                    <div id="ts-ground"></div>
+                    <div id="ts-weapon-status">ASSAULT RIFLE</div>
+                    <div id="ts-player-area">
+                        <div id="ts-weapon-wrap">
+                            <div id="ts-muzzle" class="ts-muzzle"></div>
+                            <div id="ts-char"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="ts-pause-overlay">
+                    <h2 style="color: #00e5ff; font-size: 2.2rem; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 15px #00e5ff;">GAME PAUSED</h2>
+                    <button id="ts-btn-resume" class="ts-menu-btn">Resume</button>
+                    <button id="ts-btn-replay" class="ts-menu-btn">Replay</button>
+                    <button id="ts-btn-exit" class="ts-menu-btn danger">Exit Game</button>
+                </div>
+            </div>
+        `;
+
+        this.DOM = {
+            wrap: document.getElementById('ts-wrap'),
+            world: document.getElementById('ts-world'),
+            weaponWrap: document.getElementById('ts-weapon-wrap'),
+            char: document.getElementById('ts-char'),
+            weaponStatus: document.getElementById('ts-weapon-status'),
+            muzzle: document.getElementById('ts-muzzle'),
+            crosshair: document.getElementById('ts-crosshair'),
+            overlay: document.getElementById('ts-damage-overlay'),
+            grenadeUI: document.getElementById('ts-grenade-ui'),
+            grenadeBar: document.getElementById('ts-grenade-bar'),
+            grenadeText: document.getElementById('ts-grenade-text'),
+            score: document.getElementById('ts-score'),
+            wave: document.getElementById('ts-wave'),
+            combo: document.getElementById('ts-combo'),
+            highscore: document.getElementById('ts-highscore'),
+            hpBar: document.getElementById('ts-hp-bar'),
+            pauseOverlay: document.getElementById('ts-pause-overlay'),
+            btnPause: document.getElementById('ts-btn-pause'),
+            btnResume: document.getElementById('ts-btn-resume'),
+            btnReplay: document.getElementById('ts-btn-replay'),
+            btnExit: document.getElementById('ts-btn-exit'),
+        };
+        
+        this.DOM.char.innerHTML = this.GRAPHICS.playerGun;
+    }
+
+    initAudio() {
+        return {
+            parent: this, ctx: null,
+            init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            shoot() {
+                if(!this.ctx || !this.parent.parent.soundEnabled) return;
+                let bSize = this.ctx.sampleRate * 0.15; let b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+                let d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random()*2-1;
+                let n = this.ctx.createBufferSource(); n.buffer = b;
+                let f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1000;
+                let g = this.ctx.createGain(); g.gain.setValueAtTime(0.6, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime+0.1);
+                n.connect(f); f.connect(g); g.connect(this.ctx.destination); n.start();
+            },
+            explosion() {
+                if(!this.ctx || !this.parent.parent.soundEnabled) return;
+                let bSize = this.ctx.sampleRate * 0.6; let b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+                let d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random()*2-1;
+                let n = this.ctx.createBufferSource(); n.buffer = b;
+                let f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(400, this.ctx.currentTime); f.frequency.exponentialRampToValueAtTime(10, this.ctx.currentTime+0.5);
+                let g = this.ctx.createGain(); g.gain.setValueAtTime(1, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime+0.5);
+                n.connect(f); f.connect(g); g.connect(this.ctx.destination); n.start();
+            },
+            nuke() {
+                if(!this.ctx || !this.parent.parent.soundEnabled) return;
+                let bSize = this.ctx.sampleRate * 2.0; let b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+                let d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random()*2-1;
+                let n = this.ctx.createBufferSource(); n.buffer = b;
+                let f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(600, this.ctx.currentTime); f.frequency.exponentialRampToValueAtTime(10, this.ctx.currentTime+1.8);
+                let g = this.ctx.createGain(); g.gain.setValueAtTime(2, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime+1.8);
+                n.connect(f); f.connect(g); g.connect(this.ctx.destination); n.start();
+            },
+            play(fr, ty, du, vo=0.1) {
+                if(!this.ctx || !this.parent.parent.soundEnabled) return;
+                let o = this.ctx.createOscillator(), g = this.ctx.createGain();
+                o.type = ty; o.frequency.value = fr;
+                g.gain.setValueAtTime(vo, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime+du);
+                o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime+du);
+            },
+            knife() { this.play(900, 'sine', 0.15, 0.1); },
+            error() { this.play(150, 'sawtooth', 0.3, 0.3); },
+            hit() { this.play(200, 'square', 0.3, 0.5); },
+            charge() { this.play(500, 'square', 0.2, 0.1); },
+            heal() { this.play(500, 'sine', 0.2, 0.1); setTimeout(()=>this.play(800, 'sine', 0.2, 0.3), 100); }
+        };
+    }
+
+        start() {
+        this.resize();
+        window.addEventListener('resize', this.resizeBind);
+        window.addEventListener('keydown', this.keydownBind);
+
+        const hiddenInput = document.getElementById('hiddenGameInput') || document.getElementById('game-hidden-input');
+        if(hiddenInput) {
+            hiddenInput.value = '';
+            hiddenInput.focus();
+            hiddenInput.oninput = (e) => {
+                if(!this.STATE.isPlaying) return;
+                let val = e.target.value.toUpperCase();
+                e.target.value = '';
+                if(val.length > 0) {
+                    let char = val.slice(-1);
+                    if(/[A-Z]/.test(char)) {
+                        this.handleInput(char);
+                    }
+                }
+            };
+        }
+
+        // 🔥 FIX: PAUSE & MENU BUTTONS BINDING
+        // Ye lines buttons ko on/off hone ki taaqat deti hain
+        if(this.DOM.btnPause) this.DOM.btnPause.onclick = () => { this.pause(); if(hiddenInput) hiddenInput.blur(); };
+        if(this.DOM.btnResume) this.DOM.btnResume.onclick = () => { this.resume(); if(hiddenInput) hiddenInput.focus(); };
+        if(this.DOM.btnExit) this.DOM.btnExit.onclick = () => { this.cleanup(); if(window.typingGamesModule) window.typingGamesModule.exitToDashboard(); };
+        if(this.DOM.btnReplay) this.DOM.btnReplay.onclick = () => { this.cleanup(); if(window.typingGamesModule) window.typingGamesModule.startGame('typingSurvivor', this.difficulty); };
+
+        this.audio.init();
+        this.updateUI();
+        this.updateGrenadeUI();
+        this.STATE.startTime = Date.now();
+        this.STATE.isPlaying = true;
+        
+        if (this.parent && this.parent.isTutorMode && this.parent.tutorLessonData) {
+            this.CONFIG.words = this.parent.tutorLessonData.gameWords.map(word => word.toUpperCase());
+        }
+
+        this.spawn();
+        this.STATE.lastFrameTime = performance.now();
+        this.loop();
+    }
 
 
-// MAIN MODULE MANAGER (With "Coming Soon" Screen for other games)
+    resize() {
+        if(this.DOM && this.DOM.wrap) {
+            this.cw = this.DOM.wrap.clientWidth;
+            this.ch = this.DOM.wrap.clientHeight;
+        }
+    }
+
+    pause() { 
+        if(!this.STATE.isPlaying) return; 
+        this.STATE.isPlaying = false; 
+        if(this.DOM.pauseOverlay) this.DOM.pauseOverlay.classList.add('active'); 
+    }
+
+    resume() { 
+        if(this.STATE.hp <= 0) return; 
+        this.STATE.isPlaying = true; 
+        if(this.DOM.pauseOverlay) this.DOM.pauseOverlay.classList.remove('active'); 
+        this.STATE.lastFrameTime = performance.now(); 
+        this.loopId = requestAnimationFrame(() => this.loop()); 
+    }
+        spawn() {
+        if (!this.STATE.isPlaying) return;
+        
+        // 🔥 UPPERCASE FIX
+        let wordList = (this.CONFIG.words && this.CONFIG.words.length > 0) ? this.CONFIG.words : ['SURVIVE'];
+        let word = wordList[Math.floor(Math.random() * wordList.length)].toUpperCase();
+        
+        const el = document.createElement('div');
+        el.className = 'ts-zombie';
+        
+        const wrap = document.createElement('div');
+        wrap.style.transformOrigin = 'bottom center';
+        wrap.style.position = 'relative';
+        
+        const sprite = document.createElement('div');
+        sprite.className = 'ts-sprite-wrap';
+        sprite.innerHTML = `<div class="ts-shadow"></div>${this.GRAPHICS.zombie}`;
+        
+        const bb = document.createElement('div');
+        bb.className = 'ts-indicator';
+        
+        const billboard = document.createElement('div');
+        billboard.className = 'ts-billboard';
+        
+        // 🚀 BADA FONT AUR BOX FIX
+        billboard.style.bottom = '150px';     
+        billboard.style.fontSize = '36px';    
+        billboard.style.padding = '8px 18px'; 
+        billboard.style.letterSpacing = '3px';
+        billboard.style.borderRadius = '8px';
+        billboard.style.border = '2px solid #334155'; 
+        
+        billboard.innerHTML = '<span class="ts-c-typed"></span><span class="ts-c-next">' + word[0] + '</span><span class="ts-c-un">' + word.substring(1) + '</span>';
+
+        sprite.appendChild(bb);
+        wrap.appendChild(sprite);
+        wrap.appendChild(billboard);
+        el.appendChild(wrap);
+        
+        this.DOM.world.appendChild(el);
+        
+        // 🔥 ANTI-OVERLAP LOGIC: Taki naye words purane words ke upar overlap na karein
+        let safeX = 0;
+        let attempts = 0;
+        let isOverlapping = true;
+
+        // Game maximum 15 baar try karega ek safe jagah dhoondhne ki
+        while (isOverlapping && attempts < 15) {
+            safeX = (Math.random() - 0.5) * 80; // Screen par kahin bhi random position
+            isOverlapping = false;
+            
+            // Har purane zombie se check karo ki doori kitni hai
+            for (let i = 0; i < this.zombies.length; i++) {
+                // Agar koi zombie naye wale ke bilkul paas hai (20vw ke daayre me)
+                if (Math.abs(this.zombies[i].xOffsetVw - safeX) < 20) {
+                    isOverlapping = true; // Overlap pakda gaya, wapas random position dhoondho!
+                    break;
+                }
+            }
+            attempts++;
+        }
+        
+        let zombieObj = {
+            el: el,
+            wrap: wrap,
+            sprite: sprite,
+            bb: bb,
+            billboard: billboard,
+            word: word,
+            typedIndex: 0,
+            xOffsetVw: safeX, // 🔥 Safe Position lagadi gayi hai
+            z: this.CONFIG.startZ,
+            zScale: 1,
+            yTrans: 0,
+            isDead: false,
+            updateBB: function() {
+                if(this.typedIndex < this.word.length) {
+                    this.billboard.innerHTML = '<span class="ts-c-typed">' + this.word.substring(0, this.typedIndex) + '</span><span class="ts-c-next">' + this.word[this.typedIndex] + '</span><span class="ts-c-un">' + this.word.substring(this.typedIndex + 1) + '</span>';
+                } else {
+                    this.billboard.innerHTML = '<span class="ts-c-typed">' + this.word + '</span>';
+                }
+            }
+        };
+
+        this.zombies.push(zombieObj);
+        
+        
+
+        // 🔥 Yahan koi setTimeout nahi hai, ab zombies limit me aayenge!
+    }
+
+
+        handleKeyDown(e) {
+        if(!this.STATE.isPlaying) return;
+        
+        // 1. Space Bar (Grenade)
+        if(e.code === 'Space') { 
+            e.preventDefault(); 
+            this.handleSpace(); 
+            return; 
+        }
+
+        // 2. Backspace
+        if(e.key === 'Backspace') {
+            e.preventDefault();
+            if(this.activeZombie) {
+                if(this.activeZombie.typedIndex > 0) {
+                    this.activeZombie.typedIndex--;
+                    this.activeZombie.updateBB();
+                } else {
+                    this.activeZombie.el.classList.remove('ts-active');
+                    this.activeZombie = null;
+                }
+            }
+            return;
+        }
+
+        // 3. Simple Letter Input (Desktop)
+        if(e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+            this.handleInput(e.key.toUpperCase());
+        }
+    }
+
+      handleInput(letter) {
+        if (!this.STATE.isPlaying) return;
+        this.STATE.keystrokes++;
+
+        // Zombie target logic
+        if (!this.activeZombie) {
+            const target = this.zombies.find(z => z.word[z.typedIndex] === letter);
+            if (target) { 
+                this.activeZombie = target; 
+                this.activeZombie.el.classList.add('ts-active'); 
+            }
+        }
+
+        // Check if letter matches
+        if (this.activeZombie && letter === this.activeZombie.word[this.activeZombie.typedIndex]) {
+            this.STATE.correctKeystrokes++;
+            this.triggerWeaponAnim(); 
+            
+            this.activeZombie.typedIndex++;
+            this.activeZombie.updateBB();
+            this.activeZombie.wrap.classList.remove('ts-hit'); 
+            void this.activeZombie.wrap.offsetWidth; 
+            this.activeZombie.wrap.classList.add('ts-hit');
+            
+            // 🔥 BULLET IMPACT: Zombie ko thoda peeche dhakelo (Safe Check ke sath)
+            if(this.activeZombie.z !== undefined) {
+                this.activeZombie.z += 40; 
+            }
+
+            this.createBlood(this.activeZombie);
+            this.createDamageText(this.activeZombie);
+
+            if (this.activeZombie.typedIndex >= this.activeZombie.word.length) {
+                this.dieZombie(this.activeZombie); 
+                this.registerKills(1);
+                this.zombies = this.zombies.filter(z => z !== this.activeZombie); 
+                this.activeZombie = null;
+            }
+            this.STATE.score += Math.floor(this.CONFIG.pointsPerLetter * this.STATE.comboMultiplier); 
+            this.STATE.combo++;
+            this.STATE.comboMultiplier = this.STATE.combo > 15 ? 2 : (this.STATE.combo > 5 ? 1.5 : 1);
+        } else {
+            // Agar galat key hai, tabhi shake hoga. Tutor me ab filter nahi hai, toh ye tabhi fire hoga jab word galat type hua.
+            this.audio.error(); 
+            this.DOM.wrap.classList.remove('ts-shake'); 
+            void this.DOM.wrap.offsetWidth; 
+            this.DOM.wrap.classList.add('ts-shake');
+            this.STATE.combo = 0; 
+            this.STATE.comboMultiplier = 1;
+        }
+        this.updateUI();
+    }
+
+    createBlood(z) {
+        const blood = document.createElement('div'); blood.className = 'ts-blood-splatter';
+        blood.style.left = `calc(50% + ${z.xOffsetVw}vw)`;
+        blood.style.top = `calc(50% + ${z.yTrans}px - ${85 * z.zScale}px)`;
+        for(let i=0; i<6; i++) {
+            const drop = document.createElement('div'); drop.className = 'ts-blood-drop';
+            const a = (Math.random() * 360) * Math.PI / 180; const d = (10 + Math.random() * 20) * z.zScale;
+            drop.style.setProperty('--tx', `${Math.cos(a)*d}px`); drop.style.setProperty('--ty', `${Math.sin(a)*d}px`);
+            blood.appendChild(drop);
+        }
+        this.DOM.world.appendChild(blood); setTimeout(() => blood.remove(), 400);
+    }
+
+    createDamageText(z) {
+        const dmg = document.createElement('div'); dmg.className = 'ts-dmg-text';
+        dmg.innerText = "-" + Math.floor(this.CONFIG.pointsPerLetter * this.STATE.comboMultiplier);
+        dmg.style.top = '45%'; dmg.style.left = `calc(50% + ${z.xOffsetVw}vw)`;
+        dmg.style.transform = `translate(calc(-50% + ${(Math.random() - 0.5) * 50}px), -50%)`;
+        this.DOM.world.appendChild(dmg); setTimeout(() => dmg.remove(), 600);
+    }
+
+    dieZombie(z) {
+        z.isDead = true; z.wrap.style.animation = 'tsFadeOut 0.2s forwards ease-out'; z.bb.style.opacity = '0';
+        this.audio.explosion();
+        const blast = document.createElement('div'); blast.className = 'ts-blast'; blast.style.transform = z.el.style.transform;
+        const core = document.createElement('div'); core.className = 'ts-blast-core'; blast.appendChild(core);
+        const scale = z.wrap.style.getPropertyValue('--end-scale') || 1;
+        
+        for(let i=0; i<8; i++){
+            const p = document.createElement('div'); p.className = 'ts-blast-part';
+            const a = (Math.random() * 360) * Math.PI / 180; const d = (30 + Math.random() * 40) * scale;
+            p.style.setProperty('--tx', `${Math.cos(a)*d}px`); p.style.setProperty('--ty', `${Math.sin(a)*d}px`);
+            blast.appendChild(p);
+        }
+        this.DOM.world.appendChild(blast); setTimeout(() => { blast.remove(); z.el.remove(); }, 500);
+    }
+
+    registerKills(count) {
+        if (count <= 0) return;
+        this.STATE.score += count * this.CONFIG.pointsPerKill; 
+        this.STATE.waveKills += count;
+        
+        if (this.STATE.grenadeCharge < 100) {
+            this.STATE.grenadeCharge += count * (100 / this.CONFIG.killsForGrenade);
+            if (this.STATE.grenadeCharge > 100) this.STATE.grenadeCharge = 100;
+            this.updateGrenadeUI();
+        }
+
+        this.STATE.healCounter += count;
+        if (this.STATE.healCounter >= this.CONFIG.killsForHeal) {
+            this.STATE.hp = this.CONFIG.maxHP; this.STATE.healCounter -= this.CONFIG.killsForHeal; 
+            this.audio.heal();
+            this.DOM.overlay.classList.add('ts-flash-green'); setTimeout(() => this.DOM.overlay.classList.remove('ts-flash-green'), 400);
+            const healText = document.createElement('div'); healText.className = 'ts-heal-text'; healText.innerText = "+ MAX HP RESTORED!";
+            this.DOM.world.appendChild(healText); setTimeout(() => healText.remove(), 2000);
+        }
+        
+        if (this.STATE.waveKills >= 3 + this.STATE.wave) {
+            this.STATE.wave++; this.STATE.waveKills = 0; this.STATE.speedMultiplier += 0.15;
+        }
+    }
+
+    handleSpace() {
+        if (!this.STATE.isPlaying || this.STATE.grenadeCharge < 100 || this.grenadeObj) {
+            if (this.STATE.grenadeCharge < 100 && !this.grenadeObj) this.audio.error(); return;
+        }
+
+        this.STATE.grenadeCharge = 0; this.updateGrenadeUI(); this.audio.charge(); 
+        
+        let startX = this.cw / 2; let startY = this.ch;
+        let targetX = startX;
+        if (this.activeZombie) targetX = this.cw * 0.5 + (this.cw * (this.activeZombie.xOffsetVw / 100));
+        let targetY = this.ch * 0.45; 
+        
+        let T = 0.6; let g = 3000; 
+        let vy = (targetY - startY - 0.5 * g * T * T) / T; let vx = (targetX - startX) / T;
+
+        let el = document.createElement('div'); el.className = 'ts-phys-grenade'; el.innerText = '💣';
+        this.DOM.world.appendChild(el);
+        this.grenadeObj = { el: el, x: startX, y: startY, vx: vx, vy: vy, g: g, targetY: targetY, rot: 0, scale: 1.5 };
+    }
+
+    detonateNuke(x, y) {
+        this.audio.nuke();
+        const shockwave = document.createElement('div'); shockwave.className = 'ts-shockwave';
+        shockwave.style.left = x + 'px'; shockwave.style.top = y + 'px';
+        this.DOM.world.appendChild(shockwave); setTimeout(() => shockwave.remove(), 600);
+
+        for(let i=0; i<40; i++) {
+            let a = Math.random() * Math.PI * 2; let s = Math.random() * 800 + 300;
+            let pEl = document.createElement('div'); pEl.className = 'ts-phys-part';
+            pEl.style.background = Math.random() > 0.5 ? '#ffea00' : '#ff1744';
+            pEl.style.width = (Math.random() * 10 + 10) + 'px'; pEl.style.height = pEl.style.width;
+            this.DOM.world.appendChild(pEl);
+            this.particles.push({ el: pEl, x: x, y: y, vx: Math.cos(a)*s, vy: Math.sin(a)*s - 500, life: 1.0, scale: 1 });
+        }
+
+        this.DOM.wrap.classList.add('ts-shake'); setTimeout(() => this.DOM.wrap.classList.remove('ts-shake'), 400);
+
+        const kills = this.zombies.length;
+        if (kills > 0) {
+            this.zombies.forEach(z => this.dieZombie(z)); this.zombies = []; this.activeZombie = null; this.registerKills(kills); 
+        }
+        this.updateUI();
+    }
+
+    shootBulletTracer(target) {
+        const bullet = document.createElement('div'); bullet.className = 'ts-bullet'; this.DOM.world.appendChild(bullet);
+        
+        // 🎯 MAGIC FIX: DOM getBoundingClientRect se exact gun ki tip (muzzle) nikalna!
+        const muzzleRect = this.DOM.muzzle.getBoundingClientRect();
+        const startX = muzzleRect.left + (muzzleRect.width / 2);
+        const startY = muzzleRect.top + (muzzleRect.height / 2);
+        
+        const endX = this.cw * 0.5 + (this.cw * (target.xOffsetVw / 100));
+        const endY = this.ch * 0.5 + target.yTrans - (85 * target.zScale);
+        
+        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+
+        bullet.style.left = startX + 'px'; bullet.style.top = startY + 'px';
+        const anim = bullet.animate([
+            { transform: `rotate(${angle + 90}deg) translateY(0) scale(1)` },
+            { transform: `rotate(${angle + 90}deg) translateY(-${Math.hypot(endX - startX, endY - startY)}px) scale(0.2)` }
+        ], { duration: 50, easing: 'linear' });
+        anim.onfinish = () => bullet.remove();
+    }
+
+    triggerWeaponAnim() {
+        const isKnife = this.activeZombie && this.activeZombie.z < this.CONFIG.meleeRange;
+        this.DOM.char.classList.remove('ts-recoil', 'ts-slash'); void this.DOM.char.offsetWidth;
+        if (isKnife) {
+            this.audio.knife(); this.DOM.char.classList.add('ts-slash');
+        } else {
+            this.audio.shoot(); this.DOM.char.classList.add('ts-recoil');
+            this.DOM.muzzle.classList.remove('ts-flash-active'); void this.DOM.muzzle.offsetWidth; this.DOM.muzzle.classList.add('ts-flash-active');
+            if(this.activeZombie) this.shootBulletTracer(this.activeZombie);
+        }
+    }
+    
+    takeDamage() {
+        this.STATE.hp--; this.audio.hit();
+        this.DOM.overlay.classList.add('ts-flash-red'); setTimeout(() => this.DOM.overlay.classList.remove('ts-flash-red'), 200);
+        this.updateUI();
+        if (this.STATE.hp <= 0) {
+            this.gameOver();
+        } else {
+            const attackingZ = this.zombies.find(z => z.z <= this.CONFIG.damageZ);
+            if (attackingZ) {
+                this.dieZombie(attackingZ);
+                this.zombies = this.zombies.filter(z => z !== attackingZ);
+                if (this.activeZombie === attackingZ) this.activeZombie = null;
+            }
+        }
+    }
+    
+    updateUI() {
+        this.DOM.score.innerText = this.STATE.score; this.DOM.wave.innerText = this.STATE.wave; this.DOM.highscore.innerText = Math.max(this.STATE.score, this.STATE.highScore);
+        this.DOM.hpBar.style.width = `${(this.STATE.hp / this.CONFIG.maxHP) * 100}%`;
+        this.DOM.hpBar.style.backgroundColor = (this.STATE.hp / this.CONFIG.maxHP) > 0.4 ? '#00e5ff' : '#ff1744';
+        this.DOM.hpBar.style.boxShadow = (this.STATE.hp / this.CONFIG.maxHP) > 0.4 ? '0 0 10px #00e5ff' : '0 0 10px #ff1744';
+        this.DOM.combo.innerText = `COMBO x${this.STATE.comboMultiplier}`;
+        this.DOM.combo.style.opacity = this.STATE.combo > 4 ? 1 : 0;
+    }
+
+    updateGrenadeUI() {
+        this.DOM.grenadeBar.style.width = `${this.STATE.grenadeCharge}%`;
+        if (this.STATE.grenadeCharge >= 100) {
+            this.DOM.grenadeUI.classList.add('ready'); this.DOM.grenadeText.innerText = "SPACEBAR!";
+        } else {
+            this.DOM.grenadeUI.classList.remove('ready'); this.DOM.grenadeText.innerText = `${Math.floor((this.STATE.grenadeCharge/100) * this.CONFIG.killsForGrenade)}/${this.CONFIG.killsForGrenade} KILLS`;
+        }
+    }
+
+    loop() {
+        if (!this.STATE.isPlaying) return;
+        const now = performance.now(); const dt = (now - this.STATE.lastFrameTime) / 1000;
+        this.STATE.lastFrameTime = now; this.STATE.timeElapsed += dt;
+
+        const maxZ = Math.min(4, 1 + Math.floor(this.STATE.wave / 2));
+        const spawnT = Math.max(1.5, 4 - (this.STATE.wave * 0.4));
+        if (this.zombies.length < maxZ && (this.STATE.timeElapsed - this.STATE.lastSpawnTime > spawnT)) {
+            this.spawn(); this.STATE.lastSpawnTime = this.STATE.timeElapsed;
+        }
+
+        for (let i = this.zombies.length - 1; i >= 0; i--) {
+            let z = this.zombies[i];
+            if (z.isDead) continue;
+            z.z -= Math.min(this.CONFIG.baseSpeed * this.STATE.speedMultiplier, this.CONFIG.speedCap) * dt;
+            
+            z.zScale = Math.max(0.1, this.CONFIG.focalLength / (this.CONFIG.focalLength + z.z));
+            const minScale = this.CONFIG.focalLength / (this.CONFIG.focalLength + this.CONFIG.startZ);
+            let nScale = 0; if (z.zScale > minScale) nScale = (z.zScale - minScale) / (1 - minScale);
+
+            z.yTrans = nScale * (this.ch * 0.5);
+            const speedM = Math.min(this.CONFIG.baseSpeed * this.STATE.speedMultiplier, this.CONFIG.speedCap) / 100;
+            const wBob = Math.abs(Math.sin(this.STATE.timeElapsed * 8 * speedM)) * 25 * z.zScale;
+            const wRot = Math.sin(this.STATE.timeElapsed * 8 * speedM) * 4;
+
+            z.el.style.transform = `translateX(calc(-50% + ${z.xOffsetVw}vw)) translateY(${z.yTrans}px)`;
+            z.wrap.style.transform = `scale(${z.zScale})`;
+            z.sprite.style.transform = `translateY(-${wBob}px) rotate(${wRot}deg)`;
+            
+            const tScale = Math.max(0.65, z.zScale * 1.3);
+            z.bb.style.transform = `translateX(-50%) scale(${tScale})`;
+            z.bb.style.bottom = `${(115 * z.zScale) + 15}px`;
+            
+            z.el.style.zIndex = Math.floor(4000 - z.z); 
+            z.wrap.style.setProperty('--end-scale', z.zScale);
+
+            if(z.z <= this.CONFIG.damageZ) this.takeDamage();
+        }
+
+        // PHYSICS GRENADE (Correct Translation)
+        if (this.grenadeObj) {
+            let g = this.grenadeObj;
+            g.x += g.vx * dt; g.y += g.vy * dt; g.vy += g.g * dt; g.rot += 720 * dt; g.scale -= (g.scale - 0.4) * 2 * dt; 
+            g.el.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.rot}deg) scale(${g.scale})`;
+            if (g.vy > 0 && g.y >= g.targetY) { g.el.remove(); this.detonateNuke(g.x, g.y); this.grenadeObj = null; }
+        }
+
+        // PHYSICS PARTICLES (Correct Translation)
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 1200 * dt; p.life -= dt; p.scale *= 0.95; 
+            p.el.style.transform = `translate(${p.x}px, ${p.y}px) scale(${p.scale})`;
+            p.el.style.opacity = p.life;
+            if (p.life <= 0) { p.el.remove(); this.particles.splice(i, 1); }
+        }
+
+        if (this.activeZombie) {
+            const zX = this.cw * 0.5 + (this.cw * (this.activeZombie.xOffsetVw / 100));
+            const zY = this.ch * 0.5 + this.activeZombie.yTrans - (85 * this.activeZombie.zScale);
+            
+            this.DOM.crosshair.style.transform = `translate(calc(-50% + ${this.activeZombie.xOffsetVw}vw), calc(-50% + ${this.activeZombie.yTrans}px - ${85 * this.activeZombie.zScale}px)) scale(1.2)`;
+            this.DOM.crosshair.classList.add('locked');
+
+            if (this.activeZombie.z > this.CONFIG.meleeRange) {
+                const pX = this.cw / 2; const pY = this.ch; 
+                const angle = Math.atan2(zY - pY, zX - pX) * (180 / Math.PI) + 90;
+                this.DOM.weaponWrap.style.transform = `rotate(${angle}deg)`;
+            } else {
+                this.DOM.weaponWrap.style.transform = `rotate(0deg)`;
+            }
+        } else {
+            this.DOM.crosshair.style.transform = `translate(-50%, -50%) scale(1)`;
+            this.DOM.crosshair.classList.remove('locked');
+            this.DOM.weaponWrap.style.transform = `rotate(0deg)`;
+        }
+
+        let closestZ = this.activeZombie || (this.zombies.length > 0 ? this.zombies.reduce((prev, curr) => (prev.z < curr.z ? prev : curr)) : null);
+        if (closestZ) {
+            if (closestZ.z < this.CONFIG.meleeRange) {
+                if (this.DOM.weaponStatus.innerText !== "TACTICAL KNIFE") {
+                    this.DOM.char.innerHTML = this.GRAPHICS.playerKnife;
+                    this.DOM.weaponStatus.innerText = "TACTICAL KNIFE"; this.DOM.weaponStatus.style.color = "#ff1744"; this.DOM.weaponStatus.style.borderColor = "#ff1744";
+                }
+            } else {
+                if (this.DOM.weaponStatus.innerText !== "ASSAULT RIFLE") {
+                    this.DOM.char.innerHTML = this.GRAPHICS.playerGun;
+                    this.DOM.weaponStatus.innerText = "ASSAULT RIFLE"; this.DOM.weaponStatus.style.color = "#00e5ff"; this.DOM.weaponStatus.style.borderColor = "#00e5ff";
+                }
+            }
+        }
+
+        this.loopId = requestAnimationFrame(() => this.loop());
+    }
+
+    gameOver() {
+        this.STATE.isPlaying = false;
+        this.audio.error();
+        if(this.loopId) cancelAnimationFrame(this.loopId);
+        
+        let scoreKey = `typingSurvivor_bestScore_${this.difficulty}`;
+        let wpmKey = `typingSurvivor_bestWpm_${this.difficulty}`;
+        let existingScore = parseInt(localStorage.getItem(scoreKey)) || 0;
+        let existingWpm = parseInt(localStorage.getItem(wpmKey)) || 0;
+        
+        let mins = (Date.now() - this.STATE.startTime) / 60000;
+        if(mins > 0) this.STATE.wpm = Math.max(0, Math.round((this.STATE.correctKeystrokes / 5) / mins));
+
+        let badge = document.getElementById('newHighScoreBadge');
+        if(this.STATE.score > existingScore) {
+            localStorage.setItem(scoreKey, this.STATE.score);
+            if(badge) { badge.style.display = 'inline-block'; badge.classList.remove('hidden'); }
+        } else {
+            if(badge) badge.style.display = 'none';
+        }
+        if(this.STATE.wpm > existingWpm || existingWpm === 0) localStorage.setItem(wpmKey, this.STATE.wpm);
+        
+        let history = JSON.parse(localStorage.getItem('typingSurvivor_GameHistory') || '[]');
+        let acc = this.STATE.keystrokes > 0 ? Math.round((this.STATE.correctKeystrokes / this.STATE.keystrokes) * 100) : 100;
+        let dateStr = new Date().toLocaleString('en-IN', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});
+        history.unshift({ date: dateStr, score: this.STATE.score, wpm: this.STATE.wpm, accuracy: acc, diff: this.difficulty.toUpperCase() });
+        if(history.length > 10) history = history.slice(0, 10);
+        localStorage.setItem('typingSurvivor_GameHistory', JSON.stringify(history));
+
+        this.parent.loadPersistentStats();
+
+        const resScore = document.getElementById('resScore');
+        if(resScore) {
+            resScore.innerText = this.STATE.score.toLocaleString();
+            document.getElementById('resWpm').innerText = this.STATE.wpm;
+            document.getElementById('resAcc').innerText = acc + '%';
+            document.getElementById('resCombo').innerText = this.STATE.maxCombo;
+            let secs = Math.floor((Date.now() - this.STATE.startTime)/1000);
+            document.getElementById('resTime').innerText = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
+            
+            // Clean DOM first
+            this.cleanup();
+
+            const modal = document.getElementById('gameResultModal');
+            if(modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+        }
+    }
+
+    cleanup() {
+        this.STATE.isPlaying = false;
+        if(this.loopId) cancelAnimationFrame(this.loopId);
+        window.removeEventListener('resize', this.resizeBind);
+        window.removeEventListener('keydown', this.keydownBind);
+        
+        document.body.style.overflow = ''; 
+        
+        const hiddenInput = document.getElementById('hiddenGameInput') || document.getElementById('game-hidden-input');
+        if(hiddenInput) {
+            hiddenInput.oninput = null;
+            hiddenInput.onkeydown = null;
+        }
+        
+        const topBar = document.querySelector('.arena-top-bar');
+        if(topBar) topBar.style.display = this.origTopBarDisplay || '';
+        
+        if(this.layer) this.layer.innerHTML = '';
+        const styles = document.getElementById('ts-styles');
+        if(styles) styles.remove();
+    }
+}
+// MAIN MODULE MANAGER (With Pause Menu & Exit Freeze Fix)
 class TypingGamesModule {
     constructor() {
         this.audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
         this.soundEnabled = true;
         this.activeGameInstance = null;
         this.wasLightMode = false;
+        
+        this.isTutorMode = false; 
+        this.tutorCheckInterval = null; 
+        
         setTimeout(() => { this.bindMenuEvents(); this.loadPersistentStats(); }, 500); 
     }
 
@@ -6014,44 +8043,33 @@ class TypingGamesModule {
         });
 
         document.getElementById('backToMainFromGames')?.addEventListener('click', () => this.hideGamesDashboard());
+        
+        // 🔥 FIX 1: Exit button correctly linked to proper exit function
         document.getElementById('exitGameBtn')?.addEventListener('click', () => this.exitToDashboard());
-        document.getElementById('pauseGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.pause === 'function') this.activeGameInstance.pause(); });
-        document.getElementById('resumeGameBtn')?.addEventListener('click', () => { if(this.activeGameInstance && typeof this.activeGameInstance.resume === 'function') this.activeGameInstance.resume(); });
         document.getElementById('quitGameBtn')?.addEventListener('click', () => this.exitToDashboard());
-                document.getElementById('restartGameBtn')?.addEventListener('click', () => {
-            if(!this.activeGameInstance) return;
-            let diff = this.activeGameInstance.difficulty;
-            // DYNAMIC GAME SELECTION FIX
-            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : 'wordRush';
-            this.exitToDashboard();
-            setTimeout(() => this.startGame(game, diff), 100);
+        
+        // 🔥 FIX 2: Force show the Pause Menu when PAUSE is clicked
+        document.getElementById('pauseGameBtn')?.addEventListener('click', () => { 
+            if(this.activeGameInstance && typeof this.activeGameInstance.pause === 'function') {
+                this.activeGameInstance.pause(); 
+            }
+            const pauseOverlay = document.getElementById('gamePauseOverlay');
+            if(pauseOverlay) { pauseOverlay.classList.remove('hidden'); pauseOverlay.style.display = 'flex'; }
         });
 
-        document.getElementById('playAgainBtn')?.addEventListener('click', () => {
-            if(!this.activeGameInstance) return;
-            let diff = this.activeGameInstance.difficulty;
-            // DYNAMIC GAME SELECTION FIX
-            let game = this.activeGameInstance.constructor.name === 'SpaceTyperGame' ? 'spaceTyper' : 'wordRush';
-            const modal = document.getElementById('gameResultModal');
-            if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
-            this.exitToDashboard();
-            setTimeout(() => this.startGame(game, diff), 100);
-        });
-
-        const viewHistoryBtns = Array.from(document.querySelectorAll('button')).filter(b => b.innerText.includes('VIEW HISTORY'));
-        viewHistoryBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = document.getElementById('gameResultModal');
-                if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
-                this.showHistoryModal();
-            });
+        // 🔥 FIX 3: Force hide the Pause Menu when RESUME is clicked
+        document.getElementById('resumeGameBtn')?.addEventListener('click', () => { 
+            if(this.activeGameInstance && typeof this.activeGameInstance.resume === 'function') {
+                this.activeGameInstance.resume(); 
+            }
+            const pauseOverlay = document.getElementById('gamePauseOverlay');
+            if(pauseOverlay) { pauseOverlay.classList.add('hidden'); pauseOverlay.style.display = 'none'; }
         });
     }
 
     showHistoryModal() {
         let modal = document.getElementById('spaceTyperHistoryModal');
         if (modal) { modal.remove(); }
-
         const modalHTML = `
         <div id="spaceTyperHistoryModal" class="dest-modal" style="display:flex; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); z-index:9999999; align-items:center; justify-content:center; flex-direction:column; backdrop-filter:blur(10px);">
             <div class="dest-modal-content" style="background:#0f172a; border:2px solid #3b82f6; padding:30px; border-radius:16px; max-height:85vh; overflow-y:auto; width:90%; max-width:450px; box-shadow:0 0 40px rgba(59,130,246,0.5);">
@@ -6060,12 +8078,9 @@ class TypingGamesModule {
                 <button onclick="window.typingGamesModule.closeHistoryModal()" class="dest-btn-primary" style="margin-top:25px; width: 100%; border: 1px solid #ef4444; color: #ef4444; font-weight: bold; cursor: pointer; padding: 12px; background: transparent; border-radius: 8px;">CLOSE ARCHIVE</button>
             </div>
         </div>`;
-        
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-
         const container = document.getElementById('historyListContainer');
         let history = JSON.parse(localStorage.getItem('spaceTyper_GameHistory') || '[]');
-
         if(history.length === 0) {
             container.innerHTML = '<p style="color:#94a3b8; font-size: 0.9rem; margin: 20px 0; text-align:center;">No combat records found yet. Play a game!</p>';
         } else {
@@ -6089,34 +8104,26 @@ class TypingGamesModule {
     closeHistoryModal() {
         let modal = document.getElementById('spaceTyperHistoryModal');
         if (modal) { modal.remove(); }
-        
         let resModal = document.getElementById('gameResultModal');
         if (resModal) { resModal.classList.add('hidden'); resModal.style.display = 'none'; }
-
         this.exitToDashboard();
     }
 
-        loadPersistentStats() {
-        // Har game card ko dhoondho aur uska data update karo
+    loadPersistentStats() {
         document.querySelectorAll('.game-card').forEach(card => {
             const gameKey = card.dataset.game; 
             if(!gameKey) return;
-
             const diffSelect = card.querySelector('.game-diff-select');
             if(!diffSelect) return;
-            
             const diff = diffSelect.value;
             const bestScore = localStorage.getItem(`${gameKey}_bestScore_${diff}`) || '0';
             const bestWpm = localStorage.getItem(`${gameKey}_bestWpm_${diff}`) || '0';
-            
             let scoreElem = card.querySelector('.stat-score');
             let wpmElem = card.querySelector('.stat-wpm');
-            
             if(scoreElem) scoreElem.innerText = bestScore;
             if(wpmElem) wpmElem.innerText = bestWpm;
         });
         
-        // Dropdown change hone par score update karne ka logic
         document.querySelectorAll('.game-diff-select').forEach(sel => {
             sel.onchange = (e) => {
                 const pCard = e.target.closest('.game-card');
@@ -6125,10 +8132,8 @@ class TypingGamesModule {
                     const diff = e.target.value;
                     const bScore = localStorage.getItem(`${gameKey}_bestScore_${diff}`) || '0';
                     const bWpm = localStorage.getItem(`${gameKey}_bestWpm_${diff}`) || '0';
-                    
                     let sElem = pCard.querySelector('.stat-score');
                     let wElem = pCard.querySelector('.stat-wpm');
-                    
                     if(sElem) sElem.innerText = bScore;
                     if(wElem) wElem.innerText = bWpm;
                 }
@@ -6140,57 +8145,47 @@ class TypingGamesModule {
         if (document.body.classList.contains('light-mode')) {
             this.wasLightMode = true; 
             document.body.classList.remove('light-mode'); 
-            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode'));
-            if(themeBtn) themeBtn.innerHTML = '☀️ Light Mode'; 
+            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode') || b.innerText.includes('☀️'));
+            if(themeBtn) themeBtn.innerHTML = '☀️'; 
         }
-
         const mainApp = document.getElementById('main-app-container');
         if (mainApp) mainApp.style.display = 'none';
-
         document.getElementById('activeGameArena').classList.add('hidden');
         document.getElementById('activeGameArena').style.display = 'none';
-        
         const dash = document.getElementById('typingGamesModule');
         dash.classList.remove('hidden'); dash.style.display = 'block';
         this.loadPersistentStats();
     }
 
-        hideGamesDashboard() {
-        // 🔥 WAPAS LIGHT MODE MEIN BHEJO (Agar pehle tha)
+    hideGamesDashboard() {
         if (this.wasLightMode) {
             document.body.classList.add('light-mode');
             this.wasLightMode = false;
-            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode'));
-            if(themeBtn) themeBtn.innerHTML = '🌙 Dark Mode'; 
+            const themeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Dark Mode') || b.innerText.includes('Light Mode') || b.innerText.includes('🌙'));
+            if(themeBtn) themeBtn.innerHTML = '🌙'; 
         }
-
-        // 1. Games Dashboard chhupao
         document.getElementById('typingGamesModule').classList.add('hidden');
         document.getElementById('typingGamesModule').style.display = 'none';
-        
-        // 2. Main App Container wapas lao
         const mainApp = document.getElementById('main-app-container');
         if (mainApp) mainApp.style.display = '';
-
-        // 3. 🛑 THE ULTIMATE FIX 🛑
-        // Saare inline display styles hata do taaki app ke apne buttons wapas kaam karein.
         document.querySelectorAll('.app-screen').forEach(s => {
-            s.style.display = ''; // Inline style clear kar diya
-            s.classList.add('hidden'); // Sabko CSS class se hide kar diya
+            s.style.display = ''; 
+            s.classList.add('hidden'); 
         });
-        
-        // Sirf aur sirf Main Setup screen ko visible rakho
         const setupScreen = document.getElementById('typing-setup-screen');
         if(setupScreen) {
             setupScreen.classList.remove('hidden');
         }
     }
 
-
-        // 🚀 UPDATED: STARTS GAME OR SHOWS "COMING SOON"
-    startGame(gameKey, difficulty) {
+ startGame(gameKey, difficulty, tutorLesson = null) {
         if(this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume();
         
+        // 🔥 FIX: Tutor listeners ko kill karo taaki game me interference na ho
+        if (typeof window.typingTutorHandleKeyDown !== 'undefined') {
+            document.removeEventListener('keydown', window.typingTutorHandleKeyDown);
+        }
+
         if (document.body.classList.contains('light-mode')) {
             this.wasLightMode = true;
             document.body.classList.remove('light-mode');
@@ -6216,61 +8211,188 @@ class TypingGamesModule {
 
         const statsBar = document.querySelector('.arena-stats');
         
-        // 1. SPACE TYPER
         if(gameKey === 'spaceTyper') {
             if(statsBar) statsBar.style.display = 'flex'; 
             document.getElementById('arenaGameTitle').innerText = `SPACE TYPER`;
             document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
             this.activeGameInstance = new SpaceTyperGame(difficulty, this);
-            this.activeGameInstance.start();
         } 
-        // 2. WORD RUSH
         else if (gameKey === 'wordRush') {
             if(statsBar) statsBar.style.display = 'flex'; 
             document.getElementById('arenaGameTitle').innerText = `WORD RUSH ⚡`;
             document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
             this.activeGameInstance = new WordRushGame(difficulty, this);
-            this.activeGameInstance.start();
         }
-        // 3. 🏎️ YAHAN TYPING RACER ADD HUA HAI 🏎️
         else if (gameKey === 'typingRacer') {
             if(statsBar) statsBar.style.display = 'flex'; 
             document.getElementById('arenaGameTitle').innerText = `TYPING RACER 🏎️`;
             document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
             this.activeGameInstance = new TypingRacerGame(difficulty, this);
-            this.activeGameInstance.start();
         }
-        // Baaki sabhi games ke liye COMING SOON screen
-        else {
+        else if (gameKey === 'keyboardNinja') {
+            if(statsBar) statsBar.style.display = 'flex'; 
+            document.getElementById('arenaGameTitle').innerText = `KEYBOARD NINJA ⚔️`;
+            document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
+            this.activeGameInstance = new KeyboardNinjaGame(difficulty, this);
+        }
+        else if (gameKey === 'typingSurvivor') {
             if(statsBar) statsBar.style.display = 'none'; 
-            let displayTitle = gameKey.replace(/([A-Z])/g, ' $1').trim().toUpperCase();
-            document.getElementById('arenaGameTitle').innerText = displayTitle;
-            
-            document.getElementById('gameCanvasLayer').innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; background: #070709; color: #fff; text-align: center; padding: 20px; box-sizing: border-box; position: absolute; top:0; left:0; z-index: 100;">
-                    <div style="font-size: 5rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,204,0.5));">🚧</div>
-                    <h1 style="color: #00ffcc; font-size: 2.2rem; font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 0 20px rgba(0,255,204,0.6);">Coming Soon</h1>
-                    <p style="color: #94a3b8; font-size: 1rem; max-width: 80%; line-height: 1.6; margin-bottom: 30px;">${displayTitle} is currently in development. It will be available in the next big update!</p>
-                    <button onclick="window.typingGamesModule.exitToDashboard()" style="padding: 12px 30px; font-size: 1rem; font-weight: bold; border: 2px solid #3b82f6; background: rgba(59,130,246,0.1); color: #3b82f6; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(59,130,246,0.3); transition: all 0.3s;">GO BACK</button>
-                </div>
-            `;
+            document.getElementById('arenaGameTitle').innerText = `TYPING SURVIVOR 🛡️`;
+            document.getElementById('gameCanvasLayer').innerHTML = '<canvas id="arcadeCanvas" style="width:100%; height:100%; display:block;"></canvas>';
+            this.activeGameInstance = new TypingSurvivorGame(difficulty, this);
         }
+
+        if (this.activeGameInstance) {
+            if (tutorLesson) {
+                this.isTutorMode = true; 
+                
+                if(this.activeGameInstance.config) this.activeGameInstance.config.list = tutorLesson.gameWords;
+                if(this.activeGameInstance.CONFIG) {
+                    this.activeGameInstance.CONFIG.words = tutorLesson.gameWords;
+                    this.activeGameInstance.CONFIG.list = tutorLesson.gameWords;
+                }
+                
+                if(this.tutorCheckInterval) clearInterval(this.tutorCheckInterval);
+                this.tutorCheckInterval = setInterval(() => {
+                    if (!this.activeGameInstance) return;
+                    let gameState = this.activeGameInstance.state || (this.activeGameInstance.STATE ? (this.activeGameInstance.STATE.isPlaying ? 'PLAYING' : 'STOPPED') : 'STOPPED');
+                    
+                    if (gameState === 'PLAYING') {
+                        let currentScore = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.score : this.activeGameInstance.score;
+                        if (currentScore >= tutorLesson.targetScore) {
+                            this.activeGameInstance.gameOver(); 
+                        }
+                    }
+                }, 500);
+
+                const originalGameOver = this.activeGameInstance.gameOver.bind(this.activeGameInstance);
+                this.activeGameInstance.gameOver = () => {
+                    if(this.tutorCheckInterval) clearInterval(this.tutorCheckInterval);
+                    
+                    originalGameOver(); 
+                    
+                    setTimeout(() => {
+                        const modal = document.getElementById('gameResultModal');
+                        if(modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+                        
+                        const arena = document.getElementById('activeGameArena');
+                        if(arena) { arena.classList.add('hidden'); arena.style.display = 'none'; }
+                        
+                        const mainApp = document.getElementById('main-app-container');
+                        if(mainApp) { mainApp.style.display = ''; }
+                        
+                        let finalScore = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.score : this.activeGameInstance.score;
+                        let hp = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.hp : this.activeGameInstance.lives;
+                        let maxHp = this.activeGameInstance.CONFIG ? this.activeGameInstance.CONFIG.maxHP : 3;
+                        let strokes = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.keystrokes : this.activeGameInstance.keystrokes;
+                        let correctStrokes = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.correctKeystrokes : this.activeGameInstance.correctKeystrokes;
+                        let acc = strokes > 0 ? Math.round((correctStrokes / strokes) * 100) : 100;
+                        let combo = this.activeGameInstance.STATE ? this.activeGameInstance.STATE.maxCombo : this.activeGameInstance.maxCombo;
+
+                        let passed = finalScore >= tutorLesson.targetScore;
+                        
+                        try { if(typeof window.registerTutorActivity === 'function') window.registerTutorActivity(); } catch(e){}
+                        
+                        let msg = ""; let rankColor = "#22c55e"; let rankTitle = "MISSION CLEARED!";
+                        
+                        if (passed) {
+                            msg = `Target Met! +${tutorLesson.xp} XP earned.\nNext level unlocked.`;
+                            try {
+                                if(window.tutorData && !window.tutorData.completed.includes(tutorLesson.id)) { 
+                                    window.tutorData.completed.push(tutorLesson.id); 
+                                    window.tutorData.xp += tutorLesson.xp; 
+                                }
+                            } catch(e){}
+                            const btnNext = document.getElementById('btn-tutor-next');
+                            if(btnNext) btnNext.classList.remove('hidden');
+                        } else {
+                            rankColor = "#ff3333"; 
+                            rankTitle = "MISSION FAILED 🔒";
+                            msg = `Goal not met! Required: ${tutorLesson.targetScore} Pts.\nYour Score: ${finalScore} Pts.`;
+                            const btnNext = document.getElementById('btn-tutor-next');
+                            if(btnNext) btnNext.classList.add('hidden');
+                        }
+                        
+                        try { if(typeof window.saveTutorData === 'function') window.saveTutorData(); } catch(e){}
+                        
+                        try {
+                            if(typeof window.showResultScreen === 'function') {
+                                window.showResultScreen("Tutor Mission Over", tutorLesson.title, "Status", rankTitle, rankColor, msg, { isGame: true, score: finalScore, lives: hp, wordsHit: acc + "%", wordsMissed: combo }, true);
+                                setTimeout(() => {
+                                    let val2 = document.getElementById('res-val-2');
+                                    if(val2) val2.innerText = hp + "/" + maxHp;
+                                    let lbl3 = document.getElementById('res-lbl-3');
+                                    if(lbl3) lbl3.innerText = "Accuracy";
+                                    let lbl4 = document.getElementById('res-lbl-4');
+                                    if(lbl4) lbl4.innerText = "Max Combo";
+                                }, 10);
+                            } else {
+                                alert(rankTitle + "\n" + msg);
+                                this.exitToDashboard();
+                            }
+                        } catch(e) {
+                            this.exitToDashboard();
+                        }
+                    }, 100); 
+                };
+                   } else {
+            this.isTutorMode = false;
+        }
+        
+        this.activeGameInstance.start();
+        setTimeout(() => this.forceFocus(), 600); // <-- YEH LINE YAHAN AAYEGI
     }
+}
 
+// 🔥 NAYA FUNCTION YAHAN AAYEGA (exitToDashboard se theek upar)
+forceFocus() {
+    const input = document.getElementById('hiddenGameInput');
+    if(input) {
+        input.focus();
+        setTimeout(() => input.focus(), 500); // 500ms baad firse retry
+    }
+}
 
-    exitToDashboard() {
+// 🔥 FIX 4: Screen freeze fix (force hides the black canvas area properly)
+exitToDashboard() {
+    if(this.tutorCheckInterval) {
+
+            clearInterval(this.tutorCheckInterval);
+            this.tutorCheckInterval = null;
+        }
+
         if(this.activeGameInstance && typeof this.activeGameInstance.cleanup === 'function') {
             this.activeGameInstance.cleanup(); 
             this.activeGameInstance = null;
         }
         
+        // Hide all game overlays
         const pauseOverlay = document.getElementById('gamePauseOverlay');
         if(pauseOverlay) { pauseOverlay.classList.add('hidden'); pauseOverlay.style.display = 'none'; }
+        
+        const tsPauseOverlay = document.getElementById('ts-pause-overlay');
+        if(tsPauseOverlay) tsPauseOverlay.classList.remove('active');
         
         const resultModal = document.getElementById('gameResultModal');
         if(resultModal) { resultModal.classList.add('hidden'); resultModal.style.display = 'none'; }
         
-        this.showGamesDashboard();
+        // 🔥 FREEZE FIX: Explicitly hide active game arena and show main container
+        const arena = document.getElementById('activeGameArena');
+        if(arena) { arena.classList.add('hidden'); arena.style.display = 'none'; }
+        
+        const mainApp = document.getElementById('main-app-container');
+        if(mainApp) { mainApp.style.display = ''; }
+        
+        if (this.isTutorMode) {
+            this.isTutorMode = false;
+            try {
+                openTutorDashboard();
+            } catch(e) {
+                this.showGamesDashboard();
+            }
+        } else {
+            this.showGamesDashboard();
+        }
     }
 }
 
@@ -6298,6 +8420,10 @@ setTimeout(() => {
             gameKey = 'wordRush';
         } else if (gameClass === 'TypingRacerGame') {
             gameKey = 'typingRacer';
+        } else if (gameClass === 'KeyboardNinjaGame') {
+            gameKey = 'keyboardNinja';
+        } else if (gameClass === 'TypingSurvivorGame') {
+            gameKey = 'typingSurvivor'; // <-- YE NAYA WALA YAHAN AAYEGA
         }
 
         window.typingGamesModule.exitToDashboard();
@@ -6332,7 +8458,125 @@ setTimeout(() => {
     });
 
 }, 1500);
+function processTutorGameResult(lesson, passed, score) {
+    if(typeof registerTutorActivity === 'function') registerTutorActivity();
+    
+    let msg = ""; let rankColor = "#22c55e"; let rankTitle = "MISSION CLEARED!";
+    
+    if (passed) {
+        msg = `Target Met! +${lesson.xp} XP earned.\nNext level unlocked.`;
+        if(!tutorData.completed.includes(lesson.id)) { 
+            tutorData.completed.push(lesson.id); 
+            tutorData.xp += lesson.xp; 
+        }
+        document.getElementById('btn-tutor-next').classList.remove('hidden');
+    } else {
+        rankColor = "#ff3333"; 
+        rankTitle = "MISSION FAILED 🔒";
+        msg = `Goal not met! Required: ${lesson.targetScore} Pts.\nYour Score: ${score} Pts.`;
+        document.getElementById('btn-tutor-next').classList.add('hidden');
+    }
+    
+    if(typeof saveTutorData === 'function') saveTutorData();
+    
+    showResultScreen("Tutor Mission Over", lesson.title, "Status", rankTitle, rankColor, msg, { isGame: true, score: score, lives: "-", wordsHit: "-", wordsMissed: "-" }, true);
+}
+// =========================================================
+// 🚀 GLOBAL KEYBOARD SHORTCUTS (ENTER & SHIFT+ENTER)
+// =========================================================
+document.addEventListener('keydown', function(e) {
+    // Agar input fields me type kar rahe hain (custom text wagerah), toh block na ho
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+        // Hidden focus inputs me shortcuts allow karne hain
+        if(e.target.id !== 'hidden-focus-input' && e.target.id !== 'hiddenGameInput' && e.target.id !== 'game-hidden-input') {
+            return; 
+        }
+    }
+
+    if (e.key === 'Enter') {
+        const isShift = e.shiftKey;
+        
+        // 1. TYPING & TUTOR RESULT SCREEN
+        const typingResultScreen = document.getElementById('typing-result-screen');
+        if (typingResultScreen && !typingResultScreen.classList.contains('hidden')) {
+            e.preventDefault(); // Default enter press ko roko
+            
+            if (isShift) {
+                // 🔥 SHIFT + ENTER -> RESTART CURRENT LESSON / TEST
+                if (typeof isTutorMode !== 'undefined' && isTutorMode && typeof tutorData !== 'undefined') {
+                    startSpecificTutorLesson(tutorData.currentId);
+                } else if (typeof initializeTypingTest === 'function') {
+                    initializeTypingTest();
+                }
+            } else {
+                // 🔥 ENTER -> NEXT LESSON
+                const nextBtn = document.getElementById('btn-tutor-next');
+                if (typeof isTutorMode !== 'undefined' && isTutorMode && nextBtn && !nextBtn.classList.contains('hidden')) {
+                    if (typeof startNextTutorLesson === 'function') startNextTutorLesson();
+                } else if (typeof resetAppToSetup === 'function') {
+                    // Normal mode me Enter dabane pe wapas Dashboard
+                    resetAppToSetup();
+                }
+            }
+            return;
+        }
+
+        // 2. ACTIVE TYPING SCREEN (RESTART ONLY)
+        const typingActiveScreen = document.getElementById('typing-active-screen');
+        if (typingActiveScreen && !typingActiveScreen.classList.contains('hidden')) {
+            if (isShift) {
+                e.preventDefault();
+                if (typeof isTutorMode !== 'undefined' && isTutorMode && typeof tutorData !== 'undefined') {
+                    startSpecificTutorLesson(tutorData.currentId);
+                } else if (typeof initializeTypingTest === 'function') {
+                    initializeTypingTest();
+                }
+            }
+            return;
+        }
+
+        // 3. GAME RESULT MODAL (ARCADE GAMES)
+        const gameResultModal = document.getElementById('gameResultModal');
+        if (gameResultModal && !gameResultModal.classList.contains('hidden') && gameResultModal.style.display !== 'none') {
+            e.preventDefault();
+            if (isShift) {
+                // SHIFT + ENTER -> RESTART GAME
+                const playAgainBtn = document.getElementById('playAgainBtn');
+                if(playAgainBtn) playAgainBtn.click();
+            } else {
+                // ENTER -> GO BACK TO GAMES
+                const backBtn = document.getElementById('backToGamesBtn');
+                if(backBtn) backBtn.click();
+            }
+            return;
+        }
+        
+        // 4. ACTIVE GAME ARENA (RESTART ONLY)
+        const activeGameArena = document.getElementById('activeGameArena');
+        if (activeGameArena && !activeGameArena.classList.contains('hidden') && activeGameArena.style.display !== 'none') {
+            if (isShift) {
+                e.preventDefault();
+                if(window.typingGamesModule && window.typingGamesModule.activeGameInstance) {
+                    let diff = window.typingGamesModule.activeGameInstance.difficulty;
+                    let gameClass = window.typingGamesModule.activeGameInstance.constructor.name;
+                    let gameKey = 'spaceTyper';
+                    if (gameClass === 'WordRushGame') gameKey = 'wordRush';
+                    else if (gameClass === 'TypingRacerGame') gameKey = 'typingRacer';
+                    else if (gameClass === 'KeyboardNinjaGame') gameKey = 'keyboardNinja';
+                    else if (gameClass === 'TypingSurvivorGame') gameKey = 'typingSurvivor';
+                    
+                    window.typingGamesModule.exitToDashboard();
+                    setTimeout(() => window.typingGamesModule.startGame(gameKey, diff), 150);
+                }
+            }
+            return;
+        }
+    }
+});
 
 </script>
+<!-- Isko body ke bilkul end me rakho, kisi div ke andar nahi -->
+<input type="text" id="hiddenGameInput" style="position: fixed; top: 0; left: 0; width: 0; height: 0; opacity: 0; pointer-events: none; z-index: 9999;">
+
 </body>
 </html>
