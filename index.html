@@ -3024,7 +3024,13 @@ button[onclick="openDistractionModal()"] {
             
             <label style="font-size: 0.85rem; font-weight: 700; margin-top: 5px;">Target Date:</label>
             <input type="date" id="target-date-input" class="search-input" style="padding: 10px 14px; font-size: 0.9rem;">
-            
+            <!-- NAYA CODE: Level Selector -->
+<label style="font-size: 0.85rem; font-weight: 700; margin-top: 10px;">Your Preparation Level:</label>
+<select id="target-level-input" class="search-input" style="padding: 10px 14px; font-size: 0.9rem; appearance: auto;">
+    <option value="beginner">Beginner (Starting from Scratch)</option>
+    <option value="revision">Pro (Syllabus Done, Only Revision)</option>
+</select>
+
             <button class="btn" style="background: var(--accent-primary); color: white; padding: 12px; font-weight: 800; margin-top: 10px;" onclick="saveMissionTarget()">Lock Target 🚀</button>
         </div>
     </div>
@@ -7719,6 +7725,7 @@ function saveMissionTarget() {
     const currentEmail = localStorage.getItem('warRoomUserEmail');
     const examName = document.getElementById('target-exam-input').value.trim();
     const examDateStr = document.getElementById('target-date-input').value;
+    const userLevel = document.getElementById('target-level-input').value; // NAYA CODE
 
     if(!examName || !examDateStr) {
         alert("Please enter both the exam name and the target date.");
@@ -7737,15 +7744,16 @@ function saveMissionTarget() {
     // Save to local storage
     localStorage.setItem(`warRoomTargetExam_${currentEmail}`, examName);
     localStorage.setItem(`warRoomTargetDate_${currentEmail}`, targetTime);
+    localStorage.setItem(`warRoomUserLevel_${currentEmail}`, userLevel); // NAYA CODE
 
     closeTargetSetupModal();
     loadDashboardState();
     loadAccountDetails(localStorage.getItem('warRoomUserName'), currentEmail);
     alert("Mission Initialized! Timer activated.");
 
-    // 🔥 NAYA CODE: YAHAN HUM NOTIFICATION PERMISSION MANGENGE 🔥
     requestNotificationPermission(currentEmail);
 }
+
 // Ye naya function add karo check karne ke liye
 function requestNotificationPermission(userEmail) {
     const messaging = firebase.messaging();
@@ -10898,9 +10906,10 @@ window.renderVipHubContent = function() {
 // Initial Auto-Render Call
 setTimeout(() => { if (typeof renderPremiumHubContent === 'function') renderPremiumHubContent(); }, 500);
 
+
+// 🚀 DUAL TIMETABLE ENGINE: FIXED WEEKLY + DAILY TARGETS
 // =================================================================
-// 🚀 AUTO-GENERATED & CUSTOMIZABLE TIMETABLE ENGINE
-// =================================================================
+
 window.renderTacticalStrategy = function() {
     const container = document.getElementById('auto-strategy-container');
     if (!container) return;
@@ -10939,186 +10948,233 @@ window.renderTacticalStrategy = function() {
         return;
     }
 
-    // 🌟 THE AI BRAIN: Default Strategy
-    let phaseName, phaseDesc, mockStrategy, defaultSchedule;
+    let phaseName = "Phase 1: Tactical Setup ⚙️";
+    let phaseDesc = `Focus on your daily targets while following the fixed master routine.`;
+    
+    // AI DEFAULT WEEKLY SCHEDULE (Skeleton)
+    const defaultSchedule = [
+        { time: "08:00 AM", freq: "Daily", title: "Maths Practice" },
+        { time: "11:00 AM", freq: "Daily", title: "English Grammar" },
+        { time: "03:00 PM", freq: "MWF", title: "Reasoning" },
+        { time: "03:00 PM", freq: "TTS", title: "General Studies" },
+        { time: "06:00 PM", freq: "Daily", title: "Vocab & Typing" }
+    ];
 
-    if (daysLeft > 90) {
-        phaseName = "Phase 1: Foundation & Concept Building 🏗️";
-        phaseDesc = `You have ${daysLeft} days left. Right now, your main focus should be completing the syllabus and taking thorough notes. Don't rush into full mock tests yet.`;
-        mockStrategy = `<strong>📝 Mock Strategy:</strong> Give 1 Full Mock every Sunday just to check progress. Focus more on Chapter-wise PYQs.`;
-        defaultSchedule = [
-            { time: "07:00 AM - 09:30 AM", title: "📐 Maths (Concepts)", desc: "Learn new concepts, watch lectures, and solve 50+ basic questions." },
-            { time: "10:00 AM - 11:30 AM", title: "📖 English (Grammar & Vocab)", desc: "1 Hour Grammar rules + 30 Mins Vocab (Blackbook/Previous Year)." },
-            { time: "12:00 PM - 02:00 PM", title: "🌍 General Studies", desc: "Read History/Polity/Geo theory. Make short notes." },
-            { time: "04:00 PM - 05:30 PM", title: "🧠 Reasoning", desc: "Watch concept videos for tough topics (Syllogism, Clock, Calendar)." },
-            { time: "06:00 PM - 08:00 PM", title: "⚡ Practice Session", desc: "Solve PYQs of the topics you learned today. Analyze mistakes." }
-        ];
-    } else if (daysLeft > 30) {
-        phaseName = "Phase 2: Speed & Rigorous Practice ⚡";
-        phaseDesc = `You have ${daysLeft} days left. Your syllabus should be 70-80% complete. Shift gears from learning theory to solving maximum Previous Year Questions.`;
-        mockStrategy = `<strong>📝 Mock Strategy:</strong> Give 2 Full Mocks a week (Wednesday & Sunday). Give Sectional Mocks daily for weak subjects.`;
-        defaultSchedule = [
-            { time: "07:00 AM - 09:30 AM", title: "📐 Maths (PYQ Grinding)", desc: "Solve 100+ PYQs on a timer. Use short tricks." },
-            { time: "10:00 AM - 11:30 AM", title: "📖 English (Comprehension)", desc: "Focus on Cloze Test, Reading Comprehension, and rapid Vocab revision." },
-            { time: "12:00 PM - 01:00 PM", title: "🌍 GS (Current Affairs & Statics)", desc: "Revise static GK topics and read last 6 months current affairs." },
-            { time: "03:00 PM - 04:00 PM", title: "🧠 Reasoning (Sectional Mock)", desc: "Give a 25-question sectional mock in 15 minutes. Review errors." },
-            { time: "05:00 PM - 07:30 PM", title: "📝 Revision & Weak Areas", desc: "Pick the topic you struggled with yesterday and fix it." },
-            { time: "08:30 PM - 09:00 PM", title: "⌨️ Typing Practice", desc: "15-20 Mins typing on the DEST Pro tool to build muscle memory." }
-        ];
-    } else {
-        phaseName = "Phase 3: The Endgame (War Mode) ⚔️";
-        phaseDesc = `You are in the final stretch! Only ${daysLeft} days remaining. Stop reading new books. Start full revision and train your brain for exam pressure.`;
-        mockStrategy = `<strong>📝 Mock Strategy:</strong> Give 1 Full Mock EVERY DAY exactly at the time of your real exam shift. Spend 1 hour analyzing it.`;
-        defaultSchedule = [
-            { time: "08:00 AM - 09:00 AM", title: "📖 Vocab & Formulas", desc: "Rapid fire revision of all tricky vocab, idioms, and Maths formulas." },
-            { time: "10:00 AM - 11:00 AM", title: "📝 LIVE FULL MOCK", desc: "Sit in absolute silence. Attempt a full 100-question mock test." },
-            { time: "11:30 AM - 12:30 PM", title: "🔬 Deep Analysis", desc: "Find out WHY you got a question wrong. Note it down in your Error Log." },
-            { time: "02:00 PM - 04:00 PM", title: "⚡ Subject specific drills", desc: "Practice 50-100 questions of the subject that lowered your score today." },
-            { time: "05:00 PM - 07:00 PM", title: "🌍 GS & Current Affairs", desc: "Revise highlighted notes only. Do not touch thick books." },
-            { time: "08:00 PM - 09:00 PM", title: "🧠 Reasoning & Typing", desc: "Solve 1 quick Reasoning set and type for 15 minutes." }
-        ];
-    }
+    const savedWeeklySchedule = localStorage.getItem(`warRoom_weekly_schedule_${email}`);
+    let activeSchedule = savedWeeklySchedule ? JSON.parse(savedWeeklySchedule) : defaultSchedule;
 
-    // 🌟 CHECK FOR USER'S CUSTOM SCHEDULE IN MEMORY
-    const savedCustomSchedule = localStorage.getItem(`warRoom_custom_schedule_${email}`);
-    let activeSchedule = savedCustomSchedule ? JSON.parse(savedCustomSchedule) : defaultSchedule;
+    let scheduleHtml = activeSchedule.map((item, idx) => {
+        let freqBadge = item.freq && item.freq !== 'Daily' 
+            ? `<span style="background: rgba(234, 88, 12, 0.1); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px;">${item.freq}</span>` 
+            : `<span style="background: rgba(37, 99, 235, 0.1); color: #3b82f6; border: 1px solid rgba(37, 99, 235, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px;">Daily</span>`;
 
-    // 🌟 RENDER THE TIMETABLE HTML
-    let scheduleHtml = activeSchedule.map((item, idx) => `
+        return `
         <div class="time-slot-card fade-in" id="ts-card-${idx}">
-            <div class="ts-time" id="ts-time-${idx}">${item.time}</div>
-            <div class="ts-title" id="ts-title-${idx}">${item.title}</div>
-            <div class="ts-desc" id="ts-desc-${idx}">${item.desc}</div>
+            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                <div class="ts-time" id="ts-time-${idx}" style="margin: 0;">${item.time}</div>
+                ${freqBadge}
+            </div>
+            <div class="ts-title" id="ts-title-${idx}" style="margin: 0;">${item.title}</div>
         </div>
-    `).join('');
+    `}).join('');
 
     container.innerHTML = `
         <div class="strategy-phase-card fade-in">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; flex-wrap: wrap; gap: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
                 <div>
                     <span style="background: rgba(37,99,235,0.2); color: #60a5fa; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;">TARGET: ${targetExam}</span>
                     <h2 style="color: white; margin: 10px 0 5px 0; font-size: 1.8rem; font-weight: 900;">${phaseName}</h2>
                     <p style="color: #94a3b8; font-size: 0.95rem; max-width: 600px; line-height: 1.6;">${phaseDesc}</p>
                 </div>
-                <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 16px; text-align: center;">
+                 <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 16px; text-align: center;">
                     <div style="font-size: 0.75rem; color: var(--accent-secondary); font-weight: 800; text-transform: uppercase;">Time Remaining</div>
                     <div style="font-size: 2.5rem; font-weight: 900; color: white;">${daysLeft} <span style="font-size: 1rem; color: #94a3b8;">Days</span></div>
                 </div>
             </div>
-            <div style="background: rgba(22, 163, 74, 0.1); border-left: 4px solid #16a34a; padding: 12px 16px; border-radius: 8px; margin-top: 20px; position: relative; z-index: 1;">
-                <p style="color: #a3e635; margin: 0; font-size: 0.9rem; line-height: 1.5;">${mockStrategy}</p>
+        </div>
+
+        <!-- 🎯 DAILY TARGETS (To-Do List) -->
+        <div class="glass-card fade-in" style="margin-bottom: 25px; border-top: 4px solid var(--accent-secondary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: var(--accent-secondary); margin: 0; font-size: 1.3rem;">🎯 Today's Action Plan</h3>
+                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="clearAllDailyTargets()">🧹 Clear All</button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Plan your specific topics here (e.g. "Maths: Percentage Video 2").</p>
+            
+            <div id="daily-target-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;"></div>
+            
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="new-target-input" class="search-input" placeholder="Add a new topic/target..." style="flex: 1; padding: 10px; font-size: 0.9rem;" onkeypress="if(event.key === 'Enter') addDailyTarget()">
+                <button class="btn" style="background: var(--accent-secondary); color: white; padding: 10px 20px;" onclick="addDailyTarget()">➕ Add</button>
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; flex-wrap: wrap; gap: 10px;">
-            <h3 style="color: var(--accent-tertiary); display: flex; align-items: center; gap: 10px; margin: 0;">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> 
-                Daily Tactical Routine
-            </h3>
-            
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button id="edit-routine-btn" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem; border-color: var(--accent-secondary); color: var(--accent-secondary);" onclick="enableScheduleEditMode()">✏️ Edit Routine</button>
-                ${savedCustomSchedule ? `<button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem; border-color: #ef4444; color: #ef4444;" onclick="resetScheduleToDefaultAI()" title="Clear your custom routine and load AI defaults.">🔄 Reset to AI Default</button>` : ''}
-            </div>
+        <!-- 📅 WEEKLY ROUTINE (Fixed Skeleton) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <h3 style="color: var(--accent-tertiary); margin: 0;">📅 Fixed Master Routine</h3>
+            <button id="edit-routine-btn" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem; border-color: var(--accent-primary); color: var(--accent-primary);" onclick="enableWeeklyEditMode()">✏️ Edit Routine</button>
         </div>
-        
-        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 15px; margin-top: 5px;">Follow this strictly. You can edit times and subjects to match your personal study habits.</p>
         
         <div class="timetable-grid" id="timetable-grid-container">
             ${scheduleHtml}
         </div>
     `;
+
+    loadDailyTargets();
 };
 
-// 🛠️ ENABLE EDIT MODE (Convert Text into Input Boxes)
-window.enableScheduleEditMode = function() {
+// =================================================================
+// 🎯 DAILY TARGETS LOGIC
+// =================================================================
+
+window.loadDailyTargets = function() {
+    const email = localStorage.getItem('warRoomUserEmail');
+    const targets = JSON.parse(localStorage.getItem(`warRoom_daily_targets_${email}`) || '[]');
+    const listEl = document.getElementById('daily-target-list');
+    
+    if (targets.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding: 10px; color: var(--text-secondary); font-size: 0.85rem; border: 1px dashed var(--glass-border); border-radius: 8px;">No targets set for today. Add a topic below!</div>`;
+        return;
+    }
+
+    listEl.innerHTML = targets.map((t, idx) => `
+        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-primary); padding: 10px 15px; border-radius: 10px; border: 1px solid var(--glass-border); opacity: ${t.done ? '0.6' : '1'};">
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer;" onclick="toggleDailyTarget(${idx})">
+                <div style="width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--accent-secondary); background: ${t.done ? 'var(--accent-secondary)' : 'transparent'}; display: flex; justify-content: center; align-items: center; color: white; font-size: 0.8rem; font-weight: bold;">${t.done ? '✓' : ''}</div>
+                <span style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); text-decoration: ${t.done ? 'line-through' : 'none'};">${t.text}</span>
+            </div>
+            <button style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0 5px;" onclick="deleteDailyTarget(${idx})">✕</button>
+        </div>
+    `).join('');
+};
+
+window.addDailyTarget = function() {
+    const input = document.getElementById('new-target-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const email = localStorage.getItem('warRoomUserEmail');
+    let targets = JSON.parse(localStorage.getItem(`warRoom_daily_targets_${email}`) || '[]');
+    targets.push({ text: text, done: false });
+    
+    localStorage.setItem(`warRoom_daily_targets_${email}`, JSON.stringify(targets));
+    input.value = '';
+    loadDailyTargets();
+};
+
+window.toggleDailyTarget = function(idx) {
+    const email = localStorage.getItem('warRoomUserEmail');
+    let targets = JSON.parse(localStorage.getItem(`warRoom_daily_targets_${email}`) || '[]');
+    targets[idx].done = !targets[idx].done;
+    localStorage.setItem(`warRoom_daily_targets_${email}`, JSON.stringify(targets));
+    loadDailyTargets();
+};
+
+window.deleteDailyTarget = function(idx) {
+    const email = localStorage.getItem('warRoomUserEmail');
+    let targets = JSON.parse(localStorage.getItem(`warRoom_daily_targets_${email}`) || '[]');
+    targets.splice(idx, 1);
+    localStorage.setItem(`warRoom_daily_targets_${email}`, JSON.stringify(targets));
+    loadDailyTargets();
+};
+
+window.clearAllDailyTargets = function() {
+    if(confirm("Delete all targets from the board?")) {
+        const email = localStorage.getItem('warRoomUserEmail');
+        localStorage.setItem(`warRoom_daily_targets_${email}`, '[]');
+        loadDailyTargets();
+    }
+};
+
+// =================================================================
+// 📅 WEEKLY ROUTINE EDIT LOGIC
+// =================================================================
+
+window.enableWeeklyEditMode = function() {
     const grid = document.getElementById('timetable-grid-container');
     const cards = grid.querySelectorAll('.time-slot-card');
     
     cards.forEach((card, idx) => {
         let timeText = document.getElementById(`ts-time-${idx}`).innerText;
         let titleText = document.getElementById(`ts-title-${idx}`).innerText;
-        let descText = document.getElementById(`ts-desc-${idx}`).innerText;
+        
+        let freqMatch = card.innerHTML.match(/span[^>]*>(Daily|MWF|TTS|Sunday Only)<\/span>/i);
+        let freqText = freqMatch ? freqMatch[1] : 'Daily';
         
         card.innerHTML = `
-            <input type="text" id="edit-ts-time-${idx}" class="search-input" value="${timeText}" placeholder="Time (e.g., 10 AM - 12 PM)" style="margin-bottom: 8px; font-size: 0.8rem; padding: 8px; width: 100%; border: 1px solid var(--accent-secondary); color: var(--accent-secondary); font-weight: 800; box-sizing: border-box;">
-            <input type="text" id="edit-ts-title-${idx}" class="search-input" value="${titleText}" placeholder="Subject / Title" style="margin-bottom: 8px; font-size: 0.95rem; padding: 8px; width: 100%; font-weight: 800; box-sizing: border-box;">
-            <textarea id="edit-ts-desc-${idx}" class="search-input" placeholder="Task details..." style="font-size: 0.85rem; padding: 8px; width: 100%; height: 65px; resize: vertical; box-sizing: border-box;">${descText}</textarea>
-            <button class="btn btn-outline" style="margin-top: 8px; width: 100%; padding: 6px; font-size: 0.75rem; color: #ef4444; border-color: #ef4444; font-weight: 800;" onclick="this.parentElement.remove()">🗑️ Delete Slot</button>
+            <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                <input type="text" id="edit-ts-time-${idx}" class="search-input" value="${timeText}" placeholder="Time (e.g. 10 AM)" style="font-size: 0.8rem; padding: 8px; flex: 1; border: 1px solid var(--accent-primary); font-weight: 800;">
+                <select id="edit-ts-freq-${idx}" class="search-input" style="font-size: 0.8rem; padding: 8px; flex: 1; font-weight: 800; border: 1px solid var(--accent-primary);">
+                    <option value="Daily" ${freqText === 'Daily' ? 'selected' : ''}>Daily</option>
+                    <option value="MWF" ${freqText === 'MWF' ? 'selected' : ''}>MWF</option>
+                    <option value="TTS" ${freqText === 'TTS' ? 'selected' : ''}>TTS</option>
+                    <option value="Sunday" ${freqText === 'Sunday Only' ? 'selected' : ''}>Sunday Only</option>
+                </select>
+            </div>
+            <input type="text" id="edit-ts-title-${idx}" class="search-input" value="${titleText}" placeholder="Subject (e.g. Maths)" style="margin-bottom: 8px; font-size: 0.95rem; padding: 8px; width: 100%; font-weight: 800; box-sizing: border-box;">
+            <button class="btn btn-outline" style="width: 100%; padding: 6px; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="this.parentElement.remove()">🗑️ Remove</button>
         `;
     });
 
-    // Add a "+ Add New Slot" button at the end
     const addBtnHtml = `
-        <div id="add-slot-btn" class="time-slot-card fade-in" style="display: flex; justify-content: center; align-items: center; border: 2px dashed var(--accent-primary); cursor: pointer; background: rgba(37, 99, 235, 0.05); min-height: 150px;" onclick="addNewScheduleSlot(this)">
-            <span style="font-size: 1.1rem; font-weight: 800; color: var(--accent-primary);">➕ Add Custom Slot</span>
+        <div id="add-slot-btn" class="time-slot-card fade-in" style="display: flex; justify-content: center; align-items: center; border: 2px dashed var(--accent-primary); cursor: pointer; background: rgba(37, 99, 235, 0.05); min-height: 100px;" onclick="addNewWeeklySlot(this)">
+            <span style="font-size: 1.1rem; font-weight: 800; color: var(--accent-primary);">➕ Add Subject Slot</span>
         </div>
     `;
     grid.insertAdjacentHTML('beforeend', addBtnHtml);
 
-    // Transform "Edit Routine" button to "Save Changes"
     const editBtn = document.getElementById('edit-routine-btn');
-    editBtn.outerHTML = `<button class="btn" style="padding: 6px 16px; font-size: 0.85rem; background: var(--accent-primary); color: white;" onclick="saveCustomSchedule()">💾 Save Routine</button>`;
+    editBtn.outerHTML = `<button class="btn" style="padding: 6px 16px; font-size: 0.85rem; background: var(--accent-primary); color: white;" onclick="saveWeeklySchedule()">💾 Save Master Plan</button>`;
 };
 
-// ➕ ADD NEW BLANK SLOT
-window.addNewScheduleSlot = function(addBtnEl) {
-    const idx = Date.now(); // Unique ID
+window.addNewWeeklySlot = function(addBtnEl) {
+    const idx = Date.now(); 
     const newSlotHtml = `
         <div class="time-slot-card fade-in">
-            <input type="text" id="edit-ts-time-${idx}" class="search-input" placeholder="Time (e.g., Night 11 PM)" style="margin-bottom: 8px; font-size: 0.8rem; padding: 8px; width: 100%; border: 1px solid var(--accent-secondary); color: var(--accent-secondary); font-weight: 800; box-sizing: border-box;">
-            <input type="text" id="edit-ts-title-${idx}" class="search-input" placeholder="Subject / Title" style="margin-bottom: 8px; font-size: 0.95rem; padding: 8px; width: 100%; font-weight: 800; box-sizing: border-box;">
-            <textarea id="edit-ts-desc-${idx}" class="search-input" placeholder="Task details..." style="font-size: 0.85rem; padding: 8px; width: 100%; height: 65px; resize: vertical; box-sizing: border-box;"></textarea>
-            <button class="btn btn-outline" style="margin-top: 8px; width: 100%; padding: 6px; font-size: 0.75rem; color: #ef4444; border-color: #ef4444; font-weight: 800;" onclick="this.parentElement.remove()">🗑️ Delete Slot</button>
+            <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                <input type="text" id="edit-ts-time-${idx}" class="search-input" placeholder="Time" style="font-size: 0.8rem; padding: 8px; flex: 1; border: 1px solid var(--accent-primary); font-weight: 800;">
+                <select id="edit-ts-freq-${idx}" class="search-input" style="font-size: 0.8rem; padding: 8px; flex: 1; font-weight: 800; border: 1px solid var(--accent-primary);">
+                    <option value="Daily">Daily</option>
+                    <option value="MWF">MWF</option>
+                    <option value="TTS">TTS</option>
+                    <option value="Sunday Only">Sunday Only</option>
+                </select>
+            </div>
+            <input type="text" id="edit-ts-title-${idx}" class="search-input" placeholder="Subject" style="margin-bottom: 8px; font-size: 0.95rem; padding: 8px; width: 100%; font-weight: 800; box-sizing: border-box;">
+            <button class="btn btn-outline" style="width: 100%; padding: 6px; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="this.parentElement.remove()">🗑️ Remove</button>
         </div>
     `;
     addBtnEl.insertAdjacentHTML('beforebegin', newSlotHtml);
 };
 
-// 💾 SAVE CUSTOM CHANGES TO LOCAL MEMORY
-window.saveCustomSchedule = function() {
+window.saveWeeklySchedule = function() {
     const email = localStorage.getItem('warRoomUserEmail');
     const grid = document.getElementById('timetable-grid-container');
-    const cards = grid.querySelectorAll('.time-slot-card:not(#add-slot-btn)'); // Ignore the add button
+    const cards = grid.querySelectorAll('.time-slot-card:not(#add-slot-btn)'); 
     
     let newSchedule = [];
     
     cards.forEach(card => {
         const timeInput = card.querySelector('input[id^="edit-ts-time-"]');
+        const freqInput = card.querySelector('select[id^="edit-ts-freq-"]');
         const titleInput = card.querySelector('input[id^="edit-ts-title-"]');
-        const descInput = card.querySelector('textarea[id^="edit-ts-desc-"]');
         
-        if (timeInput && titleInput && descInput) {
-            // Only save if at least title or time is provided
+        if (timeInput && titleInput) {
             if (timeInput.value.trim() || titleInput.value.trim()) {
                 newSchedule.push({
-                    time: timeInput.value.trim() || "Flexible Time",
-                    title: titleInput.value.trim() || "Custom Study Block",
-                    desc: descInput.value.trim() || ""
+                    time: timeInput.value.trim() || "Anytime",
+                    freq: freqInput ? freqInput.value : "Daily",
+                    title: titleInput.value.trim() || "Study Block"
                 });
             }
         }
     });
     
-    if(newSchedule.length === 0) {
-        alert("Routine cannot be empty. Please add at least one study slot.");
-        return;
-    }
-
-    localStorage.setItem(`warRoom_custom_schedule_${email}`, JSON.stringify(newSchedule));
-    alert("✅ Tactical Routine Saved Successfully!");
-    renderTacticalStrategy(); // Refresh UI to read-only mode
+    localStorage.setItem(`warRoom_weekly_schedule_${email}`, JSON.stringify(newSchedule));
+    alert("✅ Fixed Routine Saved! Ab kal ke topics Daily Action Plan mein add karein.");
+    renderTacticalStrategy(); 
 };
 
-// 🔄 RESET TO AI DEFAULTS
-window.resetScheduleToDefaultAI = function() {
-    const email = localStorage.getItem('warRoomUserEmail');
-    if(confirm("⚠️ Warning: Are you sure you want to delete your custom routine? This will restore the original AI-generated timetable. This action cannot be undone.")) {
-        localStorage.removeItem(`warRoom_custom_schedule_${email}`);
-        renderTacticalStrategy();
-        alert("🔄 Reset complete! AI Default Strategy restored.");
-    }
-};
 // =================================================================
 // 💣 VOCAB ARSENAL ENGINE (FLASHCARDS & SMART FILTER)
 // =================================================================
