@@ -8668,36 +8668,26 @@ function downloadPracticePDF() {
                 strong { color: #1e40af; }
                 p { color: #475569; margin: 4px 0 0 0; font-size: 14px; }
                 span { font-size: 12px; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
-      /* ==========================================
-   📖 ULTRA PREMIUM DICTIONARY CSS (AESTHETIC)
+   /* ==========================================
+   📖 ULTRA PREMIUM DICTIONARY CSS (TAB STYLE)
    ========================================== */
 .dict-word-card {
-    background: var(--bg-secondary); /* Isse card alag chamkega */
+    background: var(--bg-secondary);
     border: 1px solid var(--glass-border);
     border-left: 5px solid var(--accent-primary);
-    padding: 24px;
+    padding: 22px;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     margin-bottom: 20px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* Soft 3D Shadow */
-    position: relative;
-    overflow: hidden;
-}
-
-/* Dark Mode ko aur deep banaya */
-[data-theme="dark"] .dict-word-card {
-    background: linear-gradient(145deg, #1e293b, #0f172a);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dict-word-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
-    border-left-color: var(--accent-secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.15);
 }
 
 .dict-word-title {
@@ -8706,85 +8696,92 @@ function downloadPracticePDF() {
     color: var(--text-primary);
     margin: 0;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: baseline;
     gap: 12px;
     letter-spacing: -0.5px;
 }
 
 .dict-word-pronun {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
     font-weight: 700;
-    background: rgba(148, 163, 184, 0.1);
-    padding: 4px 10px;
-    border-radius: 8px;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .dict-word-meaning {
     font-size: 1.1rem;
     color: var(--text-primary);
-    font-weight: 600;
-    line-height: 1.6;
+    font-weight: 700;
+    line-height: 1.5;
 }
 
 .dict-word-hinglish {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--accent-secondary);
     font-weight: 800;
-    background: rgba(234, 88, 12, 0.08);
-    padding: 12px 16px;
-    border-radius: 10px;
-    border-left: 3px solid var(--accent-secondary);
 }
 
-.dict-word-synant {
+/* --- PREMIUM TABS FOR SYNONYMS & ANTONYMS --- */
+.dict-synant-tabs {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     margin-top: 5px;
     flex-wrap: wrap;
 }
 
-.dict-word-synant > div {
-    background: var(--bg-primary);
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
+.dict-tab-box {
     flex: 1;
     min-width: 140px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    background: rgba(37, 99, 235, 0.05);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    padding: 12px 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.dict-syn, .dict-ant { 
-    font-weight: 900; 
-    text-transform: uppercase; 
-    font-size: 0.75rem; 
-    letter-spacing: 1px; 
-    display: flex; 
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px; 
+.dict-tab-box.antonym-tab {
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.2);
 }
-.dict-syn { color: #16a34a; }
-.dict-ant { color: #ef4444; }
 
-.dict-word-example {
+.dict-tab-title {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.dict-tab-title.syn { color: #2563eb; }
+.dict-tab-title.ant { color: #ef4444; }
+
+.dict-tab-content {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* --- EXAMPLE BOX --- */
+.dict-example-box {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 5px;
+    border-left: 3px solid var(--text-secondary);
+}
+
+.dict-example-eng {
     font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-top: 5px;
-    padding-top: 15px;
-    border-top: 1px dashed var(--glass-border);
-    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 6px;
 }
 
-.dict-word-example div {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    margin-bottom: 8px;
+.dict-example-hin {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
 }
+
 
             </style>
         </head>
@@ -12516,28 +12513,38 @@ function renderDictionary(searchQuery = '') {
         return;
     }
 
-       // HTML Generate karo
+      // HTML Generate karo (Without Emojis, Clean Tabs)
     container.innerHTML = filteredVocab.map(v => `
         <div class="dict-word-card fade-in">
             <h3 class="dict-word-title">
                 ${v.word} 
                 ${v.pronunciation ? `<span class="dict-word-pronun">[ ${v.pronunciation} ]</span>` : ''}
             </h3>
+            
             <div class="dict-word-meaning">${v.meaning}</div>
             ${v.hinglish ? `<div class="dict-word-hinglish">अर्थ: ${v.hinglish}</div>` : ''}
             
-            <div class="dict-word-synant">
-                <div><span class="dict-syn">📈 Synonyms</span> <span style="color: var(--text-secondary); font-weight: 600;">${v.syn || '-'}</span></div>
-                <div><span class="dict-ant">📉 Antonyms</span> <span style="color: var(--text-secondary); font-weight: 600;">${v.ant || '-'}</span></div>
+            <!-- SYNONYM & ANTONYM TABS -->
+            <div class="dict-synant-tabs">
+                <div class="dict-tab-box">
+                    <span class="dict-tab-title syn">Synonyms</span>
+                    <span class="dict-tab-content">${v.syn || '-'}</span>
+                </div>
+                <div class="dict-tab-box antonym-tab">
+                    <span class="dict-tab-title ant">Antonyms</span>
+                    <span class="dict-tab-content">${v.ant || '-'}</span>
+                </div>
             </div>
             
+            <!-- EXAMPLE BOX -->
             ${(v.ex || v.hinglishEx) ? `
-            <div class="dict-word-example">
-                ${v.ex ? `<div><span style="font-size:1.1rem; flex-shrink: 0;">📝</span> <span style="font-style:italic;">"${v.ex}"</span></div>` : ''}
-                ${v.hinglishEx ? `<div><span style="font-size:1.1rem; flex-shrink: 0;">💡</span> <span style="color: var(--text-primary); font-weight:500;">"${v.hinglishEx}"</span></div>` : ''}
+            <div class="dict-example-box">
+                ${v.ex ? `<div class="dict-example-eng">"${v.ex}"</div>` : ''}
+                ${v.hinglishEx ? `<div class="dict-example-hin">"${v.hinglishEx}"</div>` : ''}
             </div>` : ''}
         </div>
     `).join('');
+
 
 }
 
